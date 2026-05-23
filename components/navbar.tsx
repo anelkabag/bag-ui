@@ -105,7 +105,7 @@ export default function Navbar() {
                 transition={transition}
                 style={{ pointerEvents: scrolled ? "none" : "auto" }}
             >
-                <nav className="flex items-center justify-between px-8 h-14 bg-white border-b border-gray-200">
+                <nav className="flex items-center justify-between px-8 h-14 bg-white ">
                     <Logo />
                     <div className="hidden md:flex items-center gap-7">
                         {NAV_LINKS.map((item, i) => (
