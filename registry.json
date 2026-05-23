@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "bagUi",
+  "homepage": "http://localhost:3000",
+  "author" : "Anelka Bag <anelka.bag@gmail.com>",
+  "items": [
+    {
+      "name": "fancy-button",
+      "type": "registry:ui",
+      "title": "Fancy Button",
+      "description": "Animated premium button",
+      "dependencies": ["framer-motion"],
+      "files": [
+        {
+          "path": "registry/default/ui/fancy-button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    }
+  ]
+}
