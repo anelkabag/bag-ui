@@ -4,8 +4,6 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
 interface RegistryItem {
     name: string;
     type: string;
@@ -24,10 +22,7 @@ const registry: RegistryItem[] = [
         dependencies: ["framer-motion"],
         files: [{ path: "registry/default/ui/fancy-button.tsx", type: "registry:ui" }],
     },
-    // ← ajoute tes futurs composants ici
 ];
-
-// ─── Live preview par composant ───────────────────────────────────────────────
 
 function ComponentPreview({ name }: { name: string }) {
     const [hovered, setHovered] = useState(false);
@@ -66,15 +61,12 @@ function ComponentPreview({ name }: { name: string }) {
         );
     }
 
-    // Fallback générique
     return (
         <div className="w-full h-full flex items-center justify-center">
             <div className="w-24 h-10 rounded-xl bg-gray-200 animate-pulse" />
         </div>
     );
 }
-
-// ─── Card individuelle (frame Framer-style) ───────────────────────────────────
 
 function ComponentCard({ item, index }: { item: RegistryItem; index: number }) {
     return (
@@ -89,26 +81,24 @@ function ComponentCard({ item, index }: { item: RegistryItem; index: number }) {
                 boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
             }}
         >
-            {/* ── Top chrome bar ── */}
             <div
                 className="flex items-center justify-between px-5 py-4"
                 style={{ borderBottom: "1px solid #efefef" }}
             >
                 <div className="flex items-center gap-2">
-          <span
-              className="text-[15px] font-bold text-black"
-              style={{ letterSpacing: "-0.03em" }}
-          >
-            {item.title}.
-          </span>
+                    <span
+                        className="text-[15px] font-bold text-black"
+                        style={{ letterSpacing: "-0.03em" }}
+                    >
+                        {item.title}.
+                    </span>
                     <span
                         className="text-[15px] font-normal text-black/35"
                         style={{ letterSpacing: "-0.02em" }}
                     >
-            /ui
-          </span>
+                        /ui
+                    </span>
                 </div>
-                {/* 3 dots — gris comme sur la photo */}
                 <div className="flex items-center gap-[5px]">
                     <span className="w-[11px] h-[11px] rounded-full bg-[#d8d8d8]" />
                     <span className="w-[11px] h-[11px] rounded-full bg-[#d8d8d8]" />
@@ -116,7 +106,6 @@ function ComponentCard({ item, index }: { item: RegistryItem; index: number }) {
                 </div>
             </div>
 
-            {/* ── Preview zone — grande hauteur, coins arrondis intérieurs ── */}
             <div
                 className="relative overflow-hidden"
                 style={{
@@ -127,7 +116,6 @@ function ComponentCard({ item, index }: { item: RegistryItem; index: number }) {
                     border: "1px solid #efefef",
                 }}
             >
-                {/* Dot grid subtile */}
                 <div
                     className="absolute inset-0 pointer-events-none"
                     style={{
@@ -141,12 +129,11 @@ function ComponentCard({ item, index }: { item: RegistryItem; index: number }) {
                 </div>
             </div>
 
-            {/* ── Bottom label ── */}
             <div className="flex items-center justify-between px-5 py-4">
                 <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-black" style={{ letterSpacing: "-0.02em" }}>
-            {item.title}
-          </span>
+                    <span className="text-sm font-semibold text-black" style={{ letterSpacing: "-0.02em" }}>
+                        {item.title}
+                    </span>
                     {item.dependencies?.map((dep) => (
                         <span
                             key={dep}
@@ -157,8 +144,8 @@ function ComponentCard({ item, index }: { item: RegistryItem; index: number }) {
                                 letterSpacing: "0.03em",
                             }}
                         >
-              {dep}
-            </span>
+                            {dep}
+                        </span>
                     ))}
                 </div>
                 <Link
@@ -173,28 +160,25 @@ function ComponentCard({ item, index }: { item: RegistryItem; index: number }) {
     );
 }
 
-// ─── Page principale ──────────────────────────────────────────────────────────
-
 export default function BlocksCatalog() {
     return (
-        <section className="min-h-screen bg-[#0a0a0a] px-6 md:px-12 lg:px-16 py-16">
-            {/* En-tête */}
+        <section className="min-h-screen bg-white px-6 md:px-12 lg:px-16 py-16">
             <div className="flex items-start justify-between mb-12">
                 <motion.div
                     initial={{ opacity: 0, y: 18 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                 >
-                    <p className="text-[11px] font-semibold tracking-[0.12em] text-white/30 mb-3 uppercase">
+                    <p className="text-[11px] font-semibold tracking-[0.12em] text-black/30 mb-3 uppercase">
                         Catalog
                     </p>
                     <h1
-                        className="text-4xl md:text-5xl font-bold text-white mb-3"
+                        className="text-4xl md:text-5xl font-bold text-black mb-3"
                         style={{ letterSpacing: "-0.03em", lineHeight: 1.1 }}
                     >
                         A taste of what's inside
                     </h1>
-                    <p className="text-white/40 text-sm md:text-base max-w-md leading-relaxed">
+                    <p className="text-black/40 text-sm md:text-base max-w-md leading-relaxed">
                         Every block crafted by hand and free while we warm up.
                         Pick a component to start browsing.
                     </p>
@@ -208,17 +192,16 @@ export default function BlocksCatalog() {
                 >
                     <Link
                         href="/blocks"
-                        className="inline-flex items-center gap-1.5 text-sm font-medium text-white/50 hover:text-white transition-colors"
+                        className="inline-flex items-center gap-1.5 text-sm font-medium text-black/50 hover:text-black transition-colors"
                     >
                         See all blocks <span>↗</span>
                     </Link>
                 </motion.div>
             </div>
 
-            {/* Grille 2 colonnes */}
             {registry.length === 0 ? (
                 <div className="flex items-center justify-center h-64">
-                    <p className="text-white/25 text-sm">No components in registry yet.</p>
+                    <p className="text-black/25 text-sm">No components in registry yet.</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -227,15 +210,6 @@ export default function BlocksCatalog() {
                     ))}
                 </div>
             )}
-
-            <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-                className="mt-10 text-center text-[11px] text-white/20 tracking-widest"
-            >
-                {registry.length} COMPONENT{registry.length !== 1 ? "S" : ""} IN REGISTRY
-            </motion.p>
         </section>
     );
 }
