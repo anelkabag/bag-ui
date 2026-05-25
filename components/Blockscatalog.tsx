@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import registryJson from "@/registry.json";
+import { FancyButton } from "@/registry/default/ui/fancy-button";
 
 interface RegistryItem {
     name: string;
@@ -13,50 +15,20 @@ interface RegistryItem {
     files: { path: string; type: string }[];
 }
 
-const registry: RegistryItem[] = [
-    {
-        name: "fancy-button",
-        type: "registry:ui",
-        title: "Fancy Button",
-        description: "Animated premium button",
-        dependencies: ["framer-motion"],
-        files: [{ path: "registry/default/ui/fancy-button.tsx", type: "registry:ui" }],
-    },
-];
+interface RegistryFile {
+    items: RegistryItem[];
+}
 
-function ComponentPreview({ name }: { name: string }) {
-    const [hovered, setHovered] = useState(false);
+const registryData = registryJson as RegistryFile;
+const latestRegistryItems = (registryData.items ?? []).slice(-5).reverse();
 
-    if (name === "fancy-button") {
+function ComponentPreview({ item }: { item: RegistryItem }) {
+    const PreviewComponent = item.name === "fancy-button" ? FancyButton : undefined;
+
+    if (PreviewComponent) {
         return (
-            <div
-                className="w-full h-full flex items-center justify-center"
-                onMouseEnter={() => setHovered(true)}
-                onMouseLeave={() => setHovered(false)}
-            >
-                <motion.button
-                    animate={hovered ? { scale: 1.05 } : { scale: 1 }}
-                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                    className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-semibold text-white select-none"
-                    style={{
-                        background: "#0f0f0f",
-                        letterSpacing: "-0.01em",
-                        boxShadow: hovered
-                            ? "0 12px 40px rgba(0,0,0,0.22)"
-                            : "0 2px 12px rgba(0,0,0,0.10)",
-                        transition: "box-shadow 0.25s",
-                    }}
-                >
-                    <motion.span animate={hovered ? { x: 2 } : { x: 0 }} transition={{ duration: 0.2 }}>
-                        Get started
-                    </motion.span>
-                    <motion.span
-                        animate={hovered ? { x: 5, opacity: 1 } : { x: 0, opacity: 0.5 }}
-                        transition={{ duration: 0.2 }}
-                    >
-                        →
-                    </motion.span>
-                </motion.button>
+            <div className="w-full h-full flex items-center justify-center">
+                <PreviewComponent />
             </div>
         );
     }
@@ -125,36 +97,41 @@ function ComponentCard({ item, index }: { item: RegistryItem; index: number }) {
                     }}
                 />
                 <div className="relative z-10 h-full" style={{ minHeight: "320px" }}>
-                    <ComponentPreview name={item.name} />
+                    <ComponentPreview item={item} />
                 </div>
             </div>
 
-            <div className="flex items-center justify-between px-5 py-4">
-                <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-black" style={{ letterSpacing: "-0.02em" }}>
-                        {item.title}
-                    </span>
-                    {item.dependencies?.map((dep) => (
-                        <span
-                            key={dep}
-                            className="text-[10px] font-medium px-2 py-0.5 rounded-md"
-                            style={{
-                                background: "#f0f0f0",
-                                color: "#888",
-                                letterSpacing: "0.03em",
-                            }}
-                        >
-                            {dep}
+            <div className="px-5 py-4">
+                <p className="text-sm text-black/60 leading-relaxed mb-3" style={{ letterSpacing: "-0.01em" }}>
+                    {item.description}
+                </p>
+                <div className="flex items-center justify-between gap-3 flex-wrap">
+                    <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-sm font-semibold text-black" style={{ letterSpacing: "-0.02em" }}>
+                            {item.title}
                         </span>
-                    ))}
+                        {item.dependencies?.map((dep) => (
+                            <span
+                                key={dep}
+                                className="text-[10px] font-medium px-2 py-0.5 rounded-md"
+                                style={{
+                                    background: "#f0f0f0",
+                                    color: "#888",
+                                    letterSpacing: "0.03em",
+                                }}
+                            >
+                                {dep}
+                            </span>
+                        ))}
+                    </div>
+                    <Link
+                        href={`/blocks/${item.name}`}
+                        className="text-[11px] font-semibold text-black/40 hover:text-black transition-colors"
+                        style={{ letterSpacing: "0.06em" }}
+                    >
+                        VIEW ↗
+                    </Link>
                 </div>
-                <Link
-                    href={`/blocks/${item.name}`}
-                    className="text-[11px] font-semibold text-black/40 hover:text-black transition-colors"
-                    style={{ letterSpacing: "0.06em" }}
-                >
-                    VIEW ↗
-                </Link>
             </div>
         </motion.div>
     );
@@ -199,13 +176,13 @@ export default function BlocksCatalog() {
                 </motion.div>
             </div>
 
-            {registry.length === 0 ? (
+            {latestRegistryItems.length === 0 ? (
                 <div className="flex items-center justify-center h-64">
                     <p className="text-black/25 text-sm">No components in registry yet.</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    {registry.map((item, i) => (
+                    {latestRegistryItems.map((item, i) => (
                         <ComponentCard key={item.name} item={item} index={i} />
                     ))}
                 </div>
