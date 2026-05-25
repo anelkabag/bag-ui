@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 import Navbar from "@/components/navbar";
 import Hero from "@/components/Hero";
@@ -26,11 +27,13 @@ export default function Page() {
     };
   }, []);
 
+  const pathname = usePathname();
+
   return (
     <>
       <Navbar />
       <Hero />
-      <BlocksCatalog />
+      <BlocksCatalog key={pathname} />
     </>
   );
 }

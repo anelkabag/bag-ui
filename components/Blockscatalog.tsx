@@ -26,7 +26,7 @@ interface RegistryFile {
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const registryData = registryJson as RegistryFile;
-const latestRegistryItems = (registryData.items ?? []).slice(-5).reverse();
+
 
 // ─── Utils ────────────────────────────────────────────────────────────────────
 
@@ -50,44 +50,45 @@ function Skeleton() {
 // ─── ComponentPreview ─────────────────────────────────────────────────────────
 
 function ComponentPreview({ item }: { item: RegistryItem }) {
-  const [PreviewComponent, setPreviewComponent] = useState<React.ComponentType | null>(null);
   const filePath = item.files?.[0]?.path;
-  const [loading, setLoading] = useState(() => Boolean(filePath));
   const exportName = useMemo(() => pascalCase(item.name), [item.name]);
 
+  return <ComponentPreviewLoader key={filePath ?? item.name} filePath={filePath} exportName={exportName} />;
+}
+
+function ComponentPreviewLoader({
+  filePath,
+  exportName,
+}: {
+  filePath?: string;
+  exportName: string;
+}) {
+  const loader = filePath ? COMPONENT_MAP[filePath] : undefined;
+  const [PreviewComponent, setPreviewComponent] = useState<React.ComponentType | null>(null);
+  const [loading, setLoading] = useState(() => Boolean(filePath && loader));
+  const [loadError, setLoadError] = useState(() => Boolean(filePath && !loader));
+
   useEffect(() => {
-    if (!filePath) {
+    if (!filePath || !loader) {
       return;
     }
 
     let active = true;
-    // Defer setLoading to avoid synchronous setState inside an effect
-    Promise.resolve().then(() => {
-      if (active) setLoading(true);
-    });
-
-    const loader = COMPONENT_MAP[filePath];
-
-    if (!loader) {
-      console.warn(`[ComponentPreview] No loader registered for: "${filePath}". Run npm run generate:map.`);
-      Promise.resolve().then(() => {
-        if (active) setLoading(false);
-      });
-      return;
-    }
 
     loader()
       .then((mod) => {
         if (!active) return;
-        // Try named export (PascalCase of the item name) then fallback to default
         const component = mod[exportName] ?? mod.default;
         if (component) {
           setPreviewComponent(() => component as React.ComponentType);
         } else {
+          setLoadError(true);
           console.warn(`[ComponentPreview] Export "${exportName}" not found in ${filePath}.`);
         }
       })
       .catch((err) => {
+        if (!active) return;
+        setLoadError(true);
         console.error(`[ComponentPreview] Failed to load ${filePath}:`, err);
       })
       .finally(() => {
@@ -97,11 +98,19 @@ function ComponentPreview({ item }: { item: RegistryItem }) {
     return () => {
       active = false;
     };
-  }, [filePath, exportName]);
+  }, [filePath, exportName, loader]);
+
+  if (!filePath) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <span className="text-xs text-black/30">Preview unavailable</span>
+      </div>
+    );
+  }
 
   if (loading) return <Skeleton />;
 
-  if (!PreviewComponent) {
+  if (!PreviewComponent || loadError) {
     return (
       <div className="w-full h-full flex items-center justify-center">
         <span className="text-xs text-black/30">Preview unavailable</span>
@@ -241,6 +250,8 @@ function ComponentCard({ item, index }: { item: RegistryItem; index: number }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function BlocksCatalog() {
+  const latestRegistryItems = (registryData.items ?? []).slice(-5).reverse();
+
   return (
     <section className="min-h-screen bg-white px-6 md:px-12 lg:px-16 py-16">
       <div className="flex items-start justify-between mb-12">
