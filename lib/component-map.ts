@@ -11,6 +11,7 @@ export const COMPONENT_MAP: Record<
 	string,
 	() => Promise<Record<string, React.ComponentType>>
 > = {
+	"registry/default/blocks/team-section.tsx": () => import("@/registry/default/blocks/team-section"),
 	"registry/default/ui/fancy-button.tsx": () => import("@/registry/default/ui/fancy-button"),
 };
 
