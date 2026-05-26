@@ -7,9 +7,9 @@ export function FancyButton() {
         <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="bg-black text-white px-6 py-3 rounded-xl"
+            className="bg-black text-white px-6 py-3 rounded-xl cursor-pointer"
         >
-            Fancy Button
+            Bag\Ui Button
         </motion.button>
     );
 }
