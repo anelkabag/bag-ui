@@ -12,9 +12,8 @@ const splitTextIntoChars = (element: HTMLElement) => {
 
   for (let i = 0; i < text.length; i++) {
     const span = document.createElement("span");
-    span.classList.add("letter");
+    span.className = "letter";
     span.textContent = text[i];
-    span.style.display = "inline-block";
     element.appendChild(span);
     chars.push(span);
   }
@@ -22,82 +21,90 @@ const splitTextIntoChars = (element: HTMLElement) => {
   return chars;
 };
 
+const members = [
+  { name: "Anelka",   img: "https://api.dicebear.com/9.x/adventurer/svg?seed=Anelka&backgroundColor=ffd93d" },
+  { name: "Djodev",   img: "https://api.dicebear.com/9.x/adventurer/svg?seed=Djodev&backgroundColor=6c63ff" },
+  { name: "Greg",     img: "https://api.dicebear.com/9.x/adventurer/svg?seed=Greg&backgroundColor=e07a5f" },
+  { name: "Yves",     img: "https://api.dicebear.com/9.x/adventurer/svg?seed=Yves&backgroundColor=81b29a" },
+  { name: "Pelagie",  img: "https://api.dicebear.com/9.x/adventurer/svg?seed=Pelagie&backgroundColor=f2cc8f" },
+  { name: "HK",       img: "https://api.dicebear.com/9.x/adventurer/svg?seed=HK&backgroundColor=3d405b" },
+  { name: "Promesse", img: "https://api.dicebear.com/9.x/adventurer/svg?seed=Promesse&backgroundColor=e63946" },
+  { name: "Lucien",   img: "https://api.dicebear.com/9.x/adventurer/svg?seed=Lucien&backgroundColor=457b9d" },
+  { name: "Big Man",  img: "https://api.dicebear.com/9.x/adventurer/svg?seed=BigMan&backgroundColor=2d6a4f" },
+];
+
 const TeamSection = () => {
   useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
+    if (typeof window === "undefined") return;
 
-    const profileImages = document.querySelectorAll<HTMLDivElement>(".profile-images .img");
-    const nameElements = document.querySelectorAll<HTMLDivElement>(".profile-names .name");
-    const nameHeadings = document.querySelectorAll<HTMLHeadingElement>(".profile-names .name h1");
+    const nameEls = document.querySelectorAll<HTMLDivElement>(".name[data-index]");
+    const imgEls = document.querySelectorAll<HTMLDivElement>(".img[data-index]");
+    const defaultName = document.querySelector<HTMLDivElement>(".name.default");
 
-    nameHeadings.forEach((heading) => {
-      splitTextIntoChars(heading as HTMLElement);
+    nameEls.forEach((nameEl) => {
+      const h1 = nameEl.querySelector("h1");
+      if (h1) splitTextIntoChars(h1);
     });
 
-    const defaultName = document.querySelector<HTMLDivElement>(".name.default");
-    const defaultLetters = defaultName ? defaultName.querySelectorAll<HTMLElement>(".letter") : [];
-
-    if (defaultLetters.length) {
-      gsap.set(defaultLetters, { y: "0%" });
+    if (defaultName) {
+      const h1 = defaultName.querySelector("h1");
+      if (h1) splitTextIntoChars(h1);
     }
 
-    const handlers: Array<{
-      img: HTMLDivElement;
-      enter: () => void;
-      leave: () => void;
-    }> = [];
+    const defaultLetters = defaultName
+      ? defaultName.querySelectorAll<HTMLElement>(".letter")
+      : [];
 
-    if (window.innerWidth > 900) {
-      profileImages.forEach((img, index) => {
-        const correspondingName = nameElements[index + 1];
-        if (!correspondingName) return;
-        const letters = correspondingName.querySelectorAll<HTMLElement>(".letter");
-        gsap.set(letters, { y: "100%" });
+    gsap.set(defaultLetters, { y: "0%" });
 
-        const enter = () => {
-          gsap.to(img, { width: 140, height: 140, duration: 0.35, ease: "power4.out" });
-          gsap.to(letters, {
-            y: "-100%",
-            duration: 0.8,
-            ease: "power4.out",
-            stagger: { each: 0.03, from: "center" },
-          });
-          if (defaultLetters.length) {
-            gsap.to(defaultLetters, {
-              y: "-150%",
-              duration: 0.8,
-              ease: "power4.out",
-              stagger: { each: 0.03, from: "center" },
-            });
-          }
-        };
+    nameEls.forEach((nameEl) => {
+      const letters = nameEl.querySelectorAll<HTMLElement>(".letter");
+      gsap.set(letters, { y: "100%" });
+    });
 
-        const leave = () => {
-          gsap.to(img, { width: 70, height: 70, duration: 0.35, ease: "power4.out" });
-          gsap.to(letters, {
-            y: "100%",
-            duration: 0.8,
-            ease: "power4.out",
-            stagger: { each: 0.03, from: "center" },
-          });
-          if (defaultLetters.length) {
-            gsap.to(defaultLetters, {
-              y: "0%",
-              duration: 0.8,
-              ease: "power4.out",
-              stagger: { each: 0.03, from: "center" },
-            });
-          }
-        };
+    const handlers: Array<{ img: HTMLDivElement; enter: () => void; leave: () => void }> = [];
 
-        img.addEventListener("mouseenter", enter);
-        img.addEventListener("mouseleave", leave);
+    imgEls.forEach((imgEl) => {
+      const idx = imgEl.getAttribute("data-index");
+      const nameEl = document.querySelector<HTMLDivElement>(`.name[data-index="${idx}"]`);
+      if (!nameEl) return;
 
-        handlers.push({ img, enter, leave });
-      });
-    }
+      const letters = nameEl.querySelectorAll<HTMLElement>(".letter");
+
+      const enter = () => {
+        gsap.to(letters, {
+          y: "-100%",
+          duration: 0.7,
+          ease: "power4.out",
+          stagger: { each: 0.03, from: "center" },
+        });
+        gsap.to(defaultLetters, {
+          y: "-150%",
+          duration: 0.7,
+          ease: "power4.out",
+          stagger: { each: 0.03, from: "center" },
+        });
+      };
+
+      const leave = () => {
+        gsap.to(letters, {
+          y: "100%",
+          duration: 0.7,
+          ease: "power4.out",
+          stagger: { each: 0.03, from: "center" },
+        });
+        gsap.to(defaultLetters, {
+          y: "0%",
+          duration: 0.7,
+          ease: "power4.out",
+          stagger: { each: 0.03, from: "center" },
+        });
+      };
+
+      imgEl.addEventListener("mouseenter", enter);
+      imgEl.addEventListener("mouseleave", leave);
+      handlers.push({ img: imgEl, enter, leave });
+    });
 
     return () => {
       handlers.forEach(({ img, enter, leave }) => {
@@ -109,120 +116,50 @@ const TeamSection = () => {
 
   return (
     <section className="team">
-      <div className="profile-images">
-        <div className="img">
-          <img src="/image1.jpeg" alt="Colin" />
-        </div>
-        <div className="img">
-          <img src="/image2.jpeg" alt="Liam" />
-        </div>
-        <div className="img">
-          <img src="/image3.jpeg" alt="Tabitha" />
-        </div>
-        <div className="img">
-          <img src="/image4.jpeg" alt="Tyson" />
-        </div>
-        <div className="img">
-          <img src="/image5.jpeg" alt="Max" />
-        </div>
-        <div className="img">
-          <img src="/image6.jpeg" alt="Everest" />
-        </div>
-        <div className="img">
-          <img src="/image7.jpeg" alt="Simon" />
-        </div>
-        <div className="img">
-          <img src="/image8.jpeg" alt="Gideon" />
-        </div>
-        <div className="img">
-          <img src="/image9.jpeg" alt="Benton" />
-        </div>
-      </div>
-
       <div className="profile-names">
         <div className="name default">
           <h1>The Geek</h1>
         </div>
-        <div className="name">
-          <h1>Anelka</h1>
-        </div>
-        <div className="name">
-          <h1>Djodev</h1>
-        </div>
-        <div className="name">
-          <h1>Greg</h1>
-        </div>
-        <div className="name">
-          <h1>Yves</h1>
-        </div>
-        <div className="name">
-          <h1>Pelagie</h1>
-        </div>
-        <div className="name">
-          <h1>HK</h1>
-        </div>
-        <div className="name">
-          <h1>Promesse</h1>
-        </div>
-        <div className="name">
-          <h1>lucien</h1>
-        </div>
-        <div className="name">
-          <h1>Big Man</h1>
-        </div>
+        {members.map((m, i) => (
+          <div className="name" data-index={i} key={m.name}>
+            <h1>{m.name}</h1>
+          </div>
+        ))}
+      </div>
+
+      <div className="profile-images">
+        {members.map((m, i) => (
+          <div className="img" data-index={i} key={m.name}>
+            <img src={m.img} alt={m.name} />
+          </div>
+        ))}
       </div>
 
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@900&display=swap');
 
         .team {
           position: relative;
           width: 100%;
-          min-height: 100vh;
+          min-height: 340px;
           background-color: #f8eed4;
           color: #1f1f1e;
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          gap: 2.5em;
-          overflow: hidden;
-          padding: 1.5rem;
+          gap: 1.5rem;
+          padding: 1.5rem 1rem;
           box-sizing: border-box;
-        }
-
-        .profile-images {
-          width: min(100%, 560px);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-wrap: wrap;
-          gap: 1rem;
-        }
-
-        .img {
-          position: relative;
-          width: 70px;
-          height: 70px;
-          padding: 5px;
-          cursor: pointer;
-          will-change: width, height;
-        }
-
-        .img img {
-          border-radius: 0.5rem;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
+          overflow: hidden;
         }
 
         .profile-names {
           width: 100%;
-          max-width: 100%;
-          height: 20rem;
-          clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+          height: clamp(3.5rem, 13vw, 14rem);
           overflow: hidden;
           position: relative;
+          clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
         }
 
         .name h1 {
@@ -231,9 +168,9 @@ const TeamSection = () => {
           text-align: center;
           text-transform: uppercase;
           font-family: 'Barlow Condensed', sans-serif;
-          font-size: clamp(3.5rem, 10vw, 20rem);
+          font-size: clamp(3rem, 13vw, 12rem);
           font-weight: 900;
-          letter-spacing: -0.5rem;
+          letter-spacing: -0.03em;
           line-height: 1;
           color: #f93535;
           user-select: none;
@@ -242,86 +179,46 @@ const TeamSection = () => {
         }
 
         .name.default h1 {
-          transform: translateY(0);
+          transform: translateY(0%);
           color: #111111;
         }
 
         .name h1 .letter {
-          position: relative;
-          transform: translateY(0%);
+          display: inline-block;
           will-change: transform;
         }
 
-        @media (max-width: 900px) {
-          .team {
-            flex-direction: column-reverse;
-          }
-
-          .profile-images {
-            flex-wrap: wrap;
-            max-width: 90%;
-            justify-content: center;
-          }
-
-          .img {
-            width: 60px;
-            height: 60px;
-            padding: 2.5px;
-          }
-
-          .name h1 {
-            font-size: clamp(3rem, 11vw, 8rem);
-            letter-spacing: 0;
-          }
-
-          .profile-names {
-            height: 4rem;
-          }
+        .profile-images {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          align-items: center;
+          gap: 0.6rem;
+          width: 100%;
+          max-width: 500px;
         }
 
-        @media (max-width: 480px) {
-          .team {
-            gap: 1rem;
-            padding: 1rem;
-          }
-
-          .profile-images {
-            gap: 0.75rem;
-          }
-
-          .img {
-            width: 48px;
-            height: 48px;
-            padding: 2px;
-          }
-
-          .name h1 {
-            font-size: clamp(2.8rem, 14vw, 6rem);
-            letter-spacing: 0;
-          }
-
-          .profile-names {
-            height: 6rem;
-          }
+        .img {
+          width: clamp(48px, 10vw, 80px);
+          height: clamp(48px, 10vw, 80px);
+          cursor: pointer;
+          will-change: width, height;
+          transition: width 0.35s cubic-bezier(0.19, 1, 0.22, 1),
+                      height 0.35s cubic-bezier(0.19, 1, 0.22, 1);
+          flex-shrink: 0;
         }
 
-        @media (max-width: 360px) {
-          .profile-images {
-            gap: 0.5rem;
-          }
+        .img:hover {
+          width: clamp(72px, 15vw, 120px);
+          height: clamp(72px, 15vw, 120px);
+        }
 
-          .img {
-            width: 42px;
-            height: 42px;
-          }
-
-          .name h1 {
-            font-size: clamp(2.4rem, 16vw, 5rem);
-          }
-
-          .profile-names {
-            height: 5rem;
-          }
+        .img img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 0.5rem;
+          display: block;
         }
       `}</style>
     </section>
