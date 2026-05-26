@@ -6,8 +6,6 @@ import Link from "next/link";
 import registryJson from "@/registry.json";
 import { ComponentPreview } from "@/components/ComponentPreview";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
 interface RegistryItem {
   name: string;
   type: string;
@@ -21,17 +19,8 @@ interface RegistryFile {
   items: RegistryItem[];
 }
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
-
 const registryData = registryJson as RegistryFile;
 
-
-// ─── Utils ────────────────────────────────────────────────────────────────────
-
-
-// ─── Skeleton ─────────────────────────────────────────────────────────────────
-
-// ─── Small helpers ────────────────────────────────────────────────────────────
 
 function TrafficLights() {
   return (
