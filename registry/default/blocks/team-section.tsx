@@ -141,22 +141,23 @@ const TeamSection = () => {
         .team {
           position: relative;
           width: 100%;
-          min-height: 340px;
-          background-color: #f8eed4;
+          height: 100%;
+          min-height: unset;
+          background-color: #ffffff;
           color: #1f1f1e;
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          gap: 1.5rem;
-          padding: 1.5rem 1rem;
+          gap: 1rem;
+          padding: 1rem;
           box-sizing: border-box;
           overflow: hidden;
         }
 
         .profile-names {
           width: 100%;
-          height: clamp(3.5rem, 13vw, 14rem);
+          height: clamp(2.5rem, 20%, 7rem);
           overflow: hidden;
           position: relative;
           clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
@@ -168,7 +169,7 @@ const TeamSection = () => {
           text-align: center;
           text-transform: uppercase;
           font-family: 'Barlow Condensed', sans-serif;
-          font-size: clamp(3rem, 13vw, 12rem);
+          font-size: clamp(2rem, 7%, 7rem);
           font-weight: 900;
           letter-spacing: -0.03em;
           line-height: 1;
@@ -193,14 +194,14 @@ const TeamSection = () => {
           flex-wrap: wrap;
           justify-content: center;
           align-items: center;
-          gap: 0.6rem;
+          gap: 0.5rem;
           width: 100%;
-          max-width: 500px;
+          max-width: 100%;
         }
 
         .img {
-          width: clamp(48px, 10vw, 80px);
-          height: clamp(48px, 10vw, 80px);
+          width: clamp(36px, 8%, 64px);
+          height: clamp(36px, 8%, 64px);
           cursor: pointer;
           will-change: width, height;
           transition: width 0.35s cubic-bezier(0.19, 1, 0.22, 1),
@@ -209,8 +210,8 @@ const TeamSection = () => {
         }
 
         .img:hover {
-          width: clamp(72px, 15vw, 120px);
-          height: clamp(72px, 15vw, 120px);
+          width: clamp(54px, 12%, 96px);
+          height: clamp(54px, 12%, 96px);
         }
 
         .img img {
