@@ -135,7 +135,7 @@ function ComponentCard({ item, index }: { item: RegistryItem; index: number }) {
             className="text-[11px] font-semibold text-black/40 hover:text-black transition-colors"
             style={{ letterSpacing: "0.06em" }}
           >
-            VIEW ↗
+            View ↗
           </Link>
         </div>
       </div>
