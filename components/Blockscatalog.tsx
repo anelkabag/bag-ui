@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import registryJson from "@/registry.json";
@@ -135,7 +136,7 @@ function ComponentCard({ item, index }: { item: RegistryItem; index: number }) {
             className="text-[11px] font-semibold text-black/40 hover:text-black transition-colors"
             style={{ letterSpacing: "0.06em" }}
           >
-            View ↗
+            View <ArrowUpRight size={14} />
           </Link>
         </div>
       </div>
@@ -181,7 +182,7 @@ export default function BlocksCatalog() {
             href="/blocks"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-black/50 hover:text-black transition-colors"
           >
-            See all blocks <span>↗</span>
+            See all blocks <ArrowUpRight size={14} />
           </Link>
         </motion.div>
       </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
@@ -96,7 +97,7 @@ export default function Hero() {
                 className="hover:text-white transition-colors duration-150"
               >
                 See what shipped
-                <span>↗</span>
+                <ArrowUpRight size={16} />
               </Link>
             </div>
           </motion.div>
@@ -143,7 +144,7 @@ export default function Hero() {
               className="inline-flex items-center gap-2 h-12 px-7 rounded-full bg-white text-[#0f0f0f] text-sm font-semibold hover:bg-gray-100 active:scale-95 transition-all"
               style={{ letterSpacing: "-0.01em" }}
             >
-              Get full access <span>→</span>
+              Get full access <ArrowRight size={16} />
             </Link>
             <Link
               href="/blocks"
