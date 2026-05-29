@@ -4,12 +4,12 @@
   "private": true,
   "scripts": {
     "generate:map": "tsx scripts/generate-component-map.ts",
-    "predev":       "npm run generate:map",
-    "prebuild":     "npm run generate:map",
-    "dev":          "next dev",
-    "build":        "next build",
-    "start":        "next start",
-    "lint":         "eslint"
+    "predev": "npm run generate:map",
+    "prebuild": "npm run generate:map",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
   },
   "dependencies": {
     "@studio-freight/lenis": "^1.0.42",
@@ -19,7 +19,7 @@
     "framer-motion": "^12.40.0",
     "gsap": "^3.15.0",
     "lenis": "^1.3.23",
-    "lucide-react": "^1.16.0",
+    "lucide-react": "^1.17.0",
     "next": "16.2.6",
     "radix-ui": "^1.4.3",
     "react": "19.2.4",
