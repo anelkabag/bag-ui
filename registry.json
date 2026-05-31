@@ -9,11 +9,11 @@
       "type": "registry:ui",
       "title": "Fancy Button",
       "description": "Animated premium button",
-      "dependencies": ["framer-motion"],
       "files": [
         {
           "path": "registry/default/ui/fancy-button.tsx",
-          "type": "registry:ui"
+          "type": "registry:ui",
+          "target": "components/ui/fancy-button.tsx"
         }
       ]
     },
@@ -22,11 +22,11 @@
       "type": "registry:block",
       "title": "Team Section",
       "description": "Interactive team preview section with hover reveal animation.",
-      "dependencies": ["gsap"],
       "files": [
         {
           "path": "registry/default/blocks/team-section.tsx",
-          "type": "registry:block"
+          "type": "registry:block",
+          "target": "components/blocks/team-section.tsx"
         }
       ]
     }

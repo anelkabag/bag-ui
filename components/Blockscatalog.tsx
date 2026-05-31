@@ -5,7 +5,6 @@ import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import registryJson from "@/registry.json";
-import { ComponentPreview } from "@/components/ComponentPreview";
 
 interface RegistryItem {
   name: string;
@@ -13,7 +12,7 @@ interface RegistryItem {
   title: string;
   description: string;
   dependencies?: string[];
-  files: { path: string; type: string }[];
+  files: { path: string; type: string; target?: string }[];
 }
 
 interface RegistryFile {
@@ -22,27 +21,36 @@ interface RegistryFile {
 
 const registryData = registryJson as RegistryFile;
 
+function getBlockCategory(item: RegistryItem) {
+  const targetPath = item.files?.find((file) => file.target)?.target;
+  const filePath = targetPath ?? item.files?.[0]?.path;
 
-function TrafficLights() {
-  return (
-    <div className="flex items-center gap-1.25">
-      {[0, 1, 2].map((i) => (
-        <span key={i} className="w-2.75 h-2.75 rounded-full bg-[#d8d8d8]" />
-      ))}
-    </div>
-  );
+  if (!filePath) {
+    return item.type?.split(":")[1] ?? "section";
+  }
+
+  const normalized = filePath
+    .replace(/^\.\//, "")
+    .replace(/^registry\/default\//, "")
+    .replace(/^components\//, "")
+    .replace(/\.tsx?$/i, "")
+    .replace(/\.jsx?$/i, "");
+
+  const segments = normalized.split("/").filter(Boolean);
+  if (segments.length === 0) {
+    return item.type?.split(":")[1] ?? "section";
+  }
+
+  const lastSegment = segments[segments.length - 1];
+  if (lastSegment.toLowerCase() === "index" && segments.length > 1) {
+    return segments[segments.length - 2];
+  }
+
+  return lastSegment;
 }
 
-function DotGrid() {
-  return (
-    <div
-      className="absolute inset-0 pointer-events-none"
-      style={{
-        backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.055) 1px, transparent 1px)",
-        backgroundSize: "22px 22px",
-      }}
-    />
-  );
+function formatCount(count: number) {
+  return `${count} composant${count > 1 ? "s" : ""}`;
 }
 
 function DepBadge({ dep }: { dep: string }) {
@@ -56,145 +64,134 @@ function DepBadge({ dep }: { dep: string }) {
   );
 }
 
-// ─── ComponentCard ────────────────────────────────────────────────────────────
-
 function ComponentCard({ item, index }: { item: RegistryItem; index: number }) {
+  const componentCount = item.files?.length ?? 0;
+  const category = getBlockCategory(item);
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 32 }}
+      initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-      className="flex flex-col rounded-2xl overflow-hidden"
-      style={{
-        background: "#fff",
-        border: "1px solid #e8e8e8",
-        boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+      transition={{
+        duration: 0.5,
+        delay: index * 0.08,
+        ease: [0.22, 1, 0.36, 1],
       }}
+      className="flex flex-col rounded-3xl border border-[#e9e9e9] bg-white shadow-sm overflow-hidden"
     >
-      {/* Header */}
-      <div
-        className="flex items-center justify-between px-5 py-4"
-        style={{ borderBottom: "1px solid #efefef" }}
-      >
-        <div className="flex items-center gap-2">
-          <span
-            className="text-[15px] font-bold text-black"
-            style={{ letterSpacing: "-0.03em" }}
-          >
-            {item.title}.
+      <div className="px-6 py-5 bg-slate-50 border-b border-slate-100">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500 mb-2">
+              Section
+            </p>
+            <h2 className="text-xl font-bold text-slate-950 tracking-[-0.03em]">
+              {item.title}
+            </h2>
+          </div>
+          <span className="text-xs font-semibold text-slate-500 uppercase tracking-[0.16em]">
+            {item.type?.split(":")[1] === "block" ? "Block" : "UI"}
           </span>
-          <span
-            className="text-[15px] font-normal text-black/35"
-            style={{ letterSpacing: "-0.02em" }}
-          >
-            /{item.type?.split(":")[1] === "block" ? "blocks" : item.type?.split(":")[1] ?? "ui"}
-          </span>
-        </div>
-        <TrafficLights />
-      </div>
-
-      {/* Preview */}
-      <div
-        className="relative overflow-hidden"
-        style={{
-          background: "#f7f7f7",
-          width: "100%",
-          height: "340px",
-          margin: "10px",
-          borderRadius: "12px",
-          border: "1px solid #efefef",
-        }}
-      >
-        <DotGrid />
-        <div className="relative z-10 flex items-center justify-center" style={{ width: "100%", height: "100%" }}>
-          <ComponentPreview item={item} />
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="px-5 py-4">
-        <p
-          className="text-sm text-black/60 leading-relaxed mb-3"
-          style={{ letterSpacing: "-0.01em" }}
-        >
+      <div className="px-6 py-5 flex-1">
+        <p className="text-sm text-slate-600 leading-relaxed mb-5">
           {item.description}
         </p>
-        <div className="flex items-center justify-between gap-3 flex-wrap">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span
-              className="text-sm font-semibold text-black"
-              style={{ letterSpacing: "-0.02em" }}
-            >
-              {item.title}
-            </span>
-            {item.dependencies?.map((dep) => (
-              <DepBadge key={dep} dep={dep} />
-            ))}
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="rounded-2xl bg-slate-100 p-4">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500 mb-2">
+              Catégorie
+            </p>
+            <p className="text-sm font-semibold text-slate-900">
+              {category || "Autre"}
+            </p>
           </div>
-          <Link
-            href={`/blocks/${item.name}`}
-            className="text-[11px] font-semibold text-black/40 hover:text-black transition-colors"
-            style={{ letterSpacing: "0.06em" }}
-          >
-            View <ArrowUpRight size={14} />
-          </Link>
+
+          <div className="rounded-2xl bg-slate-100 p-4">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500 mb-2">
+              Composants utilisés
+            </p>
+            <p className="text-sm font-semibold text-slate-900">
+              {formatCount(componentCount)}
+            </p>
+          </div>
         </div>
+
+        <div className="mt-5 space-y-2">
+          {item.files?.map((file) => (
+            <div
+              key={file.path}
+              className="rounded-2xl border border-slate-200 bg-white p-3 text-xs text-slate-600"
+            >
+              {file.path.replace(/^registry\/default\//, "")}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="px-6 py-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between gap-3">
+        <div className="flex flex-wrap gap-2">
+          {item.dependencies?.map((dep) => (
+            <DepBadge key={dep} dep={dep} />
+          ))}
+        </div>
+        <Link
+          href={`/blocks/${item.name}`}
+          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-slate-900 transition-colors"
+        >
+          Voir le bloc <ArrowUpRight size={14} />
+        </Link>
       </div>
     </motion.div>
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
-
 export default function BlocksCatalog() {
-  const latestRegistryItems = (registryData.items ?? []).slice(-5).reverse();
+  const registryItems = registryData.items ?? [];
 
   return (
     <section className="min-h-screen bg-white px-6 md:px-12 lg:px-16 py-16">
-      <div className="flex items-start justify-between mb-12">
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <p className="text-[11px] font-semibold tracking-[0.12em] text-black/30 mb-3 uppercase">
-            Catalog
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between mb-12">
+        <div>
+          <p className="text-[11px] font-semibold tracking-[0.12em] text-slate-500 uppercase mb-3">
+            Catalogue de sections
           </p>
           <h1
-            className="text-4xl md:text-5xl font-bold text-black mb-3"
-            style={{ letterSpacing: "-0.03em", lineHeight: 1.1 }}
+            className="text-4xl md:text-5xl font-bold text-slate-950 mb-4"
+            style={{ letterSpacing: "-0.03em", lineHeight: 1.05 }}
           >
-            A taste of what&apos;s inside
+            Les blocs de page modernes
           </h1>
-          <p className="text-black/40 text-sm md:text-base max-w-md leading-relaxed">
-            Every block crafted by hand and free while we warm up. Pick a component to start
-            browsing.
+          <p className="text-slate-600 text-sm md:text-base max-w-xl leading-relaxed">
+            Ici, chaque bloc représente une section de site web. On affiche
+            combien de composants sont nécessaires pour le construire selon le
+            registre.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.55, delay: 0.15 }}
-          className="hidden md:block pt-1"
-        >
+        <div className="hidden md:block">
           <Link
             href="/blocks"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-black/50 hover:text-black transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors"
           >
-            See all blocks <ArrowUpRight size={14} />
+            Voir tous les blocs <ArrowUpRight size={14} />
           </Link>
-        </motion.div>
+        </div>
       </div>
 
-      {latestRegistryItems.length === 0 ? (
+      {registryItems.length === 0 ? (
         <div className="flex items-center justify-center h-64">
-          <p className="text-black/25 text-sm">No components in registry yet.</p>
+          <p className="text-slate-400 text-sm">
+            Aucun bloc trouvé dans le registre.
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {latestRegistryItems.map((item, i) => (
-            <ComponentCard key={item.name} item={item} index={i} />
+          {registryItems.map((item, index) => (
+            <ComponentCard key={item.name} item={item} index={index} />
           ))}
         </div>
       )}
