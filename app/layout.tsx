@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Bag/UI - By Anelka Bag",
+    title: "BagUI - By Anelka Bag",
     description:
       "A curated shadcn/ui component registry. Copy-paste beautiful, accessible blocks.",
   },
