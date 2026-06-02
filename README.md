@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bag UI
 
-## Getting Started
+Mini documentation pour ce projet `bag-ui`.
 
-First, run the development server:
+## Présentation
+
+Ce projet est un site Next.js qui expose un catalogue de blocs et composants issu d’un registre statique `public/r`.
+
+Il est conçu pour fonctionner comme un registre shadcn custom :
+
+- `registry.json` est la source de vérité du registre.
+- `public/r/registry.json` est le registre public utilisé par l’application.
+- `public/r/*.json` contient les items de registre individuels.
+- `components/ComponentPreview.tsx` charge dynamiquement les composants à partir du registre.
+
+## Structure importante
+
+- `app/page.tsx` : page d’accueil
+- `components/navbar.tsx` : barre de navigation
+- `components/Hero.tsx` : section hero
+- `components/Blockscatalog.tsx` : affichage du catalogue de blocs
+- `components/ComponentPreview.tsx` : prévisualisation dynamique
+- `registry.json` : registre racine
+- `public/r/registry.json` : registre public exploité par l’app
+- `public/r/*.json` : items de registre
+
+## Installation
+
+```bash
+npm install
+```
+
+## Développement
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Puis ouvrir :
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Build et production
 
-## Learn More
+```bash
+npm run build
+npm run start
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Registre et génération
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Le projet utilise maintenant un registre statique `public/r` :
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- pour qu’un nouveau composant soit visible, il faut mettre à jour `registry.json`
+- puis lancer `npm run registry:build`
+- cela met à jour `public/r/registry.json` et `public/r/<nom>.json`
 
-## Deploy on Vercel
+### Ajouter un composant
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Ajouter l’item dans `registry.json`
+2. Ajouter le composant dans `registry/default/...`
+3. Lancer `npm run registry:build`
+4. Vérifier `public/r/registry.json` et `public/r/<nom>.json`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Commandes utiles
+
+```bash
+npm run dev
+npm run build
+npm run start
+npm run registry:build
+```
+
+## Notes
+
+- Le pipeline de génération `component-map` a été retiré.
+- L’application dépend maintenant du contenu statique de `public/r` pour afficher le registre.
+- `public/r/team-section.json` est un exemple d’item de registre.
+
+## Stack
+
+- Next.js 16
+- React 19
+- Tailwind CSS 4
+- shadcn registry
+- Framer Motion, GSAP
