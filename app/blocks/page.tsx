@@ -35,6 +35,15 @@ function getFileLabel(file: { path: string; target?: string }) {
 
 export default function BlocksPage() {
   const items = registryData.items ?? [];
+  const totalBlocks = items.filter((item) =>
+    item.type?.includes("block"),
+  ).length;
+  const totalUi = items.filter((item) => item.type?.includes("ui")).length;
+  const totalComponents = items.reduce(
+    (sum, item) => sum + item.files.length,
+    0,
+  );
+  const sortedItems = [...items].sort((a, b) => a.title.localeCompare(b.title));
 
   return (
     <>
@@ -48,46 +57,72 @@ export default function BlocksPage() {
             className="text-4xl md:text-5xl font-bold text-slate-950 mb-4"
             style={{ lineHeight: 1.05 }}
           >
-            Tous les blocs disponibles
+            Catalogue des blocs
           </h1>
           <p className="max-w-2xl text-slate-600 text-base leading-relaxed">
-            Parcourez les sections prêtes à l’emploi et voyez combien de
-            composants chaque bloc contient selon le registre. Les catégories
-            sont déterminées à partir du champ <code>target</code> du fichier.
+            Une seule page pour visualiser chaque bloc disponible et les
+            composants associés. Tous les blocs sont affichés ici, sans générer
+            une page dédiée par bloc.
           </p>
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-3">
+            <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500 mb-2">
+                Sections
+              </p>
+              <p className="text-3xl font-semibold text-slate-950">
+                {totalBlocks}
+              </p>
+            </div>
+            <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500 mb-2">
+                Composants
+              </p>
+              <p className="text-3xl font-semibold text-slate-950">
+                {totalComponents}
+              </p>
+            </div>
+            <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500 mb-2">
+                UI
+              </p>
+              <p className="text-3xl font-semibold text-slate-950">{totalUi}</p>
+            </div>
+          </div>
         </div>
 
-        {items.length === 0 ? (
+        {sortedItems.length === 0 ? (
           <div className="flex items-center justify-center h-48 text-slate-400">
             Aucun bloc trouvé dans le registre.
           </div>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {items.map((item) => (
+          <div className="space-y-8">
+            {sortedItems.map((item) => (
               <article
+                id={item.name}
                 key={item.name}
                 className="group rounded-[28px] border border-slate-200 bg-slate-50 p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
               >
-                <div className="flex items-start justify-between gap-3 mb-5">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between mb-6">
                   <div>
                     <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500 mb-2">
                       {item.type?.split(":")[1] === "block" ? "Section" : "UI"}
                     </p>
-                    <h2 className="text-xl font-semibold text-slate-950 leading-tight">
+                    <h2 className="text-2xl font-semibold text-slate-950 leading-tight">
                       {item.title}
                     </h2>
                   </div>
                   <span className="rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-600 border border-slate-200">
-                    {item.files.length} component
+                    {item.files.length} composant
                     {item.files.length > 1 ? "s" : ""}
                   </span>
                 </div>
 
-                <p className="text-sm text-slate-600 leading-relaxed mb-5">
+                <p className="text-sm text-slate-600 leading-relaxed mb-6">
                   {item.description}
                 </p>
 
-                <div className="grid gap-3 mb-5">
+                <div className="grid gap-3 md:grid-cols-2 mb-6">
                   <div className="rounded-2xl bg-white p-4 border border-slate-200">
                     <p className="text-[10px] uppercase tracking-[0.18em] text-slate-500 mb-1">
                       Catégorie
@@ -96,23 +131,39 @@ export default function BlocksPage() {
                       {getCategory(item)}
                     </p>
                   </div>
+                  <div className="rounded-2xl bg-white p-4 border border-slate-200">
+                    <p className="text-[10px] uppercase tracking-[0.18em] text-slate-500 mb-1">
+                      Types de fichiers
+                    </p>
+                    <p className="text-sm font-medium text-slate-900">
+                      {Array.from(
+                        new Set(item.files.map((file) => file.type)),
+                      ).join(", ")}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-3 mb-6">
                   {item.files.map((file) => (
                     <div
                       key={file.path}
-                      className="rounded-2xl bg-white p-4 border border-slate-200 text-xs text-slate-600"
+                      className="rounded-2xl bg-white p-4 border border-slate-200 text-sm text-slate-600"
                     >
-                      {getFileLabel(file)}
+                      <p className="font-semibold text-slate-900">
+                        {getFileLabel(file)}
+                      </p>
+                      <p className="text-xs text-slate-500 mt-1">{file.type}</p>
                     </div>
                   ))}
                 </div>
 
-                <Link
-                  href={`/blocks/${item.name}`}
+                <a
+                  href={`#${item.name}`}
                   className="inline-flex items-center gap-2 text-sm font-semibold text-slate-900 hover:text-black"
                 >
-                  Voir le bloc
+                  Voir cette section
                   <span aria-hidden="true">→</span>
-                </Link>
+                </a>
               </article>
             ))}
           </div>
