@@ -5,93 +5,32 @@ import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import registryJson from "@/public/r/registry.json";
-
-interface RegistryItem {
-  name: string;
-  title: string;
-  type: string;
-  description: string;
-  dependencies?: string[];
-  files: { path: string; type: string; target?: string }[];
-}
+import {
+  blockCategories,
+  countRegistryItemsForCategory,
+  RegistryItem,
+} from "@/lib/block-categories";
 
 interface RegistryFile {
   items: RegistryItem[];
 }
 
 interface SectionBlock {
-  name: string;
+  slug: string;
   title: string;
   type: string;
   description: string;
   count: number;
   available: boolean;
+  route?: string;
 }
 
 const registryData = registryJson as RegistryFile;
 
-const mockBlocks = [
-  {
-    name: "contact",
-    title: "Contact",
-    type: "block",
-    description: "Contact form and information section",
-  },
-  {
-    name: "faqs",
-    title: "FAQs",
-    type: "block",
-    count: 15,
-    description: "Frequently asked questions accordion",
-  },
-  {
-    name: "footer",
-    title: "Footer",
-    type: "block",
-    count: 15,
-    description: "Site footer with links and info",
-  },
-  {
-    name: "carousel",
-    title: "Carousel",
-    type: "block",
-    count: 12,
-    description: "Image carousel/slider component",
-  },
-  {
-    name: "pricing",
-    title: "Pricing",
-    type: "block",
-    count: 14,
-    description: "Pricing plans and comparison",
-  },
-  {
-    name: "hero",
-    title: "Hero",
-    type: "block",
-    description: "Hero banner with call to action",
-  },
-  {
-    name: "team",
-    title: "Team",
-    type: "block",
-    description: "Team section with member previews",
-  },
-];
+const mockBlocks = blockCategories;
 
 function countRegistryItemsForSection(sectionName: string) {
-  return registryData.items.filter((item) => {
-    const normalizedName = item.name.toLowerCase();
-    const normalizedPath = item.files
-      .map((file) => file.path.toLowerCase())
-      .join(" ");
-
-    return (
-      normalizedName.includes(sectionName.toLowerCase()) ||
-      normalizedPath.includes(`/${sectionName.toLowerCase()}`) ||
-      normalizedPath.includes(`-${sectionName.toLowerCase()}`)
-    );
-  }).length;
+  return countRegistryItemsForCategory(sectionName, registryData.items);
 }
 
 // Preview components for each block type
@@ -312,7 +251,7 @@ function BlockCard({ block, index }: { block: SectionBlock; index: number }) {
       {/* Preview Area */}
       <div className="aspect-video bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden relative">
         <div className="w-full h-full p-6">
-          <BlockPreview blockType={block.name} />
+          <BlockPreview blockType={block.slug} />
         </div>
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
       </div>
@@ -356,8 +295,8 @@ function BlockCard({ block, index }: { block: SectionBlock; index: number }) {
       whileHover={{ y: -4 }}
       className="group"
     >
-      {block.available ? (
-        <Link href={`/blocks#${block.name}`}>{cardContent}</Link>
+      {block.available && block.route ? (
+        <Link href={`/blocks/${block.route}`}>{cardContent}</Link>
       ) : (
         cardContent
       )}
@@ -367,11 +306,12 @@ function BlockCard({ block, index }: { block: SectionBlock; index: number }) {
 
 export default function BlocksCatalog() {
   const blocks = mockBlocks.map((section) => {
-    const count = countRegistryItemsForSection(section.name);
+    const count = countRegistryItemsForSection(section.slug);
     return {
       ...section,
       count,
       available: count > 0,
+      route: section.slug,
     };
   });
 
@@ -410,7 +350,7 @@ export default function BlocksCatalog() {
           {/* Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {blocks.map((block, index) => (
-              <BlockCard key={block.name} block={block} index={index} />
+              <BlockCard key={block.slug} block={block} index={index} />
             ))}
           </div>
         </div>
