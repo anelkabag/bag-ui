@@ -188,7 +188,25 @@ export default function Navbar() {
             </Link>
             <Link
               href="/access"
-              className="inline-flex h-8 px-4 rounded-full text-[13px] font-medium text-white bg-black border border-black hover:bg-gray-800 transition-all items-center justify-center"
+              className="
+                  inline-flex
+                  h-8
+                  px-3
+                  sm:px-4
+                  rounded-full
+                  text-[12px]
+                  sm:text-[13px]
+                  font-medium
+                  whitespace-nowrap
+                  text-white
+                  bg-black
+                  border
+                  border-black
+                  hover:bg-gray-800
+                  transition-all
+                  items-center
+                  justify-center
+                "
             >
               Get access
             </Link>
