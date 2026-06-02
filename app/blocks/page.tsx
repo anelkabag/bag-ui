@@ -1,5 +1,5 @@
 import Link from "next/link";
-import registryJson from "@/registry.json";
+import registryJson from "@/public/r/registry.json";
 
 interface RegistryItem {
   name: string;

@@ -3,13 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "generate:map": "tsx scripts/generate-component-map.ts",
-    "predev": "npm run generate:map",
-    "prebuild": "npm run generate:map",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "registry:build": "shadcn build"
   },
   "dependencies": {
     "@studio-freight/lenis": "^1.0.42",

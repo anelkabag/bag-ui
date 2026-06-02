@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "team-section",
+  "title": "Team Section",
+  "description": "Interactive team preview section with hover reveal animation.",
+  "dependencies": ["gsap"],
+  "files": [
+    {
+      "path": "registry/default/blocks/team-section.tsx",
+      "type": "registry:block"
+    }
+  ],
+  "type": "registry:block"
+}
