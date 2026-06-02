@@ -14,32 +14,65 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://bagui.vercel.app"),
+
   title: "Bag/UI - Premium shadcn/ui blocks",
   description:
-    "A curated shadcn/ui component registry. Copy-paste beautiful, accessible blocks for your projects.",
+      "BagUI is a curated registry of modern shadcn/ui components, animated sections, and production-ready blocks designed to help developers build beautiful interfaces in minutes.",
+
   keywords: [
     "shadcn",
-    "ui",
-    "components",
-    "registry",
+    "shadcn/ui",
+    "ui components",
+    "component registry",
     "nextjs",
-    "tailwind",
+    "reactjs",
+    "react",
+    "tailwindcss",
     "blocks",
+    "animations",
+    "ui library",
   ],
-  authors: [{ name: "Anelka Bagalane" }],
+
+  authors: [
+    {
+      name: "Anelka Bagalane",
+    },
+  ],
+
+  creator: "Anelka Bagalane <anelka.bag@gmail.com",
+  publisher: "BagUI",
 
   openGraph: {
-    title: "Bag/UI — shadcn registry",
+    title: "Bag/UI - Premium shadcn/ui blocks",
     description:
-      "A curated shadcn/ui component registry. Copy-paste beautiful, accessible blocks.",
+        "BagUI is a curated registry of modern shadcn/ui components, animated sections, and production-ready blocks designed to help developers build beautiful interfaces in minutes.",
+    url: "https://bagui.vercel.app",
+    siteName: "BagUI",
     type: "website",
+
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "BagUI - Premium shadcn/ui blocks",
+      },
+    ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "BagUI - By Anelka Bag",
+    title: "Bag/UI - Premium shadcn/ui blocks",
     description:
-      "A curated shadcn/ui component registry. Copy-paste beautiful, accessible blocks.",
+        "BagUI is a curated registry of modern shadcn/ui components, animated sections, and production-ready blocks designed to help developers build beautiful interfaces in minutes.",
+    images: ["/og-image.png"],
+    creator: "@anelkabag",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
   },
 
   icons: {
@@ -52,31 +85,25 @@ export const metadata: Metadata = {
         url: "/faviconblack.png",
         media: "(prefers-color-scheme: dark)",
       },
-      {
-        url: "/faviconblack.png",
-        type: "image/svg+xml",
-      },
     ],
-
     apple: "/apple-icon.png",
   },
 };
 
 export default function RootLayout({
-  children,
-}: Readonly<{
+                                     children,
+                                   }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+      <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
+          className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
+      {children}
 
-          {children}
-
-        {process.env.NODE_ENV === "production" && <Analytics />}
+      {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
-    </html>
+      </html>
   );
 }
