@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Bag/UI - Premium shadcn/ui blocks",
   description:
-    "A curated shadcn/ui component registry. Copy-paste beautiful, accessible blocks for your Next.js projects.",
+    "A curated shadcn/ui component registry. Copy-paste beautiful, accessible blocks for your projects.",
   keywords: [
     "shadcn",
     "ui",
