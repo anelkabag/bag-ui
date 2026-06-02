@@ -50,7 +50,7 @@ function DotGrid() {
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 22 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] },
+  transition: { duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] as const },
 });
 
 export default function Hero() {
@@ -114,9 +114,9 @@ export default function Hero() {
               margin: 0,
             }}
           >
-              Premium <span style={{ color: "#fff" }}>shadcn/ui blocks</span>
+            Premium <span style={{ color: "#fff" }}>shadcn/ui blocks</span>
             <br />
-              built for <span style={{ color: "#fff" }}>devs who ship.</span>
+            built for <span style={{ color: "#fff" }}>devs who ship.</span>
           </motion.h1>
 
           {/* Subtext */}
@@ -130,8 +130,9 @@ export default function Hero() {
               margin: 0,
             }}
           >
-              Polished React sections you can plug in instantly, customize in minutes, and ship with
-              confidence — carefully crafted by hand, without bloated starters or generic AI-generated layouts.
+            Polished React sections you can plug in instantly, customize in
+            minutes, and ship with confidence — carefully crafted by hand,
+            without bloated starters or generic AI-generated layouts.
           </motion.p>
 
           {/* CTAs */}

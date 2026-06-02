@@ -4,7 +4,7 @@ import React from "react";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import registryJson from "@/registry.json";
+import registryJson from "@/public/r/registry.json";
 
 interface RegistryItem {
   name: string;
@@ -75,7 +75,7 @@ function ComponentCard({ item, index }: { item: RegistryItem; index: number }) {
       transition={{
         duration: 0.5,
         delay: index * 0.08,
-        ease: [0.22, 1, 0.36, 1],
+        ease: [0.22, 1, 0.36, 1] as const,
       }}
       className="flex flex-col rounded-3xl border border-[#e9e9e9] bg-white shadow-sm overflow-hidden"
     >
