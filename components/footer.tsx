@@ -81,7 +81,7 @@ export function Footer() {
                             <span className="text-black font-semibold text-sm">Bag\Ui</span>
                         </div>
                         <p className="text-gray-400 text-xs leading-relaxed max-w-[180px]">
-                            Stop rebuilding the same sections. Drop in Bag/UI and ship.
+                            Spend less time building UI from scratch. Ship faster with Bag/UI.
                         </p>
                     </div>
                     <div>
