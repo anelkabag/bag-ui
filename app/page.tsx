@@ -7,6 +7,7 @@ import Navbar from "@/components/navbar";
 import Hero from "@/components/Hero";
 import BlocksCatalog from "@/components/Blockscatalog";
 import { Analytics } from '@vercel/analytics/next';
+import {Footer} from "@/components/footer";
 
 export default function Page() {
   useEffect(() => {
@@ -35,6 +36,7 @@ export default function Page() {
       <Navbar />
       <Hero />
       <BlocksCatalog key={pathname} />
+      <Footer/>
       <Analytics />
     </>
   );
