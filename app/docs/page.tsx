@@ -19,16 +19,38 @@ const NAV_LINKS = [
 ] as const;
 
 const SECTIONS: Section[] = [
-    { id: "introduction",      label: "Introduction" },
-    { id: "requirements",      label: "Requirements" },
-    { id: "register-namespace",label: "Register the namespace" },
-    { id: "install-a-block",   label: "Install a free block" },
-    { id: "pro-access",        label: "Pro access" },
-    { id: "copy-prompt",       label: "Copy prompt" },
-    { id: "customization",     label: "Customization" },
-    { id: "dark-mode",         label: "Dark mode" },
-    { id: "updates",           label: "Updates" },
-    { id: "support",           label: "Support" },
+    { id: "introduction",       label: "Introduction" },
+    { id: "requirements",       label: "Requirements" },
+    { id: "register-namespace", label: "Register the namespace" },
+    { id: "install-a-block",    label: "Install a free block" },
+    { id: "pro-access",         label: "Pro access" },
+    { id: "copy-prompt",        label: "Copy prompt" },
+    { id: "customization",      label: "Customization" },
+    { id: "dark-mode",          label: "Dark mode" },
+    { id: "updates",            label: "Updates" },
+    { id: "support",            label: "Support" },
+];
+
+// ─── Sidebar nav ─────────────────────────────────────────────────────────────
+// Chaque groupe = une section "Getting Started", "Components", etc.
+// Chaque page = une entrée cliquable dans la sidebar (comme "Installations" dans le screenshot).
+// Les sous-sections (ancres) restent dans le TOC à droite.
+const SIDEBAR_NAV = [
+    {
+        group: "Getting Started",
+        pages: [
+            { label: "Installations", href: "/docs" },
+            // Ajouter d'autres pages ici quand elles existent :
+            // { label: "Configuration", href: "/docs/configuration" },
+        ],
+    },
+    // Ajouter d'autres groupes ici :
+    // {
+    //     group: "Components",
+    //     pages: [
+    //         { label: "Buttons", href: "/docs/components/buttons" },
+    //     ],
+    // },
 ];
 
 // ─── Code snippets ────────────────────────────────────────────────────────────
@@ -302,28 +324,32 @@ function Prose({ children }: { children: React.ReactNode }) {
 }
 
 // ─── Left sidebar ─────────────────────────────────────────────────────────────
-function LeftSidebar({ active }: { active: string }) {
+function LeftSidebar({ activePage }: { activePage: string }) {
     return (
         <aside className="hidden xl:block sticky top-20 self-start">
-            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-3 px-3">
-                Getting Started
-            </p>
-            <ul className="space-y-0.5">
-                {SECTIONS.map((s) => (
-                    <li key={s.id}>
-                        <a
-                            href={`#${s.id}`}
-                            className={`block text-sm rounded-lg px-3 py-1.5 transition-colors ${
-                                active === s.id
-                                    ? "text-black bg-gray-100 font-medium"
-                                    : "text-gray-500 hover:text-gray-800 hover:bg-gray-50"
-                            }`}
-                        >
-                            {s.label}
-                        </a>
-                    </li>
-                ))}
-            </ul>
+            {SIDEBAR_NAV.map((group) => (
+                <div key={group.group} className="mb-6">
+                    <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-3 px-3">
+                        {group.group}
+                    </p>
+                    <ul className="space-y-0.5">
+                        {group.pages.map((page) => (
+                            <li key={page.href}>
+                                <Link
+                                    href={page.href}
+                                    className={`block text-sm rounded-lg px-3 py-1.5 transition-colors ${
+                                        activePage === page.href
+                                            ? "text-black bg-gray-100 font-medium"
+                                            : "text-gray-500 hover:text-gray-800 hover:bg-gray-50"
+                                    }`}
+                                >
+                                    {page.label}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ))}
         </aside>
     );
 }
@@ -412,7 +438,7 @@ export default function DocsPage() {
                 {/* 3-col layout */}
                 <div className="grid grid-cols-1 xl:grid-cols-[200px_1fr_180px] gap-12">
                     {/* Left sidebar */}
-                    <LeftSidebar active={activeSection} />
+                    <LeftSidebar activePage="/docs" />
 
                     {/* Main content */}
                     <main className="min-w-0">
