@@ -23,7 +23,6 @@ const SECTIONS: Section[] = [
     { id: "requirements",       label: "Requirements" },
     { id: "register-namespace", label: "Register the namespace" },
     { id: "install-a-block",    label: "Install a free block" },
-    { id: "pro-access",         label: "Pro access" },
     { id: "copy-prompt",        label: "Copy prompt" },
     { id: "customization",      label: "Customization" },
     { id: "dark-mode",          label: "Dark mode" },
@@ -258,7 +257,7 @@ function CodeBlock({
                         <button
                             key={t}
                             onClick={() => setActive(t)}
-                            className={`px-3 py-1.5 text-xs font-medium rounded-t transition-colors ${
+                            className={`px-3 py-1.5 text-xs font-medium rounded-t transition-colors cursor-pointer ${
                                 active === t
                                     ? "text-black bg-gray-100"
                                     : "text-gray-400 hover:text-gray-700"
@@ -280,7 +279,7 @@ function CodeBlock({
         </pre>
                 <button
                     onClick={copy}
-                    className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity bg-white hover:bg-gray-50 border border-gray-200 rounded-md px-2 py-1 text-xs text-gray-500 hover:text-gray-900 flex items-center gap-1.5 shadow-sm"
+                    className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity bg-white hover:bg-gray-50 border border-gray-200 rounded-md px-2 py-1 text-xs text-gray-500 hover:text-gray-900 flex items-center gap-1.5 shadow-sm cursor-pointer"
                 >
                     <AnimatePresence mode="wait">
                         {copied ? (
@@ -446,19 +445,12 @@ export default function DocsPage() {
                         <section id="introduction">
                             <SectionHeading id="introduction">Introduction</SectionHeading>
                             <Prose>
-                                Bag/UI is a curated catalog of production-ready React sections
-                                built with shadcn/ui and Tailwind CSS. Every block is served
-                                from a public shadcn registry endpoint — register the
-                                namespace once and any free block is one CLI command away.
+                                Bag/UI is a growing library of carefully crafted React blocks built on
+                                shadcn/ui and Tailwind CSS. Interactive sections may include Framer Motion
+                                or GSAP animations, while every block remains fully customizable and
+                                installable through the Bag/UI registry with a single CLI command.
                             </Prose>
-                            <p className="text-gray-500 text-[0.925rem] leading-7 mt-3">
-                                Pro blocks live behind the same endpoint but require a personal API key.
-                                Sign in once you've purchased a plan to generate yours — see{" "}
-                                <a href="#pro-access" className="text-black underline underline-offset-2 hover:opacity-70 transition-opacity">
-                                    Pro access
-                                </a>{" "}
-                                below.
-                            </p>
+
                         </section>
 
                         {/* Requirements */}
@@ -510,38 +502,6 @@ export default function DocsPage() {
                                     </li>
                                 ))}
                             </ol>
-                        </section>
-
-                        {/* Pro access */}
-                        <section id="pro-access">
-                            <SectionHeading id="pro-access">Pro access</SectionHeading>
-                            <Prose>
-                                Pro blocks require an API key tied to a paid Bag/UI plan. After purchase,
-                                sign in, generate a token under Account → Registry token, and add it to
-                                your project.
-                            </Prose>
-                            <p className="text-gray-500 text-[0.925rem] leading-7 mt-3">
-                                Without a key, Pro install commands return{" "}
-                                <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">401</code>{" "}
-                                with a clear message — your project keeps working, those specific blocks just won't install.
-                            </p>
-                            <div className="mt-5 rounded-xl border border-gray-100 bg-gray-50 p-5 flex items-start gap-4">
-                                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-black flex items-center justify-center text-white text-sm">
-                                    ✦
-                                </div>
-                                <div>
-                                    <p className="text-gray-900 text-sm font-semibold mb-1">Unlock all Pro blocks</p>
-                                    <p className="text-gray-400 text-xs leading-relaxed">
-                                        Pay once, own them forever — including everything we ship next.
-                                    </p>
-                                    <Link
-                                        href="/pricing"
-                                        className="inline-flex items-center gap-1 mt-3 text-xs text-white bg-black hover:bg-gray-800 rounded-lg px-3 py-1.5 transition-colors"
-                                    >
-                                        View pricing →
-                                    </Link>
-                                </div>
-                            </div>
                         </section>
 
                         {/* Copy prompt */}
