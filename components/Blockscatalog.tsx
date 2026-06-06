@@ -822,7 +822,11 @@ function BlockCard({ block, index }: { block: SectionBlock; index: number }) {
 // ═══════════════════════════════════════════════════════════════════════════════
 // CATALOG
 // ═══════════════════════════════════════════════════════════════════════════════
+const INITIAL_COUNT = 9;
+
 export default function BlocksCatalog() {
+  const [showAll, setShowAll] = React.useState(false);
+
   const blocks = mockBlocks.map((section) => {
     const count = countRegistryItemsForSection(section.slug);
     return {
@@ -832,6 +836,9 @@ export default function BlocksCatalog() {
       route: section.slug,
     };
   });
+
+  const visibleBlocks = showAll ? blocks : blocks.slice(0, INITIAL_COUNT);
+  const hiddenCount = blocks.length - INITIAL_COUNT;
 
   return (
       <div className="w-full bg-white">
@@ -863,10 +870,40 @@ export default function BlocksCatalog() {
             </div>
 
             {/* Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {blocks.map((block, index) => (
-                  <BlockCard key={block.slug} block={block} index={index} />
-              ))}
+            <div className="relative">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {visibleBlocks.map((block, index) => (
+                    <BlockCard key={block.slug} block={block} index={index} />
+                ))}
+              </div>
+
+              {/* Show more */}
+              {!showAll && (
+                  <div className="relative mt-0">
+                    {/* fade overlay */}
+                    <div className="absolute -top-36 left-0 right-0 h-36 bg-gradient-to-b from-transparent to-white pointer-events-none" />
+                    <div className="flex flex-col items-center gap-2 pt-8">
+                      <button
+                          onClick={() => setShowAll(true)}
+                          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-black text-white text-sm font-semibold hover:bg-gray-800 transition-all shadow-sm hover:shadow-md cursor-pointer"
+                      >
+                        See all {blocks.length} blocks
+                      </button>
+                    </div>
+                  </div>
+              )}
+
+              {/* Show less */}
+              {showAll && (
+                  <div className="flex justify-center mt-10">
+                    <button
+                        onClick={() => setShowAll(false)}
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-gray-200 text-sm font-medium text-gray-500 hover:text-black hover:border-gray-400 transition-colors"
+                    >
+                      Show less
+                    </button>
+                  </div>
+              )}
             </div>
           </div>
         </section>
