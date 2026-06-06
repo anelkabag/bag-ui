@@ -608,8 +608,8 @@ export default function DocsPage() {
                             <SectionHeading id="support">Support</SectionHeading>
                             <Prose>
                                 Stuck on something? Email{" "}
-                                <a href="mailto:contact@bagui.dev" className="text-black underline underline-offset-2 hover:opacity-70 transition-opacity">
-                                    contact@bagui.dev
+                                <a href="mailto:anelka.bag@gmail.com" className="text-black underline underline-offset-2 hover:opacity-70 transition-opacity">
+                                    anelka.bag@gmail.com
                                 </a>{" "}
                                 — Pro accounts get priority replies, free users still get an answer when time allows.
                             </Prose>
@@ -617,8 +617,8 @@ export default function DocsPage() {
                                 <h3 className="text-gray-900 text-sm font-semibold mb-2">Still stuck?</h3>
                                 <p className="text-gray-500 text-sm leading-relaxed">
                                     Drop us an email at{" "}
-                                    <a href="mailto:contact@bagui.dev" className="text-black underline underline-offset-2 hover:opacity-70 transition-opacity">
-                                        contact@bagui.dev
+                                    <a href="mailto:anelka.bag@gmail.com" className="text-black underline underline-offset-2 hover:opacity-70 transition-opacity">
+                                        anelka.bag@gmail.com
                                     </a>
                                     . Pro accounts get priority replies.
                                 </p>
