@@ -400,12 +400,12 @@ export default function DocsPage() {
                 {/* Hero */}
                 <div className="mb-14 max-w-2xl">
                     <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-black mb-3 leading-tight">
-                        Drop a block.{" "}
-                        <span className="text-gray-400">Ship the page.</span>
+                        Ready-made blocks.{" "}
+                        <span className="text-gray-400">Zero wasted time.</span>
                     </h1>
                     <p className="text-gray-500 text-base leading-relaxed">
-                        Register the Bag/UI namespace once and every block is one CLI
-                        command away — pnpm, npm, bun or yarn.
+                        Register Bag/UI once and pull any block directly into your project with a
+                        single CLI command.
                     </p>
                 </div>
 
