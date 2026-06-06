@@ -191,52 +191,29 @@ function BlockPreview({ blockType }: { blockType: string }) {
       </svg>
     ),
     hero: (
-      <svg
-        viewBox="0 0 280 200"
-        className="w-full h-full"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <defs>
-          <linearGradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#667eea" />
-            <stop offset="100%" stopColor="#764ba2" />
-          </linearGradient>
-        </defs>
-        <rect width="280" height="200" fill="url(#heroGrad)" />
-        {/* Headline */}
-        <line x1="20" y1="40" x2="180" y2="40" stroke="#fff" strokeWidth="3" />
-        <line x1="20" y1="55" x2="200" y2="55" stroke="#fff" strokeWidth="3" />
-        {/* Subtitle */}
-        <line
-          x1="20"
-          y1="75"
-          x2="250"
-          y2="75"
-          stroke="#fff"
-          strokeWidth="1"
-          opacity="0.7"
-        />
-        <line
-          x1="20"
-          y1="87"
-          x2="240"
-          y2="87"
-          stroke="#fff"
-          strokeWidth="1"
-          opacity="0.7"
-        />
-        {/* CTA Button */}
-        <rect x="20" y="120" width="120" height="40" rx="20" fill="#fff" />
-        <line
-          x1="35"
-          y1="140"
-          x2="95"
-          y2="140"
-          stroke="#667eea"
-          strokeWidth="2"
-        />
-      </svg>
+        <svg viewBox="0 0 320 180" className="w-full h-full">
+          <rect width="320" height="180" fill="#f9fafb"/>
+          {/* nav */}
+          <rect x="16" y="12" width="28" height="5" rx="2" fill="#d1d5db"/>
+          <rect x="224" y="11" width="20" height="7" rx="3" fill="#d1d5db"/>
+          <rect x="248" y="11" width="20" height="7" rx="3" fill="#d1d5db"/>
+          <rect x="272" y="10" width="32" height="8" rx="4" fill="#111827"/>
+          {/* badge */}
+          <rect x="120" y="36" width="80" height="9" rx="4.5" fill="#e5e7eb"/>
+          {/* headline */}
+          <rect x="52" y="52" width="216" height="12" rx="3" fill="#111827"/>
+          <rect x="76" y="68" width="168" height="12" rx="3" fill="#111827"/>
+          {/* sub */}
+          <rect x="80" y="88" width="160" height="6" rx="2" fill="#9ca3af"/>
+          <rect x="96" y="98" width="128" height="6" rx="2" fill="#9ca3af"/>
+          {/* buttons */}
+          <rect x="96" y="114" width="56" height="16" rx="8" fill="#111827"/>
+          <rect x="160" y="114" width="64" height="16" rx="8" fill="none" stroke="#d1d5db" strokeWidth="1.5"/>
+          {/* image placeholder */}
+          <rect x="40" y="144" width="240" height="28" rx="6" fill="#e5e7eb"/>
+          <rect x="56" y="150" width="60" height="4" rx="2" fill="#d1d5db"/>
+          <rect x="56" y="158" width="40" height="4" rx="2" fill="#d1d5db"/>
+        </svg>
     ),
   };
 
