@@ -13,3 +13,5 @@
 </p>
 
 <p align="center"><strong>Built by Anelka Bag</strong></p>
+
+npm run registry:build

@@ -3,14 +3,12 @@
   "name": "fancy-button",
   "title": "Fancy Button",
   "description": "Animated premium button",
-  "dependencies": [
-    "framer-motion"
-  ],
   "files": [
     {
       "path": "registry/default/ui/fancy-button.tsx",
-      "content": "\"use client\";\n\nimport { motion } from \"framer-motion\";\n\nexport function FancyButton() {\n    return (\n        <motion.button\n            whileHover={{ scale: 1.05 }}\n            whileTap={{ scale: 0.95 }}\n            className=\"bg-black text-white px-6 py-3 rounded-xl\"\n        >\n            Fancy Button\n        </motion.button>\n    );\n}",
-      "type": "registry:ui"
+      "content": "\"use client\";\n\nimport { motion } from \"framer-motion\";\n\nexport function FancyButton() {\n    return (\n        <motion.button\n            whileHover={{ scale: 1.05 }}\n            whileTap={{ scale: 0.95 }}\n            className=\"bg-black text-white px-6 py-3 rounded-xl cursor-pointer\"\n        >\n            Bag\\Ui Button\n        </motion.button>\n    );\n}",
+      "type": "registry:ui",
+      "target": "components/ui/fancy-button.tsx"
     }
   ],
   "type": "registry:ui"

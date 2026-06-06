@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "bagUi",
   "homepage": "https://bagui.vercel.app",
-  "author" : "Anelka Bag <anelka.bag@gmail.com>",
+  "author": "Anelka Bag <anelka.bag@gmail.com>",
   "items": [
     {
       "name": "fancy-button",
@@ -24,9 +24,23 @@
       "description": "Interactive team preview section with hover reveal animation.",
       "files": [
         {
-          "path": "registry/default/blocks/team-section.tsx",
+          "path": "registry/default/blocks/teams/team-section.tsx",
           "type": "registry:block",
           "target": "components/blocks/team-section.tsx"
+        }
+      ]
+    },
+    {
+      "name": "hero1",
+      "type": "registry:block",
+      "title": "Hero 1",
+      "description": "Hero section with navbar and animated event dashboard preview.",
+      "dependencies": ["framer-motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/hero/hero1.tsx",
+          "type": "registry:block",
+          "target": "components/blocks/hero1.tsx"
         }
       ]
     }
