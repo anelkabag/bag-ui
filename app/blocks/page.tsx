@@ -368,13 +368,29 @@ function Navbar() {
   return (
       <nav className="sticky top-0 z-50 w-full bg-white border-b border-gray-100">
         <div className="flex items-center justify-between px-8 h-14 max-w-7xl mx-auto">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-5 h-5 bg-black rounded-sm flex items-center justify-center">
-              <div className="w-2.5 h-2.5 bg-white rounded-sm"/>
+            <div className="flex items-center gap-2 shrink-0">
+                <Link href="/" className="flex items-center gap-2">
+                    <Image
+                        src="/logo.png"
+                        alt="BagUI Logo"
+                        width={20}
+                        height={20}
+                        className="shrink-0"
+                        priority
+                    />
+                    <span className="text-[15px] font-semibold tracking-tight text-black">
+        Bag\Ui
+      </span>
+                </Link>
+                <Link
+                    href="https://x.com/anelkabag"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[13px] text-gray-400 hover:text-black transition-colors"
+                >
+                    by Anelka Bag
+                </Link>
             </div>
-            <span className="text-[15px] font-semibold tracking-tight text-black">Bag\Ui</span>
-            <span className="text-[13px] text-gray-400">by Anelka Bag</span>
-          </Link>
           <div className="hidden md:flex items-center gap-7">
             {NAV_LINKS.map((item) => (
                 <Link
