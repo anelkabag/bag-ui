@@ -9,27 +9,28 @@ interface ComponentPreviewProps {
   };
 }
 
-const componentLoaders = (import.meta as any).glob(
-  "../registry/default/**/*.tsx",
-) as Record<string, () => Promise<Record<string, React.ComponentType>>>;
+const componentLoaders: Record<
+  string,
+  () => Promise<Record<string, React.ComponentType>>
+> = {
+  "registry/default/blocks/hero/hero1.tsx": () =>
+    import("../registry/default/blocks/hero/hero1"),
+  "registry/default/blocks/teams/team-section.tsx": () =>
+    import("../registry/default/blocks/teams/team-section"),
+  "registry/default/ui/fancy-button.tsx": () =>
+    import("../registry/default/ui/fancy-button"),
+};
 
-function normalizeImportKey(key: string) {
-  return key.replace(/^\.\//, "").replace(/\\/g, "/");
+function normalizePath(path: string) {
+  return path.replace(/^\.\//, "").replace(/\\/g, "/");
 }
-
-const normalizedLoaders = Object.fromEntries(
-  Object.entries(componentLoaders).map(([key, loader]) => [
-    normalizeImportKey(key),
-    loader,
-  ]),
-) as Record<string, () => Promise<Record<string, React.ComponentType>>>;
 
 function findLoader(filePath?: string, targetPath?: string) {
   const candidates = [filePath, targetPath].filter(Boolean) as string[];
 
   for (const candidate of candidates) {
-    const normalized = candidate.replace(/^\.\//, "").replace(/\\/g, "/");
-    const exact = normalizedLoaders[normalized];
+    const normalized = normalizePath(candidate);
+    const exact = componentLoaders[normalized];
     if (exact) return exact;
   }
 
@@ -38,7 +39,7 @@ function findLoader(filePath?: string, targetPath?: string) {
   const basename = filePath.split("/").pop();
   if (!basename) return undefined;
 
-  const fallbackEntry = Object.entries(normalizedLoaders).find(([importPath]) =>
+  const fallbackEntry = Object.entries(componentLoaders).find(([importPath]) =>
     importPath.endsWith(`/${basename}`),
   );
 
@@ -55,7 +56,10 @@ function pascalCase(name: string) {
 function Skeleton() {
   return (
     <div className="w-full h-full flex items-center justify-center">
-      <div className="w-24 h-10 rounded-xl bg-gray-200 animate-pulse" />
+      <div className="flex flex-col items-center gap-3">
+        <div className="w-14 h-14 rounded-full border-2 border-gray-300 border-t-transparent animate-spin" />
+        <span className="text-sm text-gray-500">Loading preview…</span>
+      </div>
     </div>
   );
 }
@@ -124,8 +128,15 @@ export function ComponentPreview({ item }: ComponentPreviewProps) {
 
   if (!PreviewComponent || loadError) {
     return (
-      <div className="w-full h-full flex items-center justify-center">
-        <span className="text-xs text-black/30">Preview unavailable</span>
+      <div className="w-full h-full flex flex-col items-center justify-center gap-3 text-center px-6">
+        <div className="text-sm font-semibold text-gray-900">
+          Preview failed to load
+        </div>
+        <div className="text-xs text-gray-500 max-w-sm">
+          The registry preview component could not be loaded for{" "}
+          <strong>{filePath}</strong>. Check the registry path or component
+          export name.
+        </div>
       </div>
     );
   }
