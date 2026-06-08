@@ -67,7 +67,7 @@ function getVariants(id: string, count: number): Variant[] {
 const PKG_MANAGERS: PkgManager[] = ["pnpm", "npm", "yarn", "bun"];
 
 function getInstallCmd(pkg: PkgManager, variantId: string) {
-  const registry = `bagui/${variantId}`;
+  const registry = `@bagui/${variantId}`;
   switch (pkg) {
     case "pnpm":
       return `pnpm dlx shadcn@latest add ${registry}`;
