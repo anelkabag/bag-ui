@@ -323,7 +323,7 @@ function VariantToolbarHeader({
             <button
               key={m}
               onClick={() => setMode(m)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer ${
                 mode === m
                   ? "text-gray-900 bg-gray-100"
                   : "text-gray-600 hover:text-gray-900"
@@ -361,7 +361,7 @@ function VariantToolbarHeader({
 
         {/* Fullscreen icon */}
         <button
-          className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
+          className="p-2 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer"
           title="Fullscreen"
         >
           <svg
@@ -379,7 +379,7 @@ function VariantToolbarHeader({
 
         {/* Refresh icon */}
         <button
-          className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
+          className="p-2 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer"
           title="Refresh"
         >
           <svg
@@ -412,7 +412,7 @@ function VariantToolbarHeader({
         <div className="relative">
           <button
             onClick={() => setOpenDropdown(!openDropdown)}
-            className="flex items-center gap-1 p-2 hover:bg-gray-200 rounded-lg transition-colors border border-gray-200 bg-white"
+            className="flex items-center gap-1 p-2 hover:bg-gray-200 rounded-lg transition-colors border border-gray-200 bg-white cursor-pointer"
             title="Change package manager"
           >
             <svg
@@ -445,7 +445,7 @@ function VariantToolbarHeader({
                       setPkg(p);
                       setOpenDropdown(false);
                     }}
-                    className={`w-full text-left px-3 py-2 text-xs font-medium flex items-center gap-2 transition-colors first:rounded-t-lg last:rounded-b-lg ${
+                    className={`w-full text-left px-3 py-2 text-xs font-medium flex items-center gap-2 transition-colors first:rounded-t-lg last:rounded-b-lg cursor-pointer ${
                       pkg === p
                         ? "bg-gray-100 text-gray-900"
                         : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
@@ -481,7 +481,7 @@ function VariantToolbarHeader({
         {/* Copy / Share button */}
         <button
           onClick={() => copy(cmd)}
-          className="flex items-center gap-1 p-2 hover:bg-gray-200 rounded-lg transition-colors text-gray-600"
+          className="flex items-center gap-1 p-2 hover:bg-gray-200 rounded-lg transition-colors text-gray-600 cursor-pointer"
           title={copied ? "Copied!" : "Copy command"}
         >
           {copied ? <CheckIcon /> : <CopyIcon />}
