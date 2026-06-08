@@ -378,7 +378,7 @@ function VariantToolbarHeader({
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.05 }}
-      className="flex items-center justify-between gap-4 mb-4 pb-3 border-b border-gray-200 bg-gray-50 -mx-6 px-6 py-3"
+      className="flex items-center justify-between gap-4 mb-4 pb-3 border-b border-gray-200 -mx-6 px-6 py-3"
     >
       {/* Left: Tabs + Icons */}
       <div className="flex items-center gap-3">
@@ -550,27 +550,6 @@ function VariantToolbarHeader({
           title={copied ? "Copied!" : "Copy command"}
         >
           {copied ? <CheckIcon /> : <CopyIcon />}
-        </button>
-
-        {/* Share button */}
-        <button
-          className="p-2 hover:bg-gray-200 rounded-lg transition-colors text-gray-600"
-          title="Share"
-        >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <circle cx="18" cy="5" r="3" />
-            <circle cx="6" cy="12" r="3" />
-            <circle cx="18" cy="19" r="3" />
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-          </svg>
         </button>
       </div>
     </motion.div>
