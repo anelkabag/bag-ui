@@ -9,6 +9,7 @@ import {
   countRegistryItemsForCategory,
   RegistryItem,
 } from "@/lib/block-categories";
+import {Footer} from "@/components/footer";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type FilterType = "all" | "marketing" | "app" | "ecommerce";
@@ -1619,6 +1620,7 @@ export default function BlocksPage() {
           )}
         </AnimatePresence>
       </div>
+        <Footer/>
     </div>
   );
 }
