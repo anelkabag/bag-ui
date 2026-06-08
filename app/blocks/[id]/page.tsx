@@ -228,51 +228,51 @@ function IframePreview({ variantId, blurred }: { variantId: string; blurred?: bo
 
 const PKG_ICONS: Record<PkgManager, React.ReactNode> = {
   pnpm: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-orange-500">
-        <rect x="3" y="3" width="6" height="6" />
-        <rect x="11" y="3" width="6" height="6" />
-        <rect x="19" y="3" width="2" height="6" />
-        <rect x="3" y="11" width="6" height="6" />
-        <rect x="11" y="11" width="6" height="6" />
-        <rect x="19" y="11" width="2" height="6" />
-        <rect x="3" y="19" width="6" height="2" />
-        <rect x="11" y="19" width="6" height="2" />
-        <rect x="19" y="19" width="2" height="2" />
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-orange-500">
+        <rect x="3" y="3" width="5" height="5" />
+        <rect x="10" y="3" width="5" height="5" />
+        <rect x="17" y="3" width="4" height="5" />
+        <rect x="3" y="10" width="5" height="5" />
+        <rect x="10" y="10" width="5" height="5" />
+        <rect x="17" y="10" width="4" height="5" />
+        <rect x="3" y="17" width="5" height="4" />
+        <rect x="10" y="17" width="5" height="4" />
+        <rect x="17" y="17" width="4" height="4" />
       </svg>
   ),
   npm: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-red-600">
-        <path d="M1 8h22v10H1z" />
-        <path d="M7 14v6h4v-4h2v4h4v-6" fill="white" />
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-red-600">
+        <path d="M1 8h22v10H1zm4 2v6h3v-4h2v4h3v-6H5zm13 0v6h-3v-4h-2v4h-3v-6h8z" />
       </svg>
   ),
   yarn: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-blue-500">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5m-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11m3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5" />
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-blue-500">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 6v12M6 12h12" stroke="white" strokeWidth="1.5" fill="none" />
       </svg>
   ),
   bun: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-gray-900">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m0-13c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5" />
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-gray-800">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M8 12c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="white" strokeWidth="1.5" fill="none" />
       </svg>
   ),
 };
 
-// ─── Variant toolbar header (inline) ──────────────────────────────────────────
+// ─── Variant toolbar header (Preview / Code + CLI) ────────────────────────────
 
 function VariantToolbarHeader({
-                                variant,
                                 variantId,
                                 mode,
                                 setMode,
                               }: {
-  variant: Variant;
   variantId: string;
   mode: ViewMode;
   setMode: (m: ViewMode) => void;
 }) {
   const [pkg, setPkg] = useState<PkgManager>("pnpm");
   const [openDropdown, setOpenDropdown] = useState(false);
+  const cmd = getInstallCmd(pkg, variantId);
   const { copied, copy } = useCopy();
 
   return (
@@ -280,106 +280,135 @@ function VariantToolbarHeader({
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.05 }}
-          className="flex items-center justify-between gap-4 mb-4 pb-4 border-b border-gray-100"
+          className="flex items-center justify-between gap-4 mb-4 pb-3 border-b border-gray-200 bg-gray-50 -mx-6 px-6 py-3"
       >
-        {/* Left: Title and badge */}
-        <div className="flex items-center gap-3 min-w-0">
-          <h3 className="text-sm font-semibold text-gray-900 truncate">
-            {variant.label}
-          </h3>
-          <span
-              className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide whitespace-nowrap ${
-                  variant.pro
-                      ? "bg-amber-100 text-amber-700 border border-amber-200"
-                      : "bg-green-100 text-green-700 border border-green-200"
-              }`}
-          >
-          {variant.pro ? "Pro" : "Free"}
-        </span>
-        </div>
-
-        {/* Center: Icons, tabs, and actions */}
-        <div className="flex items-center gap-3 flex-1 justify-center flex-wrap">
-          {/* Preview icon */}
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-400">
-            <path d="M12 5H8a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2v-4" />
-            <polyline points="14 5 14 3 10 3 10 5" />
-          </svg>
-
+        {/* Left: Tabs + Icons */}
+        <div className="flex items-center gap-3">
           {/* Preview / Code tabs */}
-          <div className="flex items-center gap-2 bg-gray-100 rounded-md p-0.5">
+          <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-lg p-1">
             {(["preview", "code"] as ViewMode[]).map((m) => (
                 <button
                     key={m}
                     onClick={() => setMode(m)}
-                    className={`relative px-2 py-1 rounded-md text-xs font-medium transition-colors ${
-                        mode === m ? "text-black bg-white shadow-sm" : "text-gray-500 hover:text-gray-700"
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                        mode === m
+                            ? "text-gray-900 bg-gray-100"
+                            : "text-gray-600 hover:text-gray-900"
                     }`}
                 >
+                  {m === "preview" ? (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                  ) : (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <polyline points="16 18 22 12 16 6" />
+                        <polyline points="8 6 2 12 8 18" />
+                      </svg>
+                  )}
                   <span className="capitalize">{m}</span>
                 </button>
             ))}
           </div>
 
-          {/* Copy prompt button */}
-          <button
-              onClick={() => copy(`bagui/${variantId}`)}
-              className="flex items-center gap-1.5 h-7 px-3 rounded-md text-xs font-medium text-gray-600 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 transition-all"
-          >
-            {copied ? <CheckIcon /> : <CopyIcon />}
-            <span>Copy prompt</span>
-          </button>
-
-          {/* Block ID */}
-          <code className="text-xs font-mono text-gray-500">@blockus/{variantId}</code>
-        </div>
-
-        {/* Right: Package manager dropdown */}
-        <div className="relative">
-          <button
-              onClick={() => setOpenDropdown(!openDropdown)}
-              className="flex items-center gap-2 h-7 px-2 rounded-md hover:bg-gray-100 transition-all border border-gray-200"
-              title="Select package manager"
-          >
-            <div className="w-4 h-4 flex items-center justify-center">
-              {PKG_ICONS[pkg]}
-            </div>
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-500">
-              <polyline points="3 5 6 8 9 5" />
+          {/* Fullscreen icon */}
+          <button className="p-2 hover:bg-gray-200 rounded-lg transition-colors" title="Fullscreen">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-600">
+              <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3" />
             </svg>
           </button>
 
-          {/* Dropdown menu */}
-          {openDropdown && (
-              <motion.div
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute top-full mt-2 right-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-max"
-              >
-                {PKG_MANAGERS.map((p) => (
-                    <button
-                        key={p}
-                        onClick={() => {
-                          setPkg(p);
-                          setOpenDropdown(false);
-                        }}
-                        className={`w-full text-left px-3 py-2 text-xs font-medium flex items-center gap-2 transition-colors ${
-                            pkg === p
-                                ? "bg-gray-100 text-gray-900"
-                                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        }`}
-                    >
-                      <div className="w-4 h-4 flex items-center justify-center">
-                        {PKG_ICONS[p]}
-                      </div>
-                      <span>{p}</span>
-                      {pkg === p && <CheckIcon />}
-                    </button>
-                ))}
-              </motion.div>
-          )}
+          {/* Refresh icon */}
+          <button className="p-2 hover:bg-gray-200 rounded-lg transition-colors" title="Refresh">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-600">
+              <polyline points="23 4 23 10 17 10" />
+              <polyline points="1 20 1 14 7 14" />
+              <path d="M3.51 9a9 9 0 0114.85-3.36M20.49 15a9 9 0 01-14.85 3.36" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Right: CLI Command + Package Manager Dropdown */}
+        <div className="flex items-center gap-2 ml-auto">
+          {/* CLI Command Display */}
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-xs font-mono text-gray-700">
+            <div className="w-4 h-4 flex items-center justify-center shrink-0">
+              {PKG_ICONS[pkg]}
+            </div>
+            <code className="truncate">{cmd}</code>
+          </div>
+
+          {/* Package Manager Dropdown */}
+          <div className="relative">
+            <button
+                onClick={() => setOpenDropdown(!openDropdown)}
+                className="flex items-center gap-1 p-2 hover:bg-gray-200 rounded-lg transition-colors border border-gray-200 bg-white"
+                title="Change package manager"
+            >
+              <svg width="16" height="16" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-600">
+                <polyline points="3 5 6 8 9 5" />
+              </svg>
+            </button>
+
+            {/* Dropdown Menu */}
+            <AnimatePresence>
+              {openDropdown && (
+                  <motion.div
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute top-full mt-1 right-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-max"
+                  >
+                    {PKG_MANAGERS.map((p) => (
+                        <button
+                            key={p}
+                            onClick={() => {
+                              setPkg(p);
+                              setOpenDropdown(false);
+                            }}
+                            className={`w-full text-left px-3 py-2 text-xs font-medium flex items-center gap-2 transition-colors first:rounded-t-lg last:rounded-b-lg ${
+                                pkg === p
+                                    ? "bg-gray-100 text-gray-900"
+                                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                            }`}
+                        >
+                          <div className="w-4 h-4 flex items-center justify-center shrink-0">
+                            {PKG_ICONS[p]}
+                          </div>
+                          <span>{p}</span>
+                          {pkg === p && (
+                              <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" className="ml-auto text-gray-600">
+                                <path d="M10 3l-6 6-3-3" stroke="currentColor" fill="none" strokeWidth="2" />
+                              </svg>
+                          )}
+                        </button>
+                    ))}
+                  </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Copy / Share button */}
+          <button
+              onClick={() => copy(cmd)}
+              className="flex items-center gap-1 p-2 hover:bg-gray-200 rounded-lg transition-colors text-gray-600"
+              title={copied ? "Copied!" : "Copy command"}
+          >
+            {copied ? <CheckIcon /> : <CopyIcon />}
+          </button>
+
+          {/* Share button */}
+          <button className="p-2 hover:bg-gray-200 rounded-lg transition-colors text-gray-600" title="Share">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="18" cy="5" r="3" />
+              <circle cx="6" cy="12" r="3" />
+              <circle cx="18" cy="19" r="3" />
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+            </svg>
+          </button>
         </div>
       </motion.div>
   );
@@ -407,9 +436,24 @@ function VariantCard({
           transition={{ delay: index * 0.05, duration: 0.3 }}
           className="mb-12 scroll-mt-20"
       >
+        {/* Title + Badge above toolbar */}
+        <div className="flex items-center gap-2 mb-2">
+          <h3 className="text-sm font-semibold text-gray-900">
+            {variant.label}
+          </h3>
+          <span
+              className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide ${
+                  variant.pro
+                      ? "bg-amber-100 text-amber-700 border border-amber-200"
+                      : "bg-green-100 text-green-700 border border-green-200"
+              }`}
+          >
+            {variant.pro ? "Pro" : "Free"}
+          </span>
+        </div>
+
         {/* Toolbar header on one line */}
         <VariantToolbarHeader
-            variant={variant}
             variantId={variant.id}
             mode={mode}
             setMode={setMode}
@@ -475,7 +519,7 @@ export default function BlockDetailPage() {
       <div className="min-h-screen bg-white">
         <Navbar />
 
-        <div className="max-w-5xl mx-auto px-6 pt-10 pb-24">
+        <div className="max-w-7xl mx-auto px-6 pt-10 pb-20">
           {/* Breadcrumb */}
           <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-8">
             <Link href="/blocks" className="hover:text-black transition-colors">
