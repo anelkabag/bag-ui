@@ -4,6 +4,11 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
+import registryJson from "@/registry.json";
+import {
+  countRegistryItemsForCategory,
+  RegistryItem,
+} from "@/lib/block-categories";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type FilterType = "all" | "marketing" | "app" | "ecommerce";
@@ -17,6 +22,12 @@ type BlockItem = {
   description?: string;
 };
 
+const registry = registryJson as { items: RegistryItem[] };
+
+function getBlockCount(blockId: string) {
+  return countRegistryItemsForCategory(blockId, registry.items);
+}
+
 // ─── Nav ──────────────────────────────────────────────────────────────────────
 const NAV_LINKS = [
   { label: "Blocks", href: "/blocks" },
@@ -26,7 +37,7 @@ const NAV_LINKS = [
 ] as const;
 
 // ─── Block catalog data ───────────────────────────────────────────────────────
-export const MARKETING_BLOCKS: BlockItem[] = [
+const MARKETING_BLOCKS_RAW: BlockItem[] = [
   { id: "hero", label: "Hero", count: 12, pro: true, new: true },
   { id: "feature", label: "Feature", count: 8, pro: false, new: false },
   { id: "pricing", label: "Pricing", count: 6, pro: true, new: true },
@@ -45,7 +56,12 @@ export const MARKETING_BLOCKS: BlockItem[] = [
   { id: "signup", label: "Sign Up", count: 4, pro: true, new: false },
 ];
 
-export const APP_BLOCKS: BlockItem[] = [
+export const MARKETING_BLOCKS = MARKETING_BLOCKS_RAW.map((block) => ({
+  ...block,
+  count: getBlockCount(block.id),
+}));
+
+const APP_BLOCKS_RAW: BlockItem[] = [
   { id: "dashboard", label: "Dashboard", count: 6, pro: true, new: false },
   { id: "sidebar", label: "Sidebar", count: 5, pro: false, new: false },
   { id: "data-table", label: "Data Table", count: 4, pro: true, new: false },
@@ -62,7 +78,12 @@ export const APP_BLOCKS: BlockItem[] = [
   { id: "todo-list", label: "Todo List", count: 3, pro: false, new: false },
 ];
 
-export const ECOMMERCE_BLOCKS: BlockItem[] = [
+export const APP_BLOCKS = APP_BLOCKS_RAW.map((block) => ({
+  ...block,
+  count: getBlockCount(block.id),
+}));
+
+const ECOMMERCE_BLOCKS_RAW: BlockItem[] = [
   {
     id: "product-list",
     label: "Product List",
@@ -94,6 +115,11 @@ export const ECOMMERCE_BLOCKS: BlockItem[] = [
     new: false,
   },
 ];
+
+export const ECOMMERCE_BLOCKS = ECOMMERCE_BLOCKS_RAW.map((block) => ({
+  ...block,
+  count: getBlockCount(block.id),
+}));
 
 // ─── Inline SVG previews ──────────────────────────────────────────────────────
 export function BlockPreview({ id }: { id: string }) {
