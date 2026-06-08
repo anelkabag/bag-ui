@@ -73,7 +73,7 @@ const SOCIAL_LINKS = [
 export function Footer() {
     return (
         <footer className="border-t border-gray-100 mt-24 py-16 px-6">
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-7xl mx-auto px-6 pt-10s">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-14">
                     <div className="col-span-2 md:col-span-1">
                         <div className="flex items-center gap-2 mb-3">
