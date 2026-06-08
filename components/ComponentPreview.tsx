@@ -80,7 +80,6 @@ export function ComponentPreview({ item }: ComponentPreviewProps) {
     const cacheKey = `${filePath ?? ""}|${exportName}`;
     const cachedComponent = filePath ? previewCache.get(cacheKey) : undefined;
 
-    // ✅ FIX: wrap with () => so React doesn't call the component as a state initializer
     const [PreviewComponent, setPreviewComponent] =
         useState<React.ComponentType | null>(() => cachedComponent ?? null);
     const [loading, setLoading] = useState(() =>
@@ -91,9 +90,7 @@ export function ComponentPreview({ item }: ComponentPreviewProps) {
     );
 
     useEffect(() => {
-        if (!filePath) {
-            return;
-        }
+        if (!filePath) return;
 
         if (cachedComponent) {
             setLoading(false);
@@ -116,7 +113,7 @@ export function ComponentPreview({ item }: ComponentPreviewProps) {
                     mod.default;
                 if (component) {
                     previewCache.set(cacheKey, component as React.ComponentType);
-                    // ✅ FIX: wrap with () => so React stores the reference instead of calling it
+                    // ✅ FIX: wrap with () => so React stores the ref instead of calling it
                     setPreviewComponent(() => component as React.ComponentType);
                 } else {
                     setLoadError(true);
@@ -141,24 +138,29 @@ export function ComponentPreview({ item }: ComponentPreviewProps) {
 
     if (!filePath) {
         return (
-            <div className="w-full h-full flex items-center justify-center">
+            <div className="w-full flex items-center justify-center h-[500px] rounded-xl border border-gray-200 bg-gray-50">
                 <span className="text-xs text-black/30">Preview unavailable</span>
             </div>
         );
     }
 
-    if (loading) return <Skeleton />;
+    if (loading) {
+        return (
+            <div className="w-full h-[500px] rounded-xl border border-gray-200 bg-gray-50">
+                <Skeleton />
+            </div>
+        );
+    }
 
     if (!PreviewComponent || loadError) {
         return (
-            <div className="w-full h-full flex flex-col items-center justify-center gap-3 text-center px-6">
+            <div className="w-full h-[500px] flex flex-col items-center justify-center gap-3 text-center px-6 rounded-xl border border-gray-200 bg-gray-50">
                 <div className="text-sm font-semibold text-gray-900">
                     Preview failed to load
                 </div>
                 <div className="text-xs text-gray-500 max-w-sm">
-                    The registry preview component could not be loaded for{" "}
-                    <strong>{filePath}</strong>. Check the registry path or component
-                    export name.
+                    The component could not be loaded for{" "}
+                    <strong>{filePath}</strong>. Check the registry path or export name.
                 </div>
             </div>
         );
@@ -166,38 +168,10 @@ export function ComponentPreview({ item }: ComponentPreviewProps) {
 
     return (
         <div
-            className="w-full h-full flex items-center justify-center"
-            style={{
-                minHeight: 320,
-                maxHeight: 320,
-                padding: 16,
-                boxSizing: "border-box",
-            }}
+            className="w-full rounded-xl border border-gray-200 overflow-auto bg-white"
+            style={{ minHeight: 500 }}
         >
-            <div
-                className="w-full h-full flex items-center justify-center"
-                style={{
-                    width: "100%",
-                    height: "100%",
-                    maxWidth: "100%",
-                    maxHeight: "100%",
-                    overflow: "hidden",
-                    position: "relative",
-                }}
-            >
-                <div
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                        overflow: "hidden",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    <PreviewComponent />
-                </div>
-            </div>
+            <PreviewComponent />
         </div>
     );
 }
