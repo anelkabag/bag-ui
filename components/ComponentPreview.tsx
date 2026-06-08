@@ -66,7 +66,7 @@ function Skeleton() {
  * `position: absolute` so they stay within the preview div instead
  * of escaping to the viewport.
  */
-function useContainFixed(ref: React.RefObject<HTMLDivElement>) {
+function useContainFixed(ref: React.RefObject<HTMLDivElement | null>) {
     useEffect(() => {
         const container = ref.current;
         if (!container) return;
