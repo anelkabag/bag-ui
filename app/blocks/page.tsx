@@ -1375,11 +1375,6 @@ function BlockCard({
               New
             </span>
           )}
-          {pro && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-400 text-amber-900">
-              Pro
-            </span>
-          )}
         </div>
       </div>
       {/* Label + count */}
