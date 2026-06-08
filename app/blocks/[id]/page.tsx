@@ -224,6 +224,15 @@ function IframePreview({ variantId, blurred }: { variantId: string; blurred?: bo
   );
 }
 
+// ─── Package manager icons ────────────────────────────────────────────────────
+
+const PKG_ICONS: Record<PkgManager, string> = {
+  pnpm: "🟠",
+  npm: "🔴",
+  yarn: "🔵",
+  bun: "⚫",
+};
+
 // ─── Variant toolbar (CLI + copy) ─────────────────────────────────────────────
 
 function VariantToolbar({ variantId }: { variantId: string }) {
@@ -232,46 +241,90 @@ function VariantToolbar({ variantId }: { variantId: string }) {
   const { copied, copy } = useCopy();
 
   return (
-      <div className="flex flex-wrap items-center gap-2 mt-3">
-        {/* Package manager tabs */}
-        <div className="flex items-center bg-gray-100 rounded-lg p-0.5 text-xs font-medium">
-          {PKG_MANAGERS.map((p) => (
-              <button
-                  key={p}
-                  onClick={() => setPkg(p)}
-                  className={`px-2.5 py-1 rounded-md transition-colors ${
-                      pkg === p ? "bg-white text-black shadow-sm" : "text-gray-500 hover:text-gray-700"
-                  }`}
-              >
-                {p}
-              </button>
-          ))}
+      <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          className="mb-4 space-y-3"
+      >
+        {/* Installation header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-400">
+              <polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"/>
+              <polyline points="12 12 20 7.5"/>
+              <polyline points="12 21 12 12"/>
+              <polyline points="4 7.5 12 12"/>
+            </svg>
+            <span className="text-xs font-semibold text-gray-700">Installation</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+                onClick={() => copy(cmd)}
+                className="h-7 px-2.5 rounded-md text-xs font-medium text-gray-600 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 transition-all flex items-center gap-1.5"
+            >
+              {copied ? <CheckIcon /> : <CopyIcon />}
+              <span>{copied ? "Copied!" : "Copy"}</span>
+            </button>
+            <Link
+                href={`/preview/${variantId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-7 px-2.5 rounded-md text-xs font-medium text-gray-600 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 transition-all flex items-center gap-1.5"
+            >
+              <ExternalLinkIcon />
+              <span>Open</span>
+            </Link>
+          </div>
         </div>
 
-        {/* CLI command */}
-        <div className="flex items-center gap-1.5 flex-1 min-w-0 bg-gray-950 rounded-lg px-3 py-1.5">
-          <span className="text-gray-500 text-xs font-mono select-none">$</span>
-          <code className="text-white text-xs font-mono truncate">{cmd}</code>
-          <button
-              onClick={() => copy(cmd)}
-              aria-label={copied ? "Copied" : "Copy command"}
-              className="ml-auto shrink-0 text-gray-500 hover:text-white transition-colors"
-          >
-            {copied ? <CheckIcon /> : <CopyIcon />}
-          </button>
+        {/* Command input area */}
+        <div className="flex items-stretch gap-3 bg-gradient-to-b from-gray-50 to-white border border-gray-200 rounded-lg p-3">
+          {/* Package manager selector */}
+          <div className="relative group">
+            <button
+                className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-md hover:border-gray-300 transition-all"
+                title="Select package manager"
+            >
+              <span className="text-base">{PKG_ICONS[pkg]}</span>
+              <span className="text-xs font-semibold text-gray-900 min-w-12">{pkg}</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-400">
+                <polyline points="3 5 6 8 9 5"/>
+              </svg>
+            </button>
+
+            {/* Dropdown menu */}
+            <div className="absolute top-full mt-2 left-0 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10 min-w-max">
+              {PKG_MANAGERS.map((p) => (
+                  <button
+                      key={p}
+                      onClick={() => setPkg(p)}
+                      className={`w-full text-left px-3 py-2 text-xs font-medium flex items-center gap-2 transition-colors ${
+                          pkg === p
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                      }`}
+                  >
+                    <span className="text-base">{PKG_ICONS[p]}</span>
+                    <span>{p}</span>
+                    {pkg === p && <CheckIcon />}
+                  </button>
+              ))}
+            </div>
+          </div>
+
+          {/* CLI command */}
+          <div className="flex items-center gap-2 flex-1 min-w-0 px-3 py-2 bg-white border border-gray-200 rounded-md">
+            <span className="text-gray-400 text-xs font-mono select-none shrink-0">$</span>
+            <code className="text-gray-900 text-xs font-mono truncate font-medium">{cmd}</code>
+          </div>
         </div>
 
-        {/* Open in new tab */}
-        <Link
-            href={`/preview/${variantId}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 h-8 px-3 rounded-lg text-xs font-medium text-gray-600 border border-gray-200 hover:bg-gray-50 hover:text-black transition-all shrink-0"
-        >
-          <ExternalLinkIcon />
-          Open in new tab
-        </Link>
-      </div>
+        {/* Quick info */}
+        <div className="text-xs text-gray-500 px-1">
+          Installs via shadcn/ui · React · TypeScript · Tailwind
+        </div>
+      </motion.div>
   );
 }
 
@@ -298,7 +351,7 @@ function VariantCard({
           className="mb-12 scroll-mt-20"
       >
         {/* Header row */}
-        <div className="flex items-center justify-between gap-4 mb-3 flex-wrap">
+        <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
           <div className="flex items-center gap-2">
             <a
                 href={`#${variant.id}`}
@@ -349,9 +402,10 @@ function VariantCard({
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
+                  className="space-y-4"
               >
-                <IframePreview variantId={variant.id} blurred={variant.pro} />
                 <VariantToolbar variantId={variant.id} />
+                <IframePreview variantId={variant.id} blurred={variant.pro} />
               </motion.div>
           ) : (
               <motion.div
