@@ -10,6 +10,7 @@ import registryJson from "@/registry.json";
 import { categoryMatchesItem, RegistryItem } from "@/lib/block-categories";
 import { ComponentPreview } from "@/components/ComponentPreview";
 import { MARKETING_BLOCKS, APP_BLOCKS, ECOMMERCE_BLOCKS } from "../page";
+import Navbar from "@/components/navbar";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -163,53 +164,6 @@ const ExternalLinkIcon = () => (
     />
   </svg>
 );
-
-// ─── Navbar ───────────────────────────────────────────────────────────────────
-
-function Navbar() {
-  return (
-    <nav className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur border-b border-gray-100">
-      <div className="flex items-center justify-between px-6 h-14 max-w-7xl mx-auto">
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2">
-            <Image
-              src="/logo.png"
-              alt="BagUI Logo"
-              width={20}
-              height={20}
-              priority
-            />
-            <span className="text-[15px] font-semibold tracking-tight text-black">
-              Bag\Ui
-            </span>
-          </Link>
-          <Link
-            href="https://x.com/anelkabag"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[12px] text-gray-400 hover:text-black transition-colors"
-          >
-            by Anelka Bag
-          </Link>
-        </div>
-        <div className="flex items-center gap-2">
-          <Link
-            href="/login"
-            className="h-8 px-4 rounded-full text-sm font-medium text-black border border-gray-200 hover:bg-gray-50 transition-all inline-flex items-center"
-          >
-            Login
-          </Link>
-          <Link
-            href="/access"
-            className="h-8 px-4 rounded-full text-sm font-medium text-white bg-black hover:bg-gray-800 transition-all inline-flex items-center"
-          >
-            Get access
-          </Link>
-        </div>
-      </div>
-    </nav>
-  );
-}
 
 // ─── Code block ──────────────────────────────────────────────────────────────
 

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { Footer } from "@/components/footer";
+import Navbar from "@/components/navbar";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Tab = "pnpm" | "npm" | "bun" | "yarn";
@@ -138,91 +139,6 @@ const NavLink = ({
 const Sep = () => (
     <div className="hidden sm:block w-px h-5 self-center shrink-0 bg-gray-200" />
 );
-
-function Navbar() {
-    const [mobileOpen, setMobileOpen] = useState(false);
-
-    return (
-        <>
-            {/* ── Navbar statique ── */}
-            <nav className="sticky top-0 z-50 w-full bg-white border-b border-gray-100">
-                <div className="flex items-center justify-between px-8 h-14">
-                    <Logo />
-                    <div className="hidden md:flex items-center gap-7">
-                        {NAV_LINKS.map((item) => (
-                            <NavLink key={item.href} {...item} />
-                        ))}
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <div className="hidden sm:flex items-center gap-2">
-                            <Link
-                                href="/login"
-                                className="h-9 px-4 rounded-full text-sm font-medium text-black border border-gray-300 hover:bg-gray-100 hover:border-gray-400 transition-all inline-flex items-center justify-center"
-                            >
-                                Login
-                            </Link>
-                            <Link
-                                href="/access"
-                                className="h-9 px-4 rounded-full text-sm font-medium text-white bg-black border border-black hover:bg-gray-800 transition-all inline-flex items-center justify-center"
-                            >
-                                Get access
-                            </Link>
-                        </div>
-                        <button
-                            className="md:hidden p-2 text-black"
-                            onClick={() => setMobileOpen((v) => !v)}
-                            aria-label="Toggle menu"
-                        >
-                            {mobileOpen ? "✕" : "☰"}
-                        </button>
-                    </div>
-                </div>
-            </nav>
-
-            {/* ── Mobile menu ── */}
-            <AnimatePresence>
-                {mobileOpen && (
-                    <motion.div
-                        className="md:hidden fixed inset-0 z-40 flex flex-col px-6 pt-24 pb-10 bg-white"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                    >
-                        <nav className="flex flex-col gap-1 flex-1">
-                            {NAV_LINKS.map((item) => (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    className="block text-[38px] font-extrabold tracking-tight leading-none py-3 text-black hover:opacity-60 transition-opacity"
-                                    onClick={() => setMobileOpen(false)}
-                                >
-                                    {item.label}
-                                </Link>
-                            ))}
-                        </nav>
-                        <div className="flex flex-col gap-3">
-                            <Link
-                                href="/login"
-                                onClick={() => setMobileOpen(false)}
-                                className="w-full py-4 rounded-xl border border-gray-300 text-black text-[14px] font-bold flex items-center justify-center hover:bg-gray-50 transition-colors"
-                            >
-                                Login
-                            </Link>
-                            <Link
-                                href="/access"
-                                onClick={() => setMobileOpen(false)}
-                                className="w-full py-4 rounded-xl bg-black text-white text-[14px] font-bold flex items-center justify-center hover:bg-gray-800 transition-colors"
-                            >
-                                Get access
-                            </Link>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </>
-    );
-}
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // DOCS COMPONENTS
@@ -412,7 +328,7 @@ export default function DocsPage() {
     return (
         <div className="min-h-screen bg-white text-gray-900">
             {/* ── Navbar ── */}
-            <Navbar />
+            <Navbar/>
 
             <div className="max-w-7xl mx-auto px-6 pt-10 pb-10">
                 {/* Breadcrumb */}
