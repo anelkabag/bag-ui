@@ -843,7 +843,7 @@ export default function BlocksCatalog() {
   return (
       <div className="w-full bg-white">
         <section className="px-6 md:px-12 lg:px-16 py-16 md:py-20">
-          <div className="max-w-7xl mx-auto">
+          <div className="max-w-7xl mx-auto px-6 pt-10">
             {/* Header */}
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-16">
               <div>
