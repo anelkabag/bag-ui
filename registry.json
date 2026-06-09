@@ -33,7 +33,7 @@
     {
       "name": "hero1",
       "type": "registry:block",
-      "title": "Hero 1",
+      "title": "Hero Exemple 1",
       "description": "Hero section with navbar and animated event dashboard preview.",
       "dependencies": ["framer-motion", "lucide-react"],
       "files": [
@@ -41,6 +41,20 @@
           "path": "registry/default/blocks/hero/hero1.tsx",
           "type": "registry:block",
           "target": "components/blocks/hero1.tsx"
+        }
+      ]
+    },
+    {
+      "name": "navbar1",
+      "type": "registry:block",
+      "title": "Navbar Exemple 1",
+      "description": "Modern responsive navigation bar with animated interactions, customizable links, and mobile menu support.",
+      "dependencies": ["framer-motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/navbar/navbar1.tsx",
+          "type": "registry:block",
+          "target": "components/blocks/navbar1.tsx"
         }
       ]
     }
