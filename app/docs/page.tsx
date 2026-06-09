@@ -24,7 +24,6 @@ const SECTIONS: Section[] = [
     { id: "requirements",       label: "Requirements" },
     { id: "register-namespace", label: "Register the namespace" },
     { id: "install-a-block",    label: "Install a free block" },
-    { id: "copy-prompt",        label: "Copy prompt" },
     { id: "customization",      label: "Customization" },
     { id: "dark-mode",          label: "Dark mode" },
     { id: "updates",            label: "Updates" },
@@ -418,22 +417,6 @@ export default function DocsPage() {
                                     </li>
                                 ))}
                             </ol>
-                        </section>
-
-                        {/* Copy prompt */}
-                        <section id="copy-prompt">
-                            <SectionHeading id="copy-prompt">Copy prompt</SectionHeading>
-                            <Prose>
-                                Every block exposes a{" "}
-                                <strong className="text-gray-800 font-semibold">Copy prompt</strong>{" "}
-                                button next to the Preview and Code switcher. It produces an LLM-ready
-                                markdown brief — block id, live preview URL, full source, integration
-                                steps and constraints.
-                            </Prose>
-                            <p className="text-gray-500 text-[0.925rem] leading-7 mt-3">
-                                Paste it into Claude Code, Cursor, Copilot or any agent that takes
-                                markdown — it knows enough to add the block to your codebase without guessing.
-                            </p>
                         </section>
 
                         {/* Customization */}
