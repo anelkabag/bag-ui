@@ -123,7 +123,7 @@ export function Footer() {
                 </div>
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pt-8 border-t border-gray-100">
                     <p className="text-gray-400 text-xs">
-                        © {new Date().getFullYear()} Bag/UI. Built by{" "}
+                        © {new Date().getFullYear()} Bag/UI - is not officially affiliated with shadcn/ui or Tailwind CSS. Built by{" "}
                         <a
                             href="https://anelkabag.vercel.app"
                             target="_blank"
