@@ -7,6 +7,7 @@ import Navbar from "@/components/navbar";
 import Hero from "@/components/Hero";
 import BlocksCatalog from "@/components/Blockscatalog";
 import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import {Footer} from "@/components/footer";
 
 export default function Page() {
@@ -38,6 +39,7 @@ export default function Page() {
       <BlocksCatalog key={pathname} />
       <Footer/>
       <Analytics />
+        <SpeedInsights />
     </>
   );
 }
