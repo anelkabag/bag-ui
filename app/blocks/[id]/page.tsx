@@ -314,9 +314,9 @@ function VariantToolbarHeader({
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.05 }}
-            className="flex items-center gap-2 sm:gap-4 mb-4 pb-3 border-b border-gray-200 -mx-6 px-6 py-3"
+            className="flex items-center gap-2 sm:gap-3 mb-4 pb-3 border-b border-gray-200 -mx-6 px-6 py-3"
         >
-            {/* Left: Tabs + Icons (fullscreen/refresh hidden on mobile) */}
+            {/* Left: Tabs + Icons */}
             <div className="flex items-center gap-2 shrink-0">
                 {/* Preview / Code tabs */}
                 <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-lg p-1">
@@ -399,92 +399,95 @@ function VariantToolbarHeader({
                 </button>
             </div>
 
-            {/* CLI Command Display - flex-1 on mobile, normal on desktop */}
-            <div className="flex-1 sm:flex-initial flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-xs font-mono text-gray-700 overflow-x-auto min-w-0">
-                <div className="w-4 h-4 flex items-center justify-center shrink-0">
-                    {PKG_ICONS[pkg]}
+            {/* Right: CLI Command + Dropdown + Copy (pushed to right on desktop) */}
+            <div className="flex-1 sm:flex-initial sm:ml-auto flex items-center gap-2 sm:gap-3">
+                {/* CLI Command Display */}
+                <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-xs font-mono text-gray-700 overflow-x-auto min-w-0">
+                    <div className="w-4 h-4 flex items-center justify-center shrink-0">
+                        {PKG_ICONS[pkg]}
+                    </div>
+                    <code className="truncate">{cmd}</code>
                 </div>
-                <code className="truncate">{cmd}</code>
-            </div>
 
-            {/* Package Manager Dropdown */}
-            <div className="relative shrink-0">
-                <button
-                    onClick={() => setOpenDropdown(!openDropdown)}
-                    className="flex items-center gap-1 p-2 hover:bg-gray-200 rounded-lg transition-colors border border-gray-200 bg-white cursor-pointer"
-                    title="Change package manager"
-                >
-                    <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 12 12"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        className="text-gray-600"
+                {/* Package Manager Dropdown */}
+                <div className="relative shrink-0">
+                    <button
+                        onClick={() => setOpenDropdown(!openDropdown)}
+                        className="flex items-center gap-1 p-2 hover:bg-gray-200 rounded-lg transition-colors border border-gray-200 bg-white cursor-pointer"
+                        title="Change package manager"
                     >
-                        <polyline points="3 5 6 8 9 5" />
-                    </svg>
-                </button>
-
-                {/* Dropdown Menu */}
-                <AnimatePresence>
-                    {openDropdown && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -6 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -6 }}
-                            transition={{ duration: 0.15 }}
-                            className="absolute top-full mt-1 right-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-max"
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 12 12"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            className="text-gray-600"
                         >
-                            {PKG_MANAGERS.map((p) => (
-                                <button
-                                    key={p}
-                                    onClick={() => {
-                                        setPkg(p);
-                                        setOpenDropdown(false);
-                                    }}
-                                    className={`w-full text-left px-3 py-2 text-xs font-medium flex items-center gap-2 transition-colors first:rounded-t-lg last:rounded-b-lg cursor-pointer ${
-                                        pkg === p
-                                            ? "bg-gray-100 text-gray-900"
-                                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                                    }`}
-                                >
-                                    <div className="w-4 h-4 flex items-center justify-center shrink-0">
-                                        {PKG_ICONS[p]}
-                                    </div>
-                                    <span>{p}</span>
-                                    {pkg === p && (
-                                        <svg
-                                            width="12"
-                                            height="12"
-                                            viewBox="0 0 12 12"
-                                            fill="currentColor"
-                                            className="ml-auto text-gray-600"
-                                        >
-                                            <path
-                                                d="M10 3l-6 6-3-3"
-                                                stroke="currentColor"
-                                                fill="none"
-                                                strokeWidth="2"
-                                            />
-                                        </svg>
-                                    )}
-                                </button>
-                            ))}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </div>
+                            <polyline points="3 5 6 8 9 5" />
+                        </svg>
+                    </button>
 
-            {/* Copy / Share button */}
-            <button
-                onClick={() => copy(cmd)}
-                className="flex items-center justify-center gap-1 p-2 hover:bg-gray-200 rounded-lg transition-colors text-gray-600 cursor-pointer shrink-0"
-                title={copied ? "Copied!" : "Copy command"}
-            >
-                {copied ? <CheckIcon /> : <CopyIcon />}
-            </button>
+                    {/* Dropdown Menu */}
+                    <AnimatePresence>
+                        {openDropdown && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -6 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -6 }}
+                                transition={{ duration: 0.15 }}
+                                className="absolute top-full mt-1 right-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-max"
+                            >
+                                {PKG_MANAGERS.map((p) => (
+                                    <button
+                                        key={p}
+                                        onClick={() => {
+                                            setPkg(p);
+                                            setOpenDropdown(false);
+                                        }}
+                                        className={`w-full text-left px-3 py-2 text-xs font-medium flex items-center gap-2 transition-colors first:rounded-t-lg last:rounded-b-lg cursor-pointer ${
+                                            pkg === p
+                                                ? "bg-gray-100 text-gray-900"
+                                                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                                        }`}
+                                    >
+                                        <div className="w-4 h-4 flex items-center justify-center shrink-0">
+                                            {PKG_ICONS[p]}
+                                        </div>
+                                        <span>{p}</span>
+                                        {pkg === p && (
+                                            <svg
+                                                width="12"
+                                                height="12"
+                                                viewBox="0 0 12 12"
+                                                fill="currentColor"
+                                                className="ml-auto text-gray-600"
+                                            >
+                                                <path
+                                                    d="M10 3l-6 6-3-3"
+                                                    stroke="currentColor"
+                                                    fill="none"
+                                                    strokeWidth="2"
+                                                />
+                                            </svg>
+                                        )}
+                                    </button>
+                                ))}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+
+                {/* Copy / Share button */}
+                <button
+                    onClick={() => copy(cmd)}
+                    className="flex items-center justify-center gap-1 p-2 hover:bg-gray-200 rounded-lg transition-colors text-gray-600 cursor-pointer shrink-0"
+                    title={copied ? "Copied!" : "Copy command"}
+                >
+                    {copied ? <CheckIcon /> : <CopyIcon />}
+                </button>
+            </div>
         </motion.div>
     );
 }
