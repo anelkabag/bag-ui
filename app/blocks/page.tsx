@@ -1412,9 +1412,10 @@ export default function BlocksPage() {
         <div className="min-h-screen bg-white">
             <Navbar/>
 
-            <div className="max-w-7xl mx-auto px-6 pt-10 pb-20">
+            <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 pt-6 sm:pt-10 pb-16 sm:pb-20">
+
                 {/* ── Breadcrumb ── */}
-                <div className="flex items-center gap-2 text-xs text-gray-400 mb-10">
+                <div className="flex items-center gap-2 text-xs text-gray-400 mb-6 sm:mb-10">
                     <Link href="/" className="hover:text-black transition-colors">
                         Home
                     </Link>
@@ -1423,12 +1424,12 @@ export default function BlocksPage() {
                 </div>
 
                 {/* ── Hero ── */}
-                <div className="mb-10">
-                    <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-black mb-3">
+                <div className="mb-6 sm:mb-10">
+                    <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-black mb-2 sm:mb-3 leading-tight">
                         Bag/UI Blocks —{" "}
                         <span className="text-gray-400">{totalAll}+ Free &amp; Pro</span>
                     </h1>
-                    <p className="text-gray-500 text-base leading-relaxed max-w-2xl">
+                    <p className="text-gray-500 text-sm sm:text-base leading-relaxed max-w-2xl">
                         Browse and install production-ready React sections built with
                         shadcn/ui and Tailwind CSS. Copy &amp; paste or install directly
                         with the Shadcn CLI.
@@ -1436,12 +1437,12 @@ export default function BlocksPage() {
                 </div>
 
                 {/* ── Filter tabs ── */}
-                <div className="flex items-center gap-1 mb-2 border-b border-gray-100 pb-0">
+                <div className="flex items-center gap-0 mb-2 border-b border-gray-100 pb-0 overflow-x-auto scrollbar-none">
                     {filters.map((f) => (
                         <button
                             key={f.key}
                             onClick={() => setActiveFilter(f.key)}
-                            className={`relative flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer ${
+                            className={`relative flex items-center gap-1 px-2.5 xs:px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-medium transition-colors cursor-pointer whitespace-nowrap flex-shrink-0 ${
                                 activeFilter === f.key
                                     ? "text-black"
                                     : "text-gray-500 hover:text-gray-800"
@@ -1449,10 +1450,10 @@ export default function BlocksPage() {
                         >
                             {f.label}
                             <span
-                                className={`text-xs tabular-nums ${activeFilter === f.key ? "text-gray-500" : "text-gray-400"}`}
+                                className={`text-[10px] sm:text-xs tabular-nums ${activeFilter === f.key ? "text-gray-500" : "text-gray-400"}`}
                             >
-                                {f.count}
-                            </span>
+                        {f.count}
+                    </span>
                             {activeFilter === f.key && (
                                 <motion.div
                                     layoutId="filter-underline"
@@ -1465,7 +1466,7 @@ export default function BlocksPage() {
                 </div>
 
                 {/* ── Anchor shortcuts ── */}
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 py-4 text-sm text-gray-400 ">
+                <div className="flex flex-wrap items-center gap-x-2 sm:gap-x-3 gap-y-1 py-3 sm:py-4 text-xs sm:text-sm text-gray-400">
                     {showMarketing && (
                         <a href="#marketing" className="hover:text-black transition-colors">
                             Marketing
@@ -1485,7 +1486,7 @@ export default function BlocksPage() {
                     )}
                 </div>
 
-                {/* ── Marketing ── */}
+                {/* ── Sections (Marketing / App / Ecommerce) ── */}
                 <AnimatePresence mode="wait">
                     {showMarketing && (
                         <motion.section
@@ -1497,7 +1498,7 @@ export default function BlocksPage() {
                             transition={{ duration: 0.2 }}
                         >
                             <SectionTitle id="marketing">Marketing Blocks</SectionTitle>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+                            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
                                 {MARKETING_BLOCKS.map((b, i) => (
                                     <motion.div
                                         key={b.id}
@@ -1512,7 +1513,6 @@ export default function BlocksPage() {
                         </motion.section>
                     )}
 
-                    {/* ── App ── */}
                     {showApp && (
                         <motion.section
                             id="app"
@@ -1523,7 +1523,7 @@ export default function BlocksPage() {
                             transition={{ duration: 0.2 }}
                         >
                             <SectionTitle id="app">App Blocks</SectionTitle>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+                            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
                                 {APP_BLOCKS.map((b, i) => (
                                     <motion.div
                                         key={b.id}
@@ -1538,7 +1538,6 @@ export default function BlocksPage() {
                         </motion.section>
                     )}
 
-                    {/* ── Ecommerce ── */}
                     {showEcommerce && (
                         <motion.section
                             id="ecommerce"
@@ -1549,7 +1548,7 @@ export default function BlocksPage() {
                             transition={{ duration: 0.2 }}
                         >
                             <SectionTitle id="ecommerce">Ecommerce Blocks</SectionTitle>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+                            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
                                 {ECOMMERCE_BLOCKS.map((b, i) => (
                                     <motion.div
                                         key={b.id}
