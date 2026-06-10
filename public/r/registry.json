@@ -62,7 +62,7 @@
       "name": "faq1",
       "type": "registry:block",
       "title": "FAQ Exemple 1",
-      "description": "Modern responsive navigation bar with animated interactions, customizable links, and mobile menu support.",
+      "description": "Frequently asked questions section with collapsible items.",
       "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
