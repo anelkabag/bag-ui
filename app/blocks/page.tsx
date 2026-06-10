@@ -1441,7 +1441,7 @@ export default function BlocksPage() {
                         <button
                             key={f.key}
                             onClick={() => setActiveFilter(f.key)}
-                            className={`relative flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium transition-colors ${
+                            className={`relative flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer ${
                                 activeFilter === f.key
                                     ? "text-black"
                                     : "text-gray-500 hover:text-gray-800"
@@ -1451,8 +1451,8 @@ export default function BlocksPage() {
                             <span
                                 className={`text-xs tabular-nums ${activeFilter === f.key ? "text-gray-500" : "text-gray-400"}`}
                             >
-                {f.count}
-              </span>
+                                {f.count}
+                            </span>
                             {activeFilter === f.key && (
                                 <motion.div
                                     layoutId="filter-underline"
@@ -1465,7 +1465,7 @@ export default function BlocksPage() {
                 </div>
 
                 {/* ── Anchor shortcuts ── */}
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 py-4 text-sm text-gray-400 mb-4">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 py-4 text-sm text-gray-400 ">
                     {showMarketing && (
                         <a href="#marketing" className="hover:text-black transition-colors">
                             Marketing
