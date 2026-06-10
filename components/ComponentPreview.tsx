@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { componentLoaders } from "@/lib/registry-loaders";
 
 interface ComponentPreviewProps {
   item: {
@@ -8,22 +9,6 @@ interface ComponentPreviewProps {
     files: { path: string; target?: string; type: string }[];
   };
 }
-
-const componentLoaders: Record<
-  string,
-  () => Promise<Record<string, React.ComponentType>>
-> = {
-  "registry/default/blocks/hero/hero1.tsx": () =>
-    import("../registry/default/blocks/hero/hero1"),
-  "registry/default/blocks/teams/team-section.tsx": () =>
-    import("../registry/default/blocks/teams/team-section"),
-  "registry/default/blocks/navbar/navbar1.tsx": () =>
-    import("../registry/default/blocks/navbar/navbar1"),
-  "registry/default/ui/fancy-button.tsx": () =>
-    import("../registry/default/ui/fancy-button"),
-  "registry/default/faq/faq1.tsx": () =>
-      import("../registry/default/blocks/faq/faq1"),
-};
 
 function normalizePath(path: string) {
   return path.replace(/^\.\//, "").replace(/\\/g, "/");

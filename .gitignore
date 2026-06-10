@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# auto-generated registry files
+/lib/registry-manifest.ts
+/lib/registry-loaders.ts

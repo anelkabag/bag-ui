@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "registry:generate": "tsx scripts/generate-registry.ts",
+    "registry:watch": "tsx scripts/watch-registry.ts",
+    "dev": "concurrently \"npm run registry:watch\" \"next dev\"",
+    "build": "npm run registry:generate && next build",
     "start": "next start",
     "lint": "eslint",
     "registry:build": "shadcn build"
@@ -32,6 +34,8 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "chokidar": "^3.6.0",
+    "concurrently": "^8.2.2",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
