@@ -128,10 +128,10 @@ export function Footer() {
                             href="https://anelkabag.vercel.app"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-[13px] text-gray-400 hover:text-black transition-colors"
+                            className="text-[13px] text-gray-400 hover:text-black transition-colors underline underline-offset-4"
                         >
                             Anelka Bag
-                        </a>.
+                        </a>
                     </p>
                     <div className="flex items-center gap-2 flex-wrap">
                         {SOCIAL_LINKS.map(({ label, href, Icon }) => (
