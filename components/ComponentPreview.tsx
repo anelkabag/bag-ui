@@ -21,6 +21,8 @@ const componentLoaders: Record<
     import("../registry/default/blocks/navbar/navbar1"),
   "registry/default/ui/fancy-button.tsx": () =>
     import("../registry/default/ui/fancy-button"),
+  "registry/default/faq/faq1.tsx": () =>
+      import("../registry/default/blocks/faq/faq1"),
 };
 
 function normalizePath(path: string) {

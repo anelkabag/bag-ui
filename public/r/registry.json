@@ -57,6 +57,20 @@
           "target": "components/blocks/navbar1.tsx"
         }
       ]
+    },
+    {
+      "name": "faq1",
+      "type": "registry:block",
+      "title": "FAQ Exemple 1",
+      "description": "Modern responsive navigation bar with animated interactions, customizable links, and mobile menu support.",
+      "dependencies": ["framer-motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/faq/faq1.tsx",
+          "type": "registry:block",
+          "target": "components/blocks/faq1.tsx"
+        }
+      ]
     }
   ]
 }
