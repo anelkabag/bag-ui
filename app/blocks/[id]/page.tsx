@@ -314,52 +314,93 @@ function VariantToolbarHeader({
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.05 }}
-            className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-200 -mx-6 px-6 py-3"
+            className="flex items-center gap-2 sm:gap-4 mb-4 pb-3 border-b border-gray-200 -mx-6 px-6 py-3"
         >
-            {/* Preview / Code tabs */}
-            <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-lg p-1 shrink-0">
-                {(["preview", "code"] as ViewMode[]).map((m) => (
-                    <button
-                        key={m}
-                        onClick={() => setMode(m)}
-                        className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
-                            mode === m
-                                ? "text-gray-900 bg-gray-100"
-                                : "text-gray-600 hover:text-gray-900"
-                        }`}
+            {/* Left: Tabs + Icons (fullscreen/refresh hidden on mobile) */}
+            <div className="flex items-center gap-2 shrink-0">
+                {/* Preview / Code tabs */}
+                <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-lg p-1">
+                    {(["preview", "code"] as ViewMode[]).map((m) => (
+                        <button
+                            key={m}
+                            onClick={() => setMode(m)}
+                            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
+                                mode === m
+                                    ? "text-gray-900 bg-gray-100"
+                                    : "text-gray-600 hover:text-gray-900"
+                            }`}
+                        >
+                            {m === "preview" ? (
+                                <svg
+                                    width="14"
+                                    height="14"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                >
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                </svg>
+                            ) : (
+                                <svg
+                                    width="14"
+                                    height="14"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                >
+                                    <polyline points="16 18 22 12 16 6" />
+                                    <polyline points="8 6 2 12 8 18" />
+                                </svg>
+                            )}
+                            <span className="capitalize">{m}</span>
+                        </button>
+                    ))}
+                </div>
+
+                {/* Fullscreen icon - hidden on mobile */}
+                <button
+                    className="hidden sm:flex p-2 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer items-center justify-center"
+                    title="Fullscreen"
+                >
+                    <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        className="text-gray-600"
                     >
-                        {m === "preview" ? (
-                            <svg
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                            >
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                <circle cx="12" cy="12" r="3" />
-                            </svg>
-                        ) : (
-                            <svg
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                            >
-                                <polyline points="16 18 22 12 16 6" />
-                                <polyline points="8 6 2 12 8 18" />
-                            </svg>
-                        )}
-                        <span className="capitalize">{m}</span>
-                    </button>
-                ))}
+                        <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3" />
+                    </svg>
+                </button>
+
+                {/* Refresh icon - hidden on mobile */}
+                <button
+                    className="hidden sm:flex p-2 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer items-center justify-center"
+                    title="Refresh"
+                >
+                    <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        className="text-gray-600"
+                    >
+                        <polyline points="23 4 23 10 17 10" />
+                        <polyline points="1 20 1 14 7 14" />
+                        <path d="M3.51 9a9 9 0 0114.85-3.36M20.49 15a9 9 0 01-14.85 3.36" />
+                    </svg>
+                </button>
             </div>
 
-            {/* CLI Command Display */}
-            <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-xs font-mono text-gray-700 overflow-x-auto min-w-0">
+            {/* CLI Command Display - flex-1 on mobile, normal on desktop */}
+            <div className="flex-1 sm:flex-initial flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-xs font-mono text-gray-700 overflow-x-auto min-w-0">
                 <div className="w-4 h-4 flex items-center justify-center shrink-0">
                     {PKG_ICONS[pkg]}
                 </div>
