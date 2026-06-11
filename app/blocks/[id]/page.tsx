@@ -330,7 +330,7 @@ function VariantToolbarHeader({
       className="flex items-center gap-2 sm:gap-3 mb-4 pb-3 border-b border-gray-200 -mx-6 px-6 py-3"
     >
       {/* Left: Tabs + Icons */}
-      <div className="flex items-center gap-2 shrink-0">
+      <div className="flex items-center gap-2 shrink-0 h-10">
         {/* Preview / Code tabs */}
         <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-lg p-1">
           {(["preview", "code"] as ViewMode[]).map((m) => (
@@ -414,7 +414,7 @@ function VariantToolbarHeader({
       </div>
 
       {/* Right: CLI Command + Dropdown + Copy (pushed to right on desktop) */}
-      <div className="flex-1 sm:flex-initial sm:ml-auto flex items-center gap-2 sm:gap-3">
+      <div className="flex-1 sm:flex-initial sm:ml-auto flex items-center gap-2 sm:gap-3 h-10">
         {/* CLI Command Display */}
         <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-xs font-mono text-gray-700 overflow-x-auto min-w-0">
           <div className="w-4 h-4 flex items-center justify-center shrink-0">
