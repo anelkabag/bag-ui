@@ -318,10 +318,10 @@ const PKG_ICONS: Record<PkgManager, React.ReactNode> = {
 // ─── Variant toolbar header (Preview / Code + CLI) ────────────────────────────
 
 function VariantToolbarHeader({
-  variantId,
-  mode,
-  setMode,
-}: {
+                                variantId,
+                                mode,
+                                setMode,
+                              }: {
   variantId: string;
   mode: ViewMode;
   setMode: (m: ViewMode) => void;
@@ -332,117 +332,132 @@ function VariantToolbarHeader({
   const { copied, copy } = useCopy();
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: 0.05 }}
-      className="flex items-center gap-2 sm:gap-3 mb-4 pb-3 border-b border-gray-200 -mx-6 px-6 py-3"
-    >
-      {/* Left: Tabs + Icons */}
-      <div className="flex items-center gap-2 shrink-0">
-        {/* Preview / Code tabs */}
-        <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-lg p-1">
-          {(["preview", "code"] as ViewMode[]).map((m) => (
-            <button
-              key={m}
-              onClick={() => setMode(m)}
-              className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
-                mode === m
-                  ? "text-gray-900 bg-gray-100"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              {m === "preview" ? <IconEye size={14} /> : <IconCode size={14} />}
-              <span className="capitalize">{m}</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Fullscreen icon - hidden on mobile */}
-        <button
-          onClick={() => window.open(`/fullscreen/${variantId}`, "_blank")}
-          className="hidden sm:flex p-2 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer items-center justify-center"
-          title="Fullscreen"
-        >
-          <IconArrowsMaximize size={16} className="text-gray-600" />
-        </button>
-
-        {/* Refresh icon - hidden on mobile */}
-        <button
-          className="hidden sm:flex p-2 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer items-center justify-center"
-          title="Refresh"
-        >
-          <IconRefresh size={16} className="text-gray-600" />
-        </button>
-      </div>
-
-      {/* Right: CLI Command + Dropdown + Copy (pushed to right on desktop) */}
-      <div className="flex-1 sm:flex-initial sm:ml-auto flex items-center gap-2 sm:gap-3">
-        {/* CLI Command Display */}
-        <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-xs font-mono text-gray-700 overflow-x-auto min-w-0">
-          <div className="w-4 h-4 flex items-center justify-center shrink-0">
-            {PKG_ICONS[pkg]}
+      <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.05 }}
+          className="flex items-center gap-2 sm:gap-3 mb-4 pb-3 border-b border-gray-200 -mx-6 px-6 py-3"
+      >
+        {/* Left: Tabs + Icons */}
+        <div className="flex items-center gap-2 shrink-0">
+          {/* Preview / Code tabs */}
+          <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-lg p-1">
+            {(["preview", "code"] as ViewMode[]).map((m) => (
+                <button
+                    key={m}
+                    onClick={() => setMode(m)}
+                    className={`flex items-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
+                        mode === m
+                            ? "text-gray-900 bg-gray-100"
+                            : "text-gray-600 hover:text-gray-900"
+                    }`}
+                >
+                  {m === "preview" ? <IconEye size={14} /> : <IconCode size={14} />}
+                  {/* Text label hidden on mobile */}
+                  <span className="hidden sm:inline capitalize">{m}</span>
+                </button>
+            ))}
           </div>
-          <code className="truncate">{cmd}</code>
-        </div>
 
-        {/* Package Manager Dropdown */}
-        <div className="relative shrink-0">
+          {/* Fullscreen icon - hidden on mobile */}
           <button
-            onClick={() => setOpenDropdown(!openDropdown)}
-            className="flex items-center gap-1 p-2 hover:bg-gray-200 rounded-lg transition-colors border border-gray-200 bg-white cursor-pointer"
-            title="Change package manager"
+              onClick={() => window.open(`/fullscreen/${variantId}`, "_blank")}
+              className="hidden sm:flex p-2 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer items-center justify-center"
+              title="Fullscreen"
           >
-            <IconChevronDown size={16} className="text-gray-600" />
+            <IconArrowsMaximize size={16} className="text-gray-600" />
           </button>
 
-          {/* Dropdown Menu */}
-          <AnimatePresence>
-            {openDropdown && (
-              <motion.div
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.15 }}
-                className="absolute top-full mt-1 right-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-max"
-              >
-                {PKG_MANAGERS.map((p) => (
-                  <button
-                    key={p}
-                    onClick={() => {
-                      setPkg(p);
-                      setOpenDropdown(false);
-                    }}
-                    className={`w-full text-left px-3 py-2 text-xs font-medium flex items-center gap-2 transition-colors first:rounded-t-lg last:rounded-b-lg cursor-pointer ${
-                      pkg === p
-                        ? "bg-gray-100 text-gray-900"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                    }`}
-                  >
-                    <div className="w-4 h-4 flex items-center justify-center shrink-0">
-                      {PKG_ICONS[p]}
-                    </div>
-                    <span>{p}</span>
-                    {pkg === p && (
-                      <IconCheck size={12} className="ml-auto text-gray-600" />
-                    )}
-                  </button>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* Refresh icon - hidden on mobile */}
+          <button
+              className="hidden sm:flex p-2 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer items-center justify-center"
+              title="Refresh"
+          >
+            <IconRefresh size={16} className="text-gray-600" />
+          </button>
         </div>
 
-        {/* Copy / Share button */}
-        <button
-          onClick={() => copy(cmd)}
-          className="flex items-center justify-center gap-1 p-2 hover:bg-gray-200 rounded-lg transition-colors text-gray-600 cursor-pointer shrink-0"
-          title={copied ? "Copied!" : "Copy command"}
-        >
-          {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
-        </button>
-      </div>
-    </motion.div>
+        {/* Right: CLI Command + Dropdown + Copy */}
+        <div className="flex-1 sm:flex-initial sm:ml-auto flex items-center gap-2 sm:gap-3">
+
+          {/* MOBILE: "Copy prompt" button (icon + label, no command text) */}
+          <button
+              onClick={() => copy(cmd)}
+              className="sm:hidden flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-gray-200 bg-white text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50"
+          >
+            {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
+            <span>{copied ? "Copied!" : "Copy prompt"}</span>
+          </button>
+
+          {/* DESKTOP: CLI Command Display (full text) */}
+          <div className="hidden sm:flex flex-1 items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 bg-white text-xs font-mono text-gray-700 overflow-x-auto min-w-0">
+            <div className="w-4 h-4 flex items-center justify-center shrink-0">
+              {PKG_ICONS[pkg]}
+            </div>
+            <code className="truncate">{cmd}</code>
+          </div>
+
+          {/* Package Manager Dropdown */}
+          <div className="relative shrink-0">
+            <button
+                onClick={() => setOpenDropdown(!openDropdown)}
+                className="flex items-center gap-1 p-2 hover:bg-gray-200 rounded-lg transition-colors border border-gray-200 bg-white cursor-pointer"
+                title="Change package manager"
+            >
+              {/* Show pkg icon on mobile next to chevron */}
+              <span className="sm:hidden w-4 h-4 flex items-center justify-center">
+              {PKG_ICONS[pkg]}
+            </span>
+              <IconChevronDown size={16} className="text-gray-600" />
+            </button>
+
+            {/* Dropdown Menu */}
+            <AnimatePresence>
+              {openDropdown && (
+                  <motion.div
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute top-full mt-1 right-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-max"
+                  >
+                    {PKG_MANAGERS.map((p) => (
+                        <button
+                            key={p}
+                            onClick={() => {
+                              setPkg(p);
+                              setOpenDropdown(false);
+                            }}
+                            className={`w-full text-left px-3 py-2 text-xs font-medium flex items-center gap-2 transition-colors first:rounded-t-lg last:rounded-b-lg cursor-pointer ${
+                                pkg === p
+                                    ? "bg-gray-100 text-gray-900"
+                                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                            }`}
+                        >
+                          <div className="w-4 h-4 flex items-center justify-center shrink-0">
+                            {PKG_ICONS[p]}
+                          </div>
+                          <span>{p}</span>
+                          {pkg === p && (
+                              <IconCheck size={12} className="ml-auto text-gray-600" />
+                          )}
+                        </button>
+                    ))}
+                  </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Copy button - desktop only */}
+          <button
+              onClick={() => copy(cmd)}
+              className="hidden sm:flex items-center justify-center gap-1 p-2 hover:bg-gray-200 rounded-lg transition-colors text-gray-600 cursor-pointer shrink-0"
+              title={copied ? "Copied!" : "Copy command"}
+          >
+            {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
+          </button>
+        </div>
+      </motion.div>
   );
 }
 
