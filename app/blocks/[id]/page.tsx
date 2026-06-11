@@ -19,7 +19,6 @@ import {
   IconCode,
   IconArrowsMaximize,
   IconRefresh,
-  IconTerminal2,
   IconChevronDown,
   IconCopy,
   IconCheck,
