@@ -125,7 +125,7 @@ export function Footer() {
                     <p className="text-gray-400 text-xs">
                         © {new Date().getFullYear()} Bag/UI - is not officially affiliated with shadcn/ui or Tailwind CSS. Built by{" "}
                         <a
-                            href="https://anelkabag.vercel.app"
+                            href="https://www.anelka.life/"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-[13px] text-gray-400 hover:text-black transition-colors underline underline-offset-4"
