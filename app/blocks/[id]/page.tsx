@@ -362,7 +362,7 @@ function VariantToolbarHeader({
           {/* Fullscreen icon - hidden on mobile */}
           <button
               onClick={() => window.open(`/fullscreen/${variantId}`, "_blank")}
-              className="hidden sm:flex p-2 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer items-center justify-center"
+              className="hidden sm:flex p-2 hover:bg-gray-100 rounded-md transition-colors cursor-pointer items-center justify-center"
               title="Fullscreen"
           >
             <IconArrowsMaximize size={16} className="text-gray-600" />
@@ -370,7 +370,7 @@ function VariantToolbarHeader({
 
           {/* Refresh icon - hidden on mobile */}
           <button
-              className="hidden sm:flex p-2 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer items-center justify-center"
+              className="hidden sm:flex p-2 hover:bg-gray-100 rounded-md transition-colors cursor-pointer items-center justify-center"
               title="Refresh"
           >
             <IconRefresh size={16} className="text-gray-600" />
@@ -386,7 +386,7 @@ function VariantToolbarHeader({
               className="sm:hidden flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-gray-200 bg-white text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50"
           >
             {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
-            <span>{copied ? "Copied!" : "Copy prompt"}</span>
+            <span>{copied ? "Copied!" : "Copy command"}</span>
           </button>
 
           {/* DESKTOP: CLI Command Display (full text) */}
@@ -401,7 +401,7 @@ function VariantToolbarHeader({
           <div className="relative shrink-0">
             <button
                 onClick={() => setOpenDropdown(!openDropdown)}
-                className="flex items-center gap-1 p-2 hover:bg-gray-200 rounded-lg transition-colors border border-gray-200 bg-white cursor-pointer"
+                className="flex items-center gap-1 p-2 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 bg-white cursor-pointer"
                 title="Change package manager"
             >
               {/* Show pkg icon on mobile next to chevron */}
@@ -451,7 +451,7 @@ function VariantToolbarHeader({
           {/* Copy button - desktop only */}
           <button
               onClick={() => copy(cmd)}
-              className="hidden sm:flex items-center justify-center gap-1 p-2 hover:bg-gray-200 rounded-lg transition-colors text-gray-600 cursor-pointer shrink-0"
+              className="hidden sm:flex p-2.5 hover:bg-gray-100 rounded-md transition-colors cursor-pointer items-center justify-center"
               title={copied ? "Copied!" : "Copy command"}
           >
             {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
