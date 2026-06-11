@@ -14,6 +14,16 @@ import Navbar from "@/components/navbar";
 import PnpmLogo from "../../../public/assets/pnpm.svg";
 import YarnLogo from "../../../public/assets/yarn.svg";
 import { Footer } from "@/components/footer";
+import {
+  IconEye,
+  IconCode,
+  IconArrowsMaximize,
+  IconRefresh,
+  IconTerminal2,
+  IconChevronDown,
+  IconCopy,
+  IconCheck,
+} from "@tabler/icons-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -330,7 +340,7 @@ function VariantToolbarHeader({
       className="flex items-center gap-2 sm:gap-3 mb-4 pb-3 border-b border-gray-200 -mx-6 px-6 py-3"
     >
       {/* Left: Tabs + Icons */}
-      <div className="flex items-center gap-2 shrink-0 h-10">
+      <div className="flex items-center gap-2 shrink-0">
         {/* Preview / Code tabs */}
         <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-lg p-1">
           {(["preview", "code"] as ViewMode[]).map((m) => (
@@ -343,31 +353,7 @@ function VariantToolbarHeader({
                   : "text-gray-600 hover:text-gray-900"
               }`}
             >
-              {m === "preview" ? (
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
-              ) : (
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <polyline points="16 18 22 12 16 6" />
-                  <polyline points="8 6 2 12 8 18" />
-                </svg>
-              )}
+              {m === "preview" ? <IconEye size={14} /> : <IconCode size={14} />}
               <span className="capitalize">{m}</span>
             </button>
           ))}
@@ -379,17 +365,7 @@ function VariantToolbarHeader({
           className="hidden sm:flex p-2 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer items-center justify-center"
           title="Fullscreen"
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            className="text-gray-600"
-          >
-            <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3" />
-          </svg>
+          <IconArrowsMaximize size={16} className="text-gray-600" />
         </button>
 
         {/* Refresh icon - hidden on mobile */}
@@ -397,24 +373,12 @@ function VariantToolbarHeader({
           className="hidden sm:flex p-2 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer items-center justify-center"
           title="Refresh"
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            className="text-gray-600"
-          >
-            <polyline points="23 4 23 10 17 10" />
-            <polyline points="1 20 1 14 7 14" />
-            <path d="M3.51 9a9 9 0 0114.85-3.36M20.49 15a9 9 0 01-14.85 3.36" />
-          </svg>
+          <IconRefresh size={16} className="text-gray-600" />
         </button>
       </div>
 
       {/* Right: CLI Command + Dropdown + Copy (pushed to right on desktop) */}
-      <div className="flex-1 sm:flex-initial sm:ml-auto flex items-center gap-2 sm:gap-3 h-10">
+      <div className="flex-1 sm:flex-initial sm:ml-auto flex items-center gap-2 sm:gap-3">
         {/* CLI Command Display */}
         <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-xs font-mono text-gray-700 overflow-x-auto min-w-0">
           <div className="w-4 h-4 flex items-center justify-center shrink-0">
@@ -430,17 +394,7 @@ function VariantToolbarHeader({
             className="flex items-center gap-1 p-2 hover:bg-gray-200 rounded-lg transition-colors border border-gray-200 bg-white cursor-pointer"
             title="Change package manager"
           >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 12 12"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              className="text-gray-600"
-            >
-              <polyline points="3 5 6 8 9 5" />
-            </svg>
+            <IconChevronDown size={16} className="text-gray-600" />
           </button>
 
           {/* Dropdown Menu */}
@@ -471,20 +425,7 @@ function VariantToolbarHeader({
                     </div>
                     <span>{p}</span>
                     {pkg === p && (
-                      <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 12 12"
-                        fill="currentColor"
-                        className="ml-auto text-gray-600"
-                      >
-                        <path
-                          d="M10 3l-6 6-3-3"
-                          stroke="currentColor"
-                          fill="none"
-                          strokeWidth="2"
-                        />
-                      </svg>
+                      <IconCheck size={12} className="ml-auto text-gray-600" />
                     )}
                   </button>
                 ))}
@@ -499,7 +440,7 @@ function VariantToolbarHeader({
           className="flex items-center justify-center gap-1 p-2 hover:bg-gray-200 rounded-lg transition-colors text-gray-600 cursor-pointer shrink-0"
           title={copied ? "Copied!" : "Copy command"}
         >
-          {copied ? <CheckIcon /> : <CopyIcon />}
+          {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
         </button>
       </div>
     </motion.div>
