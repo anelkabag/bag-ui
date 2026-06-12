@@ -101,7 +101,7 @@
       ]
     },
     {
-      "name": "dashboard1",
+      "name": "chat-app1",
       "type": "registry:block",
       "title": "Dashboard Chat App Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
