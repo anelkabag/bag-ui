@@ -103,7 +103,7 @@
     {
       "name": "dashboard1",
       "type": "registry:block",
-      "title": "Dashboard Exemple 1",
+      "title": "Dashboard Chat Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
       "dependencies": ["framer-motion", "lucide-react"],
       "files": [
