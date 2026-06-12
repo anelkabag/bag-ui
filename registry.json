@@ -108,7 +108,7 @@
       "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
-          "path": "registry/default/blocks/Dashboard/dashboard1.tsx",
+          "path": "registry/default/blocks/Dashboard/Chat-App1.tsx",
           "type": "registry:block",
           "target": "components/Chatapp1.tsx"
         }
