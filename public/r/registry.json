@@ -71,6 +71,20 @@
           "target": "components/blocks/faq1.tsx"
         }
       ]
+    },
+    {
+      "name": "login1",
+      "type": "registry:block",
+      "title": "Login Exemple 1",
+      "description": "Frequently asked questions section with collapsible items.",
+      "dependencies": ["framer-motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/SignUp/login1.tsx",
+          "type": "registry:block",
+          "target": "components/blocks/login1.tsx"
+        }
+      ]
     }
   ]
 }

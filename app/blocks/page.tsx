@@ -55,7 +55,7 @@ const MARKETING_BLOCKS_RAW: BlockItem[] = [
     { id: "gallery", label: "Gallery", count: 5, pro: true, new: false },
     { id: "logos", label: "Logos", count: 4, pro: false, new: false },
     { id: "banner", label: "Banner", count: 3, pro: false, new: false },
-    { id: "signup", label: "Sign Up", count: 4, pro: true, new: false },
+    { id: "signup", label: "SignUp", count: 4, pro: true, new: false },
 ];
 
 export const MARKETING_BLOCKS = MARKETING_BLOCKS_RAW.map((block) => ({

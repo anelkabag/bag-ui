@@ -37,7 +37,7 @@ export const blockCategories: BlockCategory[] = [
   { slug: "gallery",     title: "Gallery",     type: "block", description: "Image gallery layouts with masonry, grid and lightbox styles." },
   { slug: "logos",       title: "Logos",       type: "block", description: "Logo marquee and grid sections to show off trusted brands." },
   { slug: "banner",      title: "Banner",      type: "block", description: "Announcement banners for promotions, alerts and updates." },
-  { slug: "signup",      title: "Sign Up",     type: "block", description: "Sign-up and login forms with email, password and social auth." },
+  { slug: "signup",      title: "SignUp",     type: "block", description: "Sign-up and SignUp forms with email, password and social auth." },
   // ── App ────────────────────────────────────────────────────────────────────
   { slug: "dashboard",    title: "Dashboard",    type: "block", description: "Admin dashboards with sidebar, stat cards and data charts." },
   { slug: "sidebar",      title: "Sidebar",      type: "block", description: "Collapsible sidebars with nav items, icons and nested menus." },

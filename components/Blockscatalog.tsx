@@ -354,7 +354,7 @@ function BlockPreview({ blockType }: { blockType: string }) {
         </svg>
     ),
 
-    // ── Sign Up ──────────────────────────────────────────────────────────────
+    // ── SignUp ──────────────────────────────────────────────────────────────
     signup: (
         <svg viewBox="0 0 320 180" className="w-full h-full" fill="none">
           <rect width="320" height="180" fill="#f9fafb"/>
