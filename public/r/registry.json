@@ -103,14 +103,14 @@
     {
       "name": "dashboard1",
       "type": "registry:block",
-      "title": "Dashboard Chat Exemple 1",
+      "title": "Dashboard Chat App Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
       "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard1.tsx",
           "type": "registry:block",
-          "target": "components/Dashboard1.tsx"
+          "target": "components/Chatapp1.tsx"
         }
       ]
     }
