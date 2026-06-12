@@ -37,14 +37,14 @@ const contacts: ContactData[] = [
         name: "Alice Mensah",
         avatar: "AM",
         messages: [
-            { id: "1", content: "Salut! Comment vas-tu?", sender: "other", timestamp: "14:30", type: "text" },
-            { id: "2", content: "Très bien, et toi?", sender: "me", timestamp: "14:31", type: "text" },
-            { id: "3", content: "Cool! On se voit ce weekend?", sender: "other", timestamp: "14:32", type: "text" },
+            { id: "1", content: "Hi! How are you?", sender: "other", timestamp: "14:30", type: "text" },
+            { id: "2", content: "Very good, and you?", sender: "me", timestamp: "14:31", type: "text" },
+            { id: "3", content: "Cool! Are we meeting this weekend?", sender: "other", timestamp: "14:32", type: "text" },
         ],
         tab: "friends",
         online: true,
         time: "14:32",
-        lastMessage: "On se voit ce weekend?",
+        lastMessage: "Are we meeting this weekend?",
         unread: 3,
         verified: true,
     },
@@ -53,13 +53,13 @@ const contacts: ContactData[] = [
         name: "Alex Chen",
         avatar: "AC",
         messages: [
-            { id: "1", content: "Projet finalisé? 📁", sender: "other", timestamp: "13:15", type: "text" },
-            { id: "2", content: "Oui, c'est bon!", sender: "me", timestamp: "13:16", type: "text" },
+            { id: "1", content: "Project finished? 📁", sender: "other", timestamp: "13:15", type: "text" },
+            { id: "2", content: "Yes, it's done!", sender: "me", timestamp: "13:16", type: "text" },
         ],
         tab: "friends",
         online: true,
         time: "13:16",
-        lastMessage: "Oui, c'est bon!",
+        lastMessage: "Yes, it's done!",
         verified: true,
     },
     {
@@ -67,13 +67,13 @@ const contacts: ContactData[] = [
         name: "Ivan Goldberg",
         avatar: "IG",
         messages: [
-            { id: "1", content: "À bientôt!", sender: "other", timestamp: "12:45", type: "text" },
+            { id: "1", content: "See you soon!", sender: "other", timestamp: "12:45", type: "text" },
         ],
         tab: "friends",
         online: false,
         time: "12:45",
-        lastMessage: "À bientôt!",
-        lastSeen: "il y a 2h",
+        lastMessage: "See you soon!",
+        lastSeen: "2h ago",
     },
     {
         id: "4",
@@ -82,8 +82,8 @@ const contacts: ContactData[] = [
         messages: [],
         tab: "friends",
         online: false,
-        time: "Hier",
-        lastMessage: "Merci pour tout!",
+        time: "Yesterday",
+        lastMessage: "Thanks for everything!",
     },
     {
         id: "5",
@@ -93,7 +93,7 @@ const contacts: ContactData[] = [
         tab: "groups",
         online: true,
         time: "11:20",
-        lastMessage: "Vous: Cool! 👍",
+        lastMessage: "You: Cool! 👍",
         unread: 7,
     },
     {
@@ -103,8 +103,8 @@ const contacts: ContactData[] = [
         messages: [],
         tab: "groups",
         online: true,
-        time: "Hier",
-        lastMessage: "À bientôt pour le meeting",
+        time: "Yesterday",
+        lastMessage: "See you at the meeting",
     },
     {
         id: "7",
@@ -113,8 +113,8 @@ const contacts: ContactData[] = [
         messages: [],
         tab: "groups",
         online: false,
-        time: "Lundi",
-        lastMessage: "Bonne chance!",
+        time: "Monday",
+        lastMessage: "Good luck!",
     },
     {
         id: "8",
@@ -123,8 +123,8 @@ const contacts: ContactData[] = [
         messages: [],
         tab: "groups",
         online: true,
-        time: "Dimanche",
-        lastMessage: "À ce soir!",
+        time: "Sunday",
+        lastMessage: "See you tonight!",
     },
     {
         id: "9",
@@ -133,21 +133,21 @@ const contacts: ContactData[] = [
         messages: [],
         tab: "friends",
         online: true,
-        time: "Samedi",
-        lastMessage: "Super idée!",
+        time: "Saturday",
+        lastMessage: "Great idea!",
     },
 ];
 
-const avatarColors: Record<string, string> = {
-    AM: "bg-gradient-to-br from-indigo-500 to-purple-600",
-    AC: "bg-gradient-to-br from-pink-400 to-rose-500",
-    IG: "bg-gradient-to-br from-orange-400 to-red-500",
-    CB: "bg-gradient-to-br from-red-700 to-red-900",
-    FE: "bg-gradient-to-br from-yellow-400 to-amber-500",
-    RM: "bg-gradient-to-br from-slate-500 to-slate-700",
-    TR: "bg-gradient-to-br from-teal-400 to-emerald-500",
-    OG: "bg-gradient-to-br from-green-500 to-emerald-700",
-    VS: "bg-gradient-to-br from-sky-400 to-blue-600",
+const avatars: Record<string, string> = {
+    AM: "https://api.dicebear.com/7.x/adventurer/svg?seed=AM",
+    AC: "https://api.dicebear.com/7.x/adventurer/svg?seed=AC",
+    IG: "https://api.dicebear.com/7.x/adventurer/svg?seed=IG",
+    CB: "https://api.dicebear.com/7.x/adventurer/svg?seed=CB",
+    FE: "https://api.dicebear.com/7.x/adventurer/svg?seed=FE",
+    RM: "https://api.dicebear.com/7.x/adventurer/svg?seed=RM",
+    TR: "https://api.dicebear.com/7.x/adventurer/svg?seed=TR",
+    OG: "https://api.dicebear.com/7.x/adventurer/svg?seed=OG",
+    VS: "https://api.dicebear.com/7.x/adventurer/svg?seed=VS",
 };
 
 // Artwork-style placeholder images using SVG data URIs
@@ -284,24 +284,28 @@ function Sidebar({ selectedContact, onSelectContact, isMobileOpen, onMobileClose
                 initial={false}
                 animate={{ x: isMobileOpen ? 0 : undefined }}
                 className={`
-          fixed md:relative z-30 md:z-auto
-          w-[320px] md:w-[320px] lg:w-[340px]
-          h-full flex flex-col
-          bg-white border-r border-gray-100
-          transition-transform duration-300
-          ${isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
-        `}
+                  fixed md:relative z-30 md:z-auto
+                  w-[320px] md:w-[320px] lg:w-[340px]
+                  h-full flex flex-col
+                  bg-white border-r border-gray-100
+                  transition-transform duration-300
+                  ${isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+                `}
             >
                 {/* Header */}
                 <div className="p-4 flex items-center justify-between">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 overflow-hidden">
-                        <div className="w-full h-full flex items-center justify-center text-white font-semibold text-sm">Me</div>
+                    <div className="w-10 h-10 rounded-md overflow-hidden">
+                        <img
+                            src="https://bagui.vercel.app/logoR.png"
+                            alt="Me"
+                            className="w-full h-full object-cover"
+                        />
                     </div>
                     <div className="flex items-center gap-1">
-                        <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors text-gray-500">
+                        <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors text-gray-500 cursor-pointer">
                             <Bell size={18} />
                         </button>
-                        <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors text-gray-500">
+                        <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors text-gray-500 cursor-pointer">
                             <MoreVertical size={18} />
                         </button>
                     </div>
@@ -310,7 +314,7 @@ function Sidebar({ selectedContact, onSelectContact, isMobileOpen, onMobileClose
                 {/* Search */}
                 <div className="px-4 pb-3">
                     <div className="relative">
-                        <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                        <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer" />
                         <input
                             value={search}
                             onChange={e => setSearch(e.target.value)}
@@ -326,7 +330,7 @@ function Sidebar({ selectedContact, onSelectContact, isMobileOpen, onMobileClose
                         <button
                             key={tab.key}
                             onClick={() => setActiveTab(tab.key)}
-                            className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                            className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
                                 activeTab === tab.key
                                     ? "text-gray-900"
                                     : "text-gray-500 hover:text-gray-700"
@@ -342,14 +346,14 @@ function Sidebar({ selectedContact, onSelectContact, isMobileOpen, onMobileClose
                             <span className={`relative text-xs px-1.5 py-0.5 rounded-full font-semibold ${
                                 activeTab === tab.key ? "bg-gray-800 text-white" : "bg-gray-200 text-gray-600"
                             }`}>
-                {tab.count}
-              </span>
+                                {tab.count}
+                              </span>
                         </button>
                     ))}
                 </div>
 
                 {/* Contact list */}
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 overflow-y-auto ">
                     <AnimatePresence mode="popLayout">
                         {filtered.map((contact, i) => (
                             <motion.button
@@ -359,7 +363,7 @@ function Sidebar({ selectedContact, onSelectContact, isMobileOpen, onMobileClose
                                 exit={{ opacity: 0, x: -20 }}
                                 transition={{ duration: 0.18, delay: i * 0.03 }}
                                 onClick={() => { onSelectContact(contact); onMobileClose(); }}
-                                className={`w-full flex items-center gap-3 px-4 py-3 transition-colors text-left ${
+                                className={`w-full flex items-center gap-3 px-4 py-3 transition-colors text-left cursor-pointer ${
                                     selectedContact?.id === contact.id
                                         ? "bg-gray-100"
                                         : "hover:bg-gray-50"
@@ -367,9 +371,18 @@ function Sidebar({ selectedContact, onSelectContact, isMobileOpen, onMobileClose
                             >
                                 {/* Avatar */}
                                 <div className="relative flex-shrink-0">
-                                    <div className={`w-12 h-12 rounded-full ${avatarColors[contact.avatar] || "bg-gray-400"} flex items-center justify-center text-white font-semibold text-sm`}>
-                                        {contact.avatar}
-                                    </div>
+                                    {avatars[contact.avatar] ? (
+                                        <img
+                                            src={avatars[contact.avatar]}
+                                            alt={contact.name}
+                                            className="w-12 h-12 rounded-full object-cover"
+                                        />
+                                    ) : (
+                                        <div className="w-12 h-12 rounded-full bg-gray-400 flex items-center justify-center text-white font-semibold text-sm">
+                                            {contact.avatar}
+                                        </div>
+                                    )}
+
                                     {contact.online && (
                                         <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
                                     )}
@@ -382,8 +395,8 @@ function Sidebar({ selectedContact, onSelectContact, isMobileOpen, onMobileClose
                                             <span className="font-semibold text-gray-900 text-sm truncate">{contact.name}</span>
                                             {contact.verified && (
                                                 <span className="w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0">
-                          <CheckCheck size={9} className="text-white" />
-                        </span>
+                                                  <CheckCheck size={9} className="text-white" />
+                                                </span>
                                             )}
                                         </div>
                                         <span className="text-xs text-gray-400 flex-shrink-0 ml-2">{contact.time}</span>
@@ -392,8 +405,8 @@ function Sidebar({ selectedContact, onSelectContact, isMobileOpen, onMobileClose
                                         <p className="text-sm text-gray-500 truncate">{contact.lastMessage}</p>
                                         {contact.unread && (
                                             <span className="ml-2 min-w-5 h-5 px-1 rounded-full bg-gray-900 text-white text-xs font-semibold flex items-center justify-center flex-shrink-0">
-                        {contact.unread}
-                      </span>
+                                                {contact.unread}
+                                            </span>
                                         )}
                                     </div>
                                 </div>
@@ -407,7 +420,7 @@ function Sidebar({ selectedContact, onSelectContact, isMobileOpen, onMobileClose
                     <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full flex items-center justify-center gap-2 py-3.5 bg-gray-900 hover:bg-gray-800 text-white rounded-2xl font-medium text-sm transition-colors"
+                        className="w-full flex items-center justify-center gap-2 py-3.5 bg-black text-white rounded-2xl font-medium text-sm transition-colors cursor-pointer"
                     >
                         <Edit3 size={16} />
                         Start a new chat
@@ -448,7 +461,13 @@ function ChatWindow({ contact, onBack }: { contact: ContactData | null; onBack: 
         setIsTyping(true);
         setTimeout(() => {
             setIsTyping(false);
-            const replies = ["Super! 😊", "Je vois, intéressant!", "Merci pour l'info!", "D'accord, on en parle bientôt.", "👍"];
+            const replies = [
+                "Great! 😊",
+                "I see, interesting!",
+                "Thanks for the info!",
+                "Alright, we’ll talk soon.",
+                "👍"
+            ];
             setMessages(prev => [...prev, {
                 id: Date.now().toString(),
                 content: replies[Math.floor(Math.random() * replies.length)],
@@ -470,8 +489,8 @@ function ChatWindow({ contact, onBack }: { contact: ContactData | null; onBack: 
                     <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center mx-auto mb-4">
                         <ImageIcon size={32} className="text-gray-400" />
                     </div>
-                    <p className="text-gray-500 font-medium">Sélectionne une conversation</p>
-                    <p className="text-gray-400 text-sm mt-1">Choisis un contact pour commencer</p>
+                    <p className="text-gray-500 font-medium">Select a conversation</p>
+                    <p className="text-gray-400 text-sm mt-1">Choose a contact to get started</p>
                 </motion.div>
             </div>
         );
@@ -493,9 +512,18 @@ function ChatWindow({ contact, onBack }: { contact: ContactData | null; onBack: 
                 </button>
 
                 <div className="relative flex-shrink-0">
-                    <div className={`w-10 h-10 rounded-full ${avatarColors[contact.avatar] || "bg-gray-400"} flex items-center justify-center text-white font-semibold text-xs`}>
-                        {contact.avatar}
-                    </div>
+                    {avatars[contact.avatar] ? (
+                        <img
+                            src={avatars[contact.avatar]}
+                            alt={contact.name}
+                            className="w-10 h-10 rounded-full object-cover"
+                        />
+                    ) : (
+                        <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-white font-semibold text-xs">
+                            {contact.avatar}
+                        </div>
+                    )}
+
                     {contact.online && (
                         <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full" />
                     )}
@@ -504,15 +532,15 @@ function ChatWindow({ contact, onBack }: { contact: ContactData | null; onBack: 
                 <div className="flex-1 min-w-0">
                     <p className="font-semibold text-gray-900 text-sm leading-tight">{contact.name}</p>
                     <p className="text-xs text-gray-400 truncate">
-                        {contact.online ? "En ligne" : contact.lastSeen ? `Vu ${contact.lastSeen}` : "Hors ligne"}
+                        {contact.online ? "Online" : contact.lastSeen ? `Seen ${contact.lastSeen}` : "Offline"}
                     </p>
                 </div>
 
                 <div className="flex items-center gap-1 flex-shrink-0">
-                    <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors text-gray-500">
+                    <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors text-gray-500 cursor-pointer">
                         <Search size={17} />
                     </button>
-                    <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors text-gray-500">
+                    <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors text-gray-500 cursor-pointer">
                         <MoreVertical size={17} />
                     </button>
                 </div>
@@ -539,7 +567,7 @@ function ChatWindow({ contact, onBack }: { contact: ContactData | null; onBack: 
                                     <div
                                         className={`max-w-[75%] md:max-w-[60%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
                                             isSent
-                                                ? "bg-gradient-to-br from-blue-400 to-blue-500 text-white rounded-br-sm"
+                                                ? "bg-black/90 text-white rounded-br-sm"
                                                 : "bg-white text-gray-800 shadow-sm rounded-bl-sm"
                                         }`}
                                     >
@@ -586,7 +614,7 @@ function ChatWindow({ contact, onBack }: { contact: ContactData | null; onBack: 
                     <motion.button
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
-                        className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors text-gray-500 flex-shrink-0"
+                        className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors text-gray-500 flex-shrink-0 cursor-pointer"
                     >
                         <Plus size={18} />
                     </motion.button>
@@ -597,7 +625,7 @@ function ChatWindow({ contact, onBack }: { contact: ContactData | null; onBack: 
                             onChange={e => setInput(e.target.value)}
                             onKeyDown={e => e.key === "Enter" && sendMessage()}
                             placeholder="Type a message"
-                            className="w-full px-4 py-2.5 bg-gray-100 rounded-xl text-sm text-gray-800 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-blue-200 transition-all pr-10"
+                            className="w-full px-4 py-2.5 bg-gray-100 rounded-xl text-sm text-gray-800 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-gray-200 transition-all pr-10"
                         />
                         <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
                             <Smile size={17} />
@@ -608,9 +636,9 @@ function ChatWindow({ contact, onBack }: { contact: ContactData | null; onBack: 
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={sendMessage}
-                        className={`w-9 h-9 flex items-center justify-center rounded-full flex-shrink-0 transition-colors ${
+                        className={`w-9 h-9 flex items-center justify-center rounded-full flex-shrink-0 transition-colors cursor-pointer ${
                             input.trim()
-                                ? "bg-blue-500 hover:bg-blue-600 text-white"
+                                ? "bg-black hover:bg-[#000]/80 text-white"
                                 : "bg-gray-100 text-gray-400"
                         }`}
                     >
