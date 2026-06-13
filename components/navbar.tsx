@@ -32,7 +32,7 @@ const Logo = () => (
       rel="noopener noreferrer"
       className="text-[13px] text-gray-400 hover:text-black transition-colors"
     >
-      by Anelka Bag
+      by Anelka
     </Link>
   </div>
 );
