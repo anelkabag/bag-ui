@@ -122,7 +122,7 @@
       "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
-          "path": "registry/default/blocks/Footer/Footer1.tsx",
+          "path": "registry/default/blocks/Footer/footer1.tsx",
           "type": "registry:block",
           "target": "components/Footer1.tsx"
         }
