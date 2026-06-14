@@ -46,11 +46,11 @@ const getBreakpoint = () => {
 };
 
 const getAnimationConfig = (breakpoint: string) => {
-  const configs: Record<string, { imgBase: number; imgHover: number; duration: number }> = {
-    "mobile-sm": { imgBase: 50, imgHover: 80, duration: 0.3 },
-    "mobile": { imgBase: 55, imgHover: 90, duration: 0.3 },
-    "tablet": { imgBase: 65, imgHover: 120, duration: 0.35 },
-    "desktop": { imgBase: 70, imgHover: 140, duration: 0.35 },
+  const configs: Record<string, { scale: number; duration: number }> = {
+    "mobile-sm": { scale: 1.6, duration: 0.3 },
+    "mobile": { scale: 1.6, duration: 0.3 },
+    "tablet": { scale: 1.85, duration: 0.35 },
+    "desktop": { scale: 2, duration: 0.35 },
   };
   return configs[breakpoint] || configs.desktop;
 };
@@ -86,49 +86,54 @@ const TeamSection = () => {
         if (!correspondingName) return;
         const letters = correspondingName.querySelectorAll(".letter");
         gsap.set(letters, { y: "100%" });
+        gsap.set(img, { scale: 1 });
 
         img.addEventListener("mouseenter", () => {
           gsap.to(img, {
-            width: config.imgHover,
-            height: config.imgHover,
+            scale: config.scale,
             duration: config.duration,
-            ease: "power4.out"
+            ease: "power2.out",
+            overwrite: "auto"
           });
           gsap.to(letters, {
             y: "-100%",
-            duration: 0.8,
-            ease: "power4.out",
-            stagger: { each: 0.03, from: "center" },
+            duration: 0.6,
+            ease: "power3.out",
+            stagger: { each: 0.02, from: "center" },
+            overwrite: "auto"
           });
           if (defaultLetters.length) {
             gsap.to(defaultLetters, {
               y: "-150%",
-              duration: 0.8,
-              ease: "power4.out",
-              stagger: { each: 0.03, from: "center" },
+              duration: 0.6,
+              ease: "power3.out",
+              stagger: { each: 0.02, from: "center" },
+              overwrite: "auto"
             });
           }
         });
 
         img.addEventListener("mouseleave", () => {
           gsap.to(img, {
-            width: config.imgBase,
-            height: config.imgBase,
+            scale: 1,
             duration: config.duration,
-            ease: "power4.out"
+            ease: "power2.out",
+            overwrite: "auto"
           });
           gsap.to(letters, {
             y: "100%",
-            duration: 0.8,
-            ease: "power4.out",
-            stagger: { each: 0.03, from: "center" },
+            duration: 0.6,
+            ease: "power3.out",
+            stagger: { each: 0.02, from: "center" },
+            overwrite: "auto"
           });
           if (defaultLetters.length) {
             gsap.to(defaultLetters, {
               y: "0%",
-              duration: 0.8,
-              ease: "power4.out",
-              stagger: { each: 0.03, from: "center" },
+              duration: 0.6,
+              ease: "power3.out",
+              stagger: { each: 0.02, from: "center" },
+              overwrite: "auto"
             });
           }
         });
@@ -160,7 +165,7 @@ const TeamSection = () => {
           position: relative;
           width: 100%;
           height: 100svh;
-          background-color: #f8eed4;
+          background-color: #fff;
           color: #1f1f1e;
           display: flex;
           flex-direction: column;
@@ -197,6 +202,8 @@ const TeamSection = () => {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          border: 1px solid #e5e7eb; /* gray-200 */
+          background-color: #fff;
         }
         
         .profile-names {
@@ -374,7 +381,7 @@ const TeamSection = () => {
           </div>
 
           <div className="profile-names">
-            <div className="name default"><h1>The Geek</h1></div>
+            <div className="name default"><h1>Bag\Ui</h1></div>
             {TEAM_MEMBERS.map((member) => (
                 <div key={member} className="name">
                   <h1>{member}</h1>
