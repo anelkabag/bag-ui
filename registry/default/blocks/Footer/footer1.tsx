@@ -70,7 +70,7 @@ const SOCIAL_LINKS = [
     },
 ];
 
-export function Footer() {
+export function Footer1() {
     return (
         <footer className="border-t border-gray-100 mt-24 py-16 px-6">
             <div className="max-w-7xl mx-auto px-6 pt-10s">

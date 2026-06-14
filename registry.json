@@ -104,7 +104,7 @@
       "name": "chat-app1",
       "type": "registry:block",
       "title": "Dashboard Chat App Exemple 1",
-      "description": "Frequently asked questions section with collapsible items.",
+      "description": "",
       "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
@@ -118,7 +118,7 @@
       "name": "footer1",
       "type": "registry:block",
       "title": "Footer Exemple 1",
-      "description": "Frequently asked questions section with collapsible items.",
+      "description": "",
       "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {

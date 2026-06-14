@@ -29,7 +29,7 @@ export const blockCategories: BlockCategory[] = [
   { slug: "cta",         title: "CTA",         type: "block", description: "Call-to-action banners designed to convert visitors into users." },
   { slug: "faq",         title: "FAQ",         type: "block", description: "Frequently asked questions accordion" },
   { slug: "navbar",      title: "Navbar",      type: "block", description: "Responsive navigation bars with logo, links and action buttons." },
-  { slug: "footer",      title: "Footer",      type: "block", description: "Site footer with links and info" },
+  { slug: "footer",      title: "Footer",      type: "block", description: "Site Footer with links and info" },
   { slug: "blog",        title: "Blog",        type: "block", description: "Blog listing sections with post cards, dates and author info." },
   { slug: "team",        title: "Team",        type: "block", description: "Team section with member previews" },
   { slug: "stats",       title: "Stats",       type: "block", description: "Key metric displays with counters, labels and sparklines." },
