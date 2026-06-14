@@ -1,5 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-
 "use client";
 
 import { useEffect } from "react";
@@ -12,8 +10,9 @@ const splitTextIntoChars = (element: HTMLElement) => {
 
   for (let i = 0; i < text.length; i++) {
     const span = document.createElement("span");
-    span.className = "letter";
+    span.classList.add("letter");
     span.textContent = text[i];
+    span.style.display = "inline-block";
     element.appendChild(span);
     chars.push(span);
   }
@@ -21,208 +20,367 @@ const splitTextIntoChars = (element: HTMLElement) => {
   return chars;
 };
 
-const members = [
-  { name: "Anelka",   img: "https://api.dicebear.com/9.x/adventurer/svg?seed=Anelka&backgroundColor=ffd93d" },
-  { name: "Djodev",   img: "https://api.dicebear.com/9.x/adventurer/svg?seed=Djodev&backgroundColor=6c63ff" },
-  { name: "Greg",     img: "https://api.dicebear.com/9.x/adventurer/svg?seed=Greg&backgroundColor=e07a5f" },
-  { name: "Yves",     img: "https://api.dicebear.com/9.x/adventurer/svg?seed=Yves&backgroundColor=81b29a" },
-  { name: "Pelagie",  img: "https://api.dicebear.com/9.x/adventurer/svg?seed=Pelagie&backgroundColor=f2cc8f" },
-  { name: "HK",       img: "https://api.dicebear.com/9.x/adventurer/svg?seed=HK&backgroundColor=3d405b" },
-  { name: "Promesse", img: "https://api.dicebear.com/9.x/adventurer/svg?seed=Promesse&backgroundColor=e63946" },
-  { name: "Lucien",   img: "https://api.dicebear.com/9.x/adventurer/svg?seed=Lucien&backgroundColor=457b9d" },
-  { name: "Big Man",  img: "https://api.dicebear.com/9.x/adventurer/svg?seed=BigMan&backgroundColor=2d6a4f" },
+const TEAM_MEMBERS = [
+  "Anelka",
+  "Djodev",
+  "Greg",
+  "Yves",
+  "Pelagie",
+  "HK",
+  "Promesse",
+  "Lucien",
+  "Big Man"
 ];
+
+const getAvatarUrl = (name: string) => {
+  return `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}`;
+};
+
+const getBreakpoint = () => {
+  if (typeof window === "undefined") return "desktop";
+  const width = window.innerWidth;
+  if (width < 480) return "mobile-sm";
+  if (width < 768) return "mobile";
+  if (width < 1024) return "tablet";
+  return "desktop";
+};
+
+const getAnimationConfig = (breakpoint: string) => {
+  const configs: Record<string, { imgBase: number; imgHover: number; duration: number }> = {
+    "mobile-sm": { imgBase: 50, imgHover: 80, duration: 0.3 },
+    "mobile": { imgBase: 55, imgHover: 90, duration: 0.3 },
+    "tablet": { imgBase: 65, imgHover: 120, duration: 0.35 },
+    "desktop": { imgBase: 70, imgHover: 140, duration: 0.35 },
+  };
+  return configs[breakpoint] || configs.desktop;
+};
 
 const TeamSection = () => {
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const nameEls = document.querySelectorAll<HTMLDivElement>(".name[data-index]");
-    const imgEls = document.querySelectorAll<HTMLDivElement>(".img[data-index]");
-    const defaultName = document.querySelector<HTMLDivElement>(".name.default");
-
-    nameEls.forEach((nameEl) => {
-      const h1 = nameEl.querySelector("h1");
-      if (h1) splitTextIntoChars(h1);
-    });
-
-    if (defaultName) {
-      const h1 = defaultName.querySelector("h1");
-      if (h1) splitTextIntoChars(h1);
+    if (typeof window === "undefined") {
+      return;
     }
 
-    const defaultLetters = defaultName
-      ? defaultName.querySelectorAll<HTMLElement>(".letter")
-      : [];
+    const breakpoint = getBreakpoint();
+    const config = getAnimationConfig(breakpoint);
 
-    gsap.set(defaultLetters, { y: "0%" });
+    const profileImages = document.querySelectorAll(".profile-images .img");
+    const nameElements = document.querySelectorAll(".profile-names .name");
+    const nameHeadings = document.querySelectorAll(".profile-names .name h1");
 
-    nameEls.forEach((nameEl) => {
-      const letters = nameEl.querySelectorAll<HTMLElement>(".letter");
-      gsap.set(letters, { y: "100%" });
+    nameHeadings.forEach((heading) => {
+      splitTextIntoChars(heading as HTMLElement);
     });
 
-    const handlers: Array<{ img: HTMLDivElement; enter: () => void; leave: () => void }> = [];
+    const defaultName = document.querySelector(".name.default");
+    const defaultLetters = defaultName ? defaultName.querySelectorAll(".letter") : [];
 
-    imgEls.forEach((imgEl) => {
-      const idx = imgEl.getAttribute("data-index");
-      const nameEl = document.querySelector<HTMLDivElement>(`.name[data-index="${idx}"]`);
-      if (!nameEl) return;
+    if (defaultLetters.length) {
+      gsap.set(defaultLetters, { y: "0%" });
+    }
 
-      const letters = nameEl.querySelectorAll<HTMLElement>(".letter");
+    // Animations seulement pour tablet et desktop
+    if (breakpoint === "tablet" || breakpoint === "desktop") {
+      profileImages.forEach((img, index) => {
+        const correspondingName = nameElements[index + 1];
+        if (!correspondingName) return;
+        const letters = correspondingName.querySelectorAll(".letter");
+        gsap.set(letters, { y: "100%" });
 
-      const enter = () => {
-        gsap.to(letters, {
-          y: "-100%",
-          duration: 0.7,
-          ease: "power4.out",
-          stagger: { each: 0.03, from: "center" },
+        img.addEventListener("mouseenter", () => {
+          gsap.to(img, {
+            width: config.imgHover,
+            height: config.imgHover,
+            duration: config.duration,
+            ease: "power4.out"
+          });
+          gsap.to(letters, {
+            y: "-100%",
+            duration: 0.8,
+            ease: "power4.out",
+            stagger: { each: 0.03, from: "center" },
+          });
+          if (defaultLetters.length) {
+            gsap.to(defaultLetters, {
+              y: "-150%",
+              duration: 0.8,
+              ease: "power4.out",
+              stagger: { each: 0.03, from: "center" },
+            });
+          }
         });
-        gsap.to(defaultLetters, {
-          y: "-150%",
-          duration: 0.7,
-          ease: "power4.out",
-          stagger: { each: 0.03, from: "center" },
-        });
-      };
 
-      const leave = () => {
-        gsap.to(letters, {
-          y: "100%",
-          duration: 0.7,
-          ease: "power4.out",
-          stagger: { each: 0.03, from: "center" },
+        img.addEventListener("mouseleave", () => {
+          gsap.to(img, {
+            width: config.imgBase,
+            height: config.imgBase,
+            duration: config.duration,
+            ease: "power4.out"
+          });
+          gsap.to(letters, {
+            y: "100%",
+            duration: 0.8,
+            ease: "power4.out",
+            stagger: { each: 0.03, from: "center" },
+          });
+          if (defaultLetters.length) {
+            gsap.to(defaultLetters, {
+              y: "0%",
+              duration: 0.8,
+              ease: "power4.out",
+              stagger: { each: 0.03, from: "center" },
+            });
+          }
         });
-        gsap.to(defaultLetters, {
-          y: "0%",
-          duration: 0.7,
-          ease: "power4.out",
-          stagger: { each: 0.03, from: "center" },
-        });
-      };
-
-      imgEl.addEventListener("mouseenter", enter);
-      imgEl.addEventListener("mouseleave", leave);
-      handlers.push({ img: imgEl, enter, leave });
-    });
-
-    return () => {
-      handlers.forEach(({ img, enter, leave }) => {
-        img.removeEventListener("mouseenter", enter);
-        img.removeEventListener("mouseleave", leave);
       });
+    }
+
+    // Gestion du redimensionnement
+    const handleResize = () => {
+      const newBreakpoint = getBreakpoint();
+      if (newBreakpoint !== breakpoint) {
+        window.location.reload();
+      }
     };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
-    <section className="team">
-      <div className="profile-names">
-        <div className="name default">
-          <h1>The Geek</h1>
-        </div>
-        {members.map((m, i) => (
-          <div className="name" data-index={i} key={m.name}>
-            <h1>{m.name}</h1>
-          </div>
-        ))}
-      </div>
-
-      <div className="profile-images">
-        {members.map((m, i) => (
-          <div className="img" data-index={i} key={m.name}>
-            <img src={m.img} alt={m.name} />
-          </div>
-        ))}
-      </div>
-
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@900&display=swap');
-
+      <>
+        <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&display=swap');
+        
+        * {
+          box-sizing: border-box;
+        }
+        
         .team {
           position: relative;
-          width: 100%;
-          height: 100%;
-          min-height: unset;
-          background-color: #ffffff;
+          width: 100vw;
+          height: 100svh;
+          background-color: #f8eed4;
           color: #1f1f1e;
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          gap: 1rem;
-          padding: 1rem;
-          box-sizing: border-box;
+          gap: 1.5em;
           overflow: hidden;
+          padding: 1rem;
         }
-
+        
+        .profile-images {
+          width: 100%;
+          max-width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+        }
+        
+        .img {
+          position: relative;
+          width: 50px;
+          height: 50px;
+          padding: 3px;
+          cursor: pointer;
+          will-change: width, height;
+          flex-shrink: 0;
+        }
+        
+        .img img {
+          border-radius: 0.5rem;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        
         .profile-names {
           width: 100%;
-          height: clamp(2.5rem, 20%, 7rem);
+          height: 6rem;
+          clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
           overflow: hidden;
           position: relative;
-          clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
         }
-
+        
         .name h1 {
           position: absolute;
           width: 100%;
           text-align: center;
           text-transform: uppercase;
           font-family: 'Barlow Condensed', sans-serif;
-          font-size: clamp(2rem, 7%, 7rem);
+          font-size: 2rem;
           font-weight: 900;
-          letter-spacing: -0.03em;
+          letter-spacing: 0;
           line-height: 1;
           color: #f93535;
           user-select: none;
           transform: translateY(100%);
           margin: 0;
+          padding: 0;
         }
-
+        
         .name.default h1 {
-          transform: translateY(0%);
+          transform: translateY(0);
           color: #111111;
         }
-
+        
         .name h1 .letter {
-          display: inline-block;
+          position: relative;
+          transform: translateY(0%);
           will-change: transform;
         }
-
-        .profile-images {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
-          align-items: center;
-          gap: 0.5rem;
-          width: 100%;
-          max-width: 100%;
+        
+        /* MOBILE SMALL (< 480px) */
+        @media (max-width: 479px) {
+          .team {
+            gap: 1em;
+            padding: 0.75rem;
+          }
+          
+          .profile-images {
+            gap: 0.4rem;
+          }
+          
+          .img {
+            width: 50px;
+            height: 50px;
+            padding: 2px;
+          }
+          
+          .profile-names {
+            height: 5rem;
+          }
+          
+          .name h1 {
+            font-size: 1.5rem;
+            letter-spacing: 0;
+          }
         }
-
-        .img {
-          width: clamp(36px, 8%, 64px);
-          height: clamp(36px, 8%, 64px);
-          cursor: pointer;
-          will-change: width, height;
-          transition: width 0.35s cubic-bezier(0.19, 1, 0.22, 1),
-                      height 0.35s cubic-bezier(0.19, 1, 0.22, 1);
-          flex-shrink: 0;
+        
+        /* MOBILE (480px - 767px) */
+        @media (min-width: 480px) and (max-width: 767px) {
+          .team {
+            gap: 1.2em;
+            padding: 1rem;
+          }
+          
+          .profile-images {
+            gap: 0.5rem;
+          }
+          
+          .img {
+            width: 55px;
+            height: 55px;
+            padding: 3px;
+          }
+          
+          .profile-names {
+            height: 6rem;
+          }
+          
+          .name h1 {
+            font-size: 2rem;
+            letter-spacing: -0.1rem;
+          }
         }
-
-        .img:hover {
-          width: clamp(54px, 12%, 96px);
-          height: clamp(54px, 12%, 96px);
+        
+        /* TABLET (768px - 1023px) */
+        @media (min-width: 768px) and (max-width: 1023px) {
+          .team {
+            gap: 2em;
+            padding: 1.5rem;
+          }
+          
+          .profile-images {
+            gap: 0.75rem;
+            flex-wrap: nowrap;
+          }
+          
+          .img {
+            width: 65px;
+            height: 65px;
+            padding: 4px;
+          }
+          
+          .profile-names {
+            height: 10rem;
+          }
+          
+          .name h1 {
+            font-size: 8rem;
+            letter-spacing: -0.3rem;
+          }
         }
-
-        .img img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          border-radius: 0.5rem;
-          display: block;
+        
+        /* DESKTOP (>= 1024px) */
+        @media (min-width: 1024px) {
+          .team {
+            gap: 2.5em;
+            padding: 2rem;
+          }
+          
+          .profile-images {
+            gap: 0.75rem;
+            flex-wrap: nowrap;
+            width: max-content;
+          }
+          
+          .img {
+            width: 70px;
+            height: 70px;
+            padding: 5px;
+          }
+          
+          .profile-names {
+            height: 20rem;
+          }
+          
+          .name h1 {
+            font-size: 20rem;
+            letter-spacing: -0.5rem;
+          }
+        }
+        
+        /* Support pour écrans très larges */
+        @media (min-width: 1920px) {
+          .team {
+            gap: 3em;
+          }
+          
+          .img {
+            width: 80px;
+            height: 80px;
+          }
         }
       `}</style>
-    </section>
+
+        <section className="team">
+          <div className="profile-images">
+            {TEAM_MEMBERS.map((member) => (
+                <div key={member} className="img">
+                  <img
+                      src={getAvatarUrl(member)}
+                      alt={member}
+                      loading="lazy"
+                  />
+                </div>
+            ))}
+          </div>
+
+          <div className="profile-names">
+            <div className="name default"><h1>Bag\Ui</h1></div>
+            {TEAM_MEMBERS.map((member) => (
+                <div key={member} className="name">
+                  <h1>{member}</h1>
+                </div>
+            ))}
+          </div>
+        </section>
+      </>
   );
 };
 
