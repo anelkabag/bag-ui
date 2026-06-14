@@ -158,7 +158,7 @@ const TeamSection = () => {
         
         .team {
           position: relative;
-          width: 100vw;
+          width: 100%;
           height: 100svh;
           background-color: #f8eed4;
           color: #1f1f1e;
@@ -166,9 +166,10 @@ const TeamSection = () => {
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          gap: 1.5em;
+          gap: 0.5em;
           overflow: hidden;
-          padding: 1rem;
+          padding: 0;
+          margin: 0;
         }
         
         .profile-images {
@@ -237,8 +238,35 @@ const TeamSection = () => {
         /* MOBILE SMALL (< 480px) */
         @media (max-width: 479px) {
           .team {
-            gap: 1em;
-            padding: 0.75rem;
+            gap: 0.4em;
+            padding: 0;
+          }
+          
+          .profile-images {
+            gap: 0.2rem;
+          }
+          
+          .img {
+            width: 40px;
+            height: 40px;
+            padding: 1px;
+          }
+          
+          .profile-names {
+            height: 3.5rem;
+          }
+          
+          .name h1 {
+            font-size: 1rem;
+            letter-spacing: 0;
+          }
+        }
+        
+        /* MOBILE (480px - 767px) */
+        @media (min-width: 480px) and (max-width: 767px) {
+          .team {
+            gap: 0.8em;
+            padding: 0.5rem;
           }
           
           .profile-images {
@@ -261,58 +289,31 @@ const TeamSection = () => {
           }
         }
         
-        /* MOBILE (480px - 767px) */
-        @media (min-width: 480px) and (max-width: 767px) {
+        /* TABLET (768px - 1023px) */
+        @media (min-width: 768px) and (max-width: 1023px) {
           .team {
-            gap: 1.2em;
+            gap: 1.5em;
             padding: 1rem;
           }
           
           .profile-images {
-            gap: 0.5rem;
-          }
-          
-          .img {
-            width: 55px;
-            height: 55px;
-            padding: 3px;
-          }
-          
-          .profile-names {
-            height: 6rem;
-          }
-          
-          .name h1 {
-            font-size: 2rem;
-            letter-spacing: -0.1rem;
-          }
-        }
-        
-        /* TABLET (768px - 1023px) */
-        @media (min-width: 768px) and (max-width: 1023px) {
-          .team {
-            gap: 2em;
-            padding: 1.5rem;
-          }
-          
-          .profile-images {
-            gap: 0.75rem;
+            gap: 0.6rem;
             flex-wrap: nowrap;
           }
           
           .img {
-            width: 65px;
-            height: 65px;
-            padding: 4px;
+            width: 60px;
+            height: 60px;
+            padding: 3px;
           }
           
           .profile-names {
-            height: 10rem;
+            height: 9rem;
           }
           
           .name h1 {
-            font-size: 8rem;
-            letter-spacing: -0.3rem;
+            font-size: 6rem;
+            letter-spacing: -0.2rem;
           }
         }
         
@@ -320,7 +321,7 @@ const TeamSection = () => {
         @media (min-width: 1024px) {
           .team {
             gap: 2.5em;
-            padding: 2rem;
+            padding: 1.5rem;
           }
           
           .profile-images {
@@ -349,6 +350,7 @@ const TeamSection = () => {
         @media (min-width: 1920px) {
           .team {
             gap: 3em;
+            padding: 2rem;
           }
           
           .img {
@@ -372,7 +374,7 @@ const TeamSection = () => {
           </div>
 
           <div className="profile-names">
-            <div className="name default"><h1>Bag\Ui</h1></div>
+            <div className="name default"><h1>The Geek</h1></div>
             {TEAM_MEMBERS.map((member) => (
                 <div key={member} className="name">
                   <h1>{member}</h1>
