@@ -58,8 +58,8 @@ export default function Hero() {
         <section className="relative h-screen">
             <div className="max-w-7xl mx-auto px-6 pt-10 pb-20 border-x border-gray-200 " style={{
                 background: `
-          radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px)
-        `,
+                  radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px)
+                `,
                 backgroundSize: "20px 20px",
                 backgroundColor: "#ffffff",
             }}>
