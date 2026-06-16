@@ -72,7 +72,7 @@ const SOCIAL_LINKS = [
 
 export function Footer() {
     return (
-        <footer className="border-t border-gray-100 mt-24 py-16 px-6">
+        <footer className="max-w-7xl mx-auto px-6 pt-10 border-t border-l border-r border-gray-200">
             <div className="max-w-7xl mx-auto px-6 pt-10s">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-14">
                     <div className="col-span-2 md:col-span-1">
@@ -122,7 +122,7 @@ export function Footer() {
                     </div>
                 </div>
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pt-8 border-t border-gray-100">
-                    <p className="text-gray-400 text-xs">
+                    <p className="text-gray-400 text-xs mb-5">
                         © {new Date().getFullYear()} Bag/UI - is not officially affiliated with shadcn/ui or Tailwind CSS. Built by{" "}
                         <a
                             href="https://www.anelka.life/"
@@ -133,7 +133,7 @@ export function Footer() {
                             Anelka Bag
                         </a>
                     </p>
-                    <div className="flex items-center gap-2 flex-wrap">
+                    <div className="flex items-center gap-2 flex-wrap mb-5">
                         {SOCIAL_LINKS.map(({ label, href, Icon }) => (
                             <a
                                 key={label}
