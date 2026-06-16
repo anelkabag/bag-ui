@@ -130,7 +130,7 @@ export function Footer() {
                             rel="noopener noreferrer"
                             className="text-[13px] text-gray-400 hover:text-black transition-colors underline underline-offset-4"
                         >
-                            Anelka Bag
+                            Anelka Bag 🇨🇩
                         </a>
                     </p>
                     <div className="flex items-center gap-2 flex-wrap mb-5">
