@@ -549,7 +549,7 @@ export default function BlockDetailPage() {
     <div className="min-h-screen bg-white">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-6 pt-10 pb-20">
+      <div className="max-w-7xl mx-auto px-6 pt-10 pb-20 border-x border-gray-200">
         {/* Breadcrumb */}
         <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-8">
           <Link href="/blocks" className="hover:text-black transition-colors">
@@ -596,7 +596,7 @@ export default function BlockDetailPage() {
                 )}
                 <span className="text-gray-300">·</span>
                 <span className="text-gray-400 text-xs">
-                  React · TypeScript · Tailwind
+                  React · TypeScript · Tailwind · Gsap
                 </span>
               </div>
             </div>

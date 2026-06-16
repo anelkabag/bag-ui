@@ -329,7 +329,7 @@ export default function DocsPage() {
             {/* ── Navbar ── */}
             <Navbar/>
 
-            <div className="max-w-7xl mx-auto px-6 pt-10 pb-10">
+            <div className="max-w-7xl mx-auto px-6 pt-10 pb-10 border-x border-gray-200">
                 {/* Breadcrumb */}
                 <div className="flex items-center gap-2 text-xs text-gray-400 mb-8">
                     <Link href="/" className="hover:text-black transition-colors">Home</Link>

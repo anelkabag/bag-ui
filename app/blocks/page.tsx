@@ -1412,7 +1412,7 @@ export default function BlocksPage() {
         <div className="min-h-screen bg-white">
             <Navbar/>
 
-            <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 pt-6 sm:pt-10 pb-16 sm:pb-20">
+            <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 pt-6 sm:pt-10 pb-16 sm:pb-20 border-x border-gray-200">
 
                 {/* ── Breadcrumb ── */}
                 <div className="flex items-center gap-2 text-xs text-gray-400 mb-6 sm:mb-10">
@@ -1425,7 +1425,7 @@ export default function BlocksPage() {
 
                 {/* ── Hero ── */}
                 <div className="mb-6 sm:mb-10">
-                    <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-black mb-2 sm:mb-3 leading-tight">
+                    <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-black mb-2 sm:mb-3 leading-tight ">
                         Bag/UI Blocks —{" "}
                         <span className="text-gray-400">{totalAll}+ Free &amp; Pro</span>
                     </h1>
