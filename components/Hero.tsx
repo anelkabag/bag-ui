@@ -55,8 +55,8 @@ const fadeUp = (delay = 0) => ({
 
 export default function Hero() {
     return (
-        <section className="relative h-screen">
-            <div className="max-w-7xl mx-auto px-6 pt-10 pb-20 border-x border-gray-200 " style={{
+        <section className="relative">
+            <div className="max-w-7xl mx-auto px-6 pt-10 border-x border-gray-200 " style={{
                 background: `
                   radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px)
                 `,
@@ -144,7 +144,7 @@ export default function Hero() {
                     {/* CTAs */}
                     <motion.div
                         {...fadeUp(0.3)}
-                        className="flex items-center gap-3 flex-wrap justify-center"
+                        className="flex items-center gap-3 flex-wrap justify-center mb-10"
                     >
                         <Link
                             href="/access"
