@@ -69,7 +69,7 @@ export default function Navbar() {
   return (
     <>
       <div className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200">
-        <nav className="max-w-7xl mx-auto px-6 pt-10s flex items-center justify-between px-8 h-14">
+        <nav className="max-w-7xl mx-auto px-6 pt-10s flex items-center justify-between px-8 h-14 border-x border-gray-200">
           <Logo />
 
           <div className="hidden md:flex items-center gap-7">
