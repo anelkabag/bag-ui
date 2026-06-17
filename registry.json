@@ -127,6 +127,20 @@
           "target": "components/Footer1.tsx"
         }
       ]
+    },
+    {
+      "name": "template1",
+      "type": "registry:block",
+      "title": "Template Exemple 1",
+      "description": "",
+      "dependencies": ["framer-motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/templates/template1.tsx",
+          "type": "registry:block",
+          "target": "components/Template1.tsx"
+        }
+      ]
     }
   ]
 }
