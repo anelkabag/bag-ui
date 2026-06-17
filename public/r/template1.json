@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "template1",
-  "title": "Template Exemple 1",
+  "title": "Template Open Agents.",
   "description": "",
   "dependencies": [
     "framer-motion",

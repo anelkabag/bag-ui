@@ -131,7 +131,7 @@
     {
       "name": "template1",
       "type": "registry:block",
-      "title": "Template Exemple 1",
+      "title": "Template Open Agents.",
       "description": "",
       "dependencies": ["framer-motion", "lucide-react"],
       "files": [
