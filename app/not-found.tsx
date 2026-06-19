@@ -37,9 +37,9 @@ export default function NotFound() {
             </div>
 
             {/* 404 */}
-            <div className="text-[clamp(90px,18vw,140px)] font-extrabold leading-none tracking-[-6px] text-black mb-2">
-              4<span className="text-gray-200">0</span>4
-            </div>
+              <div className="text-[clamp(120px,25vw,220px)] font-extrabold leading-none tracking-[-8px] text-black mb-2">
+                  4<span className="text-gray-200">0</span>4
+              </div>
 
             <h1 className="text-xl font-semibold text-black mb-3">
               This block doesn&apos;t exist.
