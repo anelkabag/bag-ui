@@ -112,18 +112,13 @@ export default function PricingPage() {
                   : "border-gray-200 bg-white text-black"
               }`}
             >
-              {/* Badge */}
-              {plan.badge && (
-                <span
-                  className={`absolute -top-3 left-5 text-[11px] font-semibold px-2.5 py-0.5 rounded-full ${
-                    plan.highlight
-                      ? "bg-white text-black"
-                      : "bg-black text-white"
-                  }`}
-                >
-                  {plan.badge}
-                </span>
-              )}
+                {plan.badge && (
+                    <span
+                        className="absolute -top-3 left-5 text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-green-200 border border-green-300 text-green-600"
+                    >
+                        {plan.badge}
+                    </span>
+                )}
 
               {/* Label */}
               <p
