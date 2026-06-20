@@ -73,6 +73,20 @@
       ]
     },
     {
+      "name": "cta-1",
+      "type": "registry:block",
+      "title": "CTA Exemple 1",
+      "description": "Frequently asked questions section with collapsible items.",
+      "dependencies": ["framer-motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/Cta/cta1.tsx",
+          "type": "registry:block",
+          "target": "components/blocks/cta-ex-1.tsx"
+        }
+      ]
+    },
+    {
       "name": "pricing-1",
       "type": "registry:block",
       "title": "Pricing Exemple 1",
