@@ -73,7 +73,7 @@ export default function PricingPage() {
     <div className="min-h-screen bg-white">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-6 pt-10 pb-20 border-x border-gray-200">
+      <div className="max-w-7xl mx-auto px-6 pt-10 pb-4 border-x border-gray-200">
         {/* Header */}
           <motion.div
               initial={{ opacity: 0, y: 8 }}
