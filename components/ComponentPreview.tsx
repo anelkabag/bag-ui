@@ -164,7 +164,7 @@ export function ComponentPreview({ item }: ComponentPreviewProps) {
 
   if (!PreviewComponent || loadError) {
     return (
-      <div className="w-full h-[500px] flex flex-col items-center justify-center gap-3 text-center px-6 rounded-xl border border-gray-200 bg-gray-50">
+      <div className="w-full h-[500px] flex flex-col items-center justify-center gap-3 text-center px-6 rounded-xl border border-gray-200 bg-zinc-50">
         <div className="text-sm font-semibold text-gray-900">
           Preview failed to load
         </div>
@@ -184,7 +184,7 @@ export function ComponentPreview({ item }: ComponentPreviewProps) {
      */
     <div
       ref={containerRef}
-      className="w-full rounded-xl border border-gray-200 bg-white overflow-auto"
+      className="w-full rounded-xl border border-gray-200 bg-zinc-50 overflow-auto"
       style={{
         minHeight: 500,
         position: "relative",
