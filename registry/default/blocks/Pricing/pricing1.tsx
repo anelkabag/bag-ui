@@ -87,7 +87,7 @@ export default function PricingSection() {
 
   return (
     <section
-      className="min-h-screen w-full flex flex-col items-center justify-center px-4 py-24 bg-white"
+      className="min-h-screen w-full flex flex-col items-center justify-center px-4 py-24"
       style={{ fontFamily: "var(--font-geist-sans, 'Inter', sans-serif)" }}
     >
       {/* Heading */}
