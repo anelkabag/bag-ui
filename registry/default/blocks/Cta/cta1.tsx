@@ -99,7 +99,7 @@ export default function CTASection1() {
   const [email, setEmail] = useState("");
 
   return (
-    <section className="w-full py-28 px-4 overflow-hidden bg-white">
+    <section className="w-full py-28 px-4 overflow-hidden">
       <div className="max-w-3xl mx-auto flex flex-col items-center text-center">
         {/* ── Headline ── */}
         <h2
