@@ -191,7 +191,7 @@ function PricingCard({ plan, index }: { plan: PricingPlan; index: number }) {
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         className={`
-          w-full rounded-xl py-3 text-sm font-semibold tracking-wide transition-colors duration-200
+          w-full rounded-xl py-3 text-sm font-semibold tracking-wide transition-colors duration-200 cursor-pointer
           ${
             plan.highlighted
               ? "bg-white text-zinc-950 hover:bg-zinc-100"
