@@ -87,6 +87,20 @@
       ]
     },
     {
+      "name": "testimonial-1",
+      "type": "registry:block",
+      "title": "Testimonial Exemple 1",
+      "description": "Frequently asked questions section with collapsible items.",
+      "dependencies": ["framer-motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/Testimonial/testimonial1.tsx",
+          "type": "registry:block",
+          "target": "components/blocks/testimonial-ex-1.tsx"
+        }
+      ]
+    },
+    {
       "name": "pricing-1",
       "type": "registry:block",
       "title": "Pricing Exemple 1",
