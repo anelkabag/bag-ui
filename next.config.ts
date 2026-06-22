@@ -17,6 +17,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "www.anelka.life",
       },
+      {
+        protocol: "https",
+        hostname: "logo.clearbit.com",
+      },
     ],
   },
 };
