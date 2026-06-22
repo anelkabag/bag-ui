@@ -101,6 +101,20 @@
       ]
     },
     {
+      "name": "feature-1",
+      "type": "registry:block",
+      "title": "Feature Exemple 1",
+      "description": "Frequently asked questions section with collapsible items.",
+      "dependencies": ["framer-motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/Feature/feature1.tsx",
+          "type": "registry:block",
+          "target": "components/blocks/feature-ex-1.tsx"
+        }
+      ]
+    },
+    {
       "name": "pricing-1",
       "type": "registry:block",
       "title": "Pricing Exemple 1",
