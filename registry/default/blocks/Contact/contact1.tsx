@@ -189,7 +189,7 @@ export default function ContactSection() {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="group flex items-center gap-2.5 bg-gray-900 hover:bg-gray-800 active:scale-[.98] text-white font-semibold text-[14.5px] px-6 py-3.5 rounded-2xl transition-all duration-200 disabled:opacity-70 cursor-pointer"
+                                    className="group flex items-center gap-2.5 bg-black hover:bg-gray-800 active:scale-[.98] text-white font-semibold text-[14.5px] px-6 py-3.5 rounded-2xl transition-all duration-200 disabled:opacity-70 cursor-pointer"
                                 >
                                     {loading ? (
                                         <>
