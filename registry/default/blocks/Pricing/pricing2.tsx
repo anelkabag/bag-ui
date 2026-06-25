@@ -107,7 +107,7 @@ function PricingCard({ plan, index }: { plan: PricingPlan; index: number }) {
       variants={cardVariants}
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
       className={`
-        relative flex flex-col rounded-2xl p-7 
+        relative flex flex-col rounded-2xl p-4 
         ${
           plan.highlighted
             ? "bg-zinc-950 border border-zinc-700 text-white"
@@ -116,42 +116,50 @@ function PricingCard({ plan, index }: { plan: PricingPlan; index: number }) {
       `}
     >
       {/* Header */}
-      <div className="mb-5">
-        <h3
-          className={`text-xl font-semibold tracking-tight mb-2 ${
-            plan.highlighted ? "text-white" : "text-zinc-900"
+      <div
+          className={`mb-5 p-4 rounded-md ${
+              plan.highlighted
+                  ? "bg-zinc-900/50 border border-zinc-800"
+                  : "bg-gray-100"
           }`}
+      >
+        <h3
+            className={`text-xl font-semibold tracking-tight mb-2 ${
+                plan.highlighted ? "text-white" : "text-zinc-900"
+            }`}
         >
           {plan.title}
         </h3>
+
         <p
-          className={`text-sm leading-relaxed ${
-            plan.highlighted ? "text-zinc-400" : "text-zinc-500"
-          }`}
+            className={`text-sm leading-relaxed ${
+                plan.highlighted ? "text-zinc-400" : "text-zinc-500"
+            }`}
         >
           {plan.description}
         </p>
-      </div>
 
-      {/* Price */}
-      <div className="mb-6">
-        <p
-          className={`text-2xl font-bold tracking-tight ${
-            plan.highlighted ? "text-white" : "text-zinc-900"
-          }`}
-        >
-          {plan.price}
-          {plan.priceLabel && (
-            <span
-              className={`text-sm font-normal ml-2 ${
-                plan.highlighted ? "text-zinc-400" : "text-zinc-500"
+        {/* Price */}
+        <div className="mt-6">
+          <p
+              className={`text-2xl font-bold tracking-tight ${
+                  plan.highlighted ? "text-white" : "text-zinc-900"
               }`}
-            >
+          >
+            {plan.price}
+            {plan.priceLabel && (
+                <span
+                    className={`text-sm font-normal ml-2 ${
+                        plan.highlighted ? "text-zinc-400" : "text-zinc-500"
+                    }`}
+                >
               / {plan.priceLabel}
             </span>
-          )}
-        </p>
+            )}
+          </p>
+        </div>
       </div>
+
 
       {/* Divider */}
       <div
@@ -253,7 +261,7 @@ export default function PricingSection() {
           </p>
           <div className="flex items-center gap-6">
             <motion.a
-              href="mailto:hello@example.com"
+              href="mailto:anelka.bag@gmail.com"
               whileHover={{ scale: 1.04 }}
               className="flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 transition-colors"
             >
@@ -261,7 +269,7 @@ export default function PricingSection() {
               Email us
             </motion.a>
             <motion.a
-              href="https://t.me/yourhandle"
+              href="https://t.me/@anelkabag"
               whileHover={{ scale: 1.04 }}
               className="flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 transition-colors"
             >
