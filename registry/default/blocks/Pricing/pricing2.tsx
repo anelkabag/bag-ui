@@ -107,7 +107,7 @@ function PricingCard({ plan, index }: { plan: PricingPlan; index: number }) {
       variants={cardVariants}
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
       className={`
-        relative flex flex-col rounded-2xl p-4 
+        relative flex flex-col rounded-2xl p-2 
         ${
           plan.highlighted
             ? "bg-zinc-950 border border-zinc-700 text-white"
@@ -117,7 +117,7 @@ function PricingCard({ plan, index }: { plan: PricingPlan; index: number }) {
     >
       {/* Header */}
       <div
-          className={`mb-5 p-4 rounded-md ${
+          className={`mb-5 p-3 rounded-md ${
               plan.highlighted
                   ? "bg-zinc-900/50 border border-zinc-800"
                   : "bg-gray-100"
