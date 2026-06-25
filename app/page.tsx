@@ -9,6 +9,7 @@ import BlocksCatalog from "@/components/Blockscatalog";
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import {Footer} from "@/components/footer";
+import CTASection from "@/components/Ctasection";
 
 export default function Page() {
   useEffect(() => {
@@ -37,6 +38,7 @@ export default function Page() {
       <Navbar />
       <Hero />
       <BlocksCatalog key={pathname} />
+      <CTASection/>
       <Footer/>
       <Analytics />
         <SpeedInsights />
