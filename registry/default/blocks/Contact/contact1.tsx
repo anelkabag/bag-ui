@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import {motion, useInView, Variants} from "framer-motion";
+import { motion, useInView } from "framer-motion";
 
 // ─── Icons ──────────────────────────────────────────────────────────────────
 function MailIcon() {
@@ -53,9 +53,9 @@ const fadeRight = (delay = 0) => ({
 
 // ─── Contact info items ──────────────────────────────────────────────────────
 const contactInfo = [
-    { icon: <MailIcon />, label: "support@avenixstore.com" },
+    { icon: <MailIcon />, label: "support@bagui.dev" },
     { icon: <MapPinIcon />, label: "123 Tech Avenue, San Francisco, USA" },
-    { icon: <PhoneIcon />, label: "+1 (415) 555-2671" },
+    { icon: <PhoneIcon />, label: "+1 (000) 555-6666" },
 ];
 
 // ─── Field component ─────────────────────────────────────────────────────────
@@ -132,32 +132,35 @@ export default function ContactSection() {
             className="w-full min-h-screen bg-white flex items-center justify-center px-6 py-24"
             style={{ fontFamily: "'Inter', 'DM Sans', sans-serif" }}
         >
-            <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+            <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-stretch">
 
                 {/* ── Left column ── */}
-                <div className="flex flex-col">
-                    {/* Headline */}
-                    <motion.h1
-                        variants={fadeLeft(0)}
-                        initial="hidden"
-                        animate={inView ? "visible" : "hidden"}
-                        className="text-[52px] sm:text-[62px] font-black leading-[1.05] tracking-[-0.03em] text-gray-950 mb-6"
-                    >
-                        Talk to our<br />support team
-                    </motion.h1>
+                {/* KEY CHANGE: use flex-col with justify-between so top = title/desc, bottom = contact info */}
+                <div className="flex flex-col justify-between min-h-[520px]">
 
-                    {/* Subtitle */}
-                    <motion.p
-                        variants={fadeLeft(0.1)}
-                        initial="hidden"
-                        animate={inView ? "visible" : "hidden"}
-                        className="text-[15px] text-gray-400 leading-relaxed max-w-xs mb-16"
-                    >
-                        Feel free to reach out for help with your order or any questions you may have regarding your purchase.
-                    </motion.p>
+                    {/* Top: Headline + Subtitle */}
+                    <div>
+                        <motion.h1
+                            variants={fadeLeft(0)}
+                            initial="hidden"
+                            animate={inView ? "visible" : "hidden"}
+                            className="text-[52px] sm:text-[62px] font-black leading-[1.05] tracking-[-0.03em] text-gray-950 mb-6"
+                        >
+                            Talk to our<br />support team
+                        </motion.h1>
 
-                    {/* Contact info */}
-                    <div className="flex flex-col gap-5">
+                        <motion.p
+                            variants={fadeLeft(0.1)}
+                            initial="hidden"
+                            animate={inView ? "visible" : "hidden"}
+                            className="text-[15px] text-gray-400 leading-relaxed max-w-xs"
+                        >
+                            Feel free to reach out for help with your order or any questions you may have regarding your purchase.
+                        </motion.p>
+                    </div>
+
+                    {/* Bottom: Contact info — pushed far down via justify-between */}
+                    <div className="flex flex-col gap-5 mb-2">
                         {contactInfo.map((item, i) => (
                             <motion.div
                                 key={i}
@@ -218,7 +221,7 @@ export default function ContactSection() {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="group flex items-center gap-2.5 bg-gray-900 hover:bg-gray-800 active:scale-[.98] text-white font-semibold text-[14.5px] px-6 py-3.5 rounded-2xl transition-all duration-200 disabled:opacity-70"
+                                    className="group flex items-center gap-2.5 bg-gray-900 hover:bg-gray-800 active:scale-[.98] text-white font-semibold text-[14.5px] px-6 py-3.5 rounded-2xl transition-all duration-200 disabled:opacity-70 cursor-pointer"
                                 >
                                     {loading ? (
                                         <>
@@ -232,8 +235,8 @@ export default function ContactSection() {
                                         <>
                                             Send Message
                                             <span className="transition-transform duration-200 group-hover:translate-x-1">
-                        <ArrowRightIcon />
-                      </span>
+                                                <ArrowRightIcon />
+                                            </span>
                                         </>
                                     )}
                                 </button>
