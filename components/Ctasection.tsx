@@ -29,10 +29,10 @@ export default function CTASection() {
 
     return (
         <div className="w-full border-t border-gray-200">
-            <div className="max-w-7xl mx-auto px-6 pt-10 border-l border-r border-gray-200  bg-black">
+            <div className="max-w-7xl mx-auto border-l border-r border-gray-200 bg-black">
                 <motion.section
                     ref={ref}
-                    className="w-full rounded-2xl px-8 py-14 overflow-hidden relative"
+                    className="w-full rounded-2xl px-8 py-14 overflow-hidden relative min-h-96 flex flex-col items-center justify-center"
                     initial={{ opacity: 0 }}
                     animate={inView ? { opacity: 1 } : { opacity: 0 }}
                     transition={{ duration: 0.6, ease: customEase }}
