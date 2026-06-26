@@ -1539,7 +1539,7 @@ export default function BlocksCatalog() {
                 Catalog
               </p>
               <h1
-                className="text-5xl md:text-6xl font-bold text-slate-950 leading-tight mb-5"
+                className="text-2xl md:text-6xl font-bold text-slate-950 leading-tight mb-5"
                 style={{ letterSpacing: "-0.02em" }}
               >
                 A taste of what&apos;s inside
