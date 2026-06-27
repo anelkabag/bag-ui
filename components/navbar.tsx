@@ -27,7 +27,7 @@ const Logo = () => (
       </span>
     </Link>
     <Link
-      href="https://x.com/anelkabag"
+      href="https://x.com/anelka_dev"
       target="_blank"
       rel="noopener noreferrer"
       className="text-[13px] text-gray-400 hover:text-black transition-colors"
