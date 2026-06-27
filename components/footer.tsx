@@ -35,12 +35,12 @@ const FOOTER_LEGAL = [
 const SOCIAL_LINKS = [
     {
         label: "X",
-        href: "https://x.com/anelkabag",
+        href: "https://x.com/anelka_dev",
         Icon: FaXTwitter,
     },
     {
         label: "Instagram",
-        href: "https://instagram.com/anelka.bag",
+        href: "https://instagram.com/anelka_developer",
         Icon: FaInstagram,
     },
     {
