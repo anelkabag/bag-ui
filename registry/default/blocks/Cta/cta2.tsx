@@ -41,7 +41,7 @@ export default function CTASection() {
                     {/* Heading */}
                     <motion.h2
                         variants={itemVariants}
-                        className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight mb-6"
+                        className="text-4xl sm:text-5xl lg:text-6xl text-white tracking-tight mb-6"
                     >
                         Ready for more demand?
                     </motion.h2>
@@ -49,7 +49,7 @@ export default function CTASection() {
                     {/* Subheading */}
                     <motion.p
                         variants={itemVariants}
-                        className="text-lg sm:text-xl text-gray-300 mb-10 max-w-2xl leading-relaxed"
+                        className="text-xl sm:text-xl text-gray-300 mb-10 max-w-2xl leading-relaxed"
                     >
                         Stop losing leads to 'Get in touch' buttons and boring contact forms.
                     </motion.p>
