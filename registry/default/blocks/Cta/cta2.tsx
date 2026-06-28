@@ -63,7 +63,7 @@ export default function CTASection() {
                         <motion.button
                             whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(255, 255, 255, 0.2)' }}
                             whileTap={{ scale: 0.98 }}
-                            className="px-8 py-3.5 bg-white text-black font-semibold rounded-lg transition-all duration-200 hover:shadow-2xl"
+                            className="px-8 py-3.5 bg-white text-black font-semibold rounded-lg transition-all duration-200 hover:shadow-2xl cursor-pointer"
                         >
                             Start free trial
                         </motion.button>
@@ -72,7 +72,7 @@ export default function CTASection() {
                         <motion.button
                             whileHover={{ scale: 1.05, borderColor: 'rgba(255, 255, 255, 0.5)' }}
                             whileTap={{ scale: 0.98 }}
-                            className="px-8 py-3.5 border border-gray-700 text-white font-semibold rounded-lg transition-all duration-200 hover:border-gray-500 hover:bg-white/5"
+                            className="px-8 py-3.5 border border-gray-700 text-white font-semibold rounded-lg transition-all duration-200 hover:border-gray-500 hover:bg-white/5 cursor-pointer"
                         >
                             Book a demo
                         </motion.button>
