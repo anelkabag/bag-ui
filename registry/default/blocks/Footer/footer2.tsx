@@ -257,11 +257,11 @@ function RightPanel() {
         className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mt-10 pt-8"
         style={{ borderTop: "1px solid #27272a" }}
       >
-        <div className="space-y-1">
-          <p className="text-sm" style={{ color: "#71717a", ...font }}>
+        <div className="space-y-1 ">
+          <p className="text-sm text-gray-300">
             support@bagui.dev
           </p>
-          <p className="text-xs" style={{ color: "#3f3f46", ...font }}>
+          <p className="text-xs text-[#3f3f46]" >
             © {currentYear} BagUI. All rights reserved.
           </p>
         </div>
