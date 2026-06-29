@@ -269,6 +269,20 @@
       ]
     },
     {
+      "name": "footer2",
+      "type": "registry:block",
+      "title": "Footer Exemple 2",
+      "description": "",
+      "dependencies": ["framer-motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/Footer/footer2.tsx",
+          "type": "registry:block",
+          "target": "components/Footer-ex-2.tsx"
+        }
+      ]
+    },
+    {
       "name": "template1",
       "type": "registry:block",
       "title": "Template Open Agents.",
