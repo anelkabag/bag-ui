@@ -63,7 +63,7 @@ function AvatarStack() {
         {AVATARS.map((a) => (
           <div
             key={a.id}
-            className="w-10 h-10 rounded-full border-2 border-white overflow-hidden bg-zinc-100 select-none flex-shrink-0"
+            className="w-10 h-10 rounded-sm border-2 border-white overflow-hidden bg-zinc-100 select-none flex-shrink-0"
           >
             <Image
               src={a.src}
@@ -103,19 +103,15 @@ function CTACard() {
   return (
     <motion.div
       variants={slide}
-      className="flex items-center gap-4 rounded-2xl px-5 py-4 w-fit border border-zinc-200"
-      style={{ backgroundColor: "#18181b" }}
+      className="flex items-center gap-4 rounded-2xl px-5 py-4 w-fit bg-gray-100"
     >
-      <button
-        className="text-sm font-semibold px-5 py-2.5 rounded-xl whitespace-nowrap transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400"
-        style={{
-          backgroundColor: "#fafafa",
-          color: "#09090b",
-          fontFamily: "'Geist', 'Inter', system-ui, sans-serif",
-        }}
+      <motion.button
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.97 }}
+        className="text-sm font-semibold px-5 py-2.5 rounded-xl whitespace-nowrap transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 bg-black text-white cursor-pointer"
       >
         Let&apos;s talk
-      </button>
+      </motion.button>
       <div
         className="text-[12px] leading-[1.6]"
         style={{
@@ -305,12 +301,11 @@ function RightPanel() {
 export default function DivBlockFooter() {
   return (
     <footer
-      className="w-full bg-white px-6 sm:px-10 lg:px-16 py-10 sm:py-14"
-      style={{ fontFamily: "'Geist', 'Inter', system-ui, sans-serif" }}
+      className="w-full px-6 sm:px-10 lg:px-16 py-10 sm:py-14"
     >
       <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-stretch">
         <motion.div
-          className="w-full lg:w-[35%] flex flex-col justify-between gap-6"
+          className="w-full lg:w-[30%] flex flex-col justify-between gap-6"
           variants={stagger}
           initial="hidden"
           whileInView="visible"
@@ -322,7 +317,7 @@ export default function DivBlockFooter() {
           <TrustBadges />
         </motion.div>
 
-        <div className="w-full lg:w-[75%] flex flex-col">
+        <div className="w-full lg:w-[70%] flex flex-col">
           <RightPanel />
         </div>
       </div>
