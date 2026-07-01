@@ -100,18 +100,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signUp = async (email: string, password: string, username: string) => {
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { username, plan: "free" },
-      },
-    });
-    setLoading(false);
-    if (error) {
-      return error.message;
+
+    try {
+      const response = await fetch("/api/auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: "sign_up",
+          email,
+          password,
+          username,
+        }),
+      });
+
+      const data = await response.json().catch(() => null);
+      if (!response.ok) {
+        return data?.error || "Unable to create account";
+      }
+
+      return null;
+    } catch {
+      return "Unable to create account";
+    } finally {
+      setLoading(false);
     }
-    return null;
   };
 
   const signInWithGoogle = async () => {
