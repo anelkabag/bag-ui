@@ -3,6 +3,9 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useAuth } from "@/hooks/useAuth";
+import UserMenu from "@/components/auth/UserMenu";
+import UnauthNav from "@/components/auth/UnauthNav";
 
 const NAV_LINKS = [
   { label: "Blocks", href: "/blocks" },
@@ -65,6 +68,7 @@ const NavLink = ({
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <>
@@ -80,18 +84,7 @@ export default function Navbar() {
 
           <div className="flex items-center gap-2">
             <div className="hidden sm:flex items-center gap-2">
-              <Link
-                href="/login"
-                className="h-9 px-4 rounded-full text-sm font-medium text-black border border-gray-300 hover:bg-gray-100 hover:border-gray-400 transition-all inline-flex items-center justify-center"
-              >
-                Login
-              </Link>
-              <Link
-                href="/access"
-                className="h-9 px-4 rounded-full text-sm font-medium text-white bg-black border border-black hover:bg-gray-800 transition-all inline-flex items-center justify-center"
-              >
-                Get access
-              </Link>
+              {user ? <UserMenu /> : <UnauthNav />}
             </div>
             <button
               className="md:hidden p-2 text-black"
@@ -125,20 +118,34 @@ export default function Navbar() {
           ))}
         </nav>
         <div className="flex flex-col gap-3">
-          <Link
-            href="/login"
-            onClick={() => setMobileOpen(false)}
-            className="w-full py-4 rounded-xl border border-gray-300 text-black text-[14px] font-bold flex items-center justify-center hover:bg-gray-50 transition-colors"
-          >
-            Login
-          </Link>
-          <Link
-            href="/access"
-            onClick={() => setMobileOpen(false)}
-            className="w-full py-4 rounded-xl bg-black text-white text-[14px] font-bold flex items-center justify-center hover:bg-gray-800 transition-colors"
-          >
-            Get access
-          </Link>
+          {user ? (
+            <button
+              onClick={() => {
+                setMobileOpen(false);
+                window.location.href = "/account";
+              }}
+              className="w-full py-4 rounded-xl border border-gray-300 text-black text-[14px] font-bold flex items-center justify-center hover:bg-gray-50 transition-colors"
+            >
+              Account
+            </button>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                onClick={() => setMobileOpen(false)}
+                className="w-full py-4 rounded-xl border border-gray-300 text-black text-[14px] font-bold flex items-center justify-center hover:bg-gray-50 transition-colors"
+              >
+                Login
+              </Link>
+              <Link
+                href="/register"
+                onClick={() => setMobileOpen(false)}
+                className="w-full py-4 rounded-xl bg-black text-white text-[14px] font-bold flex items-center justify-center hover:bg-gray-800 transition-colors"
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </>
