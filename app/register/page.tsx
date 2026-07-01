@@ -14,19 +14,6 @@ export default function RegisterPage() {
   const [error, setError] = useState<string | null>(null);
   const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
 
-  useEffect(() => {
-    if (!isVerificationModalOpen) {
-      return;
-    }
-
-    const timer = window.setTimeout(() => {
-      setIsVerificationModalOpen(false);
-      router.replace("/");
-    }, 3000);
-
-    return () => window.clearTimeout(timer);
-  }, [isVerificationModalOpen, router]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -48,17 +35,43 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-[#111] flex items-center justify-center p-4">
       {isVerificationModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
-          <div className="w-full max-w-[420px] rounded-[28px] border border-emerald-400/20 bg-[#151515] p-8 text-center shadow-2xl shadow-black/40">
-            <h2 className="text-2xl font-semibold text-white">
-              Vérifiez votre email
-            </h2>
-            <p className="mt-3 text-sm leading-6 text-white/70">
-              Un email de confirmation a été envoyé. Vérifiez votre boîte de
-              réception puis vous serez redirigé vers l’accueil.
-            </p>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm px-4">
+            <div className="w-full max-w-[420px] rounded-[28px] bg-[#F5F3EF] p-8 text-center shadow-2xl shadow-black/20">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-black">
+                <svg
+                    className="h-6 w-6 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={3}
+                >
+                  <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+
+              <h2 className="mt-6 text-2xl font-semibold text-[#111]">
+                Check your email
+              </h2>
+              <p className="mt-3 text-sm leading-6 text-[#111]/60">
+                A confirmation email has been sent. Check your inbox, then you’ll
+                be redirected to the homepage.
+              </p>
+
+              <button
+                  onClick={() => {
+                    setIsVerificationModalOpen(false);
+                    router.replace("/");
+                  }}
+                  className="mt-6 w-full rounded-2xl bg-black py-3 text-sm font-semibold text-white transition hover:bg-black/90"
+              >
+                Got it
+              </button>
+            </div>
           </div>
-        </div>
       )}
 
       <div className="w-full max-w-[480px] rounded-[32px] border border-white/10 bg-[#151515]/95 p-8 shadow-2xl shadow-black/30">
