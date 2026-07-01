@@ -3,7 +3,7 @@ import { createSupabaseRouteHandlerClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const supabase = createSupabaseRouteHandlerClient();
+  const supabase = await createSupabaseRouteHandlerClient();
 
   if (!body?.password) {
     return NextResponse.json({ error: "Missing password" }, { status: 400 });
