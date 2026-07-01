@@ -437,11 +437,10 @@ function VariantToolbarHeader({
               {PKG_ICONS[pkg]}
             </span>
             <IconChevronDown size={16} className="text-gray-600" />
-          <button
-            onClick={() => handleCopy(cmd)}
-            className="hidden sm:flex p-2.5 hover:bg-gray-100 rounded-md transition-colors cursor-pointer items-center justify-center"
-            title={copied ? "Copied!" : "Copy command"}
-          >
+          </button>
+
+          <AnimatePresence>
+            {openDropdown && (
               <motion.div
                 initial={{ opacity: 0, y: -6 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -478,7 +477,7 @@ function VariantToolbarHeader({
 
         {/* Copy button - desktop only */}
         <button
-          onClick={() => copy(cmd)}
+          onClick={() => handleCopy(cmd)}
           className="hidden sm:flex p-2.5 hover:bg-gray-100 rounded-md transition-colors cursor-pointer items-center justify-center"
           title={copied ? "Copied!" : "Copy command"}
         >
