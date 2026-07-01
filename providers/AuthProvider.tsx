@@ -111,8 +111,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (error) {
       return error.message;
     }
-    await fetchProfile();
-    router.replace("/blocks");
     return null;
   };
 

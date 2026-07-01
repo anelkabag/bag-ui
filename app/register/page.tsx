@@ -1,21 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const { signUp, signInWithGoogle, loading } = useAuth();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isVerificationModalOpen) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setIsVerificationModalOpen(false);
+      router.replace("/");
+    }, 3000);
+
+    return () => window.clearTimeout(timer);
+  }, [isVerificationModalOpen, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setSuccess(null);
 
     if (!email || !username || !password) {
       setError("Please fill all fields.");
@@ -27,11 +41,26 @@ export default function RegisterPage() {
       setError(message);
       return;
     }
-    setSuccess("Signup successful! Check your email for verification.");
+
+    setIsVerificationModalOpen(true);
   };
 
   return (
     <div className="min-h-screen bg-[#111] flex items-center justify-center p-4">
+      {isVerificationModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+          <div className="w-full max-w-[420px] rounded-[28px] border border-emerald-400/20 bg-[#151515] p-8 text-center shadow-2xl shadow-black/40">
+            <h2 className="text-2xl font-semibold text-white">
+              Vérifiez votre email
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-white/70">
+              Un email de confirmation a été envoyé. Vérifiez votre boîte de
+              réception puis vous serez redirigé vers l’accueil.
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="w-full max-w-[480px] rounded-[32px] border border-white/10 bg-[#151515]/95 p-8 shadow-2xl shadow-black/30">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-semibold text-white">
@@ -74,7 +103,6 @@ export default function RegisterPage() {
           </div>
 
           {error && <p className="text-sm text-rose-400">{error}</p>}
-          {success && <p className="text-sm text-emerald-400">{success}</p>}
 
           <button
             type="submit"
