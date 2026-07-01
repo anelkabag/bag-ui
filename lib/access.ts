@@ -13,6 +13,17 @@ export interface AccessProfileLike {
   id?: string | null;
   plan?: string | null;
   subscription_plan?: string | null;
+  user_metadata?: {
+    plan?: string | null;
+    subscription_plan?: string | null;
+    username?: string | null;
+    [key: string]: unknown;
+  } | null;
+  app_metadata?: {
+    plan?: string | null;
+    subscription_plan?: string | null;
+    [key: string]: unknown;
+  } | null;
 }
 
 export interface AccessComponentLike {
@@ -38,11 +49,16 @@ export function hasProAccess(
 ): boolean {
   // For now, access is determined from the active profile plan only.
   // We do not inspect billing/payment history here.
-  const plan = (
-    profile?.plan ??
-    profile?.subscription_plan ??
-    "free"
-  ).toLowerCase();
+  const rawPlan = [
+    profile?.plan,
+    profile?.subscription_plan,
+    profile?.user_metadata?.plan,
+    profile?.user_metadata?.subscription_plan,
+    profile?.app_metadata?.plan,
+    profile?.app_metadata?.subscription_plan,
+  ].find((value): value is string => Boolean(value && String(value).trim()));
+
+  const plan = (rawPlan ?? "free").toLowerCase();
 
   return ["monthly", "yearly", "lifetime", "pro"].includes(plan);
 }
