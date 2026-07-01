@@ -94,7 +94,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return error.message;
     }
     await fetchProfile();
-    router.replace("/account");
+    router.replace("/blocks");
     return null;
   };
 
@@ -111,7 +111,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (error) {
       return error.message;
     }
-    router.replace("/account");
+    router.replace("/blocks");
     return null;
   };
 
@@ -119,7 +119,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/account`,
+        redirectTo: `${window.location.origin}/blocks`,
       },
     });
   };
