@@ -15,7 +15,10 @@
           "type": "registry:ui",
           "target": "components/ui/fancy-button.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "pro"
+      }
     },
     {
       "name": "team-section",
@@ -28,273 +31,390 @@
           "type": "registry:block",
           "target": "components/blocks/team-section.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "free"
+      }
     },
     {
       "name": "hero1",
       "type": "registry:block",
       "title": "Hero Exemple 1",
       "description": "Hero section with navbar and animated event dashboard preview.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/hero/hero1.tsx",
           "type": "registry:block",
           "target": "components/blocks/hero1.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "pro"
+      }
     },
     {
       "name": "navbar1",
       "type": "registry:block",
       "title": "Navbar Exemple 1",
       "description": "Modern responsive navigation bar with animated interactions, customizable links, and mobile menu support.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/navbar/navbar1.tsx",
           "type": "registry:block",
           "target": "components/blocks/navbar1.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "pro"
+      }
     },
     {
       "name": "faq1",
       "type": "registry:block",
       "title": "FAQ Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/faq/faq1.tsx",
           "type": "registry:block",
           "target": "components/blocks/faq1.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "free"
+      }
     },
     {
       "name": "cta-1",
       "type": "registry:block",
       "title": "CTA Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/Cta/cta1.tsx",
           "type": "registry:block",
           "target": "components/blocks/cta-ex-1.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "free"
+      }
     },
     {
       "name": "cta-2",
       "type": "registry:block",
       "title": "CTA Exemple 2",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/Cta/cta2.tsx",
           "type": "registry:block",
           "target": "components/blocks/cta-ex-2.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "free"
+      }
     },
     {
       "name": "testimonial-1",
       "type": "registry:block",
       "title": "Testimonial Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/Testimonial/testimonial1.tsx",
           "type": "registry:block",
           "target": "components/blocks/testimonial-ex-1.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "free"
+      }
     },
     {
       "name": "contact-1",
       "type": "registry:block",
       "title": "Contact Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/Contact/contact1.tsx",
           "type": "registry:block",
           "target": "components/blocks/contact-ex-1.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "free"
+      }
     },
     {
       "name": "feature-1",
       "type": "registry:block",
       "title": "Feature Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/Feature/feature1.tsx",
           "type": "registry:block",
           "target": "components/blocks/feature-ex-1.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "free"
+      }
     },
     {
       "name": "feature-2",
       "type": "registry:block",
       "title": "Feature Exemple 2",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/Feature/feature2.tsx",
           "type": "registry:block",
           "target": "components/blocks/feature-ex-2.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "free"
+      }
     },
     {
       "name": "feature-3",
       "type": "registry:block",
       "title": "Feature Exemple 3",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/Feature/feature3.tsx",
           "type": "registry:block",
           "target": "components/blocks/feature-ex-3.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "free"
+      }
     },
     {
       "name": "pricing-1",
       "type": "registry:block",
       "title": "Pricing Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/Pricing/pricing1.tsx",
           "type": "registry:block",
           "target": "components/blocks/pricing-ex-1.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "pro"
+      }
     },
     {
       "name": "pricing-2",
       "type": "registry:block",
       "title": "Pricing Exemple 2",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/Pricing/pricing2.tsx",
           "type": "registry:block",
           "target": "components/blocks/pricing-ex-2.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "pro"
+      }
     },
     {
       "name": "pricing-3",
       "type": "registry:block",
       "title": "Pricing Exemple 3",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/Pricing/pricing3.tsx",
           "type": "registry:block",
           "target": "components/blocks/pricing-ex-3.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "pro"
+      }
     },
     {
       "name": "login1",
       "type": "registry:block",
       "title": "Login Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/SignUp/login1.tsx",
           "type": "registry:block",
           "target": "components/blocks/login1.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "pro"
+      }
     },
     {
       "name": "sidebar1",
       "type": "registry:block",
       "title": "Sidebar Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/Sidebar/sidebar1.tsx",
           "type": "registry:block",
           "target": "components/Sidebar1.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "free"
+      }
     },
     {
       "name": "chat-app1",
       "type": "registry:block",
       "title": "Dashboard Chat App Exemple 1",
       "description": "",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/Chat-App1.tsx",
           "type": "registry:block",
           "target": "components/Dashboard/Chatapp1.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "pro"
+      }
     },
     {
       "name": "footer1",
       "type": "registry:block",
       "title": "Footer Exemple 1",
       "description": "",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/Footer/footer1.tsx",
           "type": "registry:block",
           "target": "components/Footer1.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "free"
+      }
     },
     {
       "name": "footer2",
       "type": "registry:block",
       "title": "Footer Exemple 2",
       "description": "",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/Footer/footer2.tsx",
           "type": "registry:block",
           "target": "components/Footer-ex-2.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "free"
+      }
     },
     {
       "name": "template1",
       "type": "registry:block",
       "title": "Template Open Agents.",
       "description": "",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/templates/template1.tsx",
           "type": "registry:block",
           "target": "components/Template1.tsx"
         }
-      ]
+      ],
+      "access": {
+        "tier": "pro"
+      }
     }
   ]
 }
