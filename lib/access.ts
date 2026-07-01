@@ -58,11 +58,11 @@ export function canInstall(
   component: AccessComponentLike | null | undefined,
   profile: AccessProfileLike | null | undefined,
 ): boolean {
-  if (!isLoggedIn(profile)) {
-    return false;
+  if (getComponentAccessTier(component) === "free") {
+    return true;
   }
 
-  return getComponentAccessTier(component) === "free" || hasProAccess(profile);
+  return isLoggedIn(profile) && hasProAccess(profile);
 }
 
 export function getInstallAccessState(
@@ -81,9 +81,16 @@ export function getInstallAccessState(
 
   if (!isLoggedIn(profile)) {
     return {
-      action: "signin",
-      label: "Sign in to install",
-      description: "Sign in to unlock installation for this component.",
+      action:
+        getComponentAccessTier(component) === "free" ? "install" : "signin",
+      label:
+        getComponentAccessTier(component) === "free"
+          ? "Install"
+          : "Sign in to install",
+      description:
+        getComponentAccessTier(component) === "free"
+          ? "Install this free component with the CLI command below."
+          : "Sign in to unlock installation for this component.",
       href: `/login?redirect=${encodeURIComponent(redirectPath)}`,
     };
   }
