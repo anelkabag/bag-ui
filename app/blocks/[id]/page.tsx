@@ -4,10 +4,11 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 import registryJson from "@/registry.json";
 import { categoryMatchesItem, RegistryItem } from "@/lib/block-categories";
+import { getComponentAccessTier, getInstallAccessState } from "@/lib/access";
 import { ComponentPreview } from "@/components/ComponentPreview";
 import { MARKETING_BLOCKS, APP_BLOCKS, ECOMMERCE_BLOCKS } from "../page";
 import Navbar from "@/components/navbar";
@@ -55,7 +56,7 @@ function getVariants(id: string, count: number): Variant[] {
 
   if (matched.length > 0) {
     return matched.map((item) => {
-      const access = item.access?.tier === "pro" ? "pro" : "free";
+      const access = getComponentAccessTier(item);
       return {
         id: item.name,
         label: item.title || item.name,
@@ -186,14 +187,33 @@ const ExternalLinkIcon = () => (
 
 // ─── Code block ──────────────────────────────────────────────────────────────
 
-function CodeBlock({ code }: { code: string }) {
+function CodeBlock({ code, isPro }: { code: string; isPro?: boolean }) {
   const { copied, copy } = useCopy();
+  const { user, profile } = useAuth();
+  const pathname = usePathname();
+  const accessProfile = profile ?? user ?? null;
+
+  const handleCopy = (text: string) => {
+    if (isPro) {
+      const accessState = getInstallAccessState(
+        { access: { tier: "pro" } },
+        accessProfile,
+        pathname ?? "/blocks",
+      );
+      if (accessState.action !== "install") {
+        window.location.href = accessState.href;
+        return;
+      }
+    }
+    copy(text);
+  };
+
   return (
     <div className="relative rounded-xl border border-gray-200 bg-gray-950 overflow-hidden">
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/10 gap-2 sm:gap-0">
         <span className="text-xs text-gray-500 font-mono">page.tsx</span>
         <button
-          onClick={() => copy(code)}
+          onClick={() => handleCopy(code)}
           aria-label={copied ? "Copied" : "Copy code"}
           className="text-xs text-gray-400 hover:text-white transition-colors flex items-center gap-1.5"
         >
@@ -338,23 +358,28 @@ function VariantToolbarHeader({
   variantId,
   mode,
   setMode,
-  isPro,
+  accessTier,
 }: {
   variantId: string;
   mode: ViewMode;
   setMode: (m: ViewMode) => void;
-  isPro?: boolean;
+  accessTier: Variant["access"];
 }) {
   const [pkg, setPkg] = useState<PkgManager>("npm");
   const [openDropdown, setOpenDropdown] = useState(false);
   const cmd = getInstallCmd(pkg, variantId);
   const { copied, copy } = useCopy();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
+  const pathname = usePathname();
+  const accessProfile = profile ?? user ?? null;
+  const installState = getInstallAccessState(
+    { access: { tier: accessTier } },
+    accessProfile,
+    pathname ?? "/blocks",
+  );
 
   const handleCopy = (text: string) => {
-    if (isPro && !user) {
-      const redirectTo = encodeURIComponent(window.location.href);
-      window.location.href = `/login?redirect=${redirectTo}`;
+    if (installState.action !== "install") {
       return;
     }
     copy(text);
@@ -408,81 +433,105 @@ function VariantToolbarHeader({
 
       {/* Right: CLI Command + Dropdown + Copy */}
       <div className="flex-1 sm:flex-initial sm:ml-auto flex items-center gap-2 sm:gap-3">
-        {/* MOBILE: "Copy prompt" button (icon + label, no command text) */}
-        <button
-          onClick={() => handleCopy(cmd)}
-          className="sm:hidden flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-gray-200 bg-white text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50"
-        >
-          {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
-          <span>{copied ? "Copied!" : "Copy command"}</span>
-        </button>
+        {installState.action === "install" ? (
+          <>
+            {/* MOBILE: "Copy prompt" button (icon + label, no command text) */}
+            <button
+              onClick={() => handleCopy(cmd)}
+              className="sm:hidden flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-gray-200 bg-white text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50"
+            >
+              {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
+              <span>{copied ? "Copied!" : "Copy command"}</span>
+            </button>
 
-        {/* DESKTOP: CLI Command Display (full text) */}
-        <div className="hidden sm:flex flex-1 items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 bg-white text-xs font-mono text-gray-700 overflow-x-auto min-w-0">
-          <div className="w-4 h-4 flex items-center justify-center shrink-0">
-            {PKG_ICONS[pkg]}
-          </div>
-          <code className="truncate">{cmd}</code>
-        </div>
+            {/* DESKTOP: CLI Command Display (full text) */}
+            <div className="hidden sm:flex flex-1 items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 bg-white text-xs font-mono text-gray-700 overflow-x-auto min-w-0">
+              <div className="w-4 h-4 flex items-center justify-center shrink-0">
+                {PKG_ICONS[pkg]}
+              </div>
+              <code className="truncate">{cmd}</code>
+            </div>
 
-        {/* Package Manager Dropdown */}
-        <div className="relative shrink-0">
-          <button
-            onClick={() => setOpenDropdown(!openDropdown)}
-            className="flex items-center gap-1 p-2 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 bg-white cursor-pointer"
-            title="Change package manager"
-          >
-            {/* Show pkg icon on mobile next to chevron */}
-            <span className="sm:hidden w-4 h-4 flex items-center justify-center">
-              {PKG_ICONS[pkg]}
-            </span>
-            <IconChevronDown size={16} className="text-gray-600" />
-          </button>
-
-          <AnimatePresence>
-            {openDropdown && (
-              <motion.div
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.15 }}
-                className="absolute top-full mt-1 right-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-max"
+            {/* Package Manager Dropdown */}
+            <div className="relative shrink-0">
+              <button
+                onClick={() => setOpenDropdown(!openDropdown)}
+                className="flex items-center gap-1 p-2 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 bg-white cursor-pointer"
+                title="Change package manager"
               >
-                {PKG_MANAGERS.map((p) => (
-                  <button
-                    key={p}
-                    onClick={() => {
-                      setPkg(p);
-                      setOpenDropdown(false);
-                    }}
-                    className={`w-full text-left px-3 py-2 text-xs font-medium flex items-center gap-2 transition-colors first:rounded-t-lg last:rounded-b-lg cursor-pointer ${
-                      pkg === p
-                        ? "bg-gray-100 text-gray-900"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                    }`}
-                  >
-                    <div className="w-4 h-4 flex items-center justify-center shrink-0">
-                      {PKG_ICONS[p]}
-                    </div>
-                    <span>{p}</span>
-                    {pkg === p && (
-                      <IconCheck size={12} className="ml-auto text-gray-600" />
-                    )}
-                  </button>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+                {/* Show pkg icon on mobile next to chevron */}
+                <span className="sm:hidden w-4 h-4 flex items-center justify-center">
+                  {PKG_ICONS[pkg]}
+                </span>
+                <IconChevronDown size={16} className="text-gray-600" />
+              </button>
 
-        {/* Copy button - desktop only */}
-        <button
-          onClick={() => handleCopy(cmd)}
-          className="hidden sm:flex p-2.5 hover:bg-gray-100 rounded-md transition-colors cursor-pointer items-center justify-center"
-          title={copied ? "Copied!" : "Copy command"}
-        >
-          {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
-        </button>
+              <AnimatePresence>
+                {openDropdown && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute top-full mt-1 right-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-max"
+                  >
+                    {PKG_MANAGERS.map((p) => (
+                      <button
+                        key={p}
+                        onClick={() => {
+                          setPkg(p);
+                          setOpenDropdown(false);
+                        }}
+                        className={`w-full text-left px-3 py-2 text-xs font-medium flex items-center gap-2 transition-colors first:rounded-t-lg last:rounded-b-lg cursor-pointer ${
+                          pkg === p
+                            ? "bg-gray-100 text-gray-900"
+                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                        }`}
+                      >
+                        <div className="w-4 h-4 flex items-center justify-center shrink-0">
+                          {PKG_ICONS[p]}
+                        </div>
+                        <span>{p}</span>
+                        {pkg === p && (
+                          <IconCheck
+                            size={12}
+                            className="ml-auto text-gray-600"
+                          />
+                        )}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Copy button - desktop only */}
+            <button
+              onClick={() => handleCopy(cmd)}
+              className="hidden sm:flex p-2.5 hover:bg-gray-100 rounded-md transition-colors cursor-pointer items-center justify-center"
+              title={copied ? "Copied!" : "Copy command"}
+            >
+              {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
+            </button>
+          </>
+        ) : (
+          <div className="flex-1 rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between min-w-0">
+            <div className="min-w-0">
+              <p className="text-[11px] font-semibold text-gray-900">
+                {installState.label}
+              </p>
+              <p className="text-[11px] text-gray-500 leading-relaxed">
+                {installState.description}
+              </p>
+            </div>
+            <Link
+              href={installState.href}
+              className="inline-flex shrink-0 items-center justify-center rounded-full bg-black px-3 py-1.5 text-[11px] font-medium text-white transition-colors hover:bg-gray-800"
+            >
+              {installState.label}
+            </Link>
+          </div>
+        )}
       </div>
     </motion.div>
   );
@@ -529,7 +578,7 @@ function VariantCard({
         variantId={variant.id}
         mode={mode}
         setMode={setMode}
-        isPro={variant.pro}
+        accessTier={variant.access}
       />
 
       {/* Content */}
@@ -558,7 +607,7 @@ function VariantCard({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
           >
-            <CodeBlock code={code} />
+            <CodeBlock code={code} isPro={variant.pro} />
           </motion.div>
         )}
       </AnimatePresence>

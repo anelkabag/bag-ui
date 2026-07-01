@@ -12,6 +12,7 @@ import {
 } from "@/lib/block-categories";
 import { Footer } from "@/components/footer";
 import Navbar from "@/components/navbar";
+import { getComponentAccessTier } from "@/lib/access";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type FilterType = "all" | "marketing" | "app" | "ecommerce";
@@ -36,7 +37,9 @@ function getBlockCount(blockId: string) {
 
 function getBlockAccess(blockId: string): AccessTier {
   return registry.items.some(
-    (item) => categoryMatchesItem(blockId, item) && item.access?.tier === "pro",
+    (item) =>
+      categoryMatchesItem(blockId, item) &&
+      getComponentAccessTier(item) === "pro",
   )
     ? "pro"
     : "free";
