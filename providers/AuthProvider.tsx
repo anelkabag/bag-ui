@@ -104,13 +104,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       email,
       password,
       options: {
-        data: { username },
+        data: { username, plan: "free" },
       },
     });
     setLoading(false);
     if (error) {
       return error.message;
     }
+    await fetchProfile();
     router.replace("/blocks");
     return null;
   };

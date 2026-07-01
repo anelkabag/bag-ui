@@ -6,7 +6,10 @@ export async function POST(request: Request) {
   const body = await request.json();
 
   if (!body?.email || !body?.password || !body?.action) {
-    return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Missing required fields" },
+      { status: 400 },
+    );
   }
 
   if (body.action === "sign_in") {
@@ -25,7 +28,7 @@ export async function POST(request: Request) {
       email: body.email,
       password: body.password,
       options: {
-        data: { username: body.username },
+        data: { username: body.username, plan: "free" },
       },
     });
     if (error) {
