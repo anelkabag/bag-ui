@@ -4,11 +4,18 @@ export interface RegistryFile {
   items: RegistryItem[];
 }
 
+export type AccessTier = "free" | "pro";
+
+export interface AccessInfo {
+  tier: AccessTier;
+}
+
 export interface RegistryItem {
   name: string;
   title: string;
   type: string;
   description: string;
+  access?: AccessInfo;
   dependencies?: string[];
   files: { path: string; type: string; target?: string }[];
 }
