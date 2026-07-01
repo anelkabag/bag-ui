@@ -23,6 +23,7 @@ import {
   IconCopy,
   IconCheck,
 } from "@tabler/icons-react";
+import { useAuth } from "@/hooks/useAuth";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -337,15 +338,27 @@ function VariantToolbarHeader({
   variantId,
   mode,
   setMode,
+  isPro,
 }: {
   variantId: string;
   mode: ViewMode;
   setMode: (m: ViewMode) => void;
+  isPro?: boolean;
 }) {
   const [pkg, setPkg] = useState<PkgManager>("npm");
   const [openDropdown, setOpenDropdown] = useState(false);
   const cmd = getInstallCmd(pkg, variantId);
   const { copied, copy } = useCopy();
+  const { user } = useAuth();
+
+  const handleCopy = (text: string) => {
+    if (isPro && !user) {
+      const redirectTo = encodeURIComponent(window.location.href);
+      window.location.href = `/login?redirect=${redirectTo}`;
+      return;
+    }
+    copy(text);
+  };
 
   return (
     <motion.div
@@ -397,7 +410,7 @@ function VariantToolbarHeader({
       <div className="flex-1 sm:flex-initial sm:ml-auto flex items-center gap-2 sm:gap-3">
         {/* MOBILE: "Copy prompt" button (icon + label, no command text) */}
         <button
-          onClick={() => copy(cmd)}
+          onClick={() => handleCopy(cmd)}
           className="sm:hidden flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-gray-200 bg-white text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50"
         >
           {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
@@ -424,11 +437,11 @@ function VariantToolbarHeader({
               {PKG_ICONS[pkg]}
             </span>
             <IconChevronDown size={16} className="text-gray-600" />
-          </button>
-
-          {/* Dropdown Menu */}
-          <AnimatePresence>
-            {openDropdown && (
+          <button
+            onClick={() => handleCopy(cmd)}
+            className="hidden sm:flex p-2.5 hover:bg-gray-100 rounded-md transition-colors cursor-pointer items-center justify-center"
+            title={copied ? "Copied!" : "Copy command"}
+          >
               <motion.div
                 initial={{ opacity: 0, y: -6 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -517,6 +530,7 @@ function VariantCard({
         variantId={variant.id}
         mode={mode}
         setMode={setMode}
+        isPro={variant.pro}
       />
 
       {/* Content */}
