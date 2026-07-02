@@ -21,6 +21,27 @@ export default function UserMenu() {
   const [mounted, setMounted] = useState(false);
   const closeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const rawPlan =
+    (
+      profile as {
+        plan?: string | null;
+        subscription_plan?: string | null;
+      } | null
+    )?.plan ??
+    (
+      profile as {
+        plan?: string | null;
+        subscription_plan?: string | null;
+      } | null
+    )?.subscription_plan ??
+    user?.user_metadata?.plan ??
+    user?.user_metadata?.subscription_plan ??
+    user?.app_metadata?.plan ??
+    user?.app_metadata?.subscription_plan ??
+    "free";
+  const plan = String(rawPlan ?? "free").toLowerCase();
+  const isProPlan = ["monthly", "yearly", "lifetime", "pro"].includes(plan);
+
   const toggle = () => {
     if (open) {
       // Play exit animation, then unmount
@@ -127,9 +148,17 @@ export default function UserMenu() {
                 icon={<CreditCard className="h-5 w-5" />}
                 onClick={() => close()}
                 right={
-                  <span className="flex items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700">
-                    <Zap className="h-3 w-3 fill-emerald-700" />
-                    PRO
+                  <span
+                    className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${
+                      isProPlan
+                        ? "bg-emerald-100 text-emerald-700"
+                        : "bg-gray-800 text-white"
+                    }`}
+                  >
+                    {isProPlan ? (
+                      <Zap className="h-3 w-3 fill-emerald-700" />
+                    ) : null}
+                    {isProPlan ? "PRO" : "FREE"}
                   </span>
                 }
               >
