@@ -1,0 +1,135 @@
+{
+  "name": "bagui-studio",
+  "displayName": "BagUI Studio",
+  "icon": "media/icon.png",
+  "description": "Browse, preview, and install BagUI components directly in VS Code",
+  "version": "0.1.0",
+  "publisher": "bagui",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:bagui.open",
+    "onCommand:bagui.searchComponent",
+    "onCommand:bagui.refreshRegistry",
+    "onCommand:bagui.installComponent",
+    "onCommand:bagui.openDocumentation",
+    "onCommand:bagui.preview",
+    "onView:bagui.components"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "bagui.open",
+        "title": "BagUI: Open"
+      },
+      {
+        "command": "bagui.searchComponent",
+        "title": "BagUI: Search Component"
+      },
+      {
+        "command": "bagui.refreshRegistry",
+        "title": "BagUI: Refresh Registry"
+      },
+      {
+        "command": "bagui.installComponent",
+        "title": "BagUI: Install Component"
+      },
+      {
+        "command": "bagui.openDocumentation",
+        "title": "BagUI: Open Documentation"
+      },
+      {
+        "command": "bagui.addFavorite",
+        "title": "BagUI: Add to Favorites"
+      },
+      {
+        "command": "bagui.preview",
+        "title": "BagUI: Preview Component"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "bagui",
+          "title": "BagUI",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "bagui": [
+        {
+          "id": "bagui.components",
+          "name": "Components"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "bagui.refreshRegistry",
+          "when": "view == bagui.components",
+          "group": "navigation@1"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "bagui.addFavorite",
+          "when": "view == bagui.components && viewItem == component",
+          "group": "inline@1"
+        }
+      ]
+    },
+    "configuration": [
+      {
+        "title": "BagUI",
+        "properties": {
+          "bagui.autoPreview": {
+            "type": "boolean",
+            "default": true,
+            "description": "Automatically open the preview panel when a component is selected."
+          },
+          "bagui.theme": {
+            "type": "string",
+            "enum": [
+              "system",
+              "light",
+              "dark"
+            ],
+            "default": "system",
+            "description": "Preferred theme for the BagUI preview webview."
+          },
+          "bagui.registryPath": {
+            "type": "string",
+            "default": "",
+            "description": "Optional override for the BagUI registry file path."
+          },
+          "bagui.apiUrl": {
+            "type": "string",
+            "default": "",
+            "description": "Optional API endpoint for future remote registry support."
+          }
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --target=node20",
+    "compile": "npm run build",
+    "watch": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --target=node20 --watch",
+    "lint": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.15",
+    "@types/vscode": "^1.95.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.6.3"
+  }
+}

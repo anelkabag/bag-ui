@@ -1,0 +1,95 @@
+import { DT_SCOPE, PROTOCOL_VIRTUAL } from "../constants.js";
+import { isAbsolute, isInNodeModules, toPosix } from "./path.js";
+export const getPackageNameFromModuleSpecifier = (specifier) => {
+    if (!isStartsLikePackageName(specifier))
+        return;
+    let start = 0;
+    if (specifier.charCodeAt(0) === 64) {
+        const slash = specifier.indexOf('/', 1);
+        if (slash === -1)
+            return specifier;
+        start = slash + 1;
+    }
+    for (let i = start; i < specifier.length; i++) {
+        const ch = specifier.charCodeAt(i);
+        if (ch === 47 || ch === 64)
+            return specifier.slice(0, i);
+    }
+    return specifier;
+};
+const lastPackageNameMatch = /(?<=node_modules\/)(@[^/]+\/[^/]+|[^/]+)/g;
+export const getPackageNameFromFilePath = (value) => {
+    const name = value.startsWith('file://') ? value.slice(7) : value;
+    if (name.includes('node_modules/.bin/'))
+        return extractBinary(name);
+    const match = toPosix(name).match(lastPackageNameMatch);
+    if (match)
+        return match[match.length - 1];
+    return name;
+};
+export const getPackageNameFromSpecifier = (specifier) => isInNodeModules(specifier) ? getPackageNameFromFilePath(specifier) : getPackageNameFromModuleSpecifier(specifier);
+const matchPackageNameStart = /^(@[a-z0-9._]|[a-z0-9])/i;
+export const isStartsLikePackageName = (specifier) => {
+    const ch = specifier.charCodeAt(0);
+    if (ch === 46 || ch === 47 || ch === 35 || ch === 126 || ch === 36)
+        return false;
+    return matchPackageNameStart.test(specifier);
+};
+export const stripVersionFromSpecifier = (specifier) => specifier.replace(/(\S+)@.*/, '$1');
+const stripNodeModulesFromPath = (command) => command.replace(/(?:\.{0,2}\/)*node_modules\//, '');
+export const extractBinary = (command) => stripVersionFromSpecifier(stripNodeModulesFromPath(command)
+    .replace(/^(\.bin\/)/, '')
+    .replace(/\$\(npm bin\)\/(\w+)/, '$1'));
+export const isValidBinary = (str) => !/[*:!()]/.test(str);
+export const isDefinitelyTyped = (packageName) => packageName.startsWith(`${DT_SCOPE}/`);
+export const getDefinitelyTypedFor = (packageName) => {
+    if (isDefinitelyTyped(packageName))
+        return packageName;
+    if (packageName.startsWith('@'))
+        return [DT_SCOPE, packageName.slice(1).replace('/', '__')].join('/');
+    return [DT_SCOPE, packageName].join('/');
+};
+export const getPackageFromDefinitelyTyped = (typedDependency) => {
+    if (typedDependency.includes('__')) {
+        const [scope, packageName] = typedDependency.split('__');
+        return `@${scope}/${packageName}`;
+    }
+    return typedDependency;
+};
+const CHAR_EXCLAMATION = 33;
+const CHAR_DASH = 45;
+const CHAR_SLASH = 47;
+const CHAR_COLON = 58;
+const CHAR_HASH = 35;
+const CHAR_QUESTION = 63;
+export const sanitizeSpecifier = (specifier) => {
+    if (specifier.startsWith('node:') ||
+        isAbsolute(specifier) ||
+        specifier.charCodeAt(0) === CHAR_COLON ||
+        specifier.startsWith(PROTOCOL_VIRTUAL)) {
+        return specifier;
+    }
+    const len = specifier.length;
+    let start = 0;
+    let end = len;
+    let colon = -1;
+    let hasSlash = false;
+    for (let i = 0; i < len; i++) {
+        const ch = specifier.charCodeAt(i);
+        if (i === start && (ch === CHAR_EXCLAMATION || ch === CHAR_DASH)) {
+            start++;
+            continue;
+        }
+        if (ch === CHAR_SLASH && colon === -1) {
+            hasSlash = true;
+        }
+        if (colon === -1 && ch === CHAR_COLON && !hasSlash) {
+            colon = i;
+        }
+        if (ch === CHAR_EXCLAMATION || ch === CHAR_QUESTION || (ch === CHAR_HASH && i > start)) {
+            end = i;
+            break;
+        }
+    }
+    return colon !== -1 && colon < end ? specifier.slice(start, colon) : specifier.slice(start, end);
+};
