@@ -55,9 +55,9 @@ export class RegistryService {
 
   async loadRegistry(): Promise<RegistryData> {
     const configuredPath = vscode.workspace
-      .getConfiguration("bagui")
-      .get<string>("registryPath");
-    const registryPath = resolveRegistryPath(configuredPath);
+        .getConfiguration("bagui")
+        .get<string>("registryPath");
+    const registryPath = resolveRegistryPath(this.context, configuredPath);
 
     if (!fs.existsSync(registryPath)) {
       throw new Error(`Registry file not found at ${registryPath}`);

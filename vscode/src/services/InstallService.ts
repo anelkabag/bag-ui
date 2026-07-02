@@ -10,9 +10,16 @@ export class InstallService {
       );
     }
 
+    const workspaceRoot = workspaceFolders[0]?.uri.fsPath;
+    if (!workspaceRoot) {
+      throw new Error(
+        "Unable to determine the workspace root for installation.",
+      );
+    }
+
     const terminal = vscode.window.createTerminal({
       name: "BagUI Install",
-      cwd: workspaceFolders[0].uri.fsPath,
+      cwd: workspaceRoot,
     });
 
     terminal.show(true);

@@ -2,36 +2,40 @@ import * as path from "node:path";
 import * as fs from "node:fs";
 import * as vscode from "vscode";
 
-export function resolveRegistryPath(configuredPath?: string): string {
+export function resolveRegistryPath(
+    context: vscode.ExtensionContext,
+    configuredPath?: string
+): string {
   if (configuredPath && configuredPath.trim().length > 0) {
-    return configuredPath;
+    const normalizedPath = configuredPath.trim();
+    if (path.isAbsolute(normalizedPath)) {
+      return normalizedPath;
+    }
+
+    const folder = vscode.workspace.workspaceFolders?.[0];
+    const base = folder ? folder.uri.fsPath : process.cwd();
+    return path.resolve(base, normalizedPath);
   }
 
+  // 1. Chercher dans le(s) workspace(s) ouvert(s)
   for (const folder of vscode.workspace.workspaceFolders ?? []) {
-    const workspaceRoot = folder.uri.fsPath;
-    const registryPath = path.join(workspaceRoot, "registry.json");
-    if (fs.existsSync(registryPath)) {
-      return registryPath;
-    }
-
-    const extensionRegistryPath = path.join(
-      workspaceRoot,
-      "vscode",
-      "registry.json",
-    );
-    if (fs.existsSync(extensionRegistryPath)) {
-      return extensionRegistryPath;
+    const candidate = path.join(folder.uri.fsPath, "registry.json");
+    if (fs.existsSync(candidate)) {
+      return candidate;
     }
   }
 
-  const fallbackRoot = path.resolve(__dirname, "..", "..");
-  const defaultPath = path.join(fallbackRoot, "registry.json");
-
-  if (fs.existsSync(defaultPath)) {
-    return defaultPath;
+  // 2. Fallback propre : dossier de l'extension elle-même (fourni par VSCode)
+  const bundled = path.join(context.extensionPath, "registry.json");
+  if (fs.existsSync(bundled)) {
+    return bundled;
   }
 
-  return path.join(fallbackRoot, "vscode", "registry.json");
+  // 3. Rien trouvé : chemin par défaut dans le workspace (ou extensionPath)
+  const fallbackFolder =
+      vscode.workspace.workspaceFolders?.[0]?.uri.fsPath ?? context.extensionPath;
+
+  return path.join(fallbackFolder, "registry.json");
 }
 
 export function toDisplayCategory(category: string): string {

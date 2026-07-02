@@ -367,9 +367,15 @@ var InstallService = class {
         "No workspace is opened. Open a folder before installing a component."
       );
     }
+    const workspaceRoot = workspaceFolders[0]?.uri.fsPath;
+    if (!workspaceRoot) {
+      throw new Error(
+        "Unable to determine the workspace root for installation."
+      );
+    }
     const terminal = vscode7.window.createTerminal({
       name: "BagUI Install",
-      cwd: workspaceFolders[0].uri.fsPath
+      cwd: workspaceRoot
     });
     terminal.show(true);
     terminal.sendText(`npx bagui add ${component.name}`, true);
@@ -390,24 +396,36 @@ var fs = __toESM(require("node:fs"));
 var vscode8 = __toESM(require("vscode"));
 function resolveRegistryPath(configuredPath) {
   if (configuredPath && configuredPath.trim().length > 0) {
-    return configuredPath;
+    const normalizedPath = configuredPath.trim();
+    if (path.isAbsolute(normalizedPath)) {
+      return normalizedPath;
+    }
+    for (const folder of vscode8.workspace.workspaceFolders ?? []) {
+      return path.resolve(folder.uri.fsPath, normalizedPath);
+    }
+    return path.resolve(process.cwd(), normalizedPath);
   }
+  const rootsToCheck = /* @__PURE__ */ new Set();
   for (const folder of vscode8.workspace.workspaceFolders ?? []) {
-    const workspaceRoot = folder.uri.fsPath;
-    const registryPath = path.join(workspaceRoot, "registry.json");
-    if (fs.existsSync(registryPath)) {
-      return registryPath;
-    }
-    const extensionRegistryPath = path.join(
-      workspaceRoot,
-      "vscode",
-      "registry.json"
-    );
-    if (fs.existsSync(extensionRegistryPath)) {
-      return extensionRegistryPath;
+    rootsToCheck.add(folder.uri.fsPath);
+  }
+  rootsToCheck.add(process.cwd());
+  rootsToCheck.add(path.resolve(__dirname, ".."));
+  rootsToCheck.add(path.resolve(__dirname, "..", ".."));
+  for (const root of rootsToCheck) {
+    const candidates = [
+      path.join(root, "registry.json"),
+      path.join(root, "vscode", "registry.json"),
+      path.join(path.dirname(root), "registry.json"),
+      path.join(path.dirname(root), "vscode", "registry.json")
+    ];
+    for (const candidate of candidates) {
+      if (fs.existsSync(candidate)) {
+        return candidate;
+      }
     }
   }
-  const fallbackRoot = path.resolve(__dirname, "..", "..");
+  const fallbackRoot = path.resolve(__dirname, "..");
   const defaultPath = path.join(fallbackRoot, "registry.json");
   if (fs.existsSync(defaultPath)) {
     return defaultPath;
