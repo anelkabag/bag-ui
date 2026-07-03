@@ -10,16 +10,17 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = request.cookies.get("sb-access-token");
-  const refreshToken = request.cookies.get("sb-refresh-token");
-  const isAuthenticated = Boolean(token && refreshToken);
+  // Vérifier les cookies de session Supabase
+  const token = request.cookies.get("sb-access-token")?.value;
+  const refreshToken = request.cookies.get("sb-refresh-token")?.value;
 
-  if (!isAuthenticated) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("redirect", requestedPath);
-    return NextResponse.redirect(loginUrl);
+  // Si les deux tokens existent, continuer
+  if (token && refreshToken) {
+    return NextResponse.next();
   }
 
+  // Sinon, laisser la page serveur gérer la redirection
+  // car elle peut vérifier la session via getSession()
   return NextResponse.next();
 }
 

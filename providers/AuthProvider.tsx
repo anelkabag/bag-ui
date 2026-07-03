@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const fetchProfile = async () => {
     try {
-      const response = await fetch("/api/profile", { cache: "no-store" });
+      const response = await fetch("/api/account", { cache: "no-store" });
       if (!response.ok) {
         setProfile(null);
         return;
