@@ -110,7 +110,11 @@ export async function PUT(request: NextRequest) {
     // Mettre à jour le profil
     const { data, error } = await supabase
       .from("profiles")
-      .update({
+      .update<{
+        username: string;
+        avatar_url: string | null;
+        updated_at: string;
+      }>({
         username: username.trim(),
         avatar_url: avatar_url?.trim() || null,
         updated_at: new Date().toISOString(),

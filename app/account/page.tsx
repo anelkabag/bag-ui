@@ -44,11 +44,9 @@ export default async function AccountPage() {
     id: user.id,
     email: user.email ?? "",
     username,
-    avatar_url: profileData?.avatar_url ?? null,
-    created_at:
-      profileData?.created_at ?? user.created_at ?? new Date().toISOString(),
-    updated_at:
-      profileData?.updated_at ?? user.updated_at ?? new Date().toISOString(),
+    avatar_url: null,
+    created_at: user.created_at ?? new Date().toISOString(),
+    updated_at: user.updated_at ?? new Date().toISOString(),
   };
 
   return (
