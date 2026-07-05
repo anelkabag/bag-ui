@@ -3,7 +3,45 @@ import assert from "node:assert/strict";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { ensureProjectIdConfig } from "./analytics.ts";
+import {
+  ensureProjectIdConfig,
+  getOrCreateAnalyticsProjectId,
+} from "./analytics.ts";
+
+test("getOrCreateAnalyticsProjectId reuses a stored project id", () => {
+  const store = new Map<string, string>();
+  const storage = {
+    getItem(key: string) {
+      return store.has(key) ? store.get(key)! : null;
+    },
+    setItem(key: string, value: string) {
+      store.set(key, value);
+    },
+    removeItem(key: string) {
+      store.delete(key);
+    },
+    clear() {
+      store.clear();
+    },
+    key(index: number) {
+      return Array.from(store.keys())[index] ?? null;
+    },
+    get length() {
+      return store.size;
+    },
+  };
+
+  Object.defineProperty(globalThis, "localStorage", {
+    configurable: true,
+    value: storage,
+  });
+
+  const first = getOrCreateAnalyticsProjectId();
+  const second = getOrCreateAnalyticsProjectId();
+
+  assert.equal(second, first);
+  assert.equal(storage.getItem("bagui.analytics.projectId"), first);
+});
 
 test("ensureProjectIdConfig creates a UUID v4 once and reuses it", async () => {
   const tempDir = await mkdtemp(path.join(tmpdir(), "bagui-analytics-"));

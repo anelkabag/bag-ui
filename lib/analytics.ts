@@ -1,7 +1,3 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import path from "node:path";
-import { randomUUID } from "node:crypto";
-
 export interface AnalyticsDownloadPayload {
   component: string;
   projectId: string;
@@ -28,9 +24,66 @@ export interface ProjectConfig {
   projectId: string;
 }
 
+const ANALYTICS_PROJECT_ID_KEY = "bagui.analytics.projectId";
+
+function getRandomProjectId(): string {
+  if (typeof globalThis.crypto?.randomUUID === "function") {
+    return globalThis.crypto.randomUUID();
+  }
+
+  return `bagui-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function getBrowserStorage(): Storage | null {
+  const storageCandidate =
+    typeof window !== "undefined"
+      ? window.localStorage
+      : typeof globalThis !== "undefined"
+        ? (globalThis as typeof globalThis & { localStorage?: Storage })
+            .localStorage
+        : undefined;
+
+  if (!storageCandidate) {
+    return null;
+  }
+
+  try {
+    return storageCandidate;
+  } catch {
+    return null;
+  }
+}
+
+export function getOrCreateAnalyticsProjectId(
+  storage?: Storage | null,
+): string {
+  const targetStorage = storage ?? getBrowserStorage();
+
+  if (targetStorage) {
+    const existing = targetStorage.getItem(ANALYTICS_PROJECT_ID_KEY);
+    if (existing) {
+      return existing;
+    }
+
+    const generated = getRandomProjectId();
+    targetStorage.setItem(ANALYTICS_PROJECT_ID_KEY, generated);
+    return generated;
+  }
+
+  return getRandomProjectId();
+}
+
 export async function ensureProjectIdConfig(
   projectRoot = process.cwd(),
 ): Promise<string> {
+  if (typeof window !== "undefined") {
+    return getOrCreateAnalyticsProjectId();
+  }
+
+  const { mkdir, readFile, writeFile } = await import("node:fs/promises");
+  const path = (await import("node:path")).default;
+  const { randomUUID } = await import("node:crypto");
+
   const configDir = path.join(projectRoot, ".bagui");
   const configPath = path.join(configDir, "config.json");
 
@@ -81,4 +134,19 @@ export async function fireAndForgetAnalytics(
   } catch {
     // Silently ignore analytics failures.
   }
+}
+
+export async function trackComponentDownload(
+  component: string,
+  options?: Partial<AnalyticsDownloadPayload>,
+): Promise<void> {
+  const projectId = options?.projectId ?? getOrCreateAnalyticsProjectId();
+
+  await fireAndForgetAnalytics("/api/analytics/download", {
+    component,
+    projectId,
+    cliVersion: options?.cliVersion,
+    os: options?.os,
+    userId: options?.userId ?? null,
+  });
 }

@@ -25,6 +25,7 @@ import {
   IconCheck,
 } from "@tabler/icons-react";
 import { useAuth } from "@/hooks/useAuth";
+import { trackComponentDownload } from "@/lib/analytics";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -382,6 +383,8 @@ function VariantToolbarHeader({
     if (installState.action !== "install") {
       return;
     }
+
+    void trackComponentDownload(variantId);
     copy(text);
   };
 
