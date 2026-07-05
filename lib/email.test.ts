@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildVerificationEmail } from "./email";
+import { buildVerificationEmail } from "./email.ts";
 
 test("buildVerificationEmail includes the recipient and confirmation link", () => {
   const email = buildVerificationEmail({
