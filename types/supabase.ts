@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json }
   | Json[];
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       profiles: {
@@ -40,6 +40,34 @@ export interface Database {
           subscription_plan?: string | null;
         };
       };
+      component_downloads: {
+        Row: {
+          id: string;
+          component: string;
+          project_id: string;
+          user_id: string | null;
+          cli_version: string | null;
+          os: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          component: string;
+          project_id: string;
+          user_id?: string | null;
+          cli_version?: string | null;
+          os?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          component?: string;
+          project_id?: string;
+          user_id?: string | null;
+          cli_version?: string | null;
+          os?: string | null;
+          created_at?: string;
+        };
+      };
     };
     Functions: {
       [key: string]: never;
@@ -48,4 +76,4 @@ export interface Database {
       [key: string]: never;
     };
   };
-}
+};

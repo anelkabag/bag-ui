@@ -122,7 +122,7 @@ export default function UserMenu() {
             {/* Primary actions */}
             <div className="flex flex-col gap-0.5 px-2.5 pb-2 text-sm text-gray-700">
               <MenuItem
-                href="/profile"
+                href="/account"
                 icon={<BadgeCheck className="h-5 w-5" />}
                 active
                 onClick={() => close()}

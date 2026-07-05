@@ -7,7 +7,7 @@ import {
   getInstallAccessState,
   hasProAccess,
   isLoggedIn,
-} from "./access";
+} from "./access.ts";
 
 test("guests cannot install pro components", () => {
   const component = { access: { tier: "pro" as const } };
