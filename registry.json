@@ -41,10 +41,7 @@
       "type": "registry:block",
       "title": "Hero Exemple 1",
       "description": "Hero section with navbar and animated event dashboard preview.",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/hero/hero1.tsx",
@@ -61,10 +58,7 @@
       "type": "registry:block",
       "title": "Navbar Exemple 1",
       "description": "Modern responsive navigation bar with animated interactions, customizable links, and mobile menu support.",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/navbar/navbar1.tsx",
@@ -77,14 +71,28 @@
       }
     },
     {
+      "name": "navbar2",
+      "type": "registry:block",
+      "title": "Navbar Exemple 2",
+      "description": "Modern responsive navigation bar with animated interactions, customizable links, and mobile menu support.",
+      "dependencies": ["framer-motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/navbar/navbar2.tsx",
+          "type": "registry:block",
+          "target": "components/blocks/navbar-ex-2.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
       "name": "faq1",
       "type": "registry:block",
       "title": "FAQ Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/faq/faq1.tsx",
@@ -101,10 +109,7 @@
       "type": "registry:block",
       "title": "CTA Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Cta/cta1.tsx",
@@ -121,10 +126,7 @@
       "type": "registry:block",
       "title": "CTA Exemple 2",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Cta/cta2.tsx",
@@ -141,10 +143,7 @@
       "type": "registry:block",
       "title": "Testimonial Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Testimonial/testimonial1.tsx",
@@ -161,10 +160,7 @@
       "type": "registry:block",
       "title": "Contact Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Contact/contact1.tsx",
@@ -181,10 +177,7 @@
       "type": "registry:block",
       "title": "Feature Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Feature/feature1.tsx",
@@ -201,10 +194,7 @@
       "type": "registry:block",
       "title": "Feature Exemple 2",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Feature/feature2.tsx",
@@ -221,10 +211,7 @@
       "type": "registry:block",
       "title": "Feature Exemple 3",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Feature/feature3.tsx",
@@ -241,10 +228,7 @@
       "type": "registry:block",
       "title": "Pricing Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Pricing/pricing1.tsx",
@@ -261,10 +245,7 @@
       "type": "registry:block",
       "title": "Pricing Exemple 2",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Pricing/pricing2.tsx",
@@ -281,10 +262,7 @@
       "type": "registry:block",
       "title": "Pricing Exemple 3",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Pricing/pricing3.tsx",
@@ -301,10 +279,7 @@
       "type": "registry:block",
       "title": "Login Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/SignUp/login1.tsx",
@@ -321,10 +296,7 @@
       "type": "registry:block",
       "title": "Sidebar Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Sidebar/sidebar1.tsx",
@@ -341,10 +313,7 @@
       "type": "registry:block",
       "title": "Dashboard Chat App Exemple 1",
       "description": "",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/Chat-App1.tsx",
@@ -361,10 +330,7 @@
       "type": "registry:block",
       "title": "Footer Exemple 1",
       "description": "",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Footer/footer1.tsx",
@@ -381,10 +347,7 @@
       "type": "registry:block",
       "title": "Footer Exemple 2",
       "description": "",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Footer/footer2.tsx",
@@ -401,10 +364,7 @@
       "type": "registry:block",
       "title": "Template Open Agents.",
       "description": "",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react"
-      ],
+      "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/templates/template1.tsx",
