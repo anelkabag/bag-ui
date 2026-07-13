@@ -50,7 +50,7 @@ export default function CTASection() {
                             className="mb-5 w-14 h-14 rounded flex items-center justify-center"
                         >
                             <img
-                                src="https://bagui.vercel.app/faviconwhite.png"
+                                src="/faviconwhite.png"
                                 alt="BagUI Logo"
                                 width={50}
                                 height={50}
