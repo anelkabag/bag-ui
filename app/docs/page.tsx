@@ -10,6 +10,7 @@ import Navbar from "@/components/navbar";
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Tab = "pnpm" | "npm" | "bun" | "yarn";
 type Section = { id: string; label: string };
+type DocsPage = "installation" | "contributing";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const NAV_LINKS = [
@@ -19,7 +20,8 @@ const NAV_LINKS = [
     { label: "Docs", href: "/docs" },
 ] as const;
 
-const SECTIONS: Section[] = [
+// "On this page" pour la page Installation — ne contient PAS Contributing.
+const INSTALLATION_SECTIONS: Section[] = [
     { id: "introduction",       label: "Introduction" },
     { id: "requirements",       label: "Requirements" },
     { id: "register-namespace", label: "Register the namespace" },
@@ -30,26 +32,28 @@ const SECTIONS: Section[] = [
     { id: "support",            label: "Support" },
 ];
 
+// "On this page" pour la page Contribution — totalement séparée de l'installation.
+const CONTRIBUTING_SECTIONS: Section[] = [
+    { id: "contributing-overview", label: "Overview" },
+    { id: "clone-repo",            label: "Clone the repository" },
+    { id: "create-branch",         label: "Create a branch" },
+    { id: "add-component",         label: "Add your component" },
+    { id: "register-json",         label: "Register in registry.json" },
+    { id: "verify-build",          label: "Verify & build" },
+];
+
 // ─── Sidebar nav ─────────────────────────────────────────────────────────────
-// Chaque groupe = une section "Getting Started", "Components", etc.
-// Chaque page = une entrée cliquable dans la sidebar (comme "Installations" dans le screenshot).
-// Les sous-sections (ancres) restent dans le TOC à droite.
-const SIDEBAR_NAV = [
+// Chaque groupe = une section "Getting Started", etc.
+// Chaque page = une entrée cliquable dans la sidebar qui bascule la vue (installation / contributing)
+// et affiche son propre "On this page" à droite.
+const SIDEBAR_NAV: { group: string; pages: { label: string; page: DocsPage }[] }[] = [
     {
         group: "Getting Started",
         pages: [
-            { label: "Installations", href: "/docs" },
-            // Ajouter d'autres pages ici quand elles existent :
-            // { label: "Configuration", href: "/docs/configuration" },
+            { label: "Installations", page: "installation" },
+            { label: "Contribution",  page: "contributing" },
         ],
     },
-    // Ajouter d'autres groupes ici :
-    // {
-    //     group: "Components",
-    //     pages: [
-    //         { label: "Buttons", href: "/docs/components/buttons" },
-    //     ],
-    // },
 ];
 
 // ─── Code snippets ────────────────────────────────────────────────────────────
@@ -76,6 +80,41 @@ const REGISTRY_JSON = `{
     "@bagui": "https://bagui.vercel.app/r/{name}.json"
   }
 }`;
+
+// ─── Contributing snippets ─────────────────────────────────────────────────────
+const CONTRIB_CLONE_CMD = `git clone https://github.com/anelkabag/bagui.git
+cd bagui`;
+
+const CONTRIB_BRANCH_CMD = "git checkout -b feat/my-new-component";
+
+const CONTRIB_COMPONENT_CODE = `export default function Navbar1() {
+  return (
+    <nav className="flex items-center justify-between p-4">
+      <div className="font-semibold">BagUi</div>
+      <div className="flex gap-3">Home</div>
+    </nav>
+  );
+}`;
+
+const CONTRIB_REGISTRY_JSON = `{
+  "name": "navbar1",
+  "type": "registry:block",
+  "title": "Navbar Example 1",
+  "description": "Modern and responsive navigation.",
+  "files": [
+    {
+      "path": "registry/default/blocks/navbar/navbar1.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/navbar1.tsx"
+    }
+  ],
+  "access": {
+    "tier": "free"
+  }
+}`;
+
+const CONTRIB_BUILD_CMD = `npm run build
+npm run registry:build`;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // NAVBAR — Pas d'animation, juste statique
@@ -238,7 +277,13 @@ function Prose({ children }: { children: React.ReactNode }) {
 }
 
 // ─── Left sidebar ─────────────────────────────────────────────────────────────
-function LeftSidebar({ activePage }: { activePage: string }) {
+function LeftSidebar({
+                         activePage,
+                         onSelectPage,
+                     }: {
+    activePage: DocsPage;
+    onSelectPage: (page: DocsPage) => void;
+}) {
     return (
         <aside className="hidden xl:block sticky top-20 self-start">
             {SIDEBAR_NAV.map((group) => (
@@ -248,17 +293,17 @@ function LeftSidebar({ activePage }: { activePage: string }) {
                     </p>
                     <ul className="space-y-0.5">
                         {group.pages.map((page) => (
-                            <li key={page.href}>
-                                <Link
-                                    href={page.href}
-                                    className={`block text-sm rounded-lg px-3 py-1.5 transition-colors ${
-                                        activePage === page.href
+                            <li key={page.page}>
+                                <button
+                                    onClick={() => onSelectPage(page.page)}
+                                    className={`w-full text-left block text-sm rounded-lg px-3 py-1.5 transition-colors cursor-pointer ${
+                                        activePage === page.page
                                             ? "text-black bg-gray-100 font-medium"
                                             : "text-gray-500 hover:text-gray-800 hover:bg-gray-50"
                                     }`}
                                 >
                                     {page.label}
-                                </Link>
+                                </button>
                             </li>
                         ))}
                     </ul>
@@ -269,14 +314,14 @@ function LeftSidebar({ activePage }: { activePage: string }) {
 }
 
 // ─── Right TOC ────────────────────────────────────────────────────────────────
-function TOC({ active }: { active: string }) {
+function TOC({ sections, active }: { sections: Section[]; active: string }) {
     return (
         <nav className="sticky top-20 hidden xl:block self-start">
             <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-3">
                 On this page
             </p>
             <ul className="space-y-1.5">
-                {SECTIONS.map((s) => (
+                {sections.map((s) => (
                     <li key={s.id}>
                         <a
                             href={`#${s.id}`}
@@ -297,8 +342,19 @@ function TOC({ active }: { active: string }) {
 // DOCS PAGE — Scroll natif pur, zéro overhead
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function DocsPage() {
+    const [activePage, setActivePage] = useState<DocsPage>("installation");
     const [activeSection, setActiveSection] = useState("introduction");
     const tabs: Tab[] = ["pnpm", "npm", "bun", "yarn"];
+
+    const sections = activePage === "installation" ? INSTALLATION_SECTIONS : CONTRIBUTING_SECTIONS;
+
+    // Changer de page réinitialise la section active affichée dans le TOC
+    // et remonte en haut du contenu.
+    const handleSelectPage = (page: DocsPage) => {
+        setActivePage(page);
+        setActiveSection(page === "installation" ? "introduction" : "contributing-overview");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
 
     // ─── Mise à jour manuelle du TOC au scroll avec throttle ───────────────
     useEffect(() => {
@@ -308,8 +364,8 @@ export default function DocsPage() {
             if (now - lastUpdate < 100) return; // Throttle à 100ms
             lastUpdate = now;
 
-            // Trouver la section en viewport
-            for (const section of SECTIONS) {
+            // Trouver la section en viewport, uniquement parmi celles de la page active
+            for (const section of sections) {
                 const el = document.getElementById(section.id);
                 if (!el) continue;
 
@@ -322,7 +378,7 @@ export default function DocsPage() {
 
         window.addEventListener("scroll", updateActive, { passive: true });
         return () => window.removeEventListener("scroll", updateActive);
-    }, []);
+    }, [sections]);
 
     return (
         <div className="min-h-screen bg-white text-gray-900">
@@ -335,169 +391,292 @@ export default function DocsPage() {
                     <Link href="/" className="hover:text-black transition-colors">Home</Link>
                     <span>/</span>
                     <span className="text-gray-600">Documentation</span>
+                    <span>/</span>
+                    <span className="text-gray-600">{activePage === "installation" ? "Installations" : "Contribution"}</span>
                 </div>
 
                 {/* Hero */}
                 <div className="mb-14 max-w-2xl">
-                    <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-black mb-3 leading-tight">
-                        Ready-made blocks.{" "}
-                        <span className="text-gray-400">Zero wasted time.</span>
-                    </h1>
-                    <p className="text-gray-500 text-base leading-relaxed">
-                        Register Bag/UI once and pull any block directly into your project with a
-                        single CLI command.
-                    </p>
+                    {activePage === "installation" ? (
+                        <>
+                            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-black mb-3 leading-tight">
+                                Ready-made blocks.{" "}
+                                <span className="text-gray-400">Zero wasted time.</span>
+                            </h1>
+                            <p className="text-gray-500 text-base leading-relaxed">
+                                Register Bag/UI once and pull any block directly into your project with a
+                                single CLI command.
+                            </p>
+                        </>
+                    ) : (
+                        <>
+                            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-black mb-3 leading-tight">
+                                Build with us.{" "}
+                                <span className="text-gray-400">Ship a block.</span>
+                            </h1>
+                            <p className="text-gray-500 text-base leading-relaxed">
+                                Bag/UI is open source. Here's everything you need to add a component
+                                and get it merged.
+                            </p>
+                        </>
+                    )}
                 </div>
 
                 {/* 3-col layout */}
                 <div className="grid grid-cols-1 xl:grid-cols-[200px_1fr_180px] gap-12">
                     {/* Left sidebar */}
-                    <LeftSidebar activePage="/docs" />
+                    <LeftSidebar activePage={activePage} onSelectPage={handleSelectPage} />
 
                     {/* Main content */}
                     <main className="min-w-0">
-                        {/* Introduction */}
-                        <section id="introduction">
-                            <SectionHeading id="introduction">Introduction</SectionHeading>
-                            <Prose>
-                                Bag/UI is a growing library of carefully crafted React blocks built on
-                                shadcn/ui and Tailwind CSS. Interactive sections may include Framer Motion
-                                or GSAP animations, while every block remains fully customizable and
-                                installable through the Bag/UI registry with a single CLI command.
-                            </Prose>
+                        {activePage === "installation" && (
+                            <>
+                                {/* Introduction */}
+                                <section id="introduction">
+                                    <SectionHeading id="introduction">Introduction</SectionHeading>
+                                    <Prose>
+                                        Bag/UI is a growing library of carefully crafted React blocks built on
+                                        shadcn/ui and Tailwind CSS. Interactive sections may include Framer Motion
+                                        or GSAP animations, while every block remains fully customizable and
+                                        installable through the Bag/UI registry with a single CLI command.
+                                    </Prose>
+                                </section>
 
-                        </section>
+                                {/* Requirements */}
+                                <section id="requirements">
+                                    <SectionHeading id="requirements">Requirements</SectionHeading>
+                                    <Prose>
+                                        Your project should already run React 19, Tailwind CSS v4 and shadcn/ui.
+                                        If shadcn isn't initialized yet, run{" "}
+                                        <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">init</code>{" "}
+                                        from your project root and follow the prompts.
+                                    </Prose>
+                                    <CodeBlock cmds={INIT_CMDS} tabs={tabs} />
+                                </section>
 
-                        {/* Requirements */}
-                        <section id="requirements">
-                            <SectionHeading id="requirements">Requirements</SectionHeading>
-                            <Prose>
-                                Your project should already run React 19, Tailwind CSS v4 and shadcn/ui.
-                                If shadcn isn't initialized yet, run{" "}
-                                <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">init</code>{" "}
-                                from your project root and follow the prompts.
-                            </Prose>
-                            <CodeBlock cmds={INIT_CMDS} tabs={tabs} />
-                        </section>
+                                {/* Register namespace */}
+                                <section id="register-namespace">
+                                    <SectionHeading id="register-namespace">Register the namespace</SectionHeading>
+                                    <Prose>
+                                        Add the Bag/UI registry to your project's{" "}
+                                        <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">components.json</code>{" "}
+                                        so the shadcn CLI knows where to fetch the blocks from.
+                                        You only do this once per project — no API key needed for free blocks.
+                                    </Prose>
+                                    <CodeBlock mono content={REGISTRY_JSON} />
+                                </section>
 
-                        {/* Register namespace */}
-                        <section id="register-namespace">
-                            <SectionHeading id="register-namespace">Register the namespace</SectionHeading>
-                            <Prose>
-                                Add the Bag/UI registry to your project's{" "}
-                                <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">components.json</code>{" "}
-                                so the shadcn CLI knows where to fetch the blocks from.
-                                You only do this once per project — no API key needed for free blocks.
-                            </Prose>
-                            <CodeBlock mono content={REGISTRY_JSON} />
-                        </section>
+                                {/* Install a block */}
+                                <section id="install-a-block">
+                                    <SectionHeading id="install-a-block">Install a free block</SectionHeading>
+                                    <Prose>
+                                        Once the registry is wired, install any free block by its id. The CLI
+                                        fetches the source, pulls the missing shadcn primitives and writes the
+                                        file under{" "}
+                                        <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">components/blocks/</code>.
+                                    </Prose>
+                                    <CodeBlock cmds={INSTALL_CMDS} tabs={tabs} />
+                                    <ol className="mt-6 space-y-3">
+                                        {[
+                                            "Pick a block in /blocks and copy its id (e.g. hero-01).",
+                                            "Run the install command above with your package manager of choice.",
+                                            "Import the default export from components/blocks/<id>.tsx and render it.",
+                                            "Replace the placeholder copy, links and brand colors.",
+                                        ].map((step, i) => (
+                                            <li key={i} className="flex items-start gap-3">
+                              <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border border-gray-200 bg-gray-50 flex items-center justify-center text-[10px] font-mono text-gray-400">
+                                {i + 1}
+                              </span>
+                                                <span className="text-gray-500 text-sm leading-6">{step}</span>
+                                            </li>
+                                        ))}
+                                    </ol>
+                                </section>
 
-                        {/* Install a block */}
-                        <section id="install-a-block">
-                            <SectionHeading id="install-a-block">Install a free block</SectionHeading>
-                            <Prose>
-                                Once the registry is wired, install any free block by its id. The CLI
-                                fetches the source, pulls the missing shadcn primitives and writes the
-                                file under{" "}
-                                <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">components/blocks/</code>.
-                            </Prose>
-                            <CodeBlock cmds={INSTALL_CMDS} tabs={tabs} />
-                            <ol className="mt-6 space-y-3">
-                                {[
-                                    "Pick a block in /blocks and copy its id (e.g. hero-01).",
-                                    "Run the install command above with your package manager of choice.",
-                                    "Import the default export from components/blocks/<id>.tsx and render it.",
-                                    "Replace the placeholder copy, links and brand colors.",
-                                ].map((step, i) => (
-                                    <li key={i} className="flex items-start gap-3">
-                      <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border border-gray-200 bg-gray-50 flex items-center justify-center text-[10px] font-mono text-gray-400">
-                        {i + 1}
-                      </span>
-                                        <span className="text-gray-500 text-sm leading-6">{step}</span>
-                                    </li>
-                                ))}
-                            </ol>
-                        </section>
+                                {/* Customization */}
+                                <section id="customization">
+                                    <SectionHeading id="customization">Customization</SectionHeading>
+                                    <Prose>
+                                        Blocks ship in plain JSX with utility classes only. Change copy, swap icons
+                                        from{" "}
+                                        <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">lucide-react</code>,
+                                        restyle with your own Tailwind tokens or refactor the markup — there is
+                                        no abstraction in the way.
+                                    </Prose>
+                                    <p className="text-gray-500 text-[0.925rem] leading-7 mt-3">
+                                        If you replace lucide-react with another icon library, search and replace
+                                        the imports. The semantics are kept generic so other libraries plug in easily.
+                                    </p>
+                                </section>
 
-                        {/* Customization */}
-                        <section id="customization">
-                            <SectionHeading id="customization">Customization</SectionHeading>
-                            <Prose>
-                                Blocks ship in plain JSX with utility classes only. Change copy, swap icons
-                                from{" "}
-                                <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">lucide-react</code>,
-                                restyle with your own Tailwind tokens or refactor the markup — there is
-                                no abstraction in the way.
-                            </Prose>
-                            <p className="text-gray-500 text-[0.925rem] leading-7 mt-3">
-                                If you replace lucide-react with another icon library, search and replace
-                                the imports. The semantics are kept generic so other libraries plug in easily.
-                            </p>
-                        </section>
+                                {/* Dark mode */}
+                                <section id="dark-mode">
+                                    <SectionHeading id="dark-mode">Dark mode</SectionHeading>
+                                    <Prose>
+                                        Every block reads the standard shadcn CSS variables (
+                                        <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">--background</code>,{" "}
+                                        <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">--foreground</code>,{" "}
+                                        <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">--muted</code>
+                                        , …). As long as your project toggles the{" "}
+                                        <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">.dark</code>{" "}
+                                        class on the{" "}
+                                        <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">&lt;html&gt;</code>{" "}
+                                        element, the blocks adapt automatically.
+                                    </Prose>
+                                </section>
 
-                        {/* Dark mode */}
-                        <section id="dark-mode">
-                            <SectionHeading id="dark-mode">Dark mode</SectionHeading>
-                            <Prose>
-                                Every block reads the standard shadcn CSS variables (
-                                <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">--background</code>,{" "}
-                                <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">--foreground</code>,{" "}
-                                <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">--muted</code>
-                                , …). As long as your project toggles the{" "}
-                                <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">.dark</code>{" "}
-                                class on the{" "}
-                                <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">&lt;html&gt;</code>{" "}
-                                element, the blocks adapt automatically.
-                            </Prose>
-                        </section>
+                                {/* Updates */}
+                                <section id="updates">
+                                    <SectionHeading id="updates">Updates</SectionHeading>
+                                    <Prose>
+                                        When a block gets a fix or a refresh, the registry endpoint serves the new
+                                        source at the same URL. Re-run the install command to pull the latest
+                                        version, or watch the changelog for high-level summaries.
+                                    </Prose>
+                                    <CodeBlock cmds={UPDATE_CMDS} tabs={tabs} />
+                                </section>
 
-                        {/* Updates */}
-                        <section id="updates">
-                            <SectionHeading id="updates">Updates</SectionHeading>
-                            <Prose>
-                                When a block gets a fix or a refresh, the registry endpoint serves the new
-                                source at the same URL. Re-run the install command to pull the latest
-                                version, or watch the changelog for high-level summaries.
-                            </Prose>
-                            <CodeBlock cmds={UPDATE_CMDS} tabs={tabs} />
-                        </section>
+                                {/* Support */}
+                                <section id="support">
+                                    <SectionHeading id="support">Support</SectionHeading>
+                                    <Prose>
+                                        Stuck on something? Email{" "}
+                                        <a href="mailto:anelka.bag@gmail.com" className="text-black underline underline-offset-2 hover:opacity-70 transition-opacity">
+                                            anelka.bag@gmail.com
+                                        </a>{" "}
+                                        — Pro accounts get priority replies, free users still get an answer when time allows.
+                                    </Prose>
+                                    <div className="mt-6 rounded-xl border border-gray-100 bg-gray-50 p-6">
+                                        <h3 className="text-gray-900 text-sm font-semibold mb-2">Still stuck?</h3>
+                                        <p className="text-gray-500 text-sm leading-relaxed">
+                                            Drop us an email at{" "}
+                                            <a href="mailto:anelka.bag@gmail.com" className="text-black underline underline-offset-2 hover:opacity-70 transition-opacity">
+                                                anelka.bag@gmail.com
+                                            </a>
+                                            . Pro accounts get priority replies.
+                                        </p>
+                                    </div>
+                                </section>
 
-                        {/* Support */}
-                        <section id="support">
-                            <SectionHeading id="support">Support</SectionHeading>
-                            <Prose>
-                                Stuck on something? Email{" "}
-                                <a href="mailto:anelka.bag@gmail.com" className="text-black underline underline-offset-2 hover:opacity-70 transition-opacity">
-                                    anelka.bag@gmail.com
-                                </a>{" "}
-                                — Pro accounts get priority replies, free users still get an answer when time allows.
-                            </Prose>
-                            <div className="mt-6 rounded-xl border border-gray-100 bg-gray-50 p-6">
-                                <h3 className="text-gray-900 text-sm font-semibold mb-2">Still stuck?</h3>
-                                <p className="text-gray-500 text-sm leading-relaxed">
-                                    Drop us an email at{" "}
-                                    <a href="mailto:anelka.bag@gmail.com" className="text-black underline underline-offset-2 hover:opacity-70 transition-opacity">
-                                        anelka.bag@gmail.com
-                                    </a>
-                                    . Pro accounts get priority replies.
-                                </p>
-                            </div>
-                        </section>
+                                {/* Prev / Next */}
+                                <div className="mt-16 pt-8 border-t border-gray-100 flex justify-end">
+                                    <button
+                                        onClick={() => handleSelectPage("contributing")}
+                                        className="group flex items-center gap-2 text-sm text-gray-400 hover:text-black transition-colors cursor-pointer"
+                                    >
+                                        Contribution guide
+                                        <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+                                    </button>
+                                </div>
+                            </>
+                        )}
 
-                        {/* Prev / Next */}
-                        <div className="mt-16 pt-8 border-t border-gray-100 flex justify-end">
-                            <Link
-                                href="/blocks"
-                                className="group flex items-center gap-2 text-sm text-gray-400 hover:text-black transition-colors"
-                            >
-                                Browse blocks
-                                <span className="group-hover:translate-x-0.5 transition-transform">→</span>
-                            </Link>
-                        </div>
+                        {activePage === "contributing" && (
+                            <>
+                                {/* Overview */}
+                                <section id="contributing-overview">
+                                    <SectionHeading id="contributing-overview">Overview</SectionHeading>
+                                    <Prose>
+                                        Bag/UI is open source, and contributions are welcome — new blocks, bug
+                                        fixes, or documentation improvements. Clone the repo, install dependencies,
+                                        then create a branch and follow the steps below.
+                                    </Prose>
+                                </section>
+
+                                {/* Clone the repository */}
+                                <section id="clone-repo">
+                                    <SectionHeading id="clone-repo">Clone the repository</SectionHeading>
+                                    <Prose>
+                                        Start by cloning the repo locally and installing dependencies.
+                                    </Prose>
+                                    <CodeBlock mono content={CONTRIB_CLONE_CMD} />
+                                </section>
+
+                                {/* Create a branch */}
+                                <section id="create-branch">
+                                    <SectionHeading id="create-branch">Create a branch</SectionHeading>
+                                    <Prose>
+                                        Work off a dedicated branch rather than committing straight to{" "}
+                                        <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">main</code>.
+                                    </Prose>
+                                    <CodeBlock mono content={CONTRIB_BRANCH_CMD} />
+                                </section>
+
+                                {/* Add your component */}
+                                <section id="add-component">
+                                    <SectionHeading id="add-component">Add your component</SectionHeading>
+                                    <Prose>
+                                        Components live under{" "}
+                                        <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">registry/default/blocks</code>{" "}
+                                        or{" "}
+                                        <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">registry/default/ui</code>.
+                                        If the category doesn't exist yet, create a new folder for it.
+                                    </Prose>
+                                    <CodeBlock mono content={CONTRIB_COMPONENT_CODE} />
+                                </section>
+
+                                {/* Register in registry.json */}
+                                <section id="register-json">
+                                    <SectionHeading id="register-json">Register in registry.json</SectionHeading>
+                                    <Prose>
+                                        Add an entry for your component in the{" "}
+                                        <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">items</code>{" "}
+                                        section of{" "}
+                                        <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">registry.json</code>.
+                                    </Prose>
+                                    <CodeBlock mono content={CONTRIB_REGISTRY_JSON} />
+                                </section>
+
+                                {/* Verify & build */}
+                                <section id="verify-build">
+                                    <SectionHeading id="verify-build">Verify & build</SectionHeading>
+                                    <Prose>
+                                        Make sure everything compiles and the registry rebuilds cleanly before
+                                        opening a pull request.
+                                    </Prose>
+                                    <CodeBlock mono content={CONTRIB_BUILD_CMD} />
+
+                                    <ol className="mt-6 space-y-3">
+                                        {[
+                                            "Fork the repo and create a branch for your component.",
+                                            "Add the component file under the correct registry folder.",
+                                            "Register it in registry.json with a unique name and correct paths.",
+                                            "Run npm run build and npm run registry:build to verify everything passes.",
+                                            "Open a pull request with the component name, what it adds, and screenshots if possible.",
+                                        ].map((step, i) => (
+                                            <li key={i} className="flex items-start gap-3">
+                              <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border border-gray-200 bg-gray-50 flex items-center justify-center text-[10px] font-mono text-gray-400">
+                                {i + 1}
+                              </span>
+                                                <span className="text-gray-500 text-sm leading-6">{step}</span>
+                                            </li>
+                                        ))}
+                                    </ol>
+                                </section>
+
+                                {/* Prev / Next */}
+                                <div className="mt-16 pt-8 border-t border-gray-100 flex justify-between">
+                                    <button
+                                        onClick={() => handleSelectPage("installation")}
+                                        className="group flex items-center gap-2 text-sm text-gray-400 hover:text-black transition-colors cursor-pointer"
+                                    >
+                                        <span className="group-hover:-translate-x-0.5 transition-transform">←</span>
+                                        Installations
+                                    </button>
+                                    <Link
+                                        href="/blocks"
+                                        className="group flex items-center gap-2 text-sm text-gray-400 hover:text-black transition-colors"
+                                    >
+                                        Browse blocks
+                                        <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+                                    </Link>
+                                </div>
+                            </>
+                        )}
                     </main>
 
-                    {/* Right TOC */}
-                    <TOC active={activeSection} />
+                    {/* Right TOC — différent selon la page active */}
+                    <TOC sections={sections} active={activeSection} />
                 </div>
             </div>
 
