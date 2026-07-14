@@ -78,7 +78,7 @@ export function canInstall(
     return true;
   }
 
-  return isLoggedIn(profile) && hasProAccess(profile);
+  return isLoggedIn(profile);
 }
 
 export function getInstallAccessState(
@@ -112,10 +112,10 @@ export function getInstallAccessState(
   }
 
   return {
-    action: "upgrade",
-    label: "Upgrade to Pro",
-    description: "Upgrade your plan to install this Pro component.",
-    href: "/pricing",
+    action: "signin",
+    label: "Sign in to install",
+    description: "Sign in to unlock installation for this component.",
+    href: `/login?redirect=${encodeURIComponent(redirectPath)}`,
   };
 }
 

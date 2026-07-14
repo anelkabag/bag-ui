@@ -21,19 +21,19 @@ test("guests cannot install pro components", () => {
   );
 });
 
-test("free-plan users cannot install pro components", () => {
+test("signed-in free-plan users can install pro components", () => {
   const component = { access: { tier: "pro" as const } };
 
   assert.equal(hasProAccess({ plan: "free" }), false);
-  assert.equal(canInstall(component, { id: "1", plan: "free" }), false);
+  assert.equal(canInstall(component, { id: "1", plan: "free" }), true);
   assert.equal(
     getInstallAccessState(component, { id: "1", plan: "free" }, "/blocks")
       .action,
-    "upgrade",
+    "install",
   );
 });
 
-test("pro-plan users can install pro components", () => {
+test("signed-in pro-plan users can install pro components", () => {
   const component = { access: { tier: "pro" as const } };
 
   assert.equal(hasProAccess({ plan: "monthly" }), true);
