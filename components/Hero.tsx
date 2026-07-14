@@ -165,7 +165,7 @@ export default function Hero() {
                             <FaGithub size={16} />
                             <span>GitHub</span>
                             <span className="inline-flex items-center justify-center text-[11px] font-semibold bg-white/15 rounded-full px-2 py-0.5">
-                                {stars !== null ? stars.toLocaleString() : "…"}
+                                {stars !== null ? stars.toLocaleString() : "0"}
                             </span>
                         </a>
                         <Link
