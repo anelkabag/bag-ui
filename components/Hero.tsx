@@ -5,6 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import NumberFlow from "@number-flow/react";
 
 const DOT_SPACING = 28;
 
@@ -55,7 +56,7 @@ const fadeUp = (delay = 0) => ({
 });
 
 export default function Hero() {
-    const [stars, setStars] = useState<number | null>(null);
+    const [stars, setStars] = useState(0);
 
     useEffect(() => {
         fetch("https://api.github.com/repos/anelkabag/bag-ui")
@@ -164,8 +165,18 @@ export default function Hero() {
                         >
                             <FaGithub size={16} />
                             <span>GitHub</span>
-                            <span className="inline-flex items-center justify-center text-[11px] font-semibold bg-white/15 rounded-full px-2 py-0.5">
-                                {stars !== null ? stars.toLocaleString() : "0"}
+                            <span
+                                className="inline-flex items-center justify-center text-[11px] font-semibold bg-white/15 rounded-full px-2 py-0.5"
+                                style={{ fontVariantNumeric: "tabular-nums" }}
+                            >
+                                <NumberFlow
+                                    value={stars}
+                                    format={{ notation: "compact" }}
+                                    transformTiming={{ duration: 600, easing: "ease-out" }}
+                                    spinTiming={{ duration: 600, easing: "ease-out" }}
+                                    opacityTiming={{ duration: 300, easing: "ease-out" }}
+                                    willChange
+                                />
                             </span>
                         </a>
                         <Link
