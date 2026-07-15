@@ -1,244 +1,218 @@
 "use client";
 
-import { useState } from "react";
-import { motion, Variants } from "framer-motion";
-import { Video, Clock, CalendarDays, Globe, X } from "lucide-react";
-import Image from "next/image";
+import { useRef, useState } from "react";
+import { motion, useInView, cubicBezier } from "framer-motion";
+import { Mail, MapPin, Phone, ArrowRight, Check } from "lucide-react";
 
-/**
- * Contact2 — Booking / scheduling card (responsive)
- * Stack: Next.js (App Router) + Tailwind CSS + Framer Motion
- */
+// ─── Animation variants ──────────────────────────────────────────────────────
+const customEase = cubicBezier(0.4, 0, 0.2, 1);
 
-const details = [
-  { icon: Clock, label: "60 minutes one-on-one session" },
-  { icon: Video, label: "Video Call (Google Meet)" },
-  { icon: CalendarDays, label: "2:00 PM - 3:00 PM Tuesday, Feb 20, 2025" },
-  { icon: Globe, label: "GMT +7" },
+const fadeUp = (delay = 0) => ({
+    hidden: { opacity: 0, y: 22 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.52, ease: customEase, delay } },
+});
+
+const fadeLeft = (delay = 0) => ({
+    hidden: { opacity: 0, x: -20 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.52, ease: customEase, delay } },
+});
+
+const fadeRight = (delay = 0) => ({
+    hidden: { opacity: 0, x: 20 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.52, ease: customEase, delay } },
+});
+
+// ─── Contact info items ──────────────────────────────────────────────────────
+const contactInfo = [
+    { icon: <Mail size={18} strokeWidth={1.8} />, label: "support@bagui.dev" },
+    { icon: <MapPin size={18} strokeWidth={1.8} />, label: "123 Tech Avenue, San Francisco, USA" },
+    { icon: <Phone size={18} strokeWidth={1.8} />, label: "+1 (000) 555-6666" },
 ];
 
-const container: Variants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.15 },
-  },
-};
+// ─── Field component ─────────────────────────────────────────────────────────
+function Field({
+                   label,
+                   placeholder,
+                   type = "text",
+                   textarea = false,
+                   delay = 0,
+                   inView,
+               }: {
+    label: string;
+    placeholder: string;
+    type?: string;
+    textarea?: boolean;
+    delay?: number;
+    inView: boolean;
+}) {
+    const [focused, setFocused] = useState(false);
 
-const item: Variants = {
-  hidden: { opacity: 0, y: 10 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: "easeOut" } },
-};
+    const inputClass = [
+        "w-full bg-white text-[14px] text-gray-800 placeholder:text-gray-400",
+        "border border-gray-200 rounded-xl px-4 outline-none",
+        "transition-all duration-200",
+        focused ? "border-gray-800 ring-[3px] ring-gray-100" : "hover:border-gray-300",
+        textarea ? "py-3.5 resize-none h-[140px]" : "h-[50px]",
+    ].join(" ");
 
-export default function Contact2() {
-  const [message, setMessage] = useState("");
-  const [portfolio, setPortfolio] = useState<"share" | "none">("share");
-
-  const maxLength = 200;
-
-  return (
-    <section className="flex min-h-screen w-full items-center justify-center px-4 py-8 sm:py-16">
-      <motion.div
-        initial={{ opacity: 0, y: 24, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="grid w-full max-w-[900px] grid-cols-1 overflow-hidden rounded-2xl border border-zinc-200 bg-black shadow-2xl shadow-black/10 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]"
-      >
-        {/* Left panel — session summary (dark) */}
+    return (
         <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="flex h-full flex-col gap-5 bg-zinc-950 p-5 sm:gap-6 sm:p-7"
+            variants={fadeUp(delay)}
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
         >
-          <motion.div
-            variants={item}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-zinc-900 ring-1 ring-zinc-800"
-          >
-            <Image
-              src="/logoW.png"
-              alt="BagUI"
-              width={18}
-              height={18}
-              className="h-[18px] w-[18px]"
-            />
-          </motion.div>
-
-          <motion.div variants={item} className="space-y-1">
-            <p className="text-xs text-zinc-400">Bag\Ui - by Anelka</p>
-            <h2 className="text-base font-semibold tracking-tight text-white sm:text-lg">
-              Interview - Product Designer
-            </h2>
-          </motion.div>
-
-          <div className="flex flex-col gap-3 sm:gap-3.5">
-            {details.map(({ icon: Icon, label }) => (
-              <motion.div
-                key={label}
-                variants={item}
-                className="flex items-center gap-3 text-xs text-zinc-400"
-              >
-                <Icon className="h-4 w-4 shrink-0 text-zinc-500" />
-                <span>{label}</span>
-              </motion.div>
-            ))}
-          </div>
-
-          <motion.button
-            variants={item}
-            whileHover={{ y: -1 }}
-            whileTap={{ scale: 0.98 }}
-            type="button"
-            className="mt-2 w-full rounded-lg border border-zinc-800 bg-zinc-900 py-2.5 text-xs font-medium text-white transition-colors hover:bg-zinc-800 cursor-pointer md:mt-auto"
-          >
-            Set Call Setting
-          </motion.button>
+            <label className="block text-[13.5px] font-semibold text-gray-800 mb-2">
+                {label}
+            </label>
+            {textarea ? (
+                <textarea
+                    placeholder={placeholder}
+                    className={inputClass}
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(false)}
+                />
+            ) : (
+                <input
+                    type={type}
+                    placeholder={placeholder}
+                    className={inputClass}
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(false)}
+                />
+            )}
         </motion.div>
+    );
+}
 
-        {/* Right panel — form (white, padded so the div reads as its own surface) */}
-        <motion.form
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
-          onSubmit={(e) => e.preventDefault()}
-          className="flex flex-col gap-4 bg-white p-5 m-1.5 rounded-lg sm:p-7 sm:m-2"
+// ─── Main component ───────────────────────────────────────────────────────────
+export default function ContactSection() {
+    const ref = useRef<HTMLElement>(null);
+    const inView = useInView(ref, { once: true, margin: "-60px" });
+    const [sent, setSent] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        setLoading(true);
+        setTimeout(() => { setLoading(false); setSent(true); }, 1400);
+    }
+
+    return (
+        <section
+            ref={ref}
+            className="w-full min-h-screen bg-white flex items-center justify-center px-6 py-24"
+            style={{ fontFamily: "'Inter', 'DM Sans', sans-serif" }}
         >
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-zinc-900">
-              Input Details
-            </h3>
-            <button
-              type="button"
-              aria-label="Close"
-              className="rounded-full p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          </div>
+            <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-stretch">
 
-          <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-zinc-700">Full name</span>
-            <input
-              type="text"
-              placeholder="Your name..."
-              className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-xs text-zinc-900 placeholder:text-zinc-400 outline-none transition-colors focus:border-zinc-400 focus:ring-1 focus:ring-zinc-300"
-            />
-          </label>
+                {/* ── Left column ── */}
+                <div className="flex flex-col justify-between min-h-[520px]">
 
-          <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-zinc-700">
-              Email Address
-            </span>
-            <input
-              type="email"
-              placeholder="your@example.com"
-              className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-xs text-zinc-900 placeholder:text-zinc-400 outline-none transition-colors focus:border-zinc-400 focus:ring-1 focus:ring-zinc-300"
-            />
-          </label>
+                    {/* Top: Headline + Subtitle */}
+                    <div>
+                        <motion.h1
+                            variants={fadeLeft(0)}
+                            initial="hidden"
+                            animate={inView ? "visible" : "hidden"}
+                            className="text-[52px] sm:text-[62px] font-black leading-[1.05] tracking-[-0.03em] text-gray-950 mb-6"
+                        >
+                            Talk to our<br />support team
+                        </motion.h1>
 
-          <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-zinc-700">
-              What would you like to discuss?
-            </span>
-            <div className="relative">
-              <textarea
-                value={message}
-                maxLength={maxLength}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Share your goals and questions for the session..."
-                rows={2}
-                className="w-full resize-none rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2.5 pb-5 text-xs text-zinc-900 placeholder:text-zinc-400 outline-none transition-colors focus:border-zinc-400 focus:ring-1 focus:ring-zinc-300"
-              />
-              <span className="pointer-events-none absolute bottom-1.5 right-2.5 text-[10px] text-zinc-400">
-                {message.length}/{maxLength}
-              </span>
+                        <motion.p
+                            variants={fadeLeft(0.1)}
+                            initial="hidden"
+                            animate={inView ? "visible" : "hidden"}
+                            className="text-[15px] text-gray-400 leading-relaxed max-w-xs"
+                        >
+                            Feel free to reach out for help with your order or any questions you may have regarding your purchase.
+                        </motion.p>
+                    </div>
+
+                    {/* Bottom: Contact info */}
+                    <div className="flex flex-col gap-5 mb-2">
+                        {contactInfo.map((item, i) => (
+                            <motion.div
+                                key={i}
+                                variants={fadeLeft(0.18 + i * 0.08)}
+                                initial="hidden"
+                                animate={inView ? "visible" : "hidden"}
+                                className="flex items-center gap-4"
+                            >
+                                <div className="w-10 h-10 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center text-gray-600 flex-shrink-0">
+                                    {item.icon}
+                                </div>
+                                <span className="text-[14.5px] font-medium text-gray-700">{item.label}</span>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* ── Right column: form card ── */}
+                <motion.div
+                    variants={fadeRight(0.08)}
+                    initial="hidden"
+                    animate={inView ? "visible" : "hidden"}
+                    className="bg-[#f5f5f5] rounded-3xl p-8 sm:p-10"
+                >
+                    {sent ? (
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.94 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.42, ease: customEase }}
+                            className="flex flex-col items-center justify-center py-16 text-center"
+                        >
+                            <div className="w-14 h-14 rounded-full bg-gray-900 flex items-center justify-center mb-5">
+                                <Check size={24} strokeWidth={2.2} className="text-white" />
+                            </div>
+                            <h3 className="text-[20px] font-bold text-gray-900 mb-2">Message sent!</h3>
+                            <p className="text-[14px] text-gray-400">We'll get back to you as soon as possible.</p>
+                            <button
+                                onClick={() => setSent(false)}
+                                className="mt-8 text-[13px] font-medium text-gray-500 underline underline-offset-2 hover:text-gray-800 transition-colors"
+                            >
+                                Send another message
+                            </button>
+                        </motion.div>
+                    ) : (
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                            <Field label="Full Name" placeholder="Enter Your Full Name" delay={0.1} inView={inView} />
+                            <Field label="Email Address" placeholder="Enter Your Email Address" type="email" delay={0.17} inView={inView} />
+                            <Field label="Phone Number" placeholder="Enter Your Phone Number" type="tel" delay={0.24} inView={inView} />
+                            <Field label="Message" placeholder="Write Your Message Here" textarea delay={0.31} inView={inView} />
+
+                            <motion.div
+                                variants={fadeUp(0.38)}
+                                initial="hidden"
+                                animate={inView ? "visible" : "hidden"}
+                            >
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="group flex items-center gap-2.5 bg-black hover:bg-gray-800 active:scale-[.98] text-white font-semibold text-[14.5px] px-6 py-3.5 rounded-2xl transition-all duration-200 disabled:opacity-70 cursor-pointer"
+                                >
+                                    {loading ? (
+                                        <>
+                                            <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                                            </svg>
+                                            Sending…
+                                        </>
+                                    ) : (
+                                        <>
+                                            Send Message
+                                            <span className="transition-transform duration-200 group-hover:translate-x-1">
+                                                <ArrowRight size={17} strokeWidth={2} />
+                                            </span>
+                                        </>
+                                    )}
+                                </button>
+                            </motion.div>
+                        </form>
+                    )}
+                </motion.div>
             </div>
-          </label>
-
-          <fieldset className="flex flex-col gap-2">
-            <legend className="text-xs font-medium text-zinc-700 mb-1">
-              Will you be sharing your portfolio during the session?
-            </legend>
-
-            <label className="flex cursor-pointer items-center gap-2.5">
-              <span
-                onClick={() => setPortfolio("share")}
-                className={`flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full border transition-colors ${
-                  portfolio === "share" ? "border-zinc-900" : "border-zinc-300"
-                }`}
-              >
-                {portfolio === "share" && (
-                  <motion.span
-                    layoutId="portfolio-dot"
-                    className="h-1.5 w-1.5 rounded-full bg-zinc-900"
-                  />
-                )}
-              </span>
-              <span className="text-xs text-zinc-700">
-                Yes, I&apos;ll share my portfolio
-              </span>
-            </label>
-
-            <label className="flex cursor-pointer items-center gap-2.5">
-              <span
-                onClick={() => setPortfolio("none")}
-                className={`flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full border transition-colors ${
-                  portfolio === "none" ? "border-zinc-900" : "border-zinc-300"
-                }`}
-              >
-                {portfolio === "none" && (
-                  <motion.span
-                    layoutId="portfolio-dot"
-                    className="h-1.5 w-1.5 rounded-full bg-zinc-900"
-                  />
-                )}
-              </span>
-              <span className="text-xs text-zinc-700">
-                No portfolio review needed
-              </span>
-            </label>
-          </fieldset>
-
-          <p className="text-[11px] leading-relaxed text-zinc-500">
-            By proceeding, you agree to our{" "}
-            <a
-              href="#"
-              className="text-zinc-700 underline underline-offset-2 hover:text-zinc-900"
-            >
-              Terms of Service
-            </a>{" "}
-            and{" "}
-            <a
-              href="#"
-              className="text-zinc-700 underline underline-offset-2 hover:text-zinc-900"
-            >
-              Privacy Policy
-            </a>
-          </p>
-
-          <div className="flex flex-col gap-3 border-t border-zinc-200 pt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-            <span className="text-[11px] text-zinc-500">
-              24 hours free cancellation
-            </span>
-            <div className="flex items-center gap-2.5">
-              <button
-                type="button"
-                className="w-full rounded-lg border border-zinc-200 px-4 py-2 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-100 cursor-pointer sm:w-auto"
-              >
-                Reset
-              </button>
-              <motion.button
-                whileHover={{ y: -1 }}
-                whileTap={{ scale: 0.98 }}
-                type="submit"
-                className="w-full rounded-lg bg-zinc-900 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-zinc-800 cursor-pointer sm:w-auto"
-              >
-                Schedule Now
-              </motion.button>
-            </div>
-          </div>
-        </motion.form>
-      </motion.div>
-    </section>
-  );
+        </section>
+    );
 }
