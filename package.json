@@ -12,6 +12,7 @@
     "registry:build": "shadcn build"
   },
   "dependencies": {
+    "@number-flow/react": "^0.6.1",
     "@studio-freight/lenis": "^1.0.42",
     "@supabase/ssr": "^0.12.0",
     "@supabase/supabase-js": "^2.40.0",
