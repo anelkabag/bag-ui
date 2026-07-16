@@ -5,7 +5,7 @@
   "scripts": {
     "registry:generate": "tsx scripts/generate-registry.ts",
     "registry:watch": "tsx scripts/watch-registry.ts",
-    "dev": "concurrently \"npm run registry:watch\" \"next dev\"",
+    "dev": "concurrently -k \"npm run registry:watch\" \"next dev\"",
     "build": "npm run registry:generate && next build",
     "start": "next start",
     "lint": "eslint",
@@ -45,7 +45,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
-    "tsx": "^4",
+    "tsx": "^4.23.1",
     "typescript": "^5"
   }
 }
