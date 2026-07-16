@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "saving-button",
+  "title": "Saving Button",
+  "description": "Animated premium button",
+  "files": [
+    {
+      "path": "registry/default/ui/saving.tsx",
+      "content": "import React, { useState } from 'react';\nimport { motion, AnimatePresence } from 'framer-motion';\nimport { Loader2 } from 'lucide-react';\n\nexport default function SavingButton() {\n    const [isHovered, setIsHovered] = useState(false);\n\n    return (\n        <motion.button\n            onMouseEnter={() => setIsHovered(true)}\n            onMouseLeave={() => setIsHovered(false)}\n            whileHover={{ scale: 1.02 }}\n            whileTap={{ scale: 0.96 }}\n            className=\"relative flex items-center justify-center text-white px-6 py-3 rounded-xl bg-black hover:bg-black border border-white/5 cursor-pointer transition-colors duration-150\"\n        >\n            <span className=\"font-medium tracking-tight text-[13px]\">Saving</span>\n\n            <AnimatePresence initial={false}>\n                {isHovered && (\n                    <motion.div\n                        key=\"spinner\"\n                        initial={{ width: 0, opacity: 0, marginLeft: 0 }}\n                        animate={{ width: 16, opacity: 1, marginLeft: 10 }}\n                        exit={{ width: 0, opacity: 0, marginLeft: 0 }}\n                        transition={{ type: \"spring\", stiffness: 500, damping: 30 }}\n                        className=\"relative w-4 h-4 flex items-center justify-center shrink-0 overflow-hidden\"\n                    >\n                        <motion.div\n                            animate={{ rotate: 360 }}\n                            transition={{ duration: 0.8, repeat: Infinity, ease: \"linear\" }}\n                            className=\"flex items-center justify-center\"\n                        >\n                            <Loader2 className=\"w-4 h-4 text-white/70\" />\n                        </motion.div>\n                    </motion.div>\n                )}\n            </AnimatePresence>\n        </motion.button>\n    );\n}",
+      "type": "registry:ui",
+      "target": "components/ui/saving-button.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

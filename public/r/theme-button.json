@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme-button",
+  "title": "Theme Button",
+  "description": "",
+  "files": [
+    {
+      "path": "registry/default/ui/theme.tsx",
+      "content": "import React, { useState } from 'react';\nimport { motion, AnimatePresence } from 'framer-motion';\nimport { Moon, Sun } from 'lucide-react';\n\nexport default function MorphButton() {\n    const [isHovered, setIsHovered] = useState(false);\n\n    return (\n        <motion.button\n            onMouseEnter={() => setIsHovered(true)}\n            onMouseLeave={() => setIsHovered(false)}\n            whileHover={{ scale: 1.02 }}\n            whileTap={{ scale: 0.96 }}\n            className=\"relative flex items-center justify-center text-white px-6 py-3 rounded-xl bg-black hover:bg-black border border-gray-200 border border-white/5 cursor-pointer transition-colors duration-150\"\n        >\n            <div className=\"relative w-[16px] h-[16px] flex items-center justify-center shrink-0\">\n                <AnimatePresence mode=\"popLayout\" initial={false}>\n                    {!isHovered ? (\n                        <motion.div\n                            key=\"icon1\"\n                            initial={{ scale: 0.5, opacity: 0 }}\n                            animate={{ scale: 1, opacity: 1 }}\n                            exit={{ scale: 0.5, opacity: 0 }}\n                            transition={{ type: \"spring\", stiffness: 600, damping: 25 }}\n                            className=\"absolute inset-0 flex items-center justify-center\"\n                        >\n                            <Moon className=\"w-4 h-4\" />\n                        </motion.div>\n                    ) : (\n                        <motion.div\n                            key=\"icon2\"\n                            initial={{ scale: 0.5, opacity: 0 }}\n                            animate={{ scale: 1, opacity: 1 }}\n                            exit={{ scale: 0.5, opacity: 0 }}\n                            transition={{ type: \"spring\", stiffness: 600, damping: 25 }}\n                            className=\"absolute inset-0 flex items-center justify-center\"\n                        >\n                            <Sun className=\"w-4 h-4\" />\n                        </motion.div>\n                    )}\n                </AnimatePresence>\n            </div>\n            <span className=\"font-medium tracking-tight text-[13px] ml-2.5\">Theme</span>\n        </motion.button>\n    );\n}",
+      "type": "registry:ui",
+      "target": "components/ui/theme-button.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

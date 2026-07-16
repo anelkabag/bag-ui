@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "check-button",
+  "title": "Check Button",
+  "description": "Animated premium button",
+  "files": [
+    {
+      "path": "registry/default/ui/check.tsx",
+      "content": "import React, { useState } from 'react';\nimport { motion, AnimatePresence } from 'framer-motion';\nimport { CheckCheck } from 'lucide-react';\n\nexport default function ReadButton() {\n    const [isHovered, setIsHovered] = useState(false);\n\n    return (\n        <motion.button\n            onMouseEnter={() => setIsHovered(true)}\n            onMouseLeave={() => setIsHovered(false)}\n            whileHover={{ scale: 1.02 }}\n            whileTap={{ scale: 0.96 }}\n            className=\"relative flex items-center justify-center text-white px-6 py-3 rounded-xl bg-black hover:bg-black border border-white/5 cursor-pointer transition-colors duration-150\"\n        >\n            <span\n                className={`font-medium tracking-tight text-[13px] transition-colors duration-500 ${\n                    isHovered ? 'text-green-400' : 'text-white'\n                }`}\n            >\n                {isHovered ? 'Read' : 'Delivered'}\n            </span>\n\n            <AnimatePresence initial={false}>\n                {isHovered && (\n                    <motion.div\n                        key=\"check\"\n                        initial={{ width: 0, opacity: 0, marginLeft: 0 }}\n                        animate={{ width: 16, opacity: 1, marginLeft: 10 }}\n                        exit={{ width: 0, opacity: 0, marginLeft: 0 }}\n                        transition={{ type: \"spring\", stiffness: 220, damping: 26 }}\n                        className=\"relative w-4 h-4 flex items-center justify-center shrink-0 overflow-hidden\"\n                    >\n                        <CheckCheck className=\"w-4 h-4 text-green-400\" />\n                    </motion.div>\n                )}\n            </AnimatePresence>\n        </motion.button>\n    );\n}",
+      "type": "registry:ui",
+      "target": "components/ui/check-button.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

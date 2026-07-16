@@ -17,7 +17,311 @@
         }
       ],
       "access": {
-        "tier": "pro"
+        "tier": "free"
+      }
+    },
+    {
+      "name": "expired-badge",
+      "type": "registry:ui",
+      "title": "Expired Badge",
+      "description": "Animated premium badge",
+      "files": [
+        {
+          "path": "registry/default/ui/ExpiredBadge.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/Expired-badge.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
+      "name": "saving-button",
+      "type": "registry:ui",
+      "title": "Saving Button",
+      "description": "Animated premium button",
+      "files": [
+        {
+          "path": "registry/default/ui/saving.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/saving-button.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
+      "name": "failed-badge",
+      "type": "registry:ui",
+      "title": "Failed Badge",
+      "description": "Animated premium badge",
+      "files": [
+        {
+          "path": "registry/default/ui/FailedBadge.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/Failed-badge.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
+      "name": "search-button",
+      "type": "registry:ui",
+      "title": "Search Button",
+      "description": "Animated premium button",
+      "files": [
+        {
+          "path": "registry/default/ui/search.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/search-button.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
+      "name": "progress-badge",
+      "type": "registry:ui",
+      "title": "In Progress Badge",
+      "description": "Animated premium badge",
+      "files": [
+        {
+          "path": "registry/default/ui/InProgressBadge.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/progress-badge.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
+      "name": "mail-button",
+      "type": "registry:ui",
+      "title": "Mail Button",
+      "description": "Animated premium button",
+      "files": [
+        {
+          "path": "registry/default/ui/mail.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/mail.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
+      "name": "review-badge",
+      "type": "registry:ui",
+      "title": "Review Badge",
+      "description": "Animated premium badge",
+      "files": [
+        {
+          "path": "registry/default/ui/InReviewBadge.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/review-badge.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
+      "name": "download-button",
+      "type": "registry:ui",
+      "title": "Download Button",
+      "description": "Animated premium button",
+      "files": [
+        {
+          "path": "registry/default/ui/download.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/download-button.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
+      "name": "pending-badge",
+      "type": "registry:ui",
+      "title": "Pending Badge",
+      "description": "Animated premium badge",
+      "files": [
+        {
+          "path": "registry/default/ui/PendingBadge.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/pending-badge.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
+      "name": "github-button",
+      "type": "registry:ui",
+      "title": "Github Button",
+      "description": "",
+      "files": [
+        {
+          "path": "registry/default/ui/stargithub.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/github-button.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
+      "name": "submitted-badge",
+      "type": "registry:ui",
+      "title": "Submitted Badge",
+      "description": "Animated premium badge",
+      "files": [
+        {
+          "path": "registry/default/ui/SubmittedBadge.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/submitted-badge.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
+      "name": "expand-button",
+      "type": "registry:ui",
+      "title": "Expand Button",
+      "description": "",
+      "files": [
+        {
+          "path": "registry/default/ui/expand.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/expand-button.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
+      "name": "success-badge",
+      "type": "registry:ui",
+      "title": "Success Badge",
+      "description": "Animated premium badge",
+      "files": [
+        {
+          "path": "registry/default/ui/SuccessBadge.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/success-badge.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
+      "name": "check-button",
+      "type": "registry:ui",
+      "title": "Check Button",
+      "description": "Animated premium button",
+      "files": [
+        {
+          "path": "registry/default/ui/check.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/check-button.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
+      "name": "favorite-button",
+      "type": "registry:ui",
+      "title": "Favorite Button",
+      "description": "Animated premium button",
+      "files": [
+        {
+          "path": "registry/default/ui/favorit.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/favorite-button.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
+      "name": "delete-button",
+      "type": "registry:ui",
+      "title": "Delete Button",
+      "description": "",
+      "files": [
+        {
+          "path": "registry/default/ui/delete.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/delete-button.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
+      "name": "theme-button",
+      "type": "registry:ui",
+      "title": "Theme Button",
+      "description": "",
+      "files": [
+        {
+          "path": "registry/default/ui/theme.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/theme-button.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
+      "name": "deploy-button",
+      "type": "registry:ui",
+      "title": "Deploy Button",
+      "description": "",
+      "files": [
+        {
+          "path": "registry/default/ui/deploybtn.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/deploy-button.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
+      "name": "battery-button",
+      "type": "registry:ui",
+      "title": "Battery Button",
+      "description": "",
+      "files": [
+        {
+          "path": "registry/default/ui/battery.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/battery-button.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
       }
     },
     {
