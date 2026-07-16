@@ -8,6 +8,7 @@ interface RegistryEntry {
 }
 
 const REGISTRY_BASE = path.join(process.cwd(), "registry/default/blocks");
+const UI_BASE = path.join(process.cwd(), "registry/default/ui");
 const OUTPUT_DIR = path.join(process.cwd(), "lib");
 const MANIFEST_FILE = path.join(OUTPUT_DIR, "registry-manifest.ts");
 const LOADERS_FILE = path.join(OUTPUT_DIR, "registry-loaders.ts");
@@ -55,6 +56,47 @@ function getAllTsxFiles(dir: string, baseDir: string = ""): RegistryEntry[] {
           });
         }
       }
+    }
+  } catch (error) {
+    console.error(`Error scanning directory ${dir}:`, error);
+  }
+
+  return entries;
+}
+
+// registry/default/ui is a FLAT directory: files sit directly inside it
+// (registry/default/ui/fancy-button.tsx), unlike blocks which nests one level
+// of category subfolders. So we scan it separately, without recursing into
+// subdirectories, and tag every entry with the fixed category "ui".
+function getFlatTsxFiles(
+  dir: string,
+  relBase: string,
+  category: string,
+): RegistryEntry[] {
+  const entries: RegistryEntry[] = [];
+
+  try {
+    if (!fs.existsSync(dir)) {
+      return entries;
+    }
+
+    const files = fs.readdirSync(dir).filter((f) => {
+      const fullPath = path.join(dir, f);
+      return (
+        fs.statSync(fullPath).isFile() &&
+        f.endsWith(".tsx") &&
+        !isIgnored(f)
+      );
+    });
+
+    for (const file of files) {
+      const componentName = file.replace(".tsx", "");
+      const relativePath = path.join(relBase, file);
+      entries.push({
+        name: componentName,
+        category,
+        path: relativePath,
+      });
     }
   } catch (error) {
     console.error(`Error scanning directory ${dir}:`, error);
@@ -122,7 +164,9 @@ ${loaderEntries}
 async function main() {
   try {
     console.log("🔍 Scanning registry...");
-    const entries = getAllTsxFiles(REGISTRY_BASE);
+    const blockEntries = getAllTsxFiles(REGISTRY_BASE);
+    const uiEntries = getFlatTsxFiles(UI_BASE, "registry/default/ui", "ui");
+    const entries = [...blockEntries, ...uiEntries];
 
     if (entries.length === 0) {
       console.warn("⚠️  No components found in registry");
