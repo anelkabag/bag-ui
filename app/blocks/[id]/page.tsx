@@ -12,8 +12,8 @@ import { getComponentAccessTier, getInstallAccessState } from "@/lib/access";
 import { ComponentPreview } from "@/components/ComponentPreview";
 import { MARKETING_BLOCKS, APP_BLOCKS, ECOMMERCE_BLOCKS } from "../page";
 import Navbar from "@/components/navbar";
-import PnpmLogo from "../../../public/assets/pnpm.svg";
-import YarnLogo from "../../../public/assets/yarn.svg";
+import PnpmLogo from "@/public/assets/pnpm.svg";
+import YarnLogo from "@/public/assets/yarn.svg";
 import { Footer } from "@/components/footer";
 import {
   IconEye,
