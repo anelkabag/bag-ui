@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://bagui.vercel.app"),
+  metadataBase: new URL("https://www.bagui.pro"),
 
   title: "BagUI – Open Source shadcn/ui Components & Blocks",
 
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     title: "BagUI – Open Source shadcn/ui Components & Blocks",
     description:
       "BagUI is an open-source shadcn/ui registry with production-ready components, blocks, templates, and animations for React, Next.js, and Tailwind CSS. Copy, customize, and build faster.",
-    url: "https://bagui.vercel.app",
+    url: "https://www.bagui.pro",
     siteName: "BagUI",
     type: "website",
 
