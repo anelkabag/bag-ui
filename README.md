@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://bagui.vercel.app"><strong>Live Site</strong></a> ·
+  <a href="https://bagui.pro"><strong>Live Site</strong></a> ·
   <a href="#-getting-started">Getting Started</a> ·
   <a href="#-contributing">Contributing</a> ·
   <a href="#-project-structure">Project Structure</a>

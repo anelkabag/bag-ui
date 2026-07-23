@@ -6,7 +6,7 @@
   "files": [
     {
       "path": "registry/default/ui/fancy-button.tsx",
-      "content": "\"use client\";\n\nimport { motion } from \"framer-motion\";\n\nexport function FancyButton() {\n    return (\n        <motion.button\n            whileHover={{ scale: 1.05 }}\n            whileTap={{ scale: 0.95 }}\n            className=\"bg-black text-white px-6 py-3 rounded-xl cursor-pointer\"\n        >\n            Bag\\Ui Button\n        </motion.button>\n    );\n}",
+      "content": "\"use client\";\r\n\r\nimport { motion } from \"framer-motion\";\r\n\r\nexport function FancyButton() {\r\n    return (\r\n        <motion.button\r\n            whileHover={{ scale: 1.05 }}\r\n            whileTap={{ scale: 0.95 }}\r\n            className=\"bg-black text-white px-6 py-3 rounded-xl cursor-pointer\"\r\n        >\r\n            Bag\\Ui Button\r\n        </motion.button>\r\n    );\r\n}",
       "type": "registry:ui",
       "target": "components/ui/fancy-button.tsx"
     }
