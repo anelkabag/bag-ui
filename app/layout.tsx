@@ -17,22 +17,36 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://bagui.vercel.app"),
 
-  title: "Bag/UI - Premium shadcn/ui blocks",
+  title: "BagUI – Open Source shadcn/ui Components & Blocks",
+
   description:
-    "BagUI is a curated registry of modern shadcn/ui components, animated sections, and production-ready blocks designed to help developers build beautiful interfaces in minutes.",
+    "BagUI is an open-source shadcn/ui registry with production-ready components, blocks, templates, and animations for React, Next.js, and Tailwind CSS. Copy, customize, and build faster.",
 
   keywords: [
+    "bagui",
+    "bag/ui",
     "shadcn",
     "shadcn/ui",
+    "shadcn registry",
+    "shadcn components",
+    "shadcn blocks",
+    "shadcn templates",
+    "react components",
+    "nextjs components",
+    "next.js",
+    "react",
+    "tailwind css",
+    "tailwindcss",
+    "tailwind components",
     "ui components",
     "component registry",
-    "nextjs",
-    "reactjs",
-    "react",
-    "tailwindcss",
-    "blocks",
+    "component library",
+    "open source",
+    "open source ui",
+    "typescript",
     "animations",
-    "ui library",
+    "landing page components",
+    "dashboard components",
   ],
 
   authors: [
@@ -41,13 +55,13 @@ export const metadata: Metadata = {
     },
   ],
 
-  creator: "Anelka Bagalane <anelka.bag@gmail.com",
+  creator: "Anelka Bagalane <anelka.bag@gmail.com>",
   publisher: "BagUI",
 
   openGraph: {
-    title: "Bag/UI - Premium shadcn/ui blocks",
+    title: "BagUI – Open Source shadcn/ui Components & Blocks",
     description:
-      "BagUI is a curated registry of modern shadcn/ui components, animated sections, and production-ready blocks designed to help developers build beautiful interfaces in minutes.",
+      "BagUI is an open-source shadcn/ui registry with production-ready components, blocks, templates, and animations for React, Next.js, and Tailwind CSS. Copy, customize, and build faster.",
     url: "https://bagui.vercel.app",
     siteName: "BagUI",
     type: "website",
@@ -57,16 +71,16 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "BagUI - Premium shadcn/ui blocks",
+        alt: "BagUI – Open Source shadcn/ui Components & Blocks",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Bag/UI - Premium shadcn/ui blocks",
+    title: "BagUI – Open Source shadcn/ui Components & Blocks",
     description:
-      "BagUI is a curated registry of modern shadcn/ui components, animated sections, and production-ready blocks designed to help developers build beautiful interfaces in minutes.",
+      "BagUI is an open-source shadcn/ui registry with production-ready components, blocks, templates, and animations for React, Next.js, and Tailwind CSS. Copy, customize, and build faster.",
     images: ["/og-image.png"],
     creator: "@anelkabag",
   },
