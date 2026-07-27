@@ -341,6 +341,23 @@
       }
     },
     {
+      "name": "hero2",
+      "type": "registry:block",
+      "title": "Hero Exemple 2",
+      "description": "Hero section with navbar and animated event dashboard preview.",
+      "dependencies": ["framer-motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/hero/hero2.tsx",
+          "type": "registry:block",
+          "target": "components/blocks/hero-ex-2.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
       "name": "hero1",
       "type": "registry:block",
       "title": "Hero Exemple 1",
