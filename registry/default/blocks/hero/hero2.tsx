@@ -11,6 +11,8 @@ import {
   Video,
   Globe,
   Rocket,
+  Sun,
+  Moon,
 } from "lucide-react";
 
 type NavItem = { title: string; description: string };
@@ -117,6 +119,7 @@ const monthVariants: Variants = {
 
 export default function Hero2() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [isDark, setIsDark] = useState(false);
 
   const [viewDate, setViewDate] = useState({
     year: TODAY.year,
@@ -153,7 +156,11 @@ export default function Hero2() {
   const selectedMonthShort = MONTH_NAMES[selectedDate.month].slice(0, 3);
 
   return (
-    <section className="relative w-full overflow-hidden bg-white text-neutral-900">
+    <section
+      className={`relative w-full overflow-hidden transition-colors duration-500 ${
+        isDark ? "bg-neutral-950 text-neutral-50" : "bg-white text-neutral-900"
+      }`}
+    >
       {/* click-away layer for dropdowns */}
       {openDropdown && (
         <div
@@ -183,7 +190,11 @@ export default function Hero2() {
                     openDropdown === link.label ? null : link.label,
                   )
                 }
-                className="flex items-center gap-1 text-[14px] font-medium text-neutral-700 transition-colors hover:text-neutral-950 cursor-pointer"
+                className={`flex items-center gap-1 text-[14px] font-medium transition-colors duration-500 cursor-pointer ${
+                  isDark
+                    ? "text-neutral-300 hover:text-white"
+                    : "text-neutral-700 hover:text-neutral-950"
+                }`}
               >
                 {link.label}
                 {link.dropdown && (
@@ -203,17 +214,33 @@ export default function Hero2() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -8, scale: 0.98 }}
                     transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-                    className="absolute left-0 top-full z-20 mt-3 w-64 rounded-xl border border-neutral-200 bg-white p-2 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.12)]"
+                    className={`absolute left-0 top-full z-20 mt-3 w-64 rounded-xl border p-2 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.12)] transition-colors duration-500 ${
+                      isDark
+                        ? "border-neutral-800 bg-neutral-900"
+                        : "border-neutral-200 bg-white"
+                    }`}
                   >
                     {link.items?.map((item) => (
                       <button
                         key={item.title}
-                        className="flex w-full flex-col items-start gap-0.5 rounded-lg px-3 py-2 text-left transition-colors hover:bg-neutral-50 cursor-pointer"
+                        className={`flex w-full flex-col items-start gap-0.5 rounded-lg px-3 py-2 text-left transition-colors cursor-pointer ${
+                          isDark
+                            ? "hover:bg-neutral-800"
+                            : "hover:bg-neutral-50"
+                        }`}
                       >
-                        <span className="text-[13.5px] font-medium text-neutral-900">
+                        <span
+                          className={`text-[13.5px] font-medium ${
+                            isDark ? "text-white" : "text-neutral-900"
+                          }`}
+                        >
                           {item.title}
                         </span>
-                        <span className="text-[12px] text-neutral-500">
+                        <span
+                          className={`text-[12px] ${
+                            isDark ? "text-neutral-400" : "text-neutral-500"
+                          }`}
+                        >
                           {item.description}
                         </span>
                       </button>
@@ -226,13 +253,59 @@ export default function Hero2() {
         </div>
 
         <div className="flex items-center gap-5">
-          <button className="text-[14px] font-medium text-neutral-400 hover:text-neutral-600 cursor-pointer">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setIsDark((v) => !v)}
+            aria-label="Toggle theme"
+            className={`relative grid h-9 w-9 place-items-center overflow-hidden transition-colors duration-500 cursor-pointer ${
+              isDark
+                ? "border-neutral-700 text-neutral-300 "
+                : "border-neutral-200 text-neutral-500 "
+            }`}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {isDark ? (
+                <motion.span
+                  key="moon"
+                  initial={{ opacity: 0, rotate: -90, scale: 0.4 }}
+                  animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                  exit={{ opacity: 0, rotate: 90, scale: 0.4 }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute grid place-items-center"
+                >
+                  <Moon className="h-4 w-4" />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="sun"
+                  initial={{ opacity: 0, rotate: 90, scale: 0.4 }}
+                  animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                  exit={{ opacity: 0, rotate: -90, scale: 0.4 }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute grid place-items-center"
+                >
+                  <Sun className="h-4 w-4" />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
+
+          <button
+            className={`text-[14px] font-medium transition-colors duration-500 cursor-pointer ${
+              isDark
+                ? "text-neutral-500 hover:text-neutral-300"
+                : "text-neutral-400 hover:text-neutral-600"
+            }`}
+          >
             Login
           </button>
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="flex items-center gap-2 rounded-full bg-neutral-900 px-4 py-2 text-[14px] font-medium text-white cursor-pointer"
+            className={`flex items-center gap-2 rounded-full px-4 py-2 text-[14px] font-medium transition-colors duration-500 cursor-pointer ${
+              isDark ? "bg-white text-neutral-900" : "bg-neutral-900 text-white"
+            }`}
           >
             <span className="grid h-4 w-4 place-items-center text-[10px]">
               <Rocket size={12} />
@@ -249,7 +322,11 @@ export default function Hero2() {
           initial="hidden"
           animate="visible"
           variants={fadeUp}
-          className="mb-6 flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-4 py-1.5 text-[13px] font-medium text-neutral-600 shadow-sm"
+          className={`mb-6 flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-[13px] font-medium shadow-sm transition-colors duration-500 ${
+            isDark
+              ? "border-neutral-800 bg-neutral-900 text-neutral-300"
+              : "border-neutral-200 bg-white text-neutral-600"
+          }`}
         >
           BagUI.pro launches v0.8
           <ChevronRight className="h-3.5 w-3.5" />
@@ -272,7 +349,9 @@ export default function Hero2() {
           initial="hidden"
           animate="visible"
           variants={fadeUp}
-          className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-neutral-500"
+          className={`mx-auto mt-5 max-w-xl text-[15px] leading-relaxed transition-colors duration-500 ${
+            isDark ? "text-neutral-400" : "text-neutral-500"
+          }`}
         >
           A fully customizable scheduling experience for individuals, businesses
           taking calls and developers building scheduling platforms where users
@@ -289,7 +368,9 @@ export default function Hero2() {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="flex items-center gap-2 rounded-full bg-neutral-900 px-5 py-2.5 text-[14px] font-medium text-white cursor-pointer"
+            className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-[14px] font-medium transition-colors duration-500 cursor-pointer ${
+              isDark ? "bg-white text-neutral-900" : "bg-neutral-900 text-white"
+            }`}
           >
             <GoogleIcon />
             Sign up with google
@@ -297,7 +378,11 @@ export default function Hero2() {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="rounded-full border border-neutral-200 bg-white px-5 py-2.5 text-[14px] font-medium text-neutral-800 cursor-pointer"
+            className={`rounded-full border px-5 py-2.5 text-[14px] font-medium transition-colors duration-500 cursor-pointer ${
+              isDark
+                ? "border-neutral-800 bg-neutral-900 text-neutral-200"
+                : "border-neutral-200 bg-white text-neutral-800"
+            }`}
           >
             Sign up with Email
           </motion.button>
@@ -308,7 +393,9 @@ export default function Hero2() {
           initial="hidden"
           animate="visible"
           variants={fadeUp}
-          className="mt-4 text-[13px] text-neutral-400"
+          className={`mt-4 text-[13px] transition-colors duration-500 ${
+            isDark ? "text-neutral-500" : "text-neutral-400"
+          }`}
         >
           No credit card required
         </motion.p>
@@ -321,10 +408,20 @@ export default function Hero2() {
         transition={{ duration: 0.7, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="relative z-10 mx-auto mt-14 max-w-5xl px-4"
       >
-        <div className="relative overflow-hidden rounded-t-2xl border-x-8 border-t-8 border-neutral-200 bg-white shadow-[0_-8px_40px_-12px_rgba(0,0,0,0.08)]">
+        <div
+          className={`relative overflow-hidden rounded-t-2xl border-x-8 border-t-8 shadow-[0_-8px_40px_-12px_rgba(0,0,0,0.08)] transition-colors duration-500 ${
+            isDark
+              ? "border-neutral-800 bg-neutral-900"
+              : "border-neutral-200 bg-white"
+          }`}
+        >
           <div className="flex flex-col sm:flex-row">
             {/* Left: event info */}
-            <div className="shrink-0 border-b border-neutral-100 p-7 sm:w-[280px] sm:border-b-0 sm:border-r">
+            <div
+              className={`shrink-0 border-b p-7 sm:w-[280px] sm:border-b-0 sm:border-r transition-colors duration-500 ${
+                isDark ? "border-neutral-800" : "border-neutral-100"
+              }`}
+            >
               <Image
                 src="/avatar.png"
                 alt="Avatar"
@@ -332,15 +429,33 @@ export default function Hero2() {
                 height={36}
                 className="mb-4 rounded-full object-cover"
               />
-              <p className="text-[13px] text-neutral-400">Anelka Bag</p>
-              <h3 className="mt-1 text-[18px] font-semibold text-neutral-900">
+              <p
+                className={`text-[13px] transition-colors duration-500 ${
+                  isDark ? "text-neutral-500" : "text-neutral-400"
+                }`}
+              >
+                Anelka Bag
+              </p>
+              <h3
+                className={`mt-1 text-[18px] font-semibold transition-colors duration-500 ${
+                  isDark ? "text-white" : "text-neutral-900"
+                }`}
+              >
                 Design Workshop
               </h3>
-              <p className="mt-2 text-[13.5px] leading-relaxed text-neutral-500">
+              <p
+                className={`mt-2 text-[13.5px] leading-relaxed transition-colors duration-500 ${
+                  isDark ? "text-neutral-400" : "text-neutral-500"
+                }`}
+              >
                 A longer chat to run through design.
               </p>
 
-              <div className="mt-6 flex flex-col gap-3 text-[13.5px] text-neutral-600">
+              <div
+                className={`mt-6 flex flex-col gap-3 text-[13.5px] transition-colors duration-500 ${
+                  isDark ? "text-neutral-300" : "text-neutral-600"
+                }`}
+              >
                 <div className="flex items-center gap-2.5">
                   <Clock className="h-4 w-4 text-neutral-400" />
                   30 mins
@@ -363,9 +478,15 @@ export default function Hero2() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                  className="mt-6 rounded-xl bg-neutral-50 px-3.5 py-3"
+                  className={`mt-6 rounded-xl px-3.5 py-3 transition-colors duration-500 ${
+                    isDark ? "bg-neutral-800" : "bg-neutral-50"
+                  }`}
                 >
-                  <p className="text-[13px] font-medium text-neutral-900">
+                  <p
+                    className={`text-[13px] font-medium transition-colors duration-500 ${
+                      isDark ? "text-white" : "text-neutral-900"
+                    }`}
+                  >
                     {selectedWeekday}, {selectedMonthShort} {selectedDate.day}
                   </p>
                 </motion.div>
@@ -375,9 +496,17 @@ export default function Hero2() {
             {/* Calendar */}
             <div className="flex-1 p-7">
               <div className="mb-5 flex items-center justify-between">
-                <h4 className="text-[16px] font-semibold text-neutral-900">
+                <h4
+                  className={`text-[16px] font-semibold transition-colors duration-500 ${
+                    isDark ? "text-white" : "text-neutral-900"
+                  }`}
+                >
                   {MONTH_NAMES[viewDate.month]}{" "}
-                  <span className="font-normal text-neutral-400">
+                  <span
+                    className={`font-normal transition-colors duration-500 ${
+                      isDark ? "text-neutral-500" : "text-neutral-400"
+                    }`}
+                  >
                     {viewDate.year}
                   </span>
                 </h4>
@@ -385,14 +514,18 @@ export default function Hero2() {
                   <motion.button
                     whileTap={{ scale: 0.88 }}
                     onClick={() => changeMonth(-1)}
-                    className="grid h-7 w-7 place-items-center rounded-full text-neutral-400 hover:bg-neutral-100 cursor-pointer"
+                    className={`grid h-7 w-7 place-items-center rounded-full text-neutral-400 transition-colors duration-500 cursor-pointer ${
+                      isDark ? "hover:bg-neutral-800" : "hover:bg-neutral-100"
+                    }`}
                   >
                     <ChevronLeft className="h-4 w-4" />
                   </motion.button>
                   <motion.button
                     whileTap={{ scale: 0.88 }}
                     onClick={() => changeMonth(1)}
-                    className="grid h-7 w-7 place-items-center rounded-full text-neutral-400 hover:bg-neutral-100 cursor-pointer"
+                    className={`grid h-7 w-7 place-items-center rounded-full text-neutral-400 transition-colors duration-500 cursor-pointer ${
+                      isDark ? "hover:bg-neutral-800" : "hover:bg-neutral-100"
+                    }`}
                   >
                     <ChevronRight className="h-4 w-4" />
                   </motion.button>
@@ -445,16 +578,20 @@ export default function Hero2() {
                           disabled={!available}
                           onClick={() => handleSelectDay(day)}
                           className={[
-                            "relative mx-auto flex h-9 w-9 items-center justify-center rounded-xl text-[13.5px] transition-colors",
+                            "relative mx-auto flex h-9 w-9 items-center justify-center rounded-xl text-[13.5px] transition-colors duration-500",
                             available
-                              ? "cursor-pointer hover:bg-neutral-100"
+                              ? isDark
+                                ? "cursor-pointer hover:bg-neutral-800"
+                                : "cursor-pointer hover:bg-neutral-100"
                               : "cursor-not-allowed",
                           ].join(" ")}
                         >
                           {selected && (
                             <motion.span
                               layoutId="day-highlight"
-                              className="absolute inset-0 rounded-xl bg-neutral-900"
+                              className={`absolute inset-0 rounded-xl transition-colors duration-500 ${
+                                isDark ? "bg-white" : "bg-neutral-900"
+                              }`}
                               transition={{
                                 type: "spring",
                                 stiffness: 380,
@@ -464,12 +601,18 @@ export default function Hero2() {
                           )}
                           <span
                             className={[
-                              "relative z-10",
+                              "relative z-10 transition-colors duration-500",
                               selected
-                                ? "text-white"
-                                : available
+                                ? isDark
                                   ? "text-neutral-900"
-                                  : "text-neutral-300",
+                                  : "text-white"
+                                : available
+                                  ? isDark
+                                    ? "text-neutral-100"
+                                    : "text-neutral-900"
+                                  : isDark
+                                    ? "text-neutral-700"
+                                    : "text-neutral-300",
                             ].join(" ")}
                           >
                             {day}
@@ -487,7 +630,11 @@ export default function Hero2() {
           </div>
 
           {/* bottom fade, matching the cropped hero look */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent" />
+          <div
+            className={`pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t to-transparent transition-colors duration-500 ${
+              isDark ? "from-neutral-900" : "from-white"
+            }`}
+          />
         </div>
       </motion.div>
     </section>
