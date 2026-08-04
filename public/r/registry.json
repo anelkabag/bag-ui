@@ -340,7 +340,24 @@
         }
       ],
       "access": {
-        "tier": "pro"
+        "tier": "free"
+      }
+    },
+    {
+      "name": "dashboard-agency",
+      "type": "registry:block",
+      "title": "Modern Agency Dashboard",
+      "description": "",
+      "dependencies": ["framer-motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/Dashboard/dashboard-agency.tsx",
+          "type": "registry:block",
+          "target": "components/Dashboard/dashboard-agency.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
       }
     },
     {
@@ -357,7 +374,7 @@
         }
       ],
       "access": {
-        "tier": "pro"
+        "tier": "free"
       }
     },
     {
