@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Moon, Sun } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import UserMenu from "@/components/auth/UserMenu";
 import UnauthNav from "@/components/auth/UnauthNav";
@@ -18,23 +19,36 @@ const NAV_LINKS = [
 const Logo = () => (
   <div className="flex items-center gap-2 shrink-0">
     <Link href="/" className="flex items-center gap-2">
-      <Image
-        src="/logo.png"
-        alt="BagUI Logo"
-        width={20}
-        height={20}
-        className="shrink-0"
-        priority
-      />
-      <span className="text-[15px] font-semibold tracking-tight text-black">
+      <div className="relative h-5 w-5 shrink-0">
+        {/* Light Logo */}
+        <Image
+          src="/logo.png"
+          alt="BagUI Logo"
+          fill
+          priority
+          className="object-contain dark:hidden"
+        />
+
+        {/* Dark Logo */}
+        <Image
+          src="/logoW.png"
+          alt="BagUI Logo"
+          fill
+          priority
+          className="hidden object-contain dark:block"
+        />
+      </div>
+
+      <span className="text-[15px] font-semibold tracking-tight text-foreground">
         Bag\Ui
       </span>
     </Link>
+
     <Link
       href="https://x.com/anelkabag"
       target="_blank"
       rel="noopener noreferrer"
-      className="text-[13px] text-gray-400 hover:text-black transition-colors"
+      className="text-[13px] text-muted-foreground transition-colors hover:text-foreground"
     >
       by Anelka
     </Link>
@@ -57,24 +71,35 @@ const NavLink = ({
   <Link
     href={href}
     onClick={onClick}
-    className={`relative ${size === "xs" ? "text-[13px]" : "text-sm"} text-gray-500 font-medium hover:text-black transition-colors duration-150 group inline-flex items-baseline gap-0.5`}
+    className={`relative ${size === "xs" ? "text-[13px]" : "text-sm"} font-medium text-muted-foreground transition-colors duration-150 hover:text-foreground group inline-flex items-baseline gap-0.5`}
   >
     {label}
     {external && (
-      <sup className="text-[10px] text-gray-400 leading-none">↗</sup>
+      <sup className="text-[10px] text-muted-foreground leading-none">↗</sup>
     )}
-    <span className="absolute left-0 -bottom-[2px] h-[1.5px] w-0 group-hover:w-full transition-all duration-300 bg-black" />
+    <span className="absolute left-0 -bottom-0.5 h-[1.5px] w-0 bg-foreground transition-all duration-300 group-hover:w-full" />
   </Link>
 );
+
+function getInitialTheme(): "dark" | "light" {
+  if (typeof window === "undefined") {
+    return "dark";
+  }
+
+  const savedTheme = window.localStorage.getItem("bagui-theme");
+  return savedTheme === "light" || savedTheme === "dark" ? savedTheme : "dark";
+}
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user } = useAuth();
 
+  useEffect(() => {});
+
   return (
     <>
-      <div className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200">
-        <nav className="max-w-7xl mx-auto px-6 pt-10s flex items-center justify-between px-8 h-14 border-x border-gray-200">
+      <div className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur-sm">
+        <nav className="max-w-7xl mx-auto flex h-14 items-center justify-between border-x border-border px-8">
           <Logo />
 
           <div className="hidden md:flex items-center gap-7">
@@ -88,7 +113,7 @@ export default function Navbar() {
               {user ? <UserMenu /> : <UnauthNav />}
             </div>
             <button
-              className="md:hidden p-2 text-black"
+              className="md:hidden p-2 text-foreground"
               onClick={() => setMobileOpen((v) => !v)}
               aria-expanded={mobileOpen}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
@@ -103,14 +128,14 @@ export default function Navbar() {
       <div
         className={`md:hidden fixed inset-0 z-40 ${
           mobileOpen ? "flex" : "hidden"
-        } flex-col px-6 pt-24 pb-10 bg-white`}
+        } flex-col bg-background px-6 pt-24 pb-10`}
       >
         <nav className="flex flex-col gap-1 flex-1">
           {NAV_LINKS.map((item) => (
             <div key={item.href}>
               <Link
                 href={item.href}
-                className="block text-[38px] font-extrabold tracking-tight leading-none py-3 text-black hover:opacity-60 transition-opacity"
+                className="block py-3 text-[38px] font-extrabold leading-none tracking-tight text-foreground transition-opacity hover:opacity-60"
                 onClick={() => setMobileOpen(false)}
               >
                 {item.label}
@@ -125,7 +150,7 @@ export default function Navbar() {
                 setMobileOpen(false);
                 window.location.href = "/account";
               }}
-              className="w-full py-4 rounded-xl border border-gray-300 text-black text-[14px] font-bold flex items-center justify-center hover:bg-gray-50 transition-colors"
+              className="w-full py-4 rounded-xl border border-border text-foreground text-[14px] font-bold flex items-center justify-center hover:bg-muted transition-colors"
             >
               Account
             </button>
@@ -134,7 +159,7 @@ export default function Navbar() {
               <Link
                 href="/login"
                 onClick={() => setMobileOpen(false)}
-                className="w-full py-4 rounded-xl border border-gray-300 text-black text-[14px] font-bold flex items-center justify-center hover:bg-gray-50 transition-colors"
+                className="w-full py-4 rounded-xl border border-border text-foreground text-[14px] font-bold flex items-center justify-center hover:bg-muted transition-colors"
               >
                 Login
               </Link>

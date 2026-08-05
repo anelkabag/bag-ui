@@ -148,15 +148,17 @@ export function ComponentPreview({ item }: ComponentPreviewProps) {
 
   if (!filePath) {
     return (
-      <div className="w-full flex items-center justify-center h-[500px] rounded-xl border border-gray-200 bg-gray-50">
-        <span className="text-xs text-black/30">Preview unavailable</span>
+      <div className="flex h-[500px] w-full items-center justify-center rounded-xl border border-border bg-card">
+        <span className="text-xs text-muted-foreground/80">
+          Preview unavailable
+        </span>
       </div>
     );
   }
 
   if (loading) {
     return (
-      <div className="w-full h-[500px] rounded-xl border border-gray-200 bg-gray-50">
+      <div className="h-[500px] w-full rounded-xl border border-border bg-card">
         <Skeleton />
       </div>
     );
@@ -164,11 +166,11 @@ export function ComponentPreview({ item }: ComponentPreviewProps) {
 
   if (!PreviewComponent || loadError) {
     return (
-      <div className="w-full h-[500px] flex flex-col items-center justify-center gap-3 text-center px-6 rounded-xl border border-gray-200 bg-zinc-50">
-        <div className="text-sm font-semibold text-gray-900">
+      <div className="flex h-[500px] w-full flex-col items-center justify-center gap-3 rounded-xl border border-border bg-card px-6 text-center">
+        <div className="text-sm font-semibold text-foreground">
           Preview failed to load
         </div>
-        <div className="text-xs text-gray-500 max-w-sm">
+        <div className="max-w-sm text-xs text-muted-foreground">
           Could not load <strong>{filePath}</strong>. Check the registry path or
           export name.
         </div>
@@ -184,7 +186,7 @@ export function ComponentPreview({ item }: ComponentPreviewProps) {
      */
     <div
       ref={containerRef}
-      className="w-full rounded-xl border border-gray-200 bg-zinc-50 overflow-auto"
+      className="w-full overflow-auto rounded-xl border border-border bg-card"
       style={{
         minHeight: 500,
         position: "relative",
