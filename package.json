@@ -18,6 +18,7 @@
     "@supabase/supabase-js": "^2.40.0",
     "@tabler/icons-react": "^3.44.0",
     "@vercel/analytics": "^2.0.1",
+    "next-themes": "^0.4.6",
     "@vercel/speed-insights": "^2.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

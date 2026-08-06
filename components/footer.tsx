@@ -3,7 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useTheme } from "next-themes";
 import { Sun, Moon } from "lucide-react";
 import {
   FaXTwitter, // X
@@ -73,37 +74,11 @@ const SOCIAL_LINKS = [
   },
 ];
 
-function getInitialTheme(): "dark" | "light" {
-  if (typeof window === "undefined") {
-    return "dark";
-  }
-
-  const savedTheme = window.localStorage.getItem("bagui-theme");
-
-  return savedTheme === "light" || savedTheme === "dark" ? savedTheme : "dark";
-}
-
 export function Footer() {
-  const [theme, setTheme] = useState<"dark" | "light">(getInitialTheme);
+  const { theme, setTheme, resolvedTheme } = useTheme();
 
-  useEffect(() => {
-    const root = document.documentElement;
-
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-
-    root.style.colorScheme = theme;
-  }, [theme]);
-
-  const toggleTheme = () => {
-    const nextTheme = theme === "dark" ? "light" : "dark";
-
-    setTheme(nextTheme);
-    window.localStorage.setItem("bagui-theme", nextTheme);
-  };
+  // resolvedTheme reflects the actual applied theme when using 'system'
+  const active = (resolvedTheme ?? theme) as string | undefined;
 
   return (
     <div className="w-full border-t border-border">
@@ -155,14 +130,11 @@ export function Footer() {
               ].map(({ key, icon, label }) => (
                 <button
                   key={key}
-                  onClick={() => {
-                    setTheme(key as "light" | "dark");
-                    window.localStorage.setItem("bagui-theme", key);
-                  }}
+                  onClick={() => setTheme(key)}
                   title={label}
                   className={[
                     "h-6 w-7 rounded-[7px] flex items-center justify-center transition-all duration-200 cursor-pointer",
-                    theme === key
+                    active === key
                       ? "bg-background text-foreground border border-border shadow-sm"
                       : "text-muted-foreground hover:text-foreground hover:bg-background/50",
                   ].join(" ")}

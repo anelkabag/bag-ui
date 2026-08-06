@@ -167,8 +167,8 @@ const NavLink = ({
     onClick={onClick}
     className={`relative ${size === "xs" ? "text-[13px]" : "text-sm"} ${
       href === "/docs"
-        ? "text-black font-semibold"
-        : "text-gray-500 font-medium"
+        ? "text-black dark:text-white font-semibold"
+        : "text-gray-500 dark:text-gray-400 font-medium"
     } hover:text-black transition-colors duration-150 group inline-flex items-baseline gap-0.5`}
   >
     {label}
@@ -209,7 +209,7 @@ function CodeBlock({
   };
 
   return (
-    <div className="rounded-xl border border-gray-100 bg-gray-50 overflow-hidden my-5 shadow-sm">
+    <div className="rounded-xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 overflow-hidden my-5 shadow-sm">
       {tabs && (
         <div className="flex items-center gap-0 border-b border-gray-100 px-1 pt-1 bg-white">
           {tabs.map((t) => (
@@ -233,12 +233,12 @@ function CodeBlock({
         </div>
       )}
       <div className="relative group">
-        <pre className="p-4 text-sm text-gray-700 font-mono leading-relaxed overflow-x-auto whitespace-pre">
+        <pre className="p-4 text-sm text-gray-700 dark:text-gray-200 font-mono leading-relaxed overflow-x-auto whitespace-pre">
           {code}
         </pre>
         <button
           onClick={copy}
-          className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity bg-white hover:bg-gray-50 border border-gray-200 rounded-md px-2 py-1 text-xs text-gray-500 hover:text-gray-900 flex items-center gap-1.5 shadow-sm cursor-pointer"
+          className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md px-2 py-1 text-xs text-gray-500 dark:text-gray-200 hover:text-gray-900 flex items-center gap-1.5 shadow-sm cursor-pointer"
         >
           <AnimatePresence mode="wait">
             {copied ? (
@@ -278,11 +278,11 @@ function SectionHeading({
   return (
     <h2
       id={id}
-      className="text-gray-900 text-xl font-semibold mt-14 mb-4 scroll-mt-20 flex items-center gap-2 group"
+      className="text-gray-900 dark:text-gray-100 text-xl font-semibold mt-14 mb-4 scroll-mt-20 flex items-center gap-2 group"
     >
       <a
         href={`#${id}`}
-        className="opacity-0 group-hover:opacity-30 transition-opacity text-gray-900 text-base"
+        className="opacity-0 group-hover:opacity-30 transition-opacity text-gray-900 dark:text-gray-100 text-base"
       >
         #
       </a>
@@ -292,7 +292,11 @@ function SectionHeading({
 }
 
 function Prose({ children }: { children: React.ReactNode }) {
-  return <p className="text-gray-500 text-[0.925rem] leading-7">{children}</p>;
+  return (
+    <p className="text-gray-500 dark:text-gray-400 text-[0.925rem] leading-7">
+      {children}
+    </p>
+  );
 }
 
 // ─── Left sidebar ─────────────────────────────────────────────────────────────
@@ -317,8 +321,8 @@ function LeftSidebar({
                   onClick={() => onSelectPage(page.page)}
                   className={`w-full text-left block text-sm rounded-lg px-3 py-1.5 transition-colors cursor-pointer ${
                     activePage === page.page
-                      ? "text-black bg-gray-100 font-medium"
-                      : "text-gray-500 hover:text-gray-800 hover:bg-gray-50"
+                      ? "text-black dark:text-white bg-gray-100 dark:bg-gray-800 font-medium"
+                      : "text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
                   }`}
                 >
                   {page.label}
@@ -346,8 +350,8 @@ function TOC({ sections, active }: { sections: Section[]; active: string }) {
               href={`#${s.id}`}
               className={`block text-[13px] transition-colors py-0.5 ${
                 active === s.id
-                  ? "text-black font-medium"
-                  : "text-gray-400 hover:text-gray-700"
+                  ? "text-black dark:text-white font-medium"
+                  : "text-gray-400 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
               }`}
             >
               {s.label}
@@ -406,7 +410,7 @@ export default function DocsPage() {
   }, [sections]);
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       {/* ── Navbar ── */}
       <Navbar />
 
@@ -444,7 +448,7 @@ export default function DocsPage() {
                 <span className="text-gray-400">Ship a block.</span>
               </h1>
               <p className="text-gray-500 text-base leading-relaxed">
-                Bag/UI is open source. Here's everything you need to add a
+                Bag/UI is open source. Here&apos;s everything you need to add a
                 component and get it merged.
               </p>
             </>
