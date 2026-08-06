@@ -43,9 +43,6 @@ const CONTRIBUTING_SECTIONS: Section[] = [
 ];
 
 // ─── Sidebar nav ─────────────────────────────────────────────────────────────
-// Chaque groupe = une section "Getting Started", etc.
-// Chaque page = une entrée cliquable dans la sidebar qui bascule la vue (installation / contributing)
-// et affiche son propre "On this page" à droite.
 const SIDEBAR_NAV: {
   group: string;
   pages: { label: string; page: DocsPage }[];
@@ -120,7 +117,7 @@ const CONTRIB_BUILD_CMD = `npm run build
 npm run registry:build`;
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// NAVBAR — Pas d'animation, juste statique
+// NAVBAR
 // ═══════════════════════════════════════════════════════════════════════════════
 
 const Logo = () => (
@@ -134,7 +131,7 @@ const Logo = () => (
         className="shrink-0"
         priority
       />
-      <span className="text-[15px] font-semibold tracking-tight text-black">
+      <span className="text-[15px] font-semibold tracking-tight text-foreground">
         Bag\Ui
       </span>
     </Link>
@@ -142,7 +139,7 @@ const Logo = () => (
       href="https://x.com/anelkabag"
       target="_blank"
       rel="noopener noreferrer"
-      className="text-[13px] text-gray-400 hover:text-black transition-colors"
+      className="text-[13px] text-muted-foreground hover:text-foreground transition-colors"
     >
       by Anelka Bag
     </Link>
@@ -167,20 +164,20 @@ const NavLink = ({
     onClick={onClick}
     className={`relative ${size === "xs" ? "text-[13px]" : "text-sm"} ${
       href === "/docs"
-        ? "text-black dark:text-white font-semibold"
-        : "text-gray-500 dark:text-gray-400 font-medium"
-    } hover:text-black transition-colors duration-150 group inline-flex items-baseline gap-0.5`}
+        ? "text-foreground font-semibold"
+        : "text-muted-foreground font-medium"
+    } hover:text-foreground transition-colors duration-150 group inline-flex items-baseline gap-0.5`}
   >
     {label}
     {external && (
-      <sup className="text-[10px] text-gray-400 leading-none">↗</sup>
+      <sup className="text-[10px] text-muted-foreground leading-none">↗</sup>
     )}
-    <span className="absolute left-0 -bottom-[2px] h-[1.5px] w-0 group-hover:w-full transition-all duration-300 bg-black" />
+    <span className="absolute left-0 -bottom-[2px] h-[1.5px] w-0 group-hover:w-full transition-all duration-300 bg-foreground" />
   </Link>
 );
 
 const Sep = () => (
-  <div className="hidden sm:block w-px h-5 self-center shrink-0 bg-gray-200" />
+  <div className="hidden sm:block w-px h-5 self-center shrink-0 bg-border" />
 );
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -209,17 +206,17 @@ function CodeBlock({
   };
 
   return (
-    <div className="rounded-xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 overflow-hidden my-5 shadow-sm">
+    <div className="rounded-xl border border-border bg-muted overflow-hidden my-5 shadow-sm">
       {tabs && (
-        <div className="flex items-center gap-0 border-b border-gray-100 px-1 pt-1 bg-white">
+        <div className="flex items-center gap-0 border-b border-border px-1 pt-1 bg-background">
           {tabs.map((t) => (
             <button
               key={t}
               onClick={() => setActive(t)}
               className={`px-3 py-1.5 text-xs font-medium rounded-t transition-colors cursor-pointer ${
                 active === t
-                  ? "text-black bg-gray-100"
-                  : "text-gray-400 hover:text-gray-700"
+                  ? "text-foreground bg-accent"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {t}
@@ -228,17 +225,17 @@ function CodeBlock({
         </div>
       )}
       {!tabs && mono && (
-        <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100 bg-white">
-          <span className="text-xs text-gray-400 font-mono">json</span>
+        <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-background">
+          <span className="text-xs text-muted-foreground font-mono">json</span>
         </div>
       )}
       <div className="relative group">
-        <pre className="p-4 text-sm text-gray-700 dark:text-gray-200 font-mono leading-relaxed overflow-x-auto whitespace-pre">
+        <pre className="p-4 text-sm text-foreground/90 font-mono leading-relaxed overflow-x-auto whitespace-pre">
           {code}
         </pre>
         <button
           onClick={copy}
-          className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md px-2 py-1 text-xs text-gray-500 dark:text-gray-200 hover:text-gray-900 flex items-center gap-1.5 shadow-sm cursor-pointer"
+          className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity bg-background hover:bg-muted border border-border rounded-md px-2 py-1 text-xs text-muted-foreground hover:text-foreground flex items-center gap-1.5 shadow-sm cursor-pointer"
         >
           <AnimatePresence mode="wait">
             {copied ? (
@@ -247,7 +244,7 @@ function CodeBlock({
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0 }}
-                className="text-emerald-600"
+                className="text-emerald-600 dark:text-emerald-400"
               >
                 ✓ Copied
               </motion.span>
@@ -278,11 +275,11 @@ function SectionHeading({
   return (
     <h2
       id={id}
-      className="text-gray-900 dark:text-gray-100 text-xl font-semibold mt-14 mb-4 scroll-mt-20 flex items-center gap-2 group"
+      className="text-foreground text-xl font-semibold mt-14 mb-4 scroll-mt-20 flex items-center gap-2 group"
     >
       <a
         href={`#${id}`}
-        className="opacity-0 group-hover:opacity-30 transition-opacity text-gray-900 dark:text-gray-100 text-base"
+        className="opacity-0 group-hover:opacity-30 transition-opacity text-foreground text-base"
       >
         #
       </a>
@@ -293,11 +290,15 @@ function SectionHeading({
 
 function Prose({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-gray-500 dark:text-gray-400 text-[0.925rem] leading-7">
+    <p className="text-muted-foreground text-[0.925rem] leading-7">
       {children}
     </p>
   );
 }
+
+// Petite classe partagée pour le code inline dans le texte (inchangée en logique, juste stylée pour le dark mode)
+const inlineCode =
+  "text-foreground bg-muted rounded px-1.5 py-0.5 text-xs font-mono";
 
 // ─── Left sidebar ─────────────────────────────────────────────────────────────
 function LeftSidebar({
@@ -311,7 +312,7 @@ function LeftSidebar({
     <aside className="hidden xl:block sticky top-20 self-start">
       {SIDEBAR_NAV.map((group) => (
         <div key={group.group} className="mb-6">
-          <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-3 px-3">
+          <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest mb-3 px-3">
             {group.group}
           </p>
           <ul className="space-y-0.5">
@@ -321,8 +322,8 @@ function LeftSidebar({
                   onClick={() => onSelectPage(page.page)}
                   className={`w-full text-left block text-sm rounded-lg px-3 py-1.5 transition-colors cursor-pointer ${
                     activePage === page.page
-                      ? "text-black dark:text-white bg-gray-100 dark:bg-gray-800 font-medium"
-                      : "text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
+                      ? "text-foreground bg-accent font-medium"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent/60"
                   }`}
                 >
                   {page.label}
@@ -340,7 +341,7 @@ function LeftSidebar({
 function TOC({ sections, active }: { sections: Section[]; active: string }) {
   return (
     <nav className="sticky top-20 hidden xl:block self-start">
-      <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-3">
+      <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest mb-3">
         On this page
       </p>
       <ul className="space-y-1.5">
@@ -350,8 +351,8 @@ function TOC({ sections, active }: { sections: Section[]; active: string }) {
               href={`#${s.id}`}
               className={`block text-[13px] transition-colors py-0.5 ${
                 active === s.id
-                  ? "text-black dark:text-white font-medium"
-                  : "text-gray-400 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                  ? "text-foreground font-medium"
+                  : "text-muted-foreground hover:text-foreground/80"
               }`}
             >
               {s.label}
@@ -363,7 +364,7 @@ function TOC({ sections, active }: { sections: Section[]; active: string }) {
   );
 }
 
-// DOCS PAGE — Scroll natif pur, zéro overhead
+// DOCS PAGE
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function DocsPage() {
   const [activePage, setActivePage] = useState<DocsPage>("installation");
@@ -375,8 +376,6 @@ export default function DocsPage() {
       ? INSTALLATION_SECTIONS
       : CONTRIBUTING_SECTIONS;
 
-  // Changer de page réinitialise la section active affichée dans le TOC
-  // et remonte en haut du contenu.
   const handleSelectPage = (page: DocsPage) => {
     setActivePage(page);
     setActiveSection(
@@ -385,15 +384,13 @@ export default function DocsPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // ─── Mise à jour manuelle du TOC au scroll avec throttle ───────────────
   useEffect(() => {
     let lastUpdate = 0;
     const updateActive = () => {
       const now = Date.now();
-      if (now - lastUpdate < 100) return; // Throttle à 100ms
+      if (now - lastUpdate < 100) return;
       lastUpdate = now;
 
-      // Trouver la section en viewport, uniquement parmi celles de la page active
       for (const section of sections) {
         const el = document.getElementById(section.id);
         if (!el) continue;
@@ -410,20 +407,20 @@ export default function DocsPage() {
   }, [sections]);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen bg-background text-foreground">
       {/* ── Navbar ── */}
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-6 pt-10 pb-10 border-x border-gray-200">
+      <div className="max-w-7xl mx-auto px-6 pt-10 pb-10 border-x border-border">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-xs text-gray-400 mb-8">
-          <Link href="/" className="hover:text-black transition-colors">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground mb-8">
+          <Link href="/" className="hover:text-foreground transition-colors">
             Home
           </Link>
           <span>/</span>
-          <span className="text-gray-600">Documentation</span>
+          <span className="text-foreground">Documentation</span>
           <span>/</span>
-          <span className="text-gray-600">
+          <span className="text-foreground">
             {activePage === "installation" ? "Installations" : "Contribution"}
           </span>
         </div>
@@ -432,22 +429,22 @@ export default function DocsPage() {
         <div className="mb-14 max-w-2xl">
           {activePage === "installation" ? (
             <>
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-black mb-3 leading-tight">
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-3 leading-tight">
                 Ready-made blocks.{" "}
-                <span className="text-gray-400">Zero wasted time.</span>
+                <span className="text-muted-foreground">Zero wasted time.</span>
               </h1>
-              <p className="text-gray-500 text-base leading-relaxed">
+              <p className="text-muted-foreground text-base leading-relaxed">
                 Register Bag/UI once and pull any block directly into your
                 project with a single CLI command.
               </p>
             </>
           ) : (
             <>
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-black mb-3 leading-tight">
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-3 leading-tight">
                 Build with us.{" "}
-                <span className="text-gray-400">Ship a block.</span>
+                <span className="text-muted-foreground">Ship a block.</span>
               </h1>
-              <p className="text-gray-500 text-base leading-relaxed">
+              <p className="text-muted-foreground text-base leading-relaxed">
                 Bag/UI is open source. Here&apos;s everything you need to add a
                 component and get it merged.
               </p>
@@ -488,11 +485,9 @@ export default function DocsPage() {
                   </SectionHeading>
                   <Prose>
                     Your project should already run React 19, Tailwind CSS v4
-                    and shadcn/ui. If shadcn isn't initialized yet, run{" "}
-                    <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">
-                      init
-                    </code>{" "}
-                    from your project root and follow the prompts.
+                    and shadcn/ui. If shadcn isn&apos;t initialized yet, run{" "}
+                    <code className={inlineCode}>init</code> from your project
+                    root and follow the prompts.
                   </Prose>
                   <CodeBlock cmds={INIT_CMDS} tabs={tabs} />
                 </section>
@@ -503,13 +498,10 @@ export default function DocsPage() {
                     Register the namespace
                   </SectionHeading>
                   <Prose>
-                    Add the Bag/UI registry to your project's{" "}
-                    <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">
-                      components.json
-                    </code>{" "}
-                    so the shadcn CLI knows where to fetch the blocks from. You
-                    only do this once per project — no API key needed for free
-                    blocks.
+                    Add the Bag/UI registry to your project&apos;s{" "}
+                    <code className={inlineCode}>components.json</code> so the
+                    shadcn CLI knows where to fetch the blocks from. You only do
+                    this once per project — no API key needed for free blocks.
                   </Prose>
                   <CodeBlock mono content={REGISTRY_JSON} />
                 </section>
@@ -523,10 +515,7 @@ export default function DocsPage() {
                     Once the registry is wired, install any free block by its
                     id. The CLI fetches the source, pulls the missing shadcn
                     primitives and writes the file under{" "}
-                    <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">
-                      components/blocks/
-                    </code>
-                    .
+                    <code className={inlineCode}>components/blocks/</code>.
                   </Prose>
                   <CodeBlock cmds={INSTALL_CMDS} tabs={tabs} />
                   <ol className="mt-6 space-y-3">
@@ -537,10 +526,10 @@ export default function DocsPage() {
                       "Replace the placeholder copy, links and brand colors.",
                     ].map((step, i) => (
                       <li key={i} className="flex items-start gap-3">
-                        <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border border-gray-200 bg-gray-50 flex items-center justify-center text-[10px] font-mono text-gray-400">
+                        <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border border-border bg-muted flex items-center justify-center text-[10px] font-mono text-muted-foreground">
                           {i + 1}
                         </span>
-                        <span className="text-gray-500 text-sm leading-6">
+                        <span className="text-muted-foreground text-sm leading-6">
                           {step}
                         </span>
                       </li>
@@ -556,13 +545,11 @@ export default function DocsPage() {
                   <Prose>
                     Blocks ship in plain JSX with utility classes only. Change
                     copy, swap icons from{" "}
-                    <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">
-                      lucide-react
-                    </code>
-                    , restyle with your own Tailwind tokens or refactor the
-                    markup — there is no abstraction in the way.
+                    <code className={inlineCode}>lucide-react</code>, restyle
+                    with your own Tailwind tokens or refactor the markup — there
+                    is no abstraction in the way.
                   </Prose>
-                  <p className="text-gray-500 text-[0.925rem] leading-7 mt-3">
+                  <p className="text-muted-foreground text-[0.925rem] leading-7 mt-3">
                     If you replace lucide-react with another icon library,
                     search and replace the imports. The semantics are kept
                     generic so other libraries plug in easily.
@@ -574,26 +561,13 @@ export default function DocsPage() {
                   <SectionHeading id="dark-mode">Dark mode</SectionHeading>
                   <Prose>
                     Every block reads the standard shadcn CSS variables (
-                    <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">
-                      --background
-                    </code>
-                    ,{" "}
-                    <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">
-                      --foreground
-                    </code>
-                    ,{" "}
-                    <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">
-                      --muted
-                    </code>
-                    , …). As long as your project toggles the{" "}
-                    <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">
-                      .dark
-                    </code>{" "}
-                    class on the{" "}
-                    <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">
-                      &lt;html&gt;
-                    </code>{" "}
-                    element, the blocks adapt automatically.
+                    <code className={inlineCode}>--background</code>,{" "}
+                    <code className={inlineCode}>--foreground</code>,{" "}
+                    <code className={inlineCode}>--muted</code>, …). As long as
+                    your project toggles the{" "}
+                    <code className={inlineCode}>.dark</code> class on the{" "}
+                    <code className={inlineCode}>&lt;html&gt;</code> element,
+                    the blocks adapt automatically.
                   </Prose>
                 </section>
 
@@ -616,22 +590,22 @@ export default function DocsPage() {
                     Stuck on something? Email{" "}
                     <a
                       href="mailto:anelka.bag@gmail.com"
-                      className="text-black underline underline-offset-2 hover:opacity-70 transition-opacity"
+                      className="text-foreground underline underline-offset-2 hover:opacity-70 transition-opacity"
                     >
                       anelka.bag@gmail.com
                     </a>{" "}
                     — Pro accounts get priority replies, free users still get an
                     answer when time allows.
                   </Prose>
-                  <div className="mt-6 rounded-xl border border-gray-100 bg-gray-50 p-6">
-                    <h3 className="text-gray-900 text-sm font-semibold mb-2">
+                  <div className="mt-6 rounded-xl border border-border bg-muted/50 p-6">
+                    <h3 className="text-foreground text-sm font-semibold mb-2">
                       Still stuck?
                     </h3>
-                    <p className="text-gray-500 text-sm leading-relaxed">
+                    <p className="text-muted-foreground text-sm leading-relaxed">
                       Drop us an email at{" "}
                       <a
                         href="mailto:anelka.bag@gmail.com"
-                        className="text-black underline underline-offset-2 hover:opacity-70 transition-opacity"
+                        className="text-foreground underline underline-offset-2 hover:opacity-70 transition-opacity"
                       >
                         anelka.bag@gmail.com
                       </a>
@@ -641,10 +615,10 @@ export default function DocsPage() {
                 </section>
 
                 {/* Prev / Next */}
-                <div className="mt-16 pt-8 border-t border-gray-100 flex justify-end">
+                <div className="mt-16 pt-8 border-t border-border flex justify-end">
                   <button
                     onClick={() => handleSelectPage("contributing")}
-                    className="group flex items-center gap-2 text-sm text-gray-400 hover:text-black transition-colors cursor-pointer"
+                    className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                   >
                     Contribution guide
                     <span className="group-hover:translate-x-0.5 transition-transform">
@@ -689,11 +663,7 @@ export default function DocsPage() {
                   </SectionHeading>
                   <Prose>
                     Work off a dedicated branch rather than committing straight
-                    to{" "}
-                    <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">
-                      main
-                    </code>
-                    .
+                    to <code className={inlineCode}>main</code>.
                   </Prose>
                   <CodeBlock mono content={CONTRIB_BRANCH_CMD} />
                 </section>
@@ -705,15 +675,10 @@ export default function DocsPage() {
                   </SectionHeading>
                   <Prose>
                     Components live under{" "}
-                    <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">
-                      registry/default/blocks
-                    </code>{" "}
-                    or{" "}
-                    <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">
-                      registry/default/ui
-                    </code>
-                    . If the category doesn't exist yet, create a new folder for
-                    it.
+                    <code className={inlineCode}>registry/default/blocks</code>{" "}
+                    or <code className={inlineCode}>registry/default/ui</code>.
+                    If the category doesn&apos;t exist yet, create a new folder
+                    for it.
                   </Prose>
                   <CodeBlock mono content={CONTRIB_COMPONENT_CODE} />
                 </section>
@@ -725,14 +690,8 @@ export default function DocsPage() {
                   </SectionHeading>
                   <Prose>
                     Add an entry for your component in the{" "}
-                    <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">
-                      items
-                    </code>{" "}
-                    section of{" "}
-                    <code className="text-gray-800 bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">
-                      registry.json
-                    </code>
-                    .
+                    <code className={inlineCode}>items</code> section of{" "}
+                    <code className={inlineCode}>registry.json</code>.
                   </Prose>
                   <CodeBlock mono content={CONTRIB_REGISTRY_JSON} />
                 </section>
@@ -757,10 +716,10 @@ export default function DocsPage() {
                       "Open a pull request with the component name, what it adds, and screenshots if possible.",
                     ].map((step, i) => (
                       <li key={i} className="flex items-start gap-3">
-                        <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border border-gray-200 bg-gray-50 flex items-center justify-center text-[10px] font-mono text-gray-400">
+                        <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border border-border bg-muted flex items-center justify-center text-[10px] font-mono text-muted-foreground">
                           {i + 1}
                         </span>
-                        <span className="text-gray-500 text-sm leading-6">
+                        <span className="text-muted-foreground text-sm leading-6">
                           {step}
                         </span>
                       </li>
@@ -769,10 +728,10 @@ export default function DocsPage() {
                 </section>
 
                 {/* Prev / Next */}
-                <div className="mt-16 pt-8 border-t border-gray-100 flex justify-between">
+                <div className="mt-16 pt-8 border-t border-border flex justify-between">
                   <button
                     onClick={() => handleSelectPage("installation")}
-                    className="group flex items-center gap-2 text-sm text-gray-400 hover:text-black transition-colors cursor-pointer"
+                    className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                   >
                     <span className="group-hover:-translate-x-0.5 transition-transform">
                       ←
@@ -781,7 +740,7 @@ export default function DocsPage() {
                   </button>
                   <Link
                     href="/blocks"
-                    className="group flex items-center gap-2 text-sm text-gray-400 hover:text-black transition-colors"
+                    className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Browse blocks
                     <span className="group-hover:translate-x-0.5 transition-transform">
@@ -793,7 +752,7 @@ export default function DocsPage() {
             )}
           </main>
 
-          {/* Right TOC — différent selon la page active */}
+          {/* Right TOC */}
           <TOC sections={sections} active={activeSection} />
         </div>
       </div>

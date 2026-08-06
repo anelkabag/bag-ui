@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { AuthProvider } from "@/providers/AuthProvider";
-import { ThemeProvider } from "@/providers/ThemeProvider";
+import DynamicThemeProvider from "@/providers/DynamicThemeProvider";
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -116,9 +116,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
-        <ThemeProvider>
+        <DynamicThemeProvider>
           <AuthProvider>{children}</AuthProvider>
-        </ThemeProvider>
+        </DynamicThemeProvider>
 
         {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
