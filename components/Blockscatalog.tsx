@@ -134,8 +134,6 @@ export default function BlocksCatalog() {
             {/* Show more */}
             {!showAll && (
               <div className="relative mt-8">
-                {/* fade overlay */}
-                <div className="absolute -top-36 left-0 right-0 h-36 bg-gradient-to-b from-transparent to-white pointer-events-none" />
                 <div className="flex flex-col items-center gap-2 pt-8">
                   <button
                     onClick={() => setShowAll(true)}
