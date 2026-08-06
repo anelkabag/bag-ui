@@ -187,6 +187,8 @@ const ExternalLinkIcon = () => (
 );
 
 // ─── Code block ──────────────────────────────────────────────────────────────
+// Reste volontairement toujours sombre (look "éditeur de code"), indépendant
+// du thème du site — comme un bloc de code GitHub/VS Code.
 
 function CodeBlock({ code, isPro }: { code: string; isPro?: boolean }) {
   const { copied, copy } = useCopy();
@@ -210,7 +212,7 @@ function CodeBlock({ code, isPro }: { code: string; isPro?: boolean }) {
   };
 
   return (
-    <div className="relative rounded-xl border border-gray-200 bg-gray-950 overflow-hidden">
+    <div className="relative rounded-xl border border-border bg-gray-950 overflow-hidden">
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/10 gap-2 sm:gap-0">
         <span className="text-xs text-gray-500 font-mono">page.tsx</span>
         <button
@@ -232,6 +234,8 @@ function CodeBlock({ code, isPro }: { code: string; isPro?: boolean }) {
 }
 
 // ─── Iframe Preview ───────────────────────────────────────────────────────────
+// Le canvas reste volontairement clair : on veut voir le rendu réel du bloc,
+// pas le thème du site qui consulte l'aperçu.
 
 function IframePreview({
   variantId,
@@ -242,7 +246,7 @@ function IframePreview({
 }) {
   return (
     <div
-      className="relative w-full rounded-xl border border-gray-200 overflow-hidden bg-white"
+      className="relative w-full rounded-xl border border-border overflow-hidden bg-white"
       style={{ height: 500 }}
     >
       <iframe
@@ -393,20 +397,20 @@ function VariantToolbarHeader({
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.05 }}
-      className="flex items-center gap-2 sm:gap-3 mb-4 pb-3 border-b border-gray-200 -mx-6 px-6 py-3"
+      className="flex items-center gap-2 sm:gap-3 mb-4 pb-3 border-b border-border -mx-6 px-6 py-3"
     >
       {/* Left: Tabs + Icons */}
       <div className="flex items-center gap-2 shrink-0">
         {/* Preview / Code tabs */}
-        <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-lg p-1">
+        <div className="flex items-center gap-1 bg-background border border-border rounded-lg p-1">
           {(["preview", "code"] as ViewMode[]).map((m) => (
             <button
               key={m}
               onClick={() => setMode(m)}
               className={`flex items-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
                 mode === m
-                  ? "text-gray-900 bg-gray-100"
-                  : "text-gray-600 hover:text-gray-900"
+                  ? "text-foreground bg-accent"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {m === "preview" ? <IconEye size={14} /> : <IconCode size={14} />}
@@ -419,18 +423,18 @@ function VariantToolbarHeader({
         {/* Fullscreen icon - hidden on mobile */}
         <button
           onClick={() => window.open(`/fullscreen/${variantId}`, "_blank")}
-          className="hidden sm:flex p-2 hover:bg-gray-100 rounded-md transition-colors cursor-pointer items-center justify-center"
+          className="hidden sm:flex p-2 hover:bg-accent rounded-md transition-colors cursor-pointer items-center justify-center"
           title="Fullscreen"
         >
-          <IconArrowsMaximize size={16} className="text-gray-600" />
+          <IconArrowsMaximize size={16} className="text-muted-foreground" />
         </button>
 
         {/* Refresh icon - hidden on mobile */}
         <button
-          className="hidden sm:flex p-2 hover:bg-gray-100 rounded-md transition-colors cursor-pointer items-center justify-center"
+          className="hidden sm:flex p-2 hover:bg-accent rounded-md transition-colors cursor-pointer items-center justify-center"
           title="Refresh"
         >
-          <IconRefresh size={16} className="text-gray-600" />
+          <IconRefresh size={16} className="text-muted-foreground" />
         </button>
       </div>
 
@@ -441,14 +445,14 @@ function VariantToolbarHeader({
             {/* MOBILE: "Copy prompt" button (icon + label, no command text) */}
             <button
               onClick={() => handleCopy(cmd)}
-              className="sm:hidden flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-gray-200 bg-white text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50"
+              className="sm:hidden flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-border bg-background text-xs font-medium text-foreground transition-colors hover:bg-accent"
             >
               {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
               <span>{copied ? "Copied!" : "Copy command"}</span>
             </button>
 
             {/* DESKTOP: CLI Command Display (full text) */}
-            <div className="hidden sm:flex flex-1 items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 bg-white text-xs font-mono text-gray-700 overflow-x-auto min-w-0">
+            <div className="hidden sm:flex flex-1 items-center gap-2 px-3 py-2 rounded-lg border border-border bg-background text-xs font-mono text-foreground overflow-x-auto min-w-0">
               <div className="w-4 h-4 flex items-center justify-center shrink-0">
                 {PKG_ICONS[pkg]}
               </div>
@@ -459,14 +463,14 @@ function VariantToolbarHeader({
             <div className="relative shrink-0">
               <button
                 onClick={() => setOpenDropdown(!openDropdown)}
-                className="flex items-center gap-1 p-2 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 bg-white cursor-pointer"
+                className="flex items-center gap-1 p-2 hover:bg-accent rounded-lg transition-colors border border-border bg-background cursor-pointer"
                 title="Change package manager"
               >
                 {/* Show pkg icon on mobile next to chevron */}
                 <span className="sm:hidden w-4 h-4 flex items-center justify-center">
                   {PKG_ICONS[pkg]}
                 </span>
-                <IconChevronDown size={16} className="text-gray-600" />
+                <IconChevronDown size={16} className="text-muted-foreground" />
               </button>
 
               <AnimatePresence>
@@ -476,7 +480,7 @@ function VariantToolbarHeader({
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute top-full mt-1 right-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-max"
+                    className="absolute top-full mt-1 right-0 bg-popover border border-border rounded-lg shadow-lg z-50 min-w-max"
                   >
                     {PKG_MANAGERS.map((p) => (
                       <button
@@ -487,8 +491,8 @@ function VariantToolbarHeader({
                         }}
                         className={`w-full text-left px-3 py-2 text-xs font-medium flex items-center gap-2 transition-colors first:rounded-t-lg last:rounded-b-lg cursor-pointer ${
                           pkg === p
-                            ? "bg-gray-100 text-gray-900"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                            ? "bg-accent text-accent-foreground"
+                            : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                         }`}
                       >
                         <div className="w-4 h-4 flex items-center justify-center shrink-0">
@@ -498,7 +502,7 @@ function VariantToolbarHeader({
                         {pkg === p && (
                           <IconCheck
                             size={12}
-                            className="ml-auto text-gray-600"
+                            className="ml-auto text-muted-foreground"
                           />
                         )}
                       </button>
@@ -511,25 +515,25 @@ function VariantToolbarHeader({
             {/* Copy button - desktop only */}
             <button
               onClick={() => handleCopy(cmd)}
-              className="hidden sm:flex p-2.5 hover:bg-gray-100 rounded-md transition-colors cursor-pointer items-center justify-center"
+              className="hidden sm:flex p-2.5 hover:bg-accent rounded-md transition-colors cursor-pointer items-center justify-center"
               title={copied ? "Copied!" : "Copy command"}
             >
               {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
             </button>
           </>
         ) : (
-          <div className="flex-1 rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between min-w-0">
+          <div className="flex-1 rounded-xl border border-border bg-muted px-3 py-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between min-w-0">
             <div className="min-w-0">
-              <p className="text-[11px] font-semibold text-gray-900">
+              <p className="text-[11px] font-semibold text-foreground">
                 {installState.label}
               </p>
-              <p className="text-[11px] text-gray-500 leading-relaxed">
+              <p className="text-[11px] text-muted-foreground leading-relaxed">
                 {installState.description}
               </p>
             </div>
             <Link
               href={installState.href}
-              className="inline-flex shrink-0 items-center justify-center rounded-full bg-black px-3 py-1.5 text-[11px] font-medium text-white transition-colors hover:bg-gray-800"
+              className="inline-flex shrink-0 items-center justify-center rounded-full bg-foreground px-3 py-1.5 text-[11px] font-medium text-background transition-colors hover:bg-foreground/90"
             >
               {installState.label}
             </Link>
@@ -564,12 +568,14 @@ function VariantCard({
     >
       {/* Title + Badge above toolbar */}
       <div className="flex items-center gap-2 mb-2">
-        <h3 className="text-sm font-semibold text-gray-900">{variant.label}</h3>
+        <h3 className="text-sm font-semibold text-foreground">
+          {variant.label}
+        </h3>
         <span
           className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide ${
             variant.access === "pro"
-              ? "bg-amber-100 text-amber-700 border border-amber-200"
-              : "bg-green-100 text-green-700 border border-green-200"
+              ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800"
+              : "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800"
           }`}
         >
           {variant.access === "pro" ? "Pro" : "Free"}
@@ -597,7 +603,7 @@ function VariantCard({
             {variant.item ? (
               <ComponentPreview item={variant.item} />
             ) : (
-              <div className="w-full h-80 flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-500">
+              <div className="w-full h-80 flex items-center justify-center rounded-xl border border-border bg-muted text-sm text-muted-foreground">
                 Preview unavailable
               </div>
             )}
@@ -631,12 +637,12 @@ export default function BlockDetailPage() {
 
   if (!block) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center space-y-3">
-          <p className="text-gray-400 text-sm">Block not found.</p>
+          <p className="text-muted-foreground text-sm">Block not found.</p>
           <Link
             href="/blocks"
-            className="text-sm font-medium text-black underline underline-offset-2"
+            className="text-sm font-medium text-foreground underline underline-offset-2"
           >
             ← Back to blocks
           </Link>
@@ -650,17 +656,20 @@ export default function BlockDetailPage() {
   const proCount = variants.filter((v) => v.access === "pro").length;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-6 pt-10 pb-20 border-x border-gray-200">
+      <div className="max-w-7xl mx-auto px-6 pt-10 pb-20 border-x border-border">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-8">
-          <Link href="/blocks" className="hover:text-black transition-colors">
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-8">
+          <Link
+            href="/blocks"
+            className="hover:text-foreground transition-colors"
+          >
             All blocks
           </Link>
           <span>/</span>
-          <span className="text-gray-600 capitalize">{block.label}</span>
+          <span className="text-foreground capitalize">{block.label}</span>
         </div>
 
         {/* Page header */}
@@ -673,33 +682,36 @@ export default function BlockDetailPage() {
           <div className="flex items-start justify-between gap-6 flex-wrap">
             <div>
               <div className="flex items-center gap-2.5 mb-2">
-                <h1 className="text-3xl font-bold tracking-tight text-black">
+                <h1 className="text-3xl font-bold tracking-tight text-foreground">
                   {block.label}
                 </h1>
                 {block.new && (
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-black text-white">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-foreground text-background">
                     New
                   </span>
                 )}
               </div>
-              <p className="text-gray-500 text-sm max-w-xl leading-relaxed">
+              <p className="text-muted-foreground text-sm max-w-xl leading-relaxed">
                 {block.description ||
                   `${block.label.toLowerCase()} sections. Ready to paste into your project.`}
               </p>
               <div className="flex items-center gap-3 mt-4 text-sm">
-                <span className="text-gray-600">
-                  <strong className="text-black">{freeCount}</strong> free
+                <span className="text-muted-foreground">
+                  <strong className="text-foreground">{freeCount}</strong> free
                 </span>
                 {proCount > 0 && (
                   <>
-                    <span className="text-gray-300">·</span>
-                    <span className="text-gray-600">
-                      <strong className="text-amber-600">{proCount}</strong> pro
+                    <span className="text-muted-foreground/50">·</span>
+                    <span className="text-muted-foreground">
+                      <strong className="text-amber-600 dark:text-amber-400">
+                        {proCount}
+                      </strong>{" "}
+                      pro
                     </span>
                   </>
                 )}
-                <span className="text-gray-300">·</span>
-                <span className="text-gray-400 text-xs">
+                <span className="text-muted-foreground/50">·</span>
+                <span className="text-muted-foreground text-xs">
                   React · TypeScript · Tailwind · Gsap
                 </span>
               </div>
@@ -707,7 +719,7 @@ export default function BlockDetailPage() {
           </div>
         </motion.div>
 
-        <div className="border-t border-gray-100 mb-10" />
+        <div className="border-t border-border mb-10" />
 
         {/* Variant list */}
         {variants.map((variant, i) => (

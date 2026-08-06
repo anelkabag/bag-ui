@@ -169,10 +169,12 @@ const CheckIcon = () => (
   </svg>
 );
 
+// Reste volontairement toujours sombre (look "éditeur de code"),
+// indépendant du thème du site.
 function CodeBlock({ code }: { code: string }) {
   const { copied, copy } = useCopy();
   return (
-    <div className="relative rounded-xl border border-gray-200 bg-gray-950 overflow-hidden">
+    <div className="relative rounded-xl border border-border bg-gray-950 overflow-hidden">
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/10 gap-2 sm:gap-0">
         <span className="text-xs text-gray-500 font-mono">page.tsx</span>
         <button
@@ -230,18 +232,18 @@ function TemplateToolbarHeader({
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.05 }}
-      className="flex items-center gap-2 sm:gap-3 mb-4 pb-3 border-b border-gray-200 -mx-6 px-6 py-3"
+      className="flex items-center gap-2 sm:gap-3 mb-4 pb-3 border-b border-border -mx-6 px-6 py-3"
     >
       <div className="flex items-center gap-2 shrink-0">
-        <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-lg p-1">
+        <div className="flex items-center gap-1 bg-background border border-border rounded-lg p-1">
           {(["preview", "code"] as ViewMode[]).map((m) => (
             <button
               key={m}
               onClick={() => setMode(m)}
               className={`flex items-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
                 mode === m
-                  ? "text-gray-900 bg-gray-100"
-                  : "text-gray-600 hover:text-gray-900"
+                  ? "text-foreground bg-accent"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {m === "preview" ? <IconEye size={14} /> : <IconCode size={14} />}
@@ -252,10 +254,10 @@ function TemplateToolbarHeader({
 
         <button
           onClick={() => window.open(`/fullscreen/${templateName}`, "_blank")}
-          className="hidden sm:flex p-2 hover:bg-gray-100 rounded-md transition-colors cursor-pointer items-center justify-center"
+          className="hidden sm:flex p-2 hover:bg-accent rounded-md transition-colors cursor-pointer items-center justify-center"
           title="Fullscreen"
         >
-          <IconArrowsMaximize size={16} className="text-gray-600" />
+          <IconArrowsMaximize size={16} className="text-muted-foreground" />
         </button>
       </div>
 
@@ -264,13 +266,13 @@ function TemplateToolbarHeader({
           <>
             <button
               onClick={() => handleCopy(cmd)}
-              className="sm:hidden flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-gray-200 bg-white text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50"
+              className="sm:hidden flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-border bg-background text-xs font-medium text-foreground transition-colors hover:bg-accent"
             >
               {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
               <span>{copied ? "Copied!" : "Copy command"}</span>
             </button>
 
-            <div className="hidden sm:flex flex-1 items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 bg-white text-xs font-mono text-gray-700 overflow-x-auto min-w-0">
+            <div className="hidden sm:flex flex-1 items-center gap-2 px-3 py-2 rounded-lg border border-border bg-background text-xs font-mono text-foreground overflow-x-auto min-w-0">
               <div className="w-4 h-4 flex items-center justify-center shrink-0">
                 {PKG_ICONS[pkg]}
               </div>
@@ -280,13 +282,13 @@ function TemplateToolbarHeader({
             <div className="relative shrink-0">
               <button
                 onClick={() => setOpenDropdown(!openDropdown)}
-                className="flex items-center gap-1 p-2 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 bg-white cursor-pointer"
+                className="flex items-center gap-1 p-2 hover:bg-accent rounded-lg transition-colors border border-border bg-background cursor-pointer"
                 title="Change package manager"
               >
                 <span className="sm:hidden w-4 h-4 flex items-center justify-center">
                   {PKG_ICONS[pkg]}
                 </span>
-                <IconChevronDown size={16} className="text-gray-600" />
+                <IconChevronDown size={16} className="text-muted-foreground" />
               </button>
 
               <AnimatePresence>
@@ -296,7 +298,7 @@ function TemplateToolbarHeader({
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute top-full mt-1 right-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-max"
+                    className="absolute top-full mt-1 right-0 bg-popover border border-border rounded-lg shadow-lg z-50 min-w-max"
                   >
                     {PKG_MANAGERS.map((p) => (
                       <button
@@ -307,8 +309,8 @@ function TemplateToolbarHeader({
                         }}
                         className={`w-full text-left px-3 py-2 text-xs font-medium flex items-center gap-2 transition-colors first:rounded-t-lg last:rounded-b-lg cursor-pointer ${
                           pkg === p
-                            ? "bg-gray-100 text-gray-900"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                            ? "bg-accent text-accent-foreground"
+                            : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                         }`}
                       >
                         <div className="w-4 h-4 flex items-center justify-center shrink-0">
@@ -318,7 +320,7 @@ function TemplateToolbarHeader({
                         {pkg === p && (
                           <IconCheck
                             size={12}
-                            className="ml-auto text-gray-600"
+                            className="ml-auto text-muted-foreground"
                           />
                         )}
                       </button>
@@ -330,25 +332,25 @@ function TemplateToolbarHeader({
 
             <button
               onClick={() => handleCopy(cmd)}
-              className="hidden sm:flex p-2.5 hover:bg-gray-100 rounded-md transition-colors cursor-pointer items-center justify-center"
+              className="hidden sm:flex p-2.5 hover:bg-accent rounded-md transition-colors cursor-pointer items-center justify-center"
               title={copied ? "Copied!" : "Copy command"}
             >
               {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
             </button>
           </>
         ) : (
-          <div className="flex-1 rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between min-w-0">
+          <div className="flex-1 rounded-xl border border-border bg-muted px-3 py-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between min-w-0">
             <div className="min-w-0">
-              <p className="text-[11px] font-semibold text-gray-900">
+              <p className="text-[11px] font-semibold text-foreground">
                 {installState.label}
               </p>
-              <p className="text-[11px] text-gray-500 leading-relaxed">
+              <p className="text-[11px] text-muted-foreground leading-relaxed">
                 {installState.description}
               </p>
             </div>
             <Link
               href={installState.href}
-              className="inline-flex shrink-0 items-center justify-center rounded-full bg-black px-3 py-1.5 text-[11px] font-medium text-white transition-colors hover:bg-gray-800"
+              className="inline-flex shrink-0 items-center justify-center rounded-full bg-foreground px-3 py-1.5 text-[11px] font-medium text-background transition-colors hover:bg-foreground/90"
             >
               {installState.label}
             </Link>
@@ -379,14 +381,14 @@ function TemplateCard({
       className="mb-12 scroll-mt-20"
     >
       <div className="flex items-center gap-2 mb-2">
-        <h3 className="text-sm font-semibold text-gray-900">
+        <h3 className="text-sm font-semibold text-foreground">
           {template.title || template.name}
         </h3>
         <span
           className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide ${
             access === "pro"
-              ? "bg-amber-100 text-amber-700 border border-amber-200"
-              : "bg-green-100 text-green-700 border border-green-200"
+              ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800"
+              : "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800"
           }`}
         >
           {access === "pro" ? "Pro" : "Free"}
@@ -429,15 +431,15 @@ function TemplateCard({
 
 export default function TemplatesPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="max-w-7xl mx-auto px-6 pt-10 pb-20 border-x border-gray-200">
-        <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-8">
-          <Link href="/" className="hover:text-black transition-colors">
+      <div className="max-w-7xl mx-auto px-6 pt-10 pb-20 border-x border-border">
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-8">
+          <Link href="/" className="hover:text-foreground transition-colors">
             Home
           </Link>
           <span>/</span>
-          <span className="text-gray-600">Templates</span>
+          <span className="text-foreground">Templates</span>
         </div>
 
         <motion.div
@@ -447,10 +449,10 @@ export default function TemplatesPage() {
           className="mb-12"
         >
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-black mb-2">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">
               Templates
             </h1>
-            <p className="text-gray-500 text-sm max-w-xl leading-relaxed">
+            <p className="text-muted-foreground text-sm max-w-xl leading-relaxed">
               Explore complete, production-ready website templates built with
               shadcn/ui, Tailwind CSS, and React. Launch modern landing pages,
               dashboards, SaaS apps, and more in minutes.
@@ -458,7 +460,7 @@ export default function TemplatesPage() {
           </div>
         </motion.div>
 
-        <div className="border-t border-gray-100 mb-10" />
+        <div className="border-t border-border mb-10" />
 
         {templates.length > 0 ? (
           templates.map((template, i) => (
@@ -466,7 +468,7 @@ export default function TemplatesPage() {
           ))
         ) : (
           <div className="text-center py-12">
-            <p className="text-gray-500">No templates available yet.</p>
+            <p className="text-muted-foreground">No templates available yet.</p>
           </div>
         )}
       </div>

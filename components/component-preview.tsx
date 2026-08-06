@@ -154,10 +154,12 @@ export function ComponentPreview({
   if (!filePath) {
     return (
       <div
-        className={`w-full flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50 ${className}`}
+        className={`flex w-full items-center justify-center rounded-xl border border-border bg-card ${className}`}
         style={{ height }}
       >
-        <span className="text-xs text-black/30">Preview unavailable</span>
+        <span className="text-xs text-muted-foreground/80">
+          Preview unavailable
+        </span>
       </div>
     );
   }
@@ -165,7 +167,7 @@ export function ComponentPreview({
   if (loading) {
     return (
       <div
-        className={`w-full rounded-xl border border-gray-200 bg-gray-50 ${className}`}
+        className={`w-full rounded-xl border border-border bg-card ${className}`}
         style={{ height }}
       >
         <Skeleton />
@@ -176,13 +178,13 @@ export function ComponentPreview({
   if (!PreviewComponent || loadError) {
     return (
       <div
-        className={`w-full flex flex-col items-center justify-center gap-2 text-center px-6 rounded-xl border border-gray-200 bg-zinc-50 ${className}`}
+        className={`flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-border bg-card px-6 text-center ${className}`}
         style={{ height }}
       >
-        <div className="text-xs font-semibold text-gray-900">
+        <div className="text-xs font-semibold text-foreground">
           Preview failed to load
         </div>
-        <div className="text-[11px] text-gray-500 max-w-sm">
+        <div className="max-w-sm text-[11px] text-muted-foreground">
           Could not load <strong>{filePath}</strong>.
         </div>
       </div>
@@ -197,7 +199,7 @@ export function ComponentPreview({
      */
     <div
       ref={containerRef}
-      className={`w-full rounded-xl border border-gray-200 bg-zinc-50 overflow-auto flex items-center justify-center ${className}`}
+      className={`flex w-full items-center justify-center overflow-auto rounded-xl border border-border bg-card ${className}`}
       style={{
         height,
         position: "relative",

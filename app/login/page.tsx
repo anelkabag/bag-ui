@@ -39,12 +39,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#111111] flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Radial glow background */}
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Radial glow background — foreground-based donc visible (subtilement)
+          en light comme en dark, au lieu d'un blanc fixe invisible sur fond clair */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-white/[0.03] blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-white/[0.02] blur-3xl" />
-        <div className="absolute top-0 right-0 w-[300px] h-[300px] rounded-full bg-white/[0.02] blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-foreground/[0.03] blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-foreground/[0.02] blur-3xl" />
+        <div className="absolute top-0 right-0 w-[300px] h-[300px] rounded-full bg-foreground/[0.02] blur-3xl" />
       </div>
 
       {/* Card */}
@@ -52,14 +53,14 @@ export default function LoginPage() {
         initial={{ opacity: 0, y: 24, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="relative w-full max-w-[480px] bg-[#161616] border border-white/[0.07] rounded-2xl shadow-2xl shadow-black/60 overflow-hidden"
+        className="relative w-full max-w-[480px] bg-card border border-border rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/60 overflow-hidden"
       >
         {/* Back button */}
         <div className="absolute top-5 left-5">
           <Link href="/">
             <motion.button
               whileHover={{ x: -2 }}
-              className="flex items-center gap-1.5 text-white/40 hover:text-white/70 text-sm transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground text-sm transition-colors cursor-pointer"
             >
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path
@@ -84,12 +85,15 @@ export default function LoginPage() {
             className="flex justify-center mb-8"
           >
             <div className="items-center justify-center">
+              {/* faviconwhite.png est un asset blanc : on l'inverse en light mode
+                  pour qu'il reste visible. Si un logo dédié au light mode existe,
+                  remplacer ce filtre par un <Image> conditionnel. */}
               <Image
                 src="/faviconwhite.png"
                 alt="BagUI Logo"
                 width={50}
                 height={50}
-                className="object-contain"
+                className="object-contain invert dark:invert-0"
               />
             </div>
           </motion.div>
@@ -101,14 +105,14 @@ export default function LoginPage() {
             transition={{ delay: 0.2, duration: 0.4 }}
             className="text-center mb-8"
           >
-            <h1 className="text-white text-[1.65rem] font-semibold tracking-tight mb-1.5">
+            <h1 className="text-foreground text-[1.65rem] font-semibold tracking-tight mb-1.5">
               Yooo, welcome back!
             </h1>
-            <p className="text-white/40 text-sm">
+            <p className="text-muted-foreground text-sm">
               First time here?{" "}
               <Link
                 href="/register"
-                className="text-white/70 hover:text-white underline underline-offset-2 transition-colors"
+                className="text-foreground/80 hover:text-foreground underline underline-offset-2 transition-colors"
               >
                 Sign up for free
               </Link>
@@ -130,7 +134,7 @@ export default function LoginPage() {
                 placeholder="Your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-[#1e1e1e] border border-white/[0.08] rounded-lg px-4 py-3 text-white/80 placeholder:text-white/25 text-sm outline-none focus:border-white/20 focus:bg-[#222] transition-all"
+                className="w-full bg-muted border border-border rounded-lg px-4 py-3 text-foreground/90 placeholder:text-muted-foreground/60 text-sm outline-none focus:border-ring focus:bg-accent/50 transition-all"
               />
             </div>
 
@@ -141,7 +145,7 @@ export default function LoginPage() {
                 placeholder="Your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-[#1e1e1e] border border-white/[0.08] rounded-lg px-4 py-3 text-white/80 placeholder:text-white/25 text-sm outline-none focus:border-white/20 focus:bg-[#222] transition-all"
+                className="w-full bg-muted border border-border rounded-lg px-4 py-3 text-foreground/90 placeholder:text-muted-foreground/60 text-sm outline-none focus:border-ring focus:bg-accent/50 transition-all"
               />
             </div>
 
@@ -151,7 +155,7 @@ export default function LoginPage() {
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
               disabled={loading}
-              className="w-full bg-white text-[#111] font-semibold text-sm rounded-lg py-3 flex items-center justify-center gap-2 hover:bg-white/90 transition-colors disabled:opacity-70 mt-1 cursor-pointer"
+              className="w-full bg-foreground text-background font-semibold text-sm rounded-lg py-3 flex items-center justify-center gap-2 hover:bg-foreground/90 transition-colors disabled:opacity-70 mt-1 cursor-pointer"
             >
               <AnimatePresence mode="wait">
                 {loading ? (
@@ -197,13 +201,19 @@ export default function LoginPage() {
             </motion.button>
           </motion.form>
 
-          {error && <p className="text-sm text-rose-400">{error}</p>}
-          {message && <p className="text-sm text-emerald-400">{message}</p>}
+          {error && (
+            <p className="text-sm text-rose-500 dark:text-rose-400">{error}</p>
+          )}
+          {message && (
+            <p className="text-sm text-emerald-600 dark:text-emerald-400">
+              {message}
+            </p>
+          )}
 
           <div className="text-center mt-4">
             <Link
               href="/forgot-password"
-              className="text-white/45 hover:text-white/70 text-sm transition-colors"
+              className="text-muted-foreground hover:text-foreground text-sm transition-colors"
             >
               Forgot password?
             </Link>
@@ -217,7 +227,7 @@ export default function LoginPage() {
           >
             <button
               onClick={handleGoogle}
-              className="text-white/45 hover:text-white/70 text-sm transition-colors"
+              className="text-muted-foreground hover:text-foreground text-sm transition-colors"
             >
               Continue with Google
             </button>
@@ -228,19 +238,19 @@ export default function LoginPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.4 }}
-            className="text-center text-white/20 text-xs mt-7 leading-relaxed"
+            className="text-center text-muted-foreground/60 text-xs mt-7 leading-relaxed"
           >
             You acknowledge that you read, and agree, to our{" "}
             <Link
               href="/terms"
-              className="text-white/35 hover:text-white/55 underline underline-offset-2 transition-colors cursor-pointer"
+              className="text-muted-foreground hover:text-foreground/80 underline underline-offset-2 transition-colors cursor-pointer"
             >
               Terms of Service
             </Link>{" "}
             and our{" "}
             <Link
               href="/privacy"
-              className="text-white/35 hover:text-white/55 underline underline-offset-2 transition-colors cursor-pointer"
+              className="text-muted-foreground hover:text-foreground/80 underline underline-offset-2 transition-colors cursor-pointer"
             >
               Privacy Policy
             </Link>

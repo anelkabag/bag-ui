@@ -16,10 +16,10 @@ const perks = [
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-6 pt-10 pb-4 border-x border-gray-200">
+      <div className="max-w-7xl mx-auto px-6 pt-10 pb-4 border-x border-border">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
@@ -27,15 +27,15 @@ export default function PricingPage() {
           transition={{ duration: 0.3 }}
           className="mb-18 text-center m-6"
         >
-          <p className="text-sm tracking-[0.25em] text-gray-500 mb-4">
+          <p className="text-sm tracking-[0.25em] text-muted-foreground mb-4">
             Open Source
           </p>
 
-          <h1 className="text-6xl font-bold tracking-tight text-black mb-4">
+          <h1 className="text-6xl font-bold tracking-tight text-foreground mb-4">
             Free. Forever.
           </h1>
 
-          <p className="text-gray-500 text-sm max-w-xl leading-relaxed mx-auto">
+          <p className="text-muted-foreground text-sm max-w-xl leading-relaxed mx-auto">
             The project is now 100% open source. Every block, every template,
             the full source code &mdash; free to use, no account required, no
             limits. If the project helps you out, you can support its
@@ -43,17 +43,20 @@ export default function PricingPage() {
           </p>
         </motion.div>
 
-        <div className="border-t border-gray-100 mb-10" />
+        <div className="border-t border-border mb-10" />
 
-        {/* Sponsor card */}
+        {/* Sponsor card — carte "inversée" volontairement toujours sombre,
+            pour qu'elle reste un accent visible en light ET en dark mode.
+            zinc-900/800 plutôt que du noir pur pour ne pas se fondre dans
+            le fond de page en dark mode. */}
         <div className="max-w-xl mx-auto mb-16">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="relative flex flex-col rounded-xl border border-black bg-black text-white p-8"
+            className="relative flex flex-col rounded-xl border border-zinc-800 dark:border-zinc-700 bg-zinc-900 dark:bg-zinc-800 text-white p-8"
           >
-            <span className="absolute -top-3 left-6 text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-green-200 border border-green-300 text-green-600">
+            <span className="absolute -top-3 left-6 text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-green-200 dark:bg-green-900/40 border border-green-300 dark:border-green-800 text-green-600 dark:text-green-400">
               Optional
             </span>
 
@@ -97,11 +100,11 @@ export default function PricingPage() {
           </motion.div>
         </div>
 
-        <p className="text-xs text-gray-400 text-center mb-16">
+        <p className="text-xs text-muted-foreground text-center mb-16">
           Got a question, an idea, or want to contribute?{" "}
           <a
             href="mailto:anelka.bag@gmail.com"
-            className="underline underline-offset-2 text-gray-500 hover:text-black transition-colors"
+            className="underline underline-offset-2 text-muted-foreground hover:text-foreground transition-colors"
           >
             Reach out
           </a>{" "}

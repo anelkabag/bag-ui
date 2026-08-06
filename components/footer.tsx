@@ -2,6 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "framer-motion";
+import React from "react";
+import { useTheme } from "next-themes";
+import { Sun, Moon } from "lucide-react";
 import {
   FaXTwitter, // X
   FaInstagram, // Instagram
@@ -71,21 +75,77 @@ const SOCIAL_LINKS = [
 ];
 
 export function Footer() {
+  const { theme, setTheme, resolvedTheme } = useTheme();
+
+  // resolvedTheme reflects the actual applied theme when using 'system'
+  const active = (resolvedTheme ?? theme) as string | undefined;
+
   return (
-    <div className="w-full border-t border-gray-200">
-      <footer className="max-w-7xl mx-auto px-6 pt-10 border-l border-r border-gray-200">
+    <div className="w-full border-t border-border">
+      <footer className="mx-auto max-w-7xl border-l border-r border-border px-6 pt-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-14">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-3">
-              <Image src="/logo.png" alt="BagUI" width={16} height={16} />
-              <span className="text-black font-semibold text-sm">Bag\Ui</span>
+              <div className="relative h-4 w-4">
+                <Image
+                  src="/logo.png"
+                  alt="BagUI"
+                  fill
+                  className="object-contain dark:hidden"
+                />
+
+                <Image
+                  src="/logoW.png"
+                  alt="BagUI"
+                  fill
+                  className="hidden object-contain dark:block"
+                />
+              </div>
+              <span className="text-sm font-semibold text-foreground">
+                Bag\Ui
+              </span>
             </div>
-            <p className="text-gray-400 text-xs leading-relaxed max-w-[180px]">
+            <p className="max-w-[180px] text-xs leading-relaxed text-muted-foreground mb-3">
               Spend less time building UI from scratch. Ship faster with Bag/UI.
             </p>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="flex h-8 w-[68px] items-center rounded-[10px] p-[3px] gap-[2px] border bg-muted/40 border-border"
+              role="group"
+              aria-label="Theme switcher"
+            >
+              {[
+                {
+                  key: "light",
+                  icon: <Sun size={13} />,
+                  label: "Light mode",
+                },
+                {
+                  key: "dark",
+                  icon: <Moon size={13} />,
+                  label: "Dark mode",
+                },
+              ].map(({ key, icon, label }) => (
+                <button
+                  key={key}
+                  onClick={() => setTheme(key)}
+                  title={label}
+                  className={[
+                    "h-6 w-7 rounded-[7px] flex items-center justify-center transition-all duration-200 cursor-pointer",
+                    active === key
+                      ? "bg-background text-foreground border border-border shadow-sm"
+                      : "text-muted-foreground hover:text-foreground hover:bg-background/50",
+                  ].join(" ")}
+                >
+                  {icon}
+                </button>
+              ))}
+            </motion.div>
           </div>
           <div>
-            <p className="text-gray-400 text-xs font-semibold uppercase tracking-widest mb-4">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
               Product
             </p>
             <ul className="space-y-2.5">
@@ -93,7 +153,7 @@ export function Footer() {
                 <li key={l.label}>
                   <Link
                     href={l.href}
-                    className="text-gray-500 hover:text-black text-sm transition-colors"
+                    className="text-gray-500 hover:text-black dark:hover:text-white text-sm transition-colors"
                   >
                     {l.label}
                   </Link>
@@ -102,7 +162,7 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <p className="text-gray-400 text-xs font-semibold uppercase tracking-widest mb-4">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
               More
             </p>
             <ul className="space-y-2.5">
@@ -110,7 +170,7 @@ export function Footer() {
                 <li key={l.label}>
                   <Link
                     href={l.href}
-                    className="text-gray-500 hover:text-black text-sm transition-colors"
+                    className="text-gray-500 hover:text-black dark:hover:text-white text-sm transition-colors"
                   >
                     {l.label}
                   </Link>
@@ -119,7 +179,7 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <p className="text-gray-400 text-xs font-semibold uppercase tracking-widest mb-4">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
               Legal
             </p>
             <ul className="space-y-2.5">
@@ -127,7 +187,7 @@ export function Footer() {
                 <li key={l.label}>
                   <Link
                     href={l.href}
-                    className="text-gray-500 hover:text-black text-sm transition-colors"
+                    className="text-gray-500 hover:text-black dark:hover:text-white text-sm transition-colors"
                   >
                     {l.label}
                   </Link>
@@ -136,15 +196,15 @@ export function Footer() {
             </ul>
           </div>
         </div>
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pt-8 border-t border-gray-100">
-          <p className="text-gray-400 text-xs mb-5">
+        <div className="flex flex-col items-start justify-between gap-6 border-t border-border pt-8 md:flex-row md:items-center">
+          <p className="mb-5 text-xs text-muted-foreground">
             © {new Date().getFullYear()} Bag\UI - is not officially affiliated
             with shadcn/ui or Tailwind CSS. Built by{" "}
             <a
               href="https://www.anelka.life/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[13px] text-gray-400 hover:text-black transition-colors underline underline-offset-4"
+              className="text-[13px] text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
             >
               Anelka Bag 🇨🇩
             </a>
@@ -157,7 +217,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 title={label}
-                className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-black  transition-all duration-200"
+                className="flex h-9 w-9 items-center justify-center text-muted-foreground transition-all duration-200 hover:text-foreground"
               >
                 <Icon size={18} />
               </a>

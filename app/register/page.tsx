@@ -33,94 +33,96 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#111] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
       {isVerificationModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm px-4">
-            <div className="w-full max-w-[420px] rounded-[28px] bg-[#F5F3EF] p-8 text-center shadow-2xl shadow-black/20">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-black">
-                <svg
-                    className="h-6 w-6 text-white"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={3}
-                >
-                  <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                  />
-                </svg>
-              </div>
-
-              <h2 className="mt-6 text-2xl font-semibold text-[#111]">
-                Check your email
-              </h2>
-              <p className="mt-3 text-sm leading-6 text-[#111]/60">
-                A confirmation email has been sent. Check your inbox, then you’ll
-                be redirected to the homepage.
-              </p>
-
-              <button
-                  onClick={() => {
-                    setIsVerificationModalOpen(false);
-                    router.replace("/");
-                  }}
-                  className="mt-6 w-full rounded-2xl bg-black py-3 text-sm font-semibold text-white transition hover:bg-black/90"
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm px-4">
+          <div className="w-full max-w-[420px] rounded-[28px] bg-card border border-border p-8 text-center shadow-2xl shadow-black/10 dark:shadow-black/30">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-foreground">
+              <svg
+                className="h-6 w-6 text-background"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={3}
               >
-                Got it
-              </button>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
             </div>
+
+            <h2 className="mt-6 text-2xl font-semibold text-foreground">
+              Check your email
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">
+              A confirmation email has been sent. Check your inbox, then you’ll
+              be redirected to the homepage.
+            </p>
+
+            <button
+              onClick={() => {
+                setIsVerificationModalOpen(false);
+                router.replace("/");
+              }}
+              className="mt-6 w-full rounded-2xl bg-foreground py-3 text-sm font-semibold text-background transition hover:bg-foreground/90"
+            >
+              Got it
+            </button>
           </div>
+        </div>
       )}
 
-      <div className="w-full max-w-[480px] rounded-[32px] border border-white/10 bg-[#151515]/95 p-8 shadow-2xl shadow-black/30">
+      <div className="w-full max-w-[480px] rounded-[32px] border border-border bg-card/95 p-8 shadow-2xl shadow-black/10 dark:shadow-black/30">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-semibold text-white">
+          <h1 className="text-3xl font-semibold text-foreground">
             Create your account
           </h1>
-          <p className="mt-2 text-sm text-white/60">
+          <p className="mt-2 text-sm text-muted-foreground">
             Register with email and password or continue with Google.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-sm text-white/60">Email</label>
+            <label className="text-sm text-muted-foreground">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-2 w-full rounded-2xl border border-white/10 bg-[#111] px-4 py-3 text-white outline-none focus:border-white/20"
+              className="mt-2 w-full rounded-2xl border border-border bg-muted px-4 py-3 text-foreground outline-none focus:border-ring"
             />
           </div>
 
           <div>
-            <label className="text-sm text-white/60">Username</label>
+            <label className="text-sm text-muted-foreground">Username</label>
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="mt-2 w-full rounded-2xl border border-white/10 bg-[#111] px-4 py-3 text-white outline-none focus:border-white/20"
+              className="mt-2 w-full rounded-2xl border border-border bg-muted px-4 py-3 text-foreground outline-none focus:border-ring"
             />
           </div>
 
           <div>
-            <label className="text-sm text-white/60">Password</label>
+            <label className="text-sm text-muted-foreground">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-2 w-full rounded-2xl border border-white/10 bg-[#111] px-4 py-3 text-white outline-none focus:border-white/20"
+              className="mt-2 w-full rounded-2xl border border-border bg-muted px-4 py-3 text-foreground outline-none focus:border-ring"
             />
           </div>
 
-          {error && <p className="text-sm text-rose-400">{error}</p>}
+          {error && (
+            <p className="text-sm text-rose-500 dark:text-rose-400">{error}</p>
+          )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-2xl bg-white py-3 text-sm font-semibold text-[#111] transition hover:bg-white/90 disabled:opacity-60"
+            className="w-full rounded-2xl bg-foreground py-3 text-sm font-semibold text-background transition hover:bg-foreground/90 disabled:opacity-60"
           >
             {loading ? "Creating account…" : "Create account"}
           </button>
@@ -129,15 +131,18 @@ export default function RegisterPage() {
         <div className="mt-6">
           <button
             onClick={signInWithGoogle}
-            className="w-full rounded-2xl border border-white/10 bg-transparent py-3 text-sm font-semibold text-white transition hover:border-white/20"
+            className="w-full rounded-2xl border border-border bg-transparent py-3 text-sm font-semibold text-foreground transition hover:border-ring"
           >
             Continue with Google
           </button>
         </div>
 
-        <p className="mt-4 text-center text-sm text-white/50">
+        <p className="mt-4 text-center text-sm text-muted-foreground">
           Already have an account?{" "}
-          <Link href="/login" className="text-white">
+          <Link
+            href="/login"
+            className="text-foreground underline underline-offset-2"
+          >
             Login
           </Link>
         </p>
