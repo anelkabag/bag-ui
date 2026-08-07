@@ -3,26 +3,20 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { AuthProvider } from "@/providers/AuthProvider";
-import DynamicThemeProvider from "@/providers/DynamicThemeProvider";
-
+import { ThemeProvider } from "@/providers/ThemeProvider";
 const geistSans = Geist({
   subsets: ["latin"],
   variable: "--font-geist-sans",
 });
-
 const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-geist-mono",
 });
-
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.bagui.pro"),
-
   title: "BagUI – Open Source shadcn/ui Components & Blocks",
-
   description:
     "BagUI is an open-source shadcn/ui registry with production-ready components, blocks, templates, and animations for React, Next.js, and Tailwind CSS. Copy, customize, and build faster.",
-
   keywords: [
     "bagui",
     "bag/ui",
@@ -49,16 +43,13 @@ export const metadata: Metadata = {
     "landing page components",
     "dashboard components",
   ],
-
   authors: [
     {
       name: "Anelka Bagalane",
     },
   ],
-
   creator: "Anelka Bagalane <anelka.bag@gmail.com>",
   publisher: "BagUI",
-
   openGraph: {
     title: "BagUI – Open Source shadcn/ui Components & Blocks",
     description:
@@ -66,7 +57,6 @@ export const metadata: Metadata = {
     url: "https://www.bagui.pro",
     siteName: "BagUI",
     type: "website",
-
     images: [
       {
         url: "/og-image.png",
@@ -76,7 +66,6 @@ export const metadata: Metadata = {
       },
     ],
   },
-
   twitter: {
     card: "summary_large_image",
     title: "BagUI – Open Source shadcn/ui Components & Blocks",
@@ -85,12 +74,10 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
     creator: "@anelkabag",
   },
-
   robots: {
     index: true,
     follow: true,
   },
-
   icons: {
     icon: [
       {
@@ -105,7 +92,6 @@ export const metadata: Metadata = {
     apple: "/apple-icon.png",
   },
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -116,10 +102,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
-        <DynamicThemeProvider>
+        <ThemeProvider>
           <AuthProvider>{children}</AuthProvider>
-        </DynamicThemeProvider>
-
+        </ThemeProvider>
         {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
