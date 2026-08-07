@@ -74,13 +74,18 @@ const SOCIAL_LINKS = [
   },
 ];
 
+const THEME_OPTIONS = [
+  { key: "light", icon: <Sun size={13} />, label: "Light mode" },
+  { key: "dark", icon: <Moon size={13} />, label: "Dark mode" },
+];
+
 export function Footer() {
   const { theme, setTheme, resolvedTheme } = useTheme();
 
   // Tant que le composant n'est pas monté côté client, on ignore le vrai
   // thème et on rend un état neutre — identique au rendu serveur. On ne
   // laisse "active" refléter le vrai thème qu'une fois monté, pour éviter
-  // le mismatch d'hydratation (et donc le flash visuel sur le bouton actif).
+  // le mismatch d'hydratation.
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => {
     setMounted(true);
@@ -127,30 +132,35 @@ export function Footer() {
               role="group"
               aria-label="Theme switcher"
             >
-              {[
-                {
-                  key: "light",
-                  icon: <Sun size={13} />,
-                  label: "Light mode",
-                },
-                {
-                  key: "dark",
-                  icon: <Moon size={13} />,
-                  label: "Dark mode",
-                },
-              ].map(({ key, icon, label }) => (
+              {THEME_OPTIONS.map(({ key, icon, label }) => (
                 <button
                   key={key}
                   onClick={() => setTheme(key)}
                   title={label}
                   className={[
-                    "h-6 w-7 rounded-[7px] flex items-center justify-center transition-colors duration-200 cursor-pointer",
+                    "relative h-6 w-7 rounded-[7px] flex items-center justify-center cursor-pointer transition-colors duration-200",
                     active === key
-                      ? "bg-background text-foreground border border-border shadow-sm"
-                      : "text-muted-foreground hover:text-foreground hover:bg-background/50",
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
                   ].join(" ")}
                 >
-                  {icon}
+                  {/* Fond animé : glisse d'un bouton à l'autre au lieu de
+                      basculer instantanément — même pattern que le
+                      soulignement des filtres sur la page /blocks. */}
+                  {active === key && (
+                    <motion.span
+                      layoutId="theme-switch-indicator"
+                      className="absolute inset-0 rounded-[7px] border border-border bg-background shadow-sm"
+                      transition={{
+                        type: "spring",
+                        bounce: 0.25,
+                        duration: 0.4,
+                      }}
+                    />
+                  )}
+                  <span className="relative z-10 flex items-center justify-center">
+                    {icon}
+                  </span>
                 </button>
               ))}
             </motion.div>
@@ -217,7 +227,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="text-[13px] text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
             >
-              Anelka Bag🇨🇩
+              Anelka Bag 🇨🇩
             </a>
           </p>
           <div className="flex items-center gap-2 flex-wrap mb-5">
