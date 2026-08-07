@@ -1,14 +1,11 @@
 "use client";
-
 import { motion, useInView, cubicBezier } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
-
 export default function CTASection() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const customEase = cubicBezier(0.4, 0, 0.2, 1);
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -16,7 +13,6 @@ export default function CTASection() {
       transition: { staggerChildren: 0.12, delayChildren: 0.15 },
     },
   };
-
   const itemVariants = {
     hidden: { opacity: 0, y: 16 },
     visible: {
@@ -25,7 +21,6 @@ export default function CTASection() {
       transition: { duration: 0.5, ease: customEase },
     },
   };
-
   const scaleVariants = {
     hidden: { opacity: 0, scale: 0.85 },
     visible: {
@@ -34,13 +29,12 @@ export default function CTASection() {
       transition: { duration: 0.5, ease: customEase },
     },
   };
-
   return (
     <div className="w-full border-t border-border">
       <div className="mx-auto max-w-7xl border-l border-r border-border bg-background">
         <motion.section
           ref={ref}
-          className="relative flex min-h-96 w-full flex-col items-center justify-center overflow-hidden rounded-2xl px-8 py-14"
+          className="relative flex min-h-96 w-full flex-col items-center justify-center overflow-hidden bg-black dark:bg-zinc-200 px-8 py-14"
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.6, ease: customEase }}
@@ -62,31 +56,29 @@ export default function CTASection() {
                 alt="BagUI Logo"
                 width={50}
                 height={50}
+                className="dark:invert"
               />
             </motion.div>
-
             {/* Headline - smaller */}
             <motion.h2
               variants={itemVariants}
-              className="mb-3 text-2xl font-bold leading-tight tracking-tight text-foreground sm:text-3xl"
+              className="mb-3 text-2xl font-bold leading-tight tracking-tight text-background sm:text-3xl"
             >
               Ready to build amazing UIs?
             </motion.h2>
-
             {/* Subtitle - smaller */}
             <motion.p
               variants={itemVariants}
-              className="mb-7 max-w-sm text-sm leading-relaxed text-muted-foreground sm:text-base"
+              className="mb-7 max-w-sm text-sm leading-relaxed text-background/70 sm:text-base"
             >
               Join thousands of developers creating beautiful components with
               BagUI.
             </motion.p>
-
             {/* CTA Button - single */}
             <motion.div variants={itemVariants}>
               <Link
                 href="/docs"
-                className="group inline-flex items-center gap-2 rounded-lg bg-foreground px-6 py-2.5 text-sm font-semibold text-background transition-all duration-200 hover:opacity-90 active:scale-95"
+                className="group inline-flex items-center gap-2 rounded-lg bg-background px-6 py-2.5 text-sm font-semibold text-foreground transition-all duration-200 hover:opacity-90 active:scale-95"
               >
                 Start for free
                 <svg
