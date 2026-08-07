@@ -77,8 +77,19 @@ const SOCIAL_LINKS = [
 export function Footer() {
   const { theme, setTheme, resolvedTheme } = useTheme();
 
+  // Tant que le composant n'est pas monté côté client, on ignore le vrai
+  // thème et on rend un état neutre — identique au rendu serveur. On ne
+  // laisse "active" refléter le vrai thème qu'une fois monté, pour éviter
+  // le mismatch d'hydratation (et donc le flash visuel sur le bouton actif).
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // resolvedTheme reflects the actual applied theme when using 'system'
-  const active = (resolvedTheme ?? theme) as string | undefined;
+  const active = mounted
+    ? ((resolvedTheme ?? theme) as string | undefined)
+    : undefined;
 
   return (
     <div className="w-full border-t border-border">
@@ -133,7 +144,7 @@ export function Footer() {
                   onClick={() => setTheme(key)}
                   title={label}
                   className={[
-                    "h-6 w-7 rounded-[7px] flex items-center justify-center transition-all duration-200 cursor-pointer",
+                    "h-6 w-7 rounded-[7px] flex items-center justify-center transition-colors duration-200 cursor-pointer",
                     active === key
                       ? "bg-background text-foreground border border-border shadow-sm"
                       : "text-muted-foreground hover:text-foreground hover:bg-background/50",
@@ -153,7 +164,7 @@ export function Footer() {
                 <li key={l.label}>
                   <Link
                     href={l.href}
-                    className="text-gray-500 hover:text-black dark:hover:text-white text-sm transition-colors"
+                    className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                   >
                     {l.label}
                   </Link>
@@ -170,7 +181,7 @@ export function Footer() {
                 <li key={l.label}>
                   <Link
                     href={l.href}
-                    className="text-gray-500 hover:text-black dark:hover:text-white text-sm transition-colors"
+                    className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                   >
                     {l.label}
                   </Link>
@@ -187,7 +198,7 @@ export function Footer() {
                 <li key={l.label}>
                   <Link
                     href={l.href}
-                    className="text-gray-500 hover:text-black dark:hover:text-white text-sm transition-colors"
+                    className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                   >
                     {l.label}
                   </Link>
@@ -206,7 +217,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="text-[13px] text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
             >
-              Anelka Bag 🇨🇩
+              Anelka Bag🇨🇩
             </a>
           </p>
           <div className="flex items-center gap-2 flex-wrap mb-5">
