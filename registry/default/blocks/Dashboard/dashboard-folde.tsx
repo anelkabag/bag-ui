@@ -1,6 +1,13 @@
 "use client";
 
-import React, { useState, useCallback, useMemo, useRef } from "react";
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+  createContext,
+  useContext,
+} from "react";
 import { AnimatePresence, motion } from "motion/react";
 import {
   Home,
@@ -38,8 +45,26 @@ import {
   ArrowUpDown,
   Clock,
   Zap,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+/* ================================================================== */
+/*  Theme (dark mode) context                                          */
+/* ================================================================== */
+/*
+  Uses Tailwind's class-based dark mode strategy: the root wrapper gets a
+  "dark" class toggled by React state, and every descendant uses regular
+  `dark:` variants. Make sure tailwind.config has `darkMode: "class"`
+  (or, on Tailwind v4, `@custom-variant dark (&:where(.dark, .dark *));`
+  in your CSS) for this to take effect.
+*/
+
+const ThemeContext = createContext<boolean>(false);
+function useIsDark() {
+  return useContext(ThemeContext);
+}
 
 /* ================================================================== */
 /*  Types                                                              */
@@ -113,6 +138,7 @@ type AutomationItem = {
 const FLAP_PATH =
   "M0 25C0 11.1929 11.1929 0 25 0H136.084C143.044 0 149.689 2.90139 154.42 8.00608L178.08 33.5343C182.811 38.639 189.456 41.5404 196.416 41.5404H296C309.807 41.5404 321 52.7333 321 66.5404V216C321 229.807 309.807 241 296 241H25C11.1929 241 0 229.807 0 216V25Z";
 
+/* Light theme — soft neutrals + a single blue accent */
 const folderPalettes = {
   neutral: {
     flapFill: "#EFEFF1",
@@ -137,6 +163,35 @@ const folderPalettes = {
   }
 } as const;
 
+/* Dark theme — kept deliberately monochrome (charcoal / graphite / off-white),
+   with the "blue" variant surviving as the one accent, muted to a deep
+   midnight so it still reads as black-and-white-first. The "black" variant
+   flips to near-white so it keeps acting as the spotlight tile against a
+   dark canvas. */
+const folderPalettesDark = {
+  neutral: {
+    flapFill: "#1A1A1D",
+    flapStroke: "#2B2B2F",
+    cardFill: "#222225",
+    cardStroke: "#333336",
+    cardLineFill: "#3F3F43",
+  },
+  blue: {
+    flapFill: "#1E3A5F",
+    flapStroke: "#2F5A88",
+    cardFill: "#0F1B2B",
+    cardStroke: "#1E3350",
+    cardLineFill: "#2A4A6E",
+  },
+  black: {
+    flapFill: "#F5F5F7",
+    flapStroke: "#E4E4E7",
+    cardFill: "#FFFFFF",
+    cardStroke: "#ECECEE",
+    cardLineFill: "#E2E2E5",
+  }
+} as const;
+
 const cardSpring = { type: "spring" as const, stiffness: 150, damping: 15 };
 
 function MiniCard({ palette }: { palette: (typeof folderPalettes)[FolderVariant] }) {
@@ -158,7 +213,8 @@ const FolderGraphic = React.memo(function FolderGraphic({
   variant?: FolderVariant;
   hovered: boolean;
 }) {
-  const palette = folderPalettes[variant];
+  const isDark = useIsDark();
+  const palette = (isDark ? folderPalettesDark : folderPalettes)[variant];
   const open = hovered;
 
   return (
@@ -233,11 +289,11 @@ const TAG_DOT: Record<TagName, string> = {
 };
 
 const KIND_META: Record<FileKind, { icon: React.ComponentType<{ className?: string }>; color: string; bg: string; label: string }> = {
-  doc: { icon: FileText, color: "text-indigo-500", bg: "bg-indigo-50", label: "Document" },
-  sheet: { icon: FileSpreadsheet, color: "text-emerald-600", bg: "bg-emerald-50", label: "Spreadsheet" },
-  image: { icon: ImageIcon, color: "text-pink-500", bg: "bg-pink-50", label: "Image" },
-  pdf: { icon: FileType, color: "text-rose-500", bg: "bg-rose-50", label: "PDF" },
-  slide: { icon: Presentation, color: "text-orange-500", bg: "bg-orange-50", label: "Slides" },
+  doc: { icon: FileText, color: "text-indigo-500 dark:text-indigo-400", bg: "bg-indigo-50 dark:bg-indigo-500/15", label: "Document" },
+  sheet: { icon: FileSpreadsheet, color: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-50 dark:bg-emerald-500/15", label: "Spreadsheet" },
+  image: { icon: ImageIcon, color: "text-pink-500 dark:text-pink-400", bg: "bg-pink-50 dark:bg-pink-500/15", label: "Image" },
+  pdf: { icon: FileType, color: "text-rose-500 dark:text-rose-400", bg: "bg-rose-50 dark:bg-rose-500/15", label: "PDF" },
+  slide: { icon: Presentation, color: "text-orange-500 dark:text-orange-400", bg: "bg-orange-50 dark:bg-orange-500/15", label: "Slides" },
 };
 
 function sortFolders(folders: Folder[], sortBy: SortKey): Folder[] {
@@ -502,12 +558,13 @@ const CURRENT_USER = "Anelka Bag";
 /* ================================================================== */
 
 function KintsugiMark() {
+  const isDark = useIsDark();
   return (
-    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] bg-neutral-900">
+    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] bg-neutral-900 dark:bg-neutral-100">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <path d="M1 9.5L5.5 5.5L4 2.5" stroke="white" strokeWidth="1.1" strokeLinecap="round" />
-        <path d="M5.5 5.5L11 3.5" stroke="white" strokeWidth="1.1" strokeLinecap="round" />
-        <path d="M6.8 5.9L13 11" stroke="white" strokeWidth="1.1" strokeLinecap="round" />
+        <path d="M1 9.5L5.5 5.5L4 2.5" stroke={isDark ? "#0A0A0A" : "white"} strokeWidth="1.1" strokeLinecap="round" />
+        <path d="M5.5 5.5L11 3.5" stroke={isDark ? "#0A0A0A" : "white"} strokeWidth="1.1" strokeLinecap="round" />
+        <path d="M6.8 5.9L13 11" stroke={isDark ? "#0A0A0A" : "white"} strokeWidth="1.1" strokeLinecap="round" />
       </svg>
     </div>
   );
@@ -518,7 +575,7 @@ function Avatar({ seed, className }: { seed: string; className?: string }) {
     <img
       src={`https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(seed)}&backgroundColor=b6e3f4`}
       alt={seed}
-      className={cn("shrink-0 rounded-full bg-neutral-100 object-cover", className)}
+      className={cn("shrink-0 rounded-full bg-neutral-100 object-cover dark:bg-neutral-800 dark:ring-1 dark:ring-neutral-800", className)}
     />
   );
 }
@@ -532,11 +589,14 @@ function Switch({ checked, onChange, label }: { checked: boolean; onChange: () =
       onClick={onChange}
       className={cn(
         "relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200",
-        checked ? "bg-neutral-900" : "bg-neutral-200"
+        checked ? "bg-neutral-900 dark:bg-neutral-100" : "bg-neutral-200 dark:bg-neutral-800"
       )}
     >
       <motion.span
-        className="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow-sm"
+        className={cn(
+          "absolute top-0.5 left-0.5 h-5 w-5 rounded-full shadow-sm",
+          checked ? "bg-white dark:bg-neutral-900" : "bg-white dark:bg-neutral-400"
+        )}
         animate={{ x: checked ? 20 : 0 }}
         transition={{ type: "spring", stiffness: 500, damping: 32 }}
       />
@@ -559,11 +619,11 @@ function TagChip({
       className={cn(
         "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[12px] transition-colors",
         active
-          ? "border-neutral-900 bg-neutral-900 text-white"
-          : "border-neutral-200 bg-neutral-50 text-neutral-600 hover:bg-neutral-100"
+          ? "border-neutral-900 bg-neutral-900 text-white dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-900"
+          : "border-neutral-200 bg-neutral-50 text-neutral-600 hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800"
       )}
     >
-      <span className={cn("h-1.5 w-1.5 rounded-full", active ? "bg-white" : TAG_DOT[tag])} />
+      <span className={cn("h-1.5 w-1.5 rounded-full", active ? "bg-white dark:bg-neutral-900" : TAG_DOT[tag])} />
       {tag}
     </button>
   );
@@ -580,9 +640,9 @@ function ToastStack({ toasts }: { toasts: { id: number; message: string }[] }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.15 } }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            className="pointer-events-auto flex items-center gap-2 rounded-xl bg-neutral-900 px-4 py-2.5 text-[13px] font-medium text-white shadow-lg"
+            className="pointer-events-auto flex items-center gap-2 rounded-xl bg-neutral-900 px-4 py-2.5 text-[13px] font-medium text-white shadow-lg dark:bg-neutral-50 dark:text-neutral-900 dark:shadow-black/50"
           >
-            <Check className="h-3.5 w-3.5 text-emerald-400" />
+            <Check className="h-3.5 w-3.5 text-emerald-400 dark:text-emerald-600" />
             {t.message}
           </motion.div>
         ))}
@@ -612,11 +672,82 @@ function Dropdown({
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: -6, scale: 0.98 }}
         transition={{ duration: 0.14 }}
-        className={cn("absolute z-50 rounded-xl border border-neutral-200 bg-white shadow-xl", anchorClassName)}
+        className={cn(
+          "absolute z-50 rounded-xl border border-neutral-200 bg-white shadow-xl dark:border-neutral-800 dark:bg-neutral-900 dark:shadow-black/50",
+          anchorClassName
+        )}
       >
         {children}
       </motion.div>
     </>
+  );
+}
+
+/* ================================================================== */
+/*  Theme toggle                                                       */
+/* ================================================================== */
+
+function ThemeToggle({
+  isDark,
+  onToggle,
+  collapsed,
+}: {
+  isDark: boolean;
+  onToggle: () => void;
+  collapsed?: boolean;
+}) {
+  return (
+    <button
+      onClick={onToggle}
+      title={collapsed ? (isDark ? "Switch to light mode" : "Switch to dark mode") : undefined}
+      className={cn(
+        "relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[7px] text-[13.5px] text-neutral-500 transition-colors hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-500 dark:hover:bg-neutral-900 dark:hover:text-neutral-200",
+        collapsed && "justify-center px-0"
+      )}
+    >
+      <span className="relative flex h-[15px] w-[15px] shrink-0 items-center justify-center overflow-hidden">
+        <AnimatePresence initial={false} mode="wait">
+          {isDark ? (
+            <motion.span
+              key="moon"
+              initial={{ opacity: 0, rotate: -70, scale: 0.5 }}
+              animate={{ opacity: 1, rotate: 0, scale: 1 }}
+              exit={{ opacity: 0, rotate: 70, scale: 0.5 }}
+              transition={{ duration: 0.22, ease: "easeOut" }}
+              className="absolute inset-0 flex items-center justify-center"
+            >
+              <Moon className="h-[15px] w-[15px]" />
+            </motion.span>
+          ) : (
+            <motion.span
+              key="sun"
+              initial={{ opacity: 0, rotate: 70, scale: 0.5 }}
+              animate={{ opacity: 1, rotate: 0, scale: 1 }}
+              exit={{ opacity: 0, rotate: -70, scale: 0.5 }}
+              transition={{ duration: 0.22, ease: "easeOut" }}
+              className="absolute inset-0 flex items-center justify-center"
+            >
+              <Sun className="h-[15px] w-[15px]" />
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </span>
+      {!collapsed && <span className="flex-1 truncate text-left">{isDark ? "Dark mode" : "Light mode"}</span>}
+      {!collapsed && (
+        <span
+          className={cn(
+            "relative h-5 w-9 shrink-0 rounded-full transition-colors duration-200",
+            isDark ? "bg-neutral-100" : "bg-neutral-200"
+          )}
+        >
+          <motion.span
+            className={cn("absolute top-0.5 left-0.5 h-4 w-4 rounded-full shadow-sm", isDark ? "bg-neutral-900" : "bg-white")}
+            animate={{ x: isDark ? 16 : 0 }}
+            transition={{ type: "spring", stiffness: 500, damping: 32 }}
+          />
+        </span>
+      )}
+    </button>
   );
 }
 
@@ -647,8 +778,8 @@ const NavItem = React.memo(function NavItem({
         "relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[7px] text-[13.5px] transition-colors",
         collapsed && "justify-center px-0",
         active
-          ? "bg-neutral-100 font-medium text-neutral-900"
-          : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-800"
+          ? "bg-neutral-100 font-medium text-neutral-900 dark:bg-neutral-800 dark:text-neutral-50"
+          : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-500 dark:hover:bg-neutral-900 dark:hover:text-neutral-200"
       )}
     >
       <Icon className="h-[15px] w-[15px] shrink-0" />
@@ -688,6 +819,8 @@ function Sidebar({
   onMarkAllRead,
   onNotificationClick,
   unreadCount,
+  isDark,
+  onToggleDark,
 }: {
   collapsed: boolean;
   onToggleCollapsed: () => void;
@@ -705,25 +838,27 @@ function Sidebar({
   onMarkAllRead: () => void;
   onNotificationClick: (n: NotificationItem) => void;
   unreadCount: number;
+  isDark: boolean;
+  onToggleDark: () => void;
 }) {
   return (
     <motion.aside
       animate={{ width: collapsed ? 68 : 212 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="relative flex h-full shrink-0 flex-col overflow-hidden border-r border-neutral-200 bg-white px-3 py-4"
+      className="relative flex h-full shrink-0 flex-col overflow-hidden border-r border-neutral-200 bg-white px-3 py-4 dark:border-neutral-800 dark:bg-[#0C0C0E]"
     >
       <div className={cn("flex items-center pb-5", collapsed ? "justify-center" : "justify-between px-1")}>
         {!collapsed && (
           <div className="flex items-center gap-2">
             <KintsugiMark />
-            <span className="whitespace-nowrap text-[14.5px] font-semibold text-neutral-900">BagUi</span>
+            <span className="whitespace-nowrap text-[14.5px] font-semibold text-neutral-900 dark:text-neutral-50">BagUi</span>
           </div>
         )}
         {collapsed && <KintsugiMark />}
         {!collapsed && (
           <button
             onClick={onToggleCollapsed}
-            className="flex h-6 w-6 items-center justify-center rounded-md text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600"
+            className="flex h-6 w-6 items-center justify-center rounded-md text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 dark:text-neutral-600 dark:hover:bg-neutral-800 dark:hover:text-neutral-300"
           >
             <ChevronsRight className="h-[15px] w-[15px]" />
           </button>
@@ -733,7 +868,7 @@ function Sidebar({
       {collapsed && (
         <button
           onClick={onToggleCollapsed}
-          className="absolute right-1.5 top-[18px] flex h-6 w-6 items-center justify-center rounded-md text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600"
+          className="absolute right-1.5 top-[18px] flex h-6 w-6 items-center justify-center rounded-md text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 dark:text-neutral-600 dark:hover:bg-neutral-800 dark:hover:text-neutral-300"
         >
           <ChevronsRight className="h-[13px] w-[13px] rotate-180" />
         </button>
@@ -745,7 +880,7 @@ function Sidebar({
         <button
           onClick={onToggleProjectsExpanded}
           className={cn(
-            "flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[7px] text-[13.5px] text-neutral-500 hover:bg-neutral-50",
+            "flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[7px] text-[13.5px] text-neutral-500 hover:bg-neutral-50 dark:text-neutral-500 dark:hover:bg-neutral-900",
             collapsed && "justify-center px-0"
           )}
         >
@@ -754,7 +889,7 @@ function Sidebar({
             <>
               <span className="flex-1 truncate text-left">Projects</span>
               <motion.span animate={{ rotate: projectsExpanded ? 0 : -90 }} transition={{ duration: 0.15 }}>
-                <ChevronDown className="h-3.5 w-3.5 text-neutral-400" />
+                <ChevronDown className="h-3.5 w-3.5 text-neutral-400 dark:text-neutral-600" />
               </motion.span>
             </>
           )}
@@ -767,7 +902,7 @@ function Sidebar({
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.18 }}
-              className="ml-[18px] overflow-hidden border-l border-neutral-200 pl-3"
+              className="ml-[18px] overflow-hidden border-l border-neutral-200 pl-3 dark:border-neutral-800"
             >
               <div className="flex flex-col gap-0.5 py-0.5">
                 {projects.map((p) => (
@@ -777,8 +912,8 @@ function Sidebar({
                     className={cn(
                       "rounded-lg px-2.5 py-[7px] text-left text-[13.5px] transition-colors",
                       p.id === activeProjectId
-                        ? "bg-neutral-100 font-medium text-neutral-900"
-                        : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-800"
+                        ? "bg-neutral-100 font-medium text-neutral-900 dark:bg-neutral-800 dark:text-neutral-50"
+                        : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-500 dark:hover:bg-neutral-900 dark:hover:text-neutral-200"
                     )}
                   >
                     {p.name}
@@ -789,7 +924,7 @@ function Sidebar({
           )}
         </AnimatePresence>
 
-        <div className="my-3 h-px bg-neutral-100" />
+        <div className="my-3 h-px bg-neutral-100 dark:bg-neutral-800" />
 
         {SECONDARY_NAV.map((item) => (
           <NavItem
@@ -804,6 +939,7 @@ function Sidebar({
       </nav>
 
       <div className="flex flex-col gap-0.5 pt-2">
+        <ThemeToggle isDark={isDark} onToggle={onToggleDark} collapsed={collapsed} />
         <NavItem icon={Settings} label="Settings" collapsed={collapsed} />
         <div className="relative">
           <NavItem
@@ -816,9 +952,9 @@ function Sidebar({
           <AnimatePresence>
             {notificationsOpen && (
               <Dropdown open onClose={onToggleNotifications} anchorClassName={collapsed ? "left-[60px] bottom-0 w-[300px]" : "left-1 right-1 bottom-[calc(100%+6px)] w-[260px]"}>
-                <div className="flex items-center justify-between border-b border-neutral-100 px-3.5 py-2.5">
-                  <span className="text-[13px] font-medium text-neutral-900">Notifications</span>
-                  <button onClick={onMarkAllRead} className="text-[11.5px] text-neutral-400 hover:text-neutral-700">
+                <div className="flex items-center justify-between border-b border-neutral-100 px-3.5 py-2.5 dark:border-neutral-800">
+                  <span className="text-[13px] font-medium text-neutral-900 dark:text-neutral-50">Notifications</span>
+                  <button onClick={onMarkAllRead} className="text-[11.5px] text-neutral-400 hover:text-neutral-700 dark:text-neutral-600 dark:hover:text-neutral-200">
                     Mark all read
                   </button>
                 </div>
@@ -827,19 +963,19 @@ function Sidebar({
                     <button
                       key={n.id}
                       onClick={() => onNotificationClick(n)}
-                      className="flex w-full items-start gap-2.5 px-3.5 py-2.5 text-left hover:bg-neutral-50"
+                      className="flex w-full items-start gap-2.5 px-3.5 py-2.5 text-left hover:bg-neutral-50 dark:hover:bg-neutral-800/60"
                     >
                       <span
                         className={cn(
                           "mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full",
-                          n.unread ? "bg-blue-500" : "bg-transparent"
+                          n.unread ? "bg-blue-500 dark:bg-blue-400" : "bg-transparent"
                         )}
                       />
                       <span className="min-w-0 flex-1">
-                        <span className={cn("block text-[12.5px] leading-snug", n.unread ? "font-medium text-neutral-900" : "text-neutral-500")}>
+                        <span className={cn("block text-[12.5px] leading-snug", n.unread ? "font-medium text-neutral-900 dark:text-neutral-50" : "text-neutral-500 dark:text-neutral-500")}>
                           {n.message}
                         </span>
-                        <span className="mt-0.5 block text-[11px] text-neutral-400">{n.time}</span>
+                        <span className="mt-0.5 block text-[11px] text-neutral-400 dark:text-neutral-600">{n.time}</span>
                       </span>
                     </button>
                   ))}
@@ -849,17 +985,17 @@ function Sidebar({
           </AnimatePresence>
         </div>
 
-        <div className="my-3 h-px bg-neutral-100" />
+        <div className="my-3 h-px bg-neutral-100 dark:bg-neutral-800" />
 
         <div className={cn("flex items-center gap-2.5 rounded-lg px-1.5 py-1.5", collapsed && "justify-center px-0")}>
           <Avatar seed="Anelka Bag" className="h-8 w-8" />
           {!collapsed && (
             <>
               <div className="min-w-0 flex-1">
-                <p className="truncate text-[13px] font-medium text-neutral-900">{CURRENT_USER}</p>
-                <p className="truncate text-[12px] text-neutral-400">ceo@bagui.pro</p>
+                <p className="truncate text-[13px] font-medium text-neutral-900 dark:text-neutral-50">{CURRENT_USER}</p>
+                <p className="truncate text-[12px] text-neutral-400 dark:text-neutral-600">ceo@bagui.pro</p>
               </div>
-              <ExternalLink className="h-3.5 w-3.5 shrink-0 text-neutral-400" />
+              <ExternalLink className="h-3.5 w-3.5 shrink-0 text-neutral-400 dark:text-neutral-600" />
             </>
           )}
         </div>
@@ -893,7 +1029,7 @@ function TopBar({
 }) {
   const [moreOpen, setMoreOpen] = useState(false);
   return (
-    <div className="flex h-[60px] shrink-0 border-b border-neutral-200 bg-white">
+    <div className="flex h-[60px] shrink-0 border-b border-neutral-200 bg-white dark:border-neutral-800 dark:bg-[#0C0C0E]">
       <div className="flex flex-1 items-center justify-between px-6">
         <div className="flex items-center gap-3 text-[13.5px]">
           <button
@@ -901,53 +1037,55 @@ function TopBar({
             disabled={!showBack}
             className={cn(
               "flex h-7 w-7 items-center justify-center rounded-md transition-colors",
-              showBack ? "text-neutral-500 hover:bg-neutral-100" : "text-neutral-200"
+              showBack
+                ? "text-neutral-500 hover:bg-neutral-100 dark:text-neutral-500 dark:hover:bg-neutral-800"
+                : "text-neutral-200 dark:text-neutral-800"
             )}
           >
             <ArrowLeft className="h-4 w-4" />
           </button>
-          <div className="flex items-center gap-1.5 text-neutral-400">
-            <button onClick={onGoProjectRoot} className="flex items-center gap-1.5 hover:text-neutral-700">
+          <div className="flex items-center gap-1.5 text-neutral-400 dark:text-neutral-600">
+            <button onClick={onGoProjectRoot} className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-200">
               <FolderIcon className="h-3.5 w-3.5" />
               <span>Projects</span>
             </button>
             <ChevronRight className="h-3.5 w-3.5" />
             <button
               onClick={onGoProjectRoot}
-              className={cn("flex items-center gap-1.5 hover:text-neutral-700", !folderTitle && "font-medium text-neutral-800")}
+              className={cn("flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-200", !folderTitle && "font-medium text-neutral-800 dark:text-neutral-100")}
             >
-              <FolderIcon className="h-3.5 w-3.5 text-neutral-500" />
-              <span className={!folderTitle ? "font-medium text-neutral-800" : ""}>{projectName}</span>
+              <FolderIcon className="h-3.5 w-3.5 text-neutral-500 dark:text-neutral-500" />
+              <span className={!folderTitle ? "font-medium text-neutral-800 dark:text-neutral-100" : ""}>{projectName}</span>
             </button>
             {folderTitle && (
               <>
                 <ChevronRight className="h-3.5 w-3.5" />
-                <span className="font-medium text-neutral-800">{folderTitle}</span>
+                <span className="font-medium text-neutral-800 dark:text-neutral-100">{folderTitle}</span>
               </>
             )}
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 text-[13.5px] text-neutral-500">
-          <button className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 hover:bg-neutral-50">
+        <div className="flex items-center gap-1.5 text-[13.5px] text-neutral-500 dark:text-neutral-400">
+          <button className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 hover:bg-neutral-50 dark:hover:bg-neutral-900">
             <Settings className="h-[15px] w-[15px]" />
             Manage
           </button>
           <div className="relative">
-            <button onClick={onShare} className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 hover:bg-neutral-50">
+            <button onClick={onShare} className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 hover:bg-neutral-50 dark:hover:bg-neutral-900">
               <Share2 className="h-[15px] w-[15px]" />
               Share
             </button>
             <AnimatePresence>
               {shareOpen && (
                 <Dropdown open onClose={onShare} anchorClassName="right-0 top-[calc(100%+6px)] w-[280px] p-3">
-                  <p className="mb-2 text-[12.5px] text-neutral-500">Anyone with the link can view this project.</p>
-                  <div className="flex items-center gap-2 rounded-lg border border-neutral-200 bg-neutral-50 px-2.5 py-2">
-                    <Link2 className="h-3.5 w-3.5 shrink-0 text-neutral-400" />
-                    <span className="truncate text-[12px] text-neutral-500">bagui.app/fullscreen/dashboard-folder</span>
+                  <p className="mb-2 text-[12.5px] text-neutral-500 dark:text-neutral-400">Anyone with the link can view this project.</p>
+                  <div className="flex items-center gap-2 rounded-lg border border-neutral-200 bg-neutral-50 px-2.5 py-2 dark:border-neutral-800 dark:bg-neutral-950">
+                    <Link2 className="h-3.5 w-3.5 shrink-0 text-neutral-400 dark:text-neutral-600" />
+                    <span className="truncate text-[12px] text-neutral-500 dark:text-neutral-500">bagui.app/fullscreen/dashboard-folder</span>
                     <button
                       onClick={onCopyLink}
-                      className="ml-auto shrink-0 rounded-md bg-neutral-900 px-2 py-1 text-[11px] font-medium text-white hover:bg-neutral-800"
+                      className="ml-auto shrink-0 rounded-md bg-neutral-900 px-2 py-1 text-[11px] font-medium text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
                     >
                       Copy
                     </button>
@@ -959,20 +1097,20 @@ function TopBar({
           <div className="relative">
             <button
               onClick={() => setMoreOpen((v) => !v)}
-              className="flex h-7 w-7 items-center justify-center rounded-md hover:bg-neutral-100"
+              className="flex h-7 w-7 items-center justify-center rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800"
             >
               <MoreHorizontal className="h-[15px] w-[15px]" />
             </button>
             <AnimatePresence>
               {moreOpen && (
                 <Dropdown open onClose={() => setMoreOpen(false)} anchorClassName="right-0 top-[calc(100%+6px)] w-[190px] py-1.5">
-                  <button className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-neutral-600 hover:bg-neutral-50">
+                  <button className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-neutral-600 hover:bg-neutral-50 dark:text-neutral-400 dark:hover:bg-neutral-800">
                     <Pencil className="h-3.5 w-3.5" /> Rename project
                   </button>
-                  <button className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-neutral-600 hover:bg-neutral-50">
+                  <button className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-neutral-600 hover:bg-neutral-50 dark:text-neutral-400 dark:hover:bg-neutral-800">
                     <Download className="h-3.5 w-3.5" /> Export all
                   </button>
-                  <button className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-rose-500 hover:bg-rose-50">
+                  <button className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-rose-500 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10">
                     <Trash2 className="h-3.5 w-3.5" /> Delete project
                   </button>
                 </Dropdown>
@@ -1014,27 +1152,27 @@ const FolderTile = React.memo(function FolderTile({
         onMouseLeave={() => setHovered(false)}
         whileHover={{ y: -2 }}
         whileTap={{ scale: 0.98 }}
-        className="inline-flex cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 mt-4"
+        className="inline-flex cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 dark:focus-visible:ring-neutral-100/40 mt-4"
       >
         <FolderGraphic variant={folder.variant} hovered={hovered} />
       </motion.button>
 
       <div className="mt-3 flex w-full max-w-[160px] flex-col items-center gap-1 text-center">
-        <h3 className={cn("truncate text-[15px] font-semibold", active ? "text-white" : "text-neutral-900")}>
+        <h3 className={cn("truncate text-[15px] font-semibold", active ? "text-white" : "text-neutral-900 dark:text-neutral-100")}>
           {folder.title}
         </h3>
-        <p className={cn("text-[13px]", active ? "text-white/80" : "text-neutral-500")}>{folder.notesCount} notes</p>
+        <p className={cn("text-[13px]", active ? "text-white/80" : "text-neutral-500 dark:text-neutral-500")}>{folder.notesCount} notes</p>
         <span
           className={cn(
             "rounded-full px-2 py-0.5 text-[11px] font-medium",
-            active ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-500"
+            active ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400"
           )}
         >
           {folder.tag}
         </span>
       </div>
 
-      <p className={cn("text-[13px]", active ? "text-white/70" : "text-neutral-400")}>
+      <p className={cn("text-[13px]", active ? "text-white/70" : "text-neutral-400 dark:text-neutral-600")}>
         {formatSize(folder.sizeKb)}
       </p>
     </motion.div>
@@ -1073,15 +1211,17 @@ const FileRow = React.memo(function FileRow({
       onClick={() => onSelect(file)}
       className={cn(
         "group flex cursor-pointer items-center gap-3 rounded-xl border px-3.5 py-2.5 transition-colors",
-        selected ? "border-neutral-900/15 bg-neutral-50" : "border-transparent hover:bg-neutral-50"
+        selected
+          ? "border-neutral-900/15 bg-neutral-50 dark:border-neutral-100/15 dark:bg-neutral-900"
+          : "border-transparent hover:bg-neutral-50 dark:hover:bg-neutral-900/70"
       )}
     >
       <span className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-lg", meta.bg)}>
         <Icon className={cn("h-4 w-4", meta.color)} />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[13.5px] font-medium text-neutral-900">{file.name}</p>
-        <p className="mt-0.5 truncate text-[12px] text-neutral-400">
+        <p className="truncate text-[13.5px] font-medium text-neutral-900 dark:text-neutral-50">{file.name}</p>
+        <p className="mt-0.5 truncate text-[12px] text-neutral-400 dark:text-neutral-600">
           {meta.label} · {formatSize(file.sizeKb)} · {formatDate(file.modified)}
         </p>
       </div>
@@ -1092,7 +1232,7 @@ const FileRow = React.memo(function FileRow({
             e.stopPropagation();
             setMenuOpen((v) => !v);
           }}
-          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-neutral-400 opacity-0 hover:bg-neutral-200/60 hover:text-neutral-700 group-hover:opacity-100"
+          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-neutral-400 opacity-0 hover:bg-neutral-200/60 hover:text-neutral-700 group-hover:opacity-100 dark:text-neutral-600 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
         >
           <MoreVertical className="h-4 w-4" />
         </button>
@@ -1105,7 +1245,7 @@ const FileRow = React.memo(function FileRow({
                   onRename(file);
                   setMenuOpen(false);
                 }}
-                className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-neutral-600 hover:bg-neutral-50"
+                className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-neutral-600 hover:bg-neutral-50 dark:text-neutral-400 dark:hover:bg-neutral-800"
               >
                 <Pencil className="h-3.5 w-3.5" /> Rename
               </button>
@@ -1115,7 +1255,7 @@ const FileRow = React.memo(function FileRow({
                   onDownload(file);
                   setMenuOpen(false);
                 }}
-                className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-neutral-600 hover:bg-neutral-50"
+                className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-neutral-600 hover:bg-neutral-50 dark:text-neutral-400 dark:hover:bg-neutral-800"
               >
                 <Download className="h-3.5 w-3.5" /> Download
               </button>
@@ -1125,7 +1265,7 @@ const FileRow = React.memo(function FileRow({
                   onDelete(file.id);
                   setMenuOpen(false);
                 }}
-                className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-rose-500 hover:bg-rose-50"
+                className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-rose-500 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10"
               >
                 <Trash2 className="h-3.5 w-3.5" /> Delete
               </button>
@@ -1162,16 +1302,16 @@ function Toolbar({
   const sortLabel: Record<SortKey, string> = { name: "Name", size: "Size", date: "Date" };
   return (
     <div className="mb-6 flex items-center gap-3">
-      <div className="flex flex-1 items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5">
-        <Search className="h-[15px] w-[15px] text-neutral-400" />
+      <div className="flex flex-1 items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 dark:border-neutral-800 dark:bg-neutral-900">
+        <Search className="h-[15px] w-[15px] text-neutral-400 dark:text-neutral-600" />
         <input
           value={search}
           onChange={(e) => onSearch(e.target.value)}
           placeholder={placeholder}
-          className="w-full bg-transparent text-[13.5px] text-neutral-700 placeholder:text-neutral-400 focus:outline-none"
+          className="w-full bg-transparent text-[13.5px] text-neutral-700 placeholder:text-neutral-400 focus:outline-none dark:text-neutral-200 dark:placeholder:text-neutral-600"
         />
         {search && (
-          <button onClick={() => onSearch("")} className="text-neutral-300 hover:text-neutral-500">
+          <button onClick={() => onSearch("")} className="text-neutral-300 hover:text-neutral-500 dark:text-neutral-700 dark:hover:text-neutral-400">
             <X className="h-3.5 w-3.5" />
           </button>
         )}
@@ -1179,7 +1319,7 @@ function Toolbar({
       <div className="relative">
         <button
           onClick={() => setSortOpen((v) => !v)}
-          className="flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[13.5px] text-neutral-600 hover:bg-neutral-50"
+          className="flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[13.5px] text-neutral-600 hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800"
         >
           <SlidersHorizontal className="h-[15px] w-[15px]" />
           {sortLabel[sortBy]}
@@ -1195,8 +1335,8 @@ function Toolbar({
                     setSortOpen(false);
                   }}
                   className={cn(
-                    "flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] hover:bg-neutral-50",
-                    sortBy === key ? "font-medium text-neutral-900" : "text-neutral-600"
+                    "flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] hover:bg-neutral-50 dark:hover:bg-neutral-800",
+                    sortBy === key ? "font-medium text-neutral-900 dark:text-neutral-50" : "text-neutral-600 dark:text-neutral-400"
                   )}
                 >
                   <ArrowUpDown className="h-3.5 w-3.5" /> {sortLabel[key]}
@@ -1209,7 +1349,7 @@ function Toolbar({
       {onNewDraft && (
         <button
           onClick={onNewDraft}
-          className="flex items-center gap-1.5 rounded-full bg-neutral-900 px-4 py-2.5 text-[13.5px] font-medium text-white hover:bg-neutral-800"
+          className="flex items-center gap-1.5 rounded-full bg-neutral-900 px-4 py-2.5 text-[13.5px] font-medium text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
         >
           <Plus className="h-[15px] w-[15px]" />
           {newDraftLabel ?? "New draft"}
@@ -1257,7 +1397,7 @@ function HomeView({
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-[22px] font-semibold text-neutral-900">{projectName}</h1>
+        <h1 className="text-[22px] font-semibold text-neutral-900 dark:text-neutral-50">{projectName}</h1>
       </div>
 
       <Toolbar
@@ -1270,9 +1410,9 @@ function HomeView({
       />
 
       {visible.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-200 py-20 text-center">
-          <FolderIcon className="mb-3 h-8 w-8 text-neutral-300" />
-          <p className="text-[13.5px] text-neutral-500">Nothing matches your search or filter.</p>
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-200 py-20 text-center dark:border-neutral-800">
+          <FolderIcon className="mb-3 h-8 w-8 text-neutral-300 dark:text-neutral-700" />
+          <p className="text-[13.5px] text-neutral-500 dark:text-neutral-500">Nothing matches your search or filter.</p>
         </div>
       ) : (
         <motion.div layout transition={{ layout: { duration: 0.4, ease: "easeOut" } }} className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center">
@@ -1316,6 +1456,9 @@ function FolderDetailView({
   onDownloadFile: (file: FileItem) => void;
   onNewDraft: () => void;
 }) {
+  const isDark = useIsDark();
+  const palette = (isDark ? folderPalettesDark : folderPalettes)[folder.variant];
+
   const visible = useMemo(() => {
     let list = folder.files;
     if (search.trim()) {
@@ -1335,18 +1478,18 @@ function FolderDetailView({
                 <FolderGraphic variant={folder.variant} hovered={false} />
               </div>
               <div className="min-w-0">
-                <h1 className="truncate text-[22px] font-semibold text-neutral-900">{folder.title}</h1>
-                <p className="mt-0.5 text-[13px] text-neutral-500">{folder.files.length} files</p>
+                <h1 className="truncate text-[22px] font-semibold text-neutral-900 dark:text-neutral-50">{folder.title}</h1>
+                <p className="mt-0.5 text-[13px] text-neutral-500 dark:text-neutral-500">{folder.files.length} files</p>
               </div>
             </div>
           </div>
         </div>
 
         <div className="flex items-center gap-3 text-right">
-          <span className="rounded-full bg-neutral-100 px-3 py-1 text-[12px] font-medium text-neutral-700">
+          <span className="rounded-full bg-neutral-100 px-3 py-1 text-[12px] font-medium text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300">
             {folder.tag}
           </span>
-          <p className="text-[13px] text-neutral-500">{formatSize(folder.sizeKb)}</p>
+          <p className="text-[13px] text-neutral-500 dark:text-neutral-500">{formatSize(folder.sizeKb)}</p>
         </div>
       </div>
 
@@ -1361,9 +1504,9 @@ function FolderDetailView({
       />
 
       {visible.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-200 py-20 text-center">
-          <FileText className="mb-3 h-8 w-8 text-neutral-300" />
-          <p className="text-[13.5px] text-neutral-500">No files match your search.</p>
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-200 py-20 text-center dark:border-neutral-800">
+          <FileText className="mb-3 h-8 w-8 text-neutral-300 dark:text-neutral-700" />
+          <p className="text-[13.5px] text-neutral-500 dark:text-neutral-500">No files match your search.</p>
         </div>
       ) : (
         <motion.div layout transition={{ layout: { duration: 0.4, ease: "easeOut" } }} className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
@@ -1381,26 +1524,26 @@ function FolderDetailView({
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 className={cn(
-                  "group flex h-full flex-col justify-between rounded-[24px] border border-neutral-200/80 bg-white p-4 text-left transition hover:-translate-y-1 hover:shadow-[0_12px_40px_-24px_rgba(15,23,42,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40",
-                  file.id === selectedFileId ? "border-neutral-900/30 bg-neutral-50" : "border-transparent"
+                  "group flex h-full flex-col justify-between rounded-[24px] border border-neutral-200/80 bg-white p-4 text-left transition hover:-translate-y-1 hover:shadow-[0_12px_40px_-24px_rgba(15,23,42,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 dark:border-neutral-800/80 dark:bg-neutral-900 dark:hover:shadow-[0_12px_40px_-24px_rgba(0,0,0,0.8)] dark:focus-visible:ring-neutral-100/30",
+                  file.id === selectedFileId ? "border-neutral-900/30 bg-neutral-50 dark:border-neutral-100/20 dark:bg-neutral-800/70" : "border-transparent"
                 )}
               >
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div className="flex min-w-0 items-start gap-3">
-                    <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-3xl bg-neutral-50">
-                      <MiniCard palette={folderPalettes[folder.variant]} />
+                    <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-3xl bg-neutral-50 dark:bg-neutral-950">
+                      <MiniCard palette={palette} />
                     </div>
                     <div className="min-w-0">
-                      <p className="truncate text-[15px] font-semibold text-neutral-900">{file.name}</p>
-                      <p className="mt-1 text-[12px] text-neutral-500">{formatSize(file.sizeKb)}</p>
+                      <p className="truncate text-[15px] font-semibold text-neutral-900 dark:text-neutral-50">{file.name}</p>
+                      <p className="mt-1 text-[12px] text-neutral-500 dark:text-neutral-500">{formatSize(file.sizeKb)}</p>
                     </div>
                   </div>
-                  <span className="shrink-0 rounded-full bg-neutral-100 px-3 py-1 text-[11px] font-medium text-neutral-500 whitespace-nowrap">{file.kind}</span>
+                  <span className="shrink-0 rounded-full bg-neutral-100 px-3 py-1 text-[11px] font-medium text-neutral-500 whitespace-nowrap dark:bg-neutral-800 dark:text-neutral-400">{file.kind}</span>
                 </div>
 
-                <div className="mt-4 flex flex-col gap-2 text-[12px] text-neutral-500 sm:flex-row sm:items-center sm:justify-between">
+                <div className="mt-4 flex flex-col gap-2 text-[12px] text-neutral-500 sm:flex-row sm:items-center sm:justify-between dark:text-neutral-500">
                   <span className="truncate">{formatDate(file.modified)}</span>
-                  <span className="shrink-0 rounded-full bg-neutral-100 px-2 py-1 text-[11px] font-medium text-neutral-500">{folder.tag}</span>
+                  <span className="shrink-0 rounded-full bg-neutral-100 px-2 py-1 text-[11px] font-medium text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400">{folder.tag}</span>
                 </div>
               </motion.button>
             ))}
@@ -1443,22 +1586,22 @@ function FlatFileListView({
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-[22px] font-semibold text-neutral-900">{title}</h1>
+        <h1 className="text-[22px] font-semibold text-neutral-900 dark:text-neutral-50">{title}</h1>
       </div>
 
-      <div className="mb-6 flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5">
-        <Search className="h-[15px] w-[15px] text-neutral-400" />
+      <div className="mb-6 flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 dark:border-neutral-800 dark:bg-neutral-900">
+        <Search className="h-[15px] w-[15px] text-neutral-400 dark:text-neutral-600" />
         <input
           value={search}
           onChange={(e) => onSearch(e.target.value)}
           placeholder={`Search ${title.toLowerCase()}`}
-          className="w-full bg-transparent text-[13.5px] text-neutral-700 placeholder:text-neutral-400 focus:outline-none"
+          className="w-full bg-transparent text-[13.5px] text-neutral-700 placeholder:text-neutral-400 focus:outline-none dark:text-neutral-200 dark:placeholder:text-neutral-600"
         />
       </div>
 
       {visible.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-200 py-20 text-center">
-          <p className="text-[13.5px] text-neutral-500">{emptyLabel}</p>
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-200 py-20 text-center dark:border-neutral-800">
+          <p className="text-[13.5px] text-neutral-500 dark:text-neutral-500">{emptyLabel}</p>
         </div>
       ) : (
         <div className="flex flex-col gap-1">
@@ -1473,15 +1616,17 @@ function FlatFileListView({
                 onClick={() => onSelectFile(file, file.folderTitle)}
                 className={cn(
                   "group flex cursor-pointer items-center gap-3 rounded-xl border px-3.5 py-2.5",
-                  selected ? "border-neutral-900/15 bg-neutral-50" : "border-transparent hover:bg-neutral-50"
+                  selected
+                    ? "border-neutral-900/15 bg-neutral-50 dark:border-neutral-100/15 dark:bg-neutral-900"
+                    : "border-transparent hover:bg-neutral-50 dark:hover:bg-neutral-900/70"
                 )}
               >
                 <span className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-lg", meta.bg)}>
                   <Icon className={cn("h-4 w-4", meta.color)} />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[13.5px] font-medium text-neutral-900">{file.name}</p>
-                  <p className="mt-0.5 truncate text-[12px] text-neutral-400">
+                  <p className="truncate text-[13.5px] font-medium text-neutral-900 dark:text-neutral-50">{file.name}</p>
+                  <p className="mt-0.5 truncate text-[12px] text-neutral-400 dark:text-neutral-600">
                     {file.folderTitle} · {formatSize(file.sizeKb)} · {formatDate(file.modified)}
                   </p>
                 </div>
@@ -1490,7 +1635,7 @@ function FlatFileListView({
                     e.stopPropagation();
                     onDownloadFile(file);
                   }}
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-neutral-400 opacity-0 hover:bg-neutral-200/60 hover:text-neutral-700 group-hover:opacity-100"
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-neutral-400 opacity-0 hover:bg-neutral-200/60 hover:text-neutral-700 group-hover:opacity-100 dark:text-neutral-600 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
                 >
                   <Download className="h-4 w-4" />
                 </button>
@@ -1519,7 +1664,7 @@ function EmailsView({
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-[22px] font-semibold text-neutral-900">Emails</h1>
+        <h1 className="text-[22px] font-semibold text-neutral-900 dark:text-neutral-50">Emails</h1>
       </div>
       <div className="flex flex-col gap-1">
         {emails.map((email) => {
@@ -1530,26 +1675,28 @@ function EmailsView({
               key={email.id}
               className={cn(
                 "cursor-pointer overflow-hidden rounded-xl border px-4 py-3",
-                open ? "border-neutral-200 bg-white" : "border-transparent hover:bg-neutral-50"
+                open
+                  ? "border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
+                  : "border-transparent hover:bg-neutral-50 dark:hover:bg-neutral-900/70"
               )}
               onClick={() => onToggleExpand(email.id)}
             >
               <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-500/15">
                   {email.unread ? (
-                    <Mail className="h-4 w-4 text-blue-500" />
+                    <Mail className="h-4 w-4 text-blue-500 dark:text-blue-400" />
                   ) : (
-                    <MailOpen className="h-4 w-4 text-neutral-400" />
+                    <MailOpen className="h-4 w-4 text-neutral-400 dark:text-neutral-600" />
                   )}
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">
-                    <p className={cn("truncate text-[13.5px]", email.unread ? "font-semibold text-neutral-900" : "font-medium text-neutral-700")}>
+                    <p className={cn("truncate text-[13.5px]", email.unread ? "font-semibold text-neutral-900 dark:text-neutral-50" : "font-medium text-neutral-700 dark:text-neutral-300")}>
                       {email.from}
                     </p>
-                    <span className="shrink-0 text-[11.5px] text-neutral-400">{email.time}</span>
+                    <span className="shrink-0 text-[11.5px] text-neutral-400 dark:text-neutral-600">{email.time}</span>
                   </div>
-                  <p className={cn("truncate text-[13px]", email.unread ? "text-neutral-800" : "text-neutral-500")}>
+                  <p className={cn("truncate text-[13px]", email.unread ? "text-neutral-800 dark:text-neutral-200" : "text-neutral-500 dark:text-neutral-500")}>
                     {email.subject}
                   </p>
                 </div>
@@ -1563,7 +1710,7 @@ function EmailsView({
                     transition={{ duration: 0.18 }}
                     className="pl-[52px]"
                   >
-                    <p className="pt-2 text-[13px] leading-relaxed text-neutral-500">{email.snippet}</p>
+                    <p className="pt-2 text-[13px] leading-relaxed text-neutral-500 dark:text-neutral-500">{email.snippet}</p>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -1589,7 +1736,7 @@ function AutomationView({
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-[22px] font-semibold text-neutral-900">Automation</h1>
+        <h1 className="text-[22px] font-semibold text-neutral-900 dark:text-neutral-50">Automation</h1>
       </div>
       <div className="flex flex-col gap-2.5">
         {automations.map((a) => (
@@ -1597,21 +1744,23 @@ function AutomationView({
             key={a.id}
             className={cn(
               "flex items-center gap-4 rounded-2xl border p-4 transition-colors",
-              a.enabled ? "border-neutral-200 bg-white" : "border-neutral-100 bg-neutral-50/60"
+              a.enabled
+                ? "border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
+                : "border-neutral-100 bg-neutral-50/60 dark:border-neutral-900 dark:bg-neutral-950/60"
             )}
           >
-            <span className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", a.enabled ? "bg-neutral-900" : "bg-neutral-200")}>
+            <span className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", a.enabled ? "bg-neutral-900 dark:bg-white" : "bg-neutral-200 dark:bg-neutral-800")}>
               {a.trigger === "Schedule" ? (
-                <Clock className={cn("h-[17px] w-[17px]", a.enabled ? "text-white" : "text-neutral-400")} />
+                <Clock className={cn("h-[17px] w-[17px]", a.enabled ? "text-white dark:text-neutral-900" : "text-neutral-400 dark:text-neutral-600")} />
               ) : (
-                <Zap className={cn("h-[17px] w-[17px]", a.enabled ? "text-white" : "text-neutral-400")} />
+                <Zap className={cn("h-[17px] w-[17px]", a.enabled ? "text-white dark:text-neutral-900" : "text-neutral-400 dark:text-neutral-600")} />
               )}
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-[13.5px] font-medium text-neutral-900">{a.name}</p>
-              <p className="mt-0.5 text-[12.5px] text-neutral-500">{a.description}</p>
+              <p className="text-[13.5px] font-medium text-neutral-900 dark:text-neutral-50">{a.name}</p>
+              <p className="mt-0.5 text-[12.5px] text-neutral-500 dark:text-neutral-500">{a.description}</p>
             </div>
-            <span className="shrink-0 rounded-full bg-neutral-100 px-2.5 py-1 text-[11px] text-neutral-500">{a.trigger}</span>
+            <span className="shrink-0 rounded-full bg-neutral-100 px-2.5 py-1 text-[11px] text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400">{a.trigger}</span>
             <Switch checked={a.enabled} onChange={() => onToggle(a.id)} label={a.name} />
           </div>
         ))}
@@ -1626,13 +1775,13 @@ function AutomationView({
 
 function StatCard({ label, value, progress, barColor }: { label: string; value: string; progress: number; barColor: string }) {
   return (
-    <div className="rounded-2xl border border-neutral-200 bg-white p-4">
+    <div className="rounded-2xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
       <div className="flex items-start justify-between">
-        <span className="text-[13px] text-neutral-500">{label}</span>
-        <MoreVertical className="h-3.5 w-3.5 text-neutral-300" />
+        <span className="text-[13px] text-neutral-500 dark:text-neutral-500">{label}</span>
+        <MoreVertical className="h-3.5 w-3.5 text-neutral-300 dark:text-neutral-700" />
       </div>
-      <p className="mt-1 text-[19px] font-semibold text-neutral-900">{value}</p>
-      <div className="mt-3 h-[5px] w-full overflow-hidden rounded-full bg-neutral-100">
+      <p className="mt-1 text-[19px] font-semibold text-neutral-900 dark:text-neutral-50">{value}</p>
+      <div className="mt-3 h-[5px] w-full overflow-hidden rounded-full bg-neutral-100 dark:bg-neutral-800">
         <motion.div
           className={cn("h-full rounded-full", barColor)}
           initial={{ width: 0 }}
@@ -1676,14 +1825,14 @@ function InfoPanel({
   }, [selected]);
 
   return (
-    <aside className="flex w-[248px] shrink-0 flex-col overflow-y-auto border-l border-neutral-200 bg-white px-5 py-6">
+    <aside className="flex w-[248px] shrink-0 flex-col overflow-y-auto border-l border-neutral-200 bg-white px-5 py-6 dark:border-neutral-800 dark:bg-[#0C0C0E]">
       <div className="flex flex-col gap-3">
         <StatCard label="Documents" value="48.5 GB" progress={32} barColor="bg-blue-500" />
         <StatCard label="Images" value="182.4 MB" progress={8} barColor="bg-rose-500" />
       </div>
 
       <div className="mt-7">
-        <h4 className="mb-2.5 text-[13px] font-medium text-neutral-500">
+        <h4 className="mb-2.5 text-[13px] font-medium text-neutral-500 dark:text-neutral-500">
           {selected ? (selected.type === "folder" ? "Folder" : "File") : "Properties"}
         </h4>
         {selected ? (
@@ -1693,35 +1842,35 @@ function InfoPanel({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.15 }}
           >
-            <p className="mb-2 truncate text-[13.5px] font-medium text-neutral-900">
+            <p className="mb-2 truncate text-[13.5px] font-medium text-neutral-900 dark:text-neutral-50">
               {selected.type === "folder" ? selected.folder.title : selected.file.name}
             </p>
             <div className="flex flex-col gap-2">
               {properties!.map((prop) => (
                 <div key={prop.label} className="flex items-center justify-between text-[13px]">
-                  <span className="text-neutral-500">{prop.label}</span>
-                  <span className="truncate font-medium text-neutral-800">{prop.value}</span>
+                  <span className="text-neutral-500 dark:text-neutral-500">{prop.label}</span>
+                  <span className="truncate font-medium text-neutral-800 dark:text-neutral-200">{prop.value}</span>
                 </div>
               ))}
             </div>
           </motion.div>
         ) : (
-          <p className="text-[12.5px] text-neutral-400">Select a folder or file to see its details here.</p>
+          <p className="text-[12.5px] text-neutral-400 dark:text-neutral-600">Select a folder or file to see its details here.</p>
         )}
       </div>
 
       <div className="mt-6">
-        <h4 className="mb-2.5 text-[13px] font-medium text-neutral-500">Tags</h4>
+        <h4 className="mb-2.5 text-[13px] font-medium text-neutral-500 dark:text-neutral-500">Tags</h4>
         <div className="flex flex-wrap gap-1.5">
           {allTags.map((tag) => (
             <TagChip key={tag} tag={tag} active={activeTagFilter === tag} onClick={() => onToggleTag(tag)} />
           ))}
         </div>
-        {activeTagFilter && <p className="mt-2 text-[11.5px] text-neutral-400">Filtering Home by "{activeTagFilter}"</p>}
+        {activeTagFilter && <p className="mt-2 text-[11.5px] text-neutral-400 dark:text-neutral-600">Filtering Home by "{activeTagFilter}"</p>}
       </div>
 
       <div className="mt-6">
-        <h4 className="mb-2.5 flex items-center gap-1.5 text-[13px] font-medium text-neutral-500">
+        <h4 className="mb-2.5 flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 dark:text-neutral-500">
           <Pin className="h-3.5 w-3.5" /> Pinned items
         </h4>
         <div className="flex flex-col gap-1">
@@ -1729,17 +1878,17 @@ function InfoPanel({
             <button
               key={folder.id}
               onClick={() => onOpenPinned(folder.id)}
-              className="flex items-center gap-2 rounded-lg px-1.5 py-1.5 text-left text-[12.5px] text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900"
+              className="flex items-center gap-2 rounded-lg px-1.5 py-1.5 text-left text-[12.5px] text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
             >
-              <FolderIcon className="h-3.5 w-3.5 text-neutral-400" />
+              <FolderIcon className="h-3.5 w-3.5 text-neutral-400 dark:text-neutral-600" />
               <span className="truncate">{folder.title}</span>
             </button>
           ))}
         </div>
       </div>
 
-      <div className="mt-auto flex flex-col gap-1 border-t border-neutral-100 pt-4">
-        <button className="flex items-center gap-2.5 rounded-lg px-1.5 py-2 text-[13.5px] text-neutral-500 hover:text-neutral-900">
+      <div className="mt-auto flex flex-col gap-1 border-t border-neutral-100 pt-4 dark:border-neutral-800">
+        <button className="flex items-center gap-2.5 rounded-lg px-1.5 py-2 text-[13.5px] text-neutral-500 hover:text-neutral-900 dark:text-neutral-500 dark:hover:text-neutral-100">
           <Inbox className="h-[15px] w-[15px]" />
           Activity
         </button>
@@ -1777,6 +1926,9 @@ export default function baguiDashboard() {
   const [shareOpen, setShareOpen] = useState(false);
   const [toasts, setToasts] = useState<{ id: number; message: string }[]>([]);
   const toastIdRef = useRef(0);
+
+  const [isDark, setIsDark] = useState(false);
+  const toggleDark = useCallback(() => setIsDark((v) => !v), []);
 
   const pushToast = useCallback((message: string) => {
     const id = ++toastIdRef.current;
@@ -1991,126 +2143,135 @@ export default function baguiDashboard() {
   const pinnedFolders = useMemo(() => activeProject.folders.slice(0, 3), [activeProject]);
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-white text-neutral-900">
-      <Sidebar
-        collapsed={sidebarCollapsed}
-        onToggleCollapsed={() => setSidebarCollapsed((v) => !v)}
-        projects={PROJECT_TABS.map((t) => ({ id: t.id, name: t.label, folders: [] }))}
-        activeProjectId={activeProjectId}
-        onSelectProject={selectProject}
-        projectsExpanded={projectsExpanded}
-        onToggleProjectsExpanded={() => setProjectsExpanded((v) => !v)}
-        activeNav={openFolderId ? null : activeNav}
-        onGoHome={goHome}
-        onGoNav={goNav}
-        notifications={notifications}
-        notificationsOpen={notificationsOpen}
-        onToggleNotifications={toggleNotifications}
-        onMarkAllRead={markAllRead}
-        onNotificationClick={handleNotificationClick}
-        unreadCount={unreadCount}
-      />
-
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <TopBar
-          projectName={activeProject.name}
-          folderTitle={openFolder ? openFolder.title : null}
-          showBack={!!openFolder}
-          onBack={closeFolder}
-          onGoProjectRoot={closeFolder}
-          onShare={toggleShare}
-          shareOpen={shareOpen}
-          onCopyLink={copyLink}
+    <ThemeContext.Provider value={isDark}>
+      <div
+        className={cn(
+          "flex h-screen w-full overflow-hidden bg-white text-neutral-900 transition-colors duration-300 dark:bg-[#08080A] dark:text-neutral-100",
+          isDark && "dark"
+        )}
+      >
+        <Sidebar
+          collapsed={sidebarCollapsed}
+          onToggleCollapsed={() => setSidebarCollapsed((v) => !v)}
+          projects={PROJECT_TABS.map((t) => ({ id: t.id, name: t.label, folders: [] }))}
+          activeProjectId={activeProjectId}
+          onSelectProject={selectProject}
+          projectsExpanded={projectsExpanded}
+          onToggleProjectsExpanded={() => setProjectsExpanded((v) => !v)}
+          activeNav={openFolderId ? null : activeNav}
+          onGoHome={goHome}
+          onGoNav={goNav}
+          notifications={notifications}
+          notificationsOpen={notificationsOpen}
+          onToggleNotifications={toggleNotifications}
+          onMarkAllRead={markAllRead}
+          onNotificationClick={handleNotificationClick}
+          unreadCount={unreadCount}
+          isDark={isDark}
+          onToggleDark={toggleDark}
         />
 
-        <div className="flex flex-1 overflow-hidden">
-          <div className="flex-1 overflow-y-auto bg-[#F8F8F9] px-8">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={openFolderId ? `folder-${openFolderId}` : `nav-${activeNav}-${activeProjectId}`}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.18 }}
-              >
-                {openFolder ? (
-                  <FolderDetailView
-                    folder={openFolder}
-                    search={search}
-                    onSearch={setSearch}
-                    sortBy={sortBy}
-                    onSortChange={setSortBy}
-                    selectedFileId={selectedItem?.type === "file" ? selectedItem.file.id : null}
-                    onSelectFile={(file) => selectFile(file, openFolder.title, openFolder.tag)}
-                    onDeleteFile={(id) => deleteFile(openFolder.id, id)}
-                    onRenameFile={renameFile}
-                    onDownloadFile={downloadFile}
-                    onNewDraft={addDraft}
-                  />
-                ) : activeNav === "home" ? (
-                  <HomeView
-                    projectName={activeProject.name}
-                    folders={activeProject.folders}
-                    search={search}
-                    onSearch={setSearch}
-                    sortBy={sortBy}
-                    onSortChange={setSortBy}
-                    tagFilter={activeTagFilter}
-                    onOpenFolder={openFolderById}
-                    onNewDraft={addDraft}
-                  />
-                ) : activeNav === "notes" ? (
-                  <FlatFileListView
-                    title="Notes"
-                    emptyLabel="No notes yet."
-                    files={allFilesFlat.filter((file) => file.kind === "doc")}
-                    search={search}
-                    onSearch={setSearch}
-                    selectedFileId={selectedItem?.type === "file" ? selectedItem.file.id : null}
-                    onSelectFile={(file, folderTitle) => {
-                      const folder = activeProject.folders.find((fl) => fl.title === folderTitle);
-                      selectFile(file, folderTitle, folder?.tag ?? "Product");
-                    }}
-                    onDownloadFile={downloadFile}
-                  />
-                ) : activeNav === "reports" ? (
-                  <FlatFileListView
-                    title="Reports"
-                    emptyLabel="No reports yet."
-                    files={allFilesFlat.filter((file) => file.kind === "pdf" || file.kind === "slide")}
-                    search={search}
-                    onSearch={setSearch}
-                    selectedFileId={selectedItem?.type === "file" ? selectedItem.file.id : null}
-                    onSelectFile={(file, folderTitle) => {
-                      const folder = activeProject.folders.find((fl) => fl.title === folderTitle);
-                      selectFile(file, folderTitle, folder?.tag ?? "Marketing");
-                    }}
-                    onDownloadFile={downloadFile}
-                  />
-                ) : activeNav === "emails" ? (
-                  <EmailsView emails={emails} expandedId={expandedEmailId} onToggleExpand={toggleEmailExpand} />
-                ) : (
-                  <AutomationView automations={automations} onToggle={toggleAutomation} />
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          <InfoPanel
-            selected={selectedItem}
-            activeTagFilter={activeTagFilter}
-            onToggleTag={toggleTagFilter}
-            allTags={allTags}
-            pinnedFolders={pinnedFolders}
-            onOpenPinned={(id) => {
-              setActiveNav("home");
-              openFolderById(id);
-            }}
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <TopBar
+            projectName={activeProject.name}
+            folderTitle={openFolder ? openFolder.title : null}
+            showBack={!!openFolder}
+            onBack={closeFolder}
+            onGoProjectRoot={closeFolder}
+            onShare={toggleShare}
+            shareOpen={shareOpen}
+            onCopyLink={copyLink}
           />
-        </div>
-      </div>
 
-      <ToastStack toasts={toasts} />
-    </div>
+          <div className="flex flex-1 overflow-hidden">
+            <div className="flex-1 overflow-y-auto bg-[#F8F8F9] px-8 dark:bg-[#08080A]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={openFolderId ? `folder-${openFolderId}` : `nav-${activeNav}-${activeProjectId}`}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  {openFolder ? (
+                    <FolderDetailView
+                      folder={openFolder}
+                      search={search}
+                      onSearch={setSearch}
+                      sortBy={sortBy}
+                      onSortChange={setSortBy}
+                      selectedFileId={selectedItem?.type === "file" ? selectedItem.file.id : null}
+                      onSelectFile={(file) => selectFile(file, openFolder.title, openFolder.tag)}
+                      onDeleteFile={(id) => deleteFile(openFolder.id, id)}
+                      onRenameFile={renameFile}
+                      onDownloadFile={downloadFile}
+                      onNewDraft={addDraft}
+                    />
+                  ) : activeNav === "home" ? (
+                    <HomeView
+                      projectName={activeProject.name}
+                      folders={activeProject.folders}
+                      search={search}
+                      onSearch={setSearch}
+                      sortBy={sortBy}
+                      onSortChange={setSortBy}
+                      tagFilter={activeTagFilter}
+                      onOpenFolder={openFolderById}
+                      onNewDraft={addDraft}
+                    />
+                  ) : activeNav === "notes" ? (
+                    <FlatFileListView
+                      title="Notes"
+                      emptyLabel="No notes yet."
+                      files={allFilesFlat.filter((file) => file.kind === "doc")}
+                      search={search}
+                      onSearch={setSearch}
+                      selectedFileId={selectedItem?.type === "file" ? selectedItem.file.id : null}
+                      onSelectFile={(file, folderTitle) => {
+                        const folder = activeProject.folders.find((fl) => fl.title === folderTitle);
+                        selectFile(file, folderTitle, folder?.tag ?? "Product");
+                      }}
+                      onDownloadFile={downloadFile}
+                    />
+                  ) : activeNav === "reports" ? (
+                    <FlatFileListView
+                      title="Reports"
+                      emptyLabel="No reports yet."
+                      files={allFilesFlat.filter((file) => file.kind === "pdf" || file.kind === "slide")}
+                      search={search}
+                      onSearch={setSearch}
+                      selectedFileId={selectedItem?.type === "file" ? selectedItem.file.id : null}
+                      onSelectFile={(file, folderTitle) => {
+                        const folder = activeProject.folders.find((fl) => fl.title === folderTitle);
+                        selectFile(file, folderTitle, folder?.tag ?? "Marketing");
+                      }}
+                      onDownloadFile={downloadFile}
+                    />
+                  ) : activeNav === "emails" ? (
+                    <EmailsView emails={emails} expandedId={expandedEmailId} onToggleExpand={toggleEmailExpand} />
+                  ) : (
+                    <AutomationView automations={automations} onToggle={toggleAutomation} />
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            <InfoPanel
+              selected={selectedItem}
+              activeTagFilter={activeTagFilter}
+              onToggleTag={toggleTagFilter}
+              allTags={allTags}
+              pinnedFolders={pinnedFolders}
+              onOpenPinned={(id) => {
+                setActiveNav("home");
+                openFolderById(id);
+              }}
+            />
+          </div>
+        </div>
+
+        <ToastStack toasts={toasts} />
+      </div>
+    </ThemeContext.Provider>
   );
 }
