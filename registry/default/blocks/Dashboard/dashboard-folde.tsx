@@ -170,18 +170,18 @@ const folderPalettes = {
    dark canvas. */
 const folderPalettesDark = {
   neutral: {
-    flapFill: "#1A1A1D",
-    flapStroke: "#2B2B2F",
-    cardFill: "#222225",
-    cardStroke: "#333336",
-    cardLineFill: "#3F3F43",
+    flapFill: "#4B4B4F",
+    flapStroke: "#5D5D62",
+    cardFill: "#ECECEE",
+    cardStroke: "#DBDBDD",
+    cardLineFill: "#C7C7CB",
   },
   blue: {
-    flapFill: "#1E3A5F",
-    flapStroke: "#2F5A88",
-    cardFill: "#0F1B2B",
-    cardStroke: "#1E3350",
-    cardLineFill: "#2A4A6E",
+    flapFill: "#2B4A6E",
+    flapStroke: "#3E6690",
+    cardFill: "#ECECEE",
+    cardStroke: "#DBDBDD",
+    cardLineFill: "#C7C7CB",
   },
   black: {
     flapFill: "#F5F5F7",
