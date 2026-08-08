@@ -361,6 +361,23 @@
       }
     },
     {
+      "name": "dashboard-folder",
+      "type": "registry:block",
+      "title": "Modern Folder Dashboard",
+      "description": "",
+      "dependencies": ["framer-motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/Dashboard/dashboard-folde.tsx",
+          "type": "registry:block",
+          "target": "components/Dashboard/dashboard-folder.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
       "name": "chat-app1",
       "type": "registry:block",
       "title": "Dashboard Chat App",
