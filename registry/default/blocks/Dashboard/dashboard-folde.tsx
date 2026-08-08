@@ -45,7 +45,7 @@ import { cn } from "@/lib/utils";
 /*  Types                                                              */
 /* ================================================================== */
 
-type FolderVariant = "neutral" | "blue";
+type FolderVariant = "neutral" | "blue" | "black";
 type FileKind = "doc" | "sheet" | "image" | "pdf" | "slide";
 type TagName = "Sales" | "Marketing" | "Analytics" | "Product" | "Engineering" | "Growth";
 type NavKey = "home" | "notes" | "reports" | "emails" | "automation";
@@ -128,18 +128,25 @@ const folderPalettes = {
     cardStroke: "#EAF4FF",
     cardLineFill: "#DCEEFF",
   },
+  black: {
+    flapFill: "#1F2937",
+    flapStroke: "#374151",
+    cardFill: "#111827",
+    cardStroke: "#374151",
+    cardLineFill: "#374151",
+  }
 } as const;
 
 const cardSpring = { type: "spring" as const, stiffness: 150, damping: 15 };
 
 function MiniCard({ palette }: { palette: (typeof folderPalettes)[FolderVariant] }) {
   return (
-    <svg width="58" height="76" viewBox="0 0 58 76" fill="none">
-      <rect width="58" height="76" rx="9" fill={palette.cardFill} stroke={palette.cardStroke} />
-      <rect x="7" y="11" width="44" height="5" rx="2.5" fill={palette.cardLineFill} />
-      <rect x="7" y="22" width="30" height="3.5" rx="1.75" fill={palette.cardLineFill} opacity={0.75} />
-      <rect x="7" y="29.5" width="30" height="3.5" rx="1.75" fill={palette.cardLineFill} opacity={0.75} />
-      <rect x="7" y="37" width="22" height="3.5" rx="1.75" fill={palette.cardLineFill} opacity={0.75} />
+    <svg width="70" height="92" viewBox="0 0 70 92" fill="none">
+      <rect width="70" height="92" rx="12" fill={palette.cardFill} stroke={palette.cardStroke} />
+      <rect x="9" y="14" width="52" height="6" rx="3" fill={palette.cardLineFill} />
+      <rect x="9" y="28" width="36" height="4" rx="2" fill={palette.cardLineFill} opacity={0.75} />
+      <rect x="9" y="37" width="36" height="4" rx="2" fill={palette.cardLineFill} opacity={0.75} />
+      <rect x="9" y="47" width="28" height="4" rx="2" fill={palette.cardLineFill} opacity={0.75} />
     </svg>
   );
 }
@@ -155,25 +162,25 @@ const FolderGraphic = React.memo(function FolderGraphic({
   const open = hovered;
 
   return (
-    <div className="relative flex h-[104px] w-full items-end justify-center">
-      <div className="absolute inset-0 flex items-center justify-center">
+    <div className="relative inline-flex h-[130px] w-[158px] items-end justify-center">
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <motion.div
           className="absolute"
-          animate={{ y: open ? -26 : -6, x: 17, rotate: open ? 8 : 4 }}
+          animate={{ y: open ? -34 : -16, x: 17, rotate: open ? 8 : 4 }}
           transition={cardSpring}
         >
           <MiniCard palette={palette} />
         </motion.div>
         <motion.div
           className="absolute"
-          animate={{ y: open ? -32 : -10, x: 0, rotate: 0 }}
+          animate={{ y: open ? -40 : -20, x: 0, rotate: 0 }}
           transition={cardSpring}
         >
           <MiniCard palette={palette} />
         </motion.div>
         <motion.div
           className="absolute"
-          animate={{ y: open ? -26 : -6, x: -17, rotate: open ? -8 : -4 }}
+          animate={{ y: open ? -34 : -16, x: -17, rotate: open ? -8 : -4 }}
           transition={cardSpring}
         >
           <MiniCard palette={palette} />
@@ -181,8 +188,8 @@ const FolderGraphic = React.memo(function FolderGraphic({
       </div>
 
       <motion.svg
-        width="112"
-        height="84"
+        width="160"
+        height="120"
         viewBox="0 0 321 241"
         fill="none"
         className="relative"
@@ -990,7 +997,7 @@ const FolderTile = React.memo(function FolderTile({
   onOpen: (id: string) => void;
 }) {
   const [hovered, setHovered] = useState(false);
-  const active = folder.variant === "blue";
+  const active = folder.variant === "black";
   return (
     <motion.div
       layout
@@ -998,37 +1005,28 @@ const FolderTile = React.memo(function FolderTile({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -6, scale: 0.97 }}
       transition={{ duration: 0.2 }}
-      whileHover={{ y: -2 }}
-      whileTap={{ scale: 0.98 }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onClick={() => onOpen(folder.id)}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") onOpen(folder.id);
-      }}
-      className={cn(
-        "flex cursor-pointer flex-col overflow-hidden rounded-[20px] border p-5 text-left transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40",
-        active
-          ? "border-transparent bg-gradient-to-b from-[#63B7FE] to-[#3E9DEE] shadow-[0_10px_28px_-10px_rgba(63,155,233,0.55)]"
-          : "border-neutral-200/80 bg-gradient-to-b from-white to-neutral-50/60 hover:shadow-[0_4px_16px_-8px_rgba(15,23,42,0.12)]"
-      )}
+      className="group inline-flex w-max flex-col items-center gap-6 text-center"
     >
-      <FolderGraphic variant={folder.variant} hovered={hovered} />
+      <motion.button
+        type="button"
+        onClick={() => onOpen(folder.id)}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        whileHover={{ y: -2 }}
+        whileTap={{ scale: 0.98 }}
+        className="inline-flex cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 mt-4"
+      >
+        <FolderGraphic variant={folder.variant} hovered={hovered} />
+      </motion.button>
 
-      <div className="mt-3 flex items-start justify-between gap-2">
-        <div className="min-w-0">
-          <h3 className={cn("truncate text-[15px] font-semibold", active ? "text-white" : "text-neutral-900")}>
-            {folder.title}
-          </h3>
-          <p className={cn("mt-0.5 text-[13px]", active ? "text-white/80" : "text-neutral-500")}>
-            {folder.notesCount} notes
-          </p>
-        </div>
+      <div className="mt-3 flex w-full max-w-[160px] flex-col items-center gap-1 text-center">
+        <h3 className={cn("truncate text-[15px] font-semibold", active ? "text-white" : "text-neutral-900")}>
+          {folder.title}
+        </h3>
+        <p className={cn("text-[13px]", active ? "text-white/80" : "text-neutral-500")}>{folder.notesCount} notes</p>
         <span
           className={cn(
-            "shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium",
+            "rounded-full px-2 py-0.5 text-[11px] font-medium",
             active ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-500"
           )}
         >
@@ -1036,7 +1034,7 @@ const FolderTile = React.memo(function FolderTile({
         </span>
       </div>
 
-      <p className={cn("mt-3 text-[13px]", active ? "text-white/70" : "text-neutral-400")}>
+      <p className={cn("text-[13px]", active ? "text-white/70" : "text-neutral-400")}>
         {formatSize(folder.sizeKb)}
       </p>
     </motion.div>
@@ -1277,8 +1275,8 @@ function HomeView({
           <p className="text-[13.5px] text-neutral-500">Nothing matches your search or filter.</p>
         </div>
       ) : (
-        <motion.div layout className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-          <AnimatePresence>
+        <motion.div layout transition={{ layout: { duration: 0.4, ease: "easeOut" } }} className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center">
+          <AnimatePresence initial={false} mode="popLayout">
             {visible.map((folder) => (
               <FolderTile key={folder.id} folder={folder} onOpen={onOpenFolder} />
             ))}
@@ -1329,15 +1327,22 @@ function FolderDetailView({
 
   return (
     <div>
-      <div className="mb-6 flex items-center gap-4">
-        <div className="flex h-14 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-neutral-50">
-          <FolderGraphic variant={folder.variant} hovered={false} />
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="flex h-14 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-neutral-100">
+            <FolderGraphic variant={folder.variant} hovered={false} />
+          </div>
+          <div className="min-w-0">
+            <h1 className="truncate text-[22px] font-semibold text-neutral-900">{folder.title}</h1>
+            <p className="mt-0.5 text-[13px] text-neutral-500">{folder.files.length} files</p>
+          </div>
         </div>
-        <div className="min-w-0">
-          <h1 className="truncate text-[22px] font-semibold text-neutral-900">{folder.title}</h1>
-          <p className="mt-0.5 text-[13px] text-neutral-500">
-            {folder.files.length} files · {formatSize(folder.sizeKb)}
-          </p>
+
+        <div className="flex items-center gap-3 text-right">
+          <span className="rounded-full bg-neutral-100 px-3 py-1 text-[12px] font-medium text-neutral-700">
+            {folder.tag}
+          </span>
+          <p className="text-[13px] text-neutral-500">{formatSize(folder.sizeKb)}</p>
         </div>
       </div>
 
@@ -1357,18 +1362,43 @@ function FolderDetailView({
           <p className="text-[13.5px] text-neutral-500">No files match your search.</p>
         </div>
       ) : (
-        <motion.div layout className="flex flex-col gap-1">
-          <AnimatePresence>
+        <motion.div layout transition={{ layout: { duration: 0.4, ease: "easeOut" } }} className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+          <AnimatePresence initial={false} mode="popLayout">
             {visible.map((file) => (
-              <FileRow
+              <motion.button
                 key={file.id}
-                file={file}
-                selected={file.id === selectedFileId}
-                onSelect={onSelectFile}
-                onDelete={onDeleteFile}
-                onRename={onRenameFile}
-                onDownload={onDownloadFile}
-              />
+                type="button"
+                layout
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.32, ease: "easeOut" }}
+                onClick={() => onSelectFile(file)}
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                className={cn(
+                  "group flex h-full flex-col justify-between rounded-[24px] border border-neutral-200/80 bg-white p-4 text-left transition hover:-translate-y-1 hover:shadow-[0_12px_40px_-24px_rgba(15,23,42,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40",
+                  file.id === selectedFileId ? "border-neutral-900/30 bg-neutral-50" : "border-transparent"
+                )}
+              >
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="flex min-w-0 items-start gap-3">
+                    <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-3xl bg-neutral-50">
+                      <MiniCard palette={folderPalettes[folder.variant]} />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="truncate text-[15px] font-semibold text-neutral-900">{file.name}</p>
+                      <p className="mt-1 text-[12px] text-neutral-500">{formatSize(file.sizeKb)}</p>
+                    </div>
+                  </div>
+                  <span className="shrink-0 rounded-full bg-neutral-100 px-3 py-1 text-[11px] font-medium text-neutral-500 whitespace-nowrap">{file.kind}</span>
+                </div>
+
+                <div className="mt-4 flex flex-col gap-2 text-[12px] text-neutral-500 sm:flex-row sm:items-center sm:justify-between">
+                  <span className="truncate">{formatDate(file.modified)}</span>
+                  <span className="shrink-0 rounded-full bg-neutral-100 px-2 py-1 text-[11px] font-medium text-neutral-500">{folder.tag}</span>
+                </div>
+              </motion.button>
             ))}
           </AnimatePresence>
         </motion.div>
@@ -1990,7 +2020,7 @@ export default function baguiDashboard() {
         />
 
         <div className="flex flex-1 overflow-hidden">
-          <div className="flex-1 overflow-y-auto bg-[#F8F8F9] px-8 py-7">
+          <div className="flex-1 overflow-y-auto bg-[#F8F8F9] px-8 py-7 ">
             <AnimatePresence mode="wait">
               <motion.div
                 key={openFolderId ? `folder-${openFolderId}` : `nav-${activeNav}-${activeProjectId}`}
