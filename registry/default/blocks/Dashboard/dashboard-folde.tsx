@@ -910,7 +910,7 @@ function Sidebar({
                     key={p.id}
                     onClick={() => onSelectProject(p.id)}
                     className={cn(
-                      "rounded-lg px-2.5 py-[7px] text-left text-[13.5px] transition-colors",
+                      "block w-full truncate rounded-lg px-2.5 py-[7px] text-left text-[13.5px] transition-colors",
                       p.id === activeProjectId
                         ? "bg-neutral-100 font-medium text-neutral-900 dark:bg-neutral-800 dark:text-neutral-50"
                         : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-500 dark:hover:bg-neutral-900 dark:hover:text-neutral-200"
@@ -1031,12 +1031,12 @@ function TopBar({
   return (
     <div className="flex h-[60px] shrink-0 border-b border-neutral-200 bg-white dark:border-neutral-800 dark:bg-[#0C0C0E]">
       <div className="flex flex-1 items-center justify-between px-6">
-        <div className="flex items-center gap-3 text-[13.5px]">
+        <div className="flex min-w-0 flex-1 items-center gap-3 text-[13.5px]">
           <button
             onClick={onBack}
             disabled={!showBack}
             className={cn(
-              "flex h-7 w-7 items-center justify-center rounded-md transition-colors",
+              "flex h-7 w-7 shrink-0 items-center justify-center rounded-md transition-colors",
               showBack
                 ? "text-neutral-500 hover:bg-neutral-100 dark:text-neutral-500 dark:hover:bg-neutral-800"
                 : "text-neutral-200 dark:text-neutral-800"
@@ -1044,29 +1044,32 @@ function TopBar({
           >
             <ArrowLeft className="h-4 w-4" />
           </button>
-          <div className="flex items-center gap-1.5 text-neutral-400 dark:text-neutral-600">
-            <button onClick={onGoProjectRoot} className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-200">
-              <FolderIcon className="h-3.5 w-3.5" />
+          <div className="flex min-w-0 items-center gap-1.5 text-neutral-400 dark:text-neutral-600">
+            <button onClick={onGoProjectRoot} className="flex shrink-0 items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-200">
+              <FolderIcon className="h-3.5 w-3.5 shrink-0" />
               <span>Projects</span>
             </button>
-            <ChevronRight className="h-3.5 w-3.5" />
+            <ChevronRight className="h-3.5 w-3.5 shrink-0" />
             <button
               onClick={onGoProjectRoot}
-              className={cn("flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-200", !folderTitle && "font-medium text-neutral-800 dark:text-neutral-100")}
+              className={cn(
+                "flex min-w-0 items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-200",
+                !folderTitle ? "shrink-0" : "shrink"
+              )}
             >
-              <FolderIcon className="h-3.5 w-3.5 text-neutral-500 dark:text-neutral-500" />
-              <span className={!folderTitle ? "font-medium text-neutral-800 dark:text-neutral-100" : ""}>{projectName}</span>
+              <FolderIcon className="h-3.5 w-3.5 shrink-0 text-neutral-500 dark:text-neutral-500" />
+              <span className={cn("truncate", !folderTitle && "font-medium text-neutral-800 dark:text-neutral-100")}>{projectName}</span>
             </button>
             {folderTitle && (
               <>
-                <ChevronRight className="h-3.5 w-3.5" />
-                <span className="font-medium text-neutral-800 dark:text-neutral-100">{folderTitle}</span>
+                <ChevronRight className="h-3.5 w-3.5 shrink-0" />
+                <span className="min-w-0 shrink truncate font-medium text-neutral-800 dark:text-neutral-100">{folderTitle}</span>
               </>
             )}
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 text-[13.5px] text-neutral-500 dark:text-neutral-400">
+        <div className="flex shrink-0 items-center gap-1.5 text-[13.5px] text-neutral-500 dark:text-neutral-400">
           <button className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 hover:bg-neutral-50 dark:hover:bg-neutral-900">
             <Settings className="h-[15px] w-[15px]" />
             Manage
@@ -1159,12 +1162,12 @@ const FolderTile = React.memo(function FolderTile({
 
       <div className="mt-3 flex w-full max-w-[200px] flex-col gap-1.5">
         <div className="flex items-center justify-between gap-2">
-          <h3 className={cn("min-w-0 truncate text-[15px] font-semibold", active ? "text-white" : "text-neutral-900 dark:text-neutral-100")}>
+          <h3 className={cn("min-w-0 flex-1 truncate text-[15px] font-semibold", active ? "text-white" : "text-neutral-900 dark:text-neutral-100")}>
             {folder.title}
           </h3>
           <span
             className={cn(
-              "shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium",
+              "shrink-0 whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] font-medium",
               active ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400"
             )}
           >
@@ -1172,10 +1175,10 @@ const FolderTile = React.memo(function FolderTile({
           </span>
         </div>
         <div className="flex items-center justify-between gap-2">
-          <p className={cn("min-w-0 truncate text-[13px]", active ? "text-white/80" : "text-neutral-500 dark:text-neutral-500")}>
+          <p className={cn("min-w-0 flex-1 truncate text-[13px]", active ? "text-white/80" : "text-neutral-500 dark:text-neutral-500")}>
             {folder.notesCount} notes
           </p>
-          <p className={cn("shrink-0 text-[13px]", active ? "text-white/70" : "text-neutral-400 dark:text-neutral-600")}>
+          <p className={cn("shrink-0 whitespace-nowrap text-[13px]", active ? "text-white/70" : "text-neutral-400 dark:text-neutral-600")}>
             {formatSize(folder.sizeKb)}
           </p>
         </div>
@@ -1401,8 +1404,8 @@ function HomeView({
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-[22px] font-semibold text-neutral-900 dark:text-neutral-50">{projectName}</h1>
+      <div className="mb-6 flex items-center justify-between gap-4">
+        <h1 className="min-w-0 truncate text-[22px] font-semibold text-neutral-900 dark:text-neutral-50">{projectName}</h1>
       </div>
 
       <Toolbar
@@ -1490,7 +1493,7 @@ function FolderDetailView({
           </div>
         </div>
 
-        <div className="flex items-center gap-3 text-right">
+        <div className="flex shrink-0 items-center gap-3 text-right">
           <span className="rounded-full bg-neutral-100 px-3 py-1 text-[12px] font-medium text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300">
             {folder.tag}
           </span>
@@ -1883,10 +1886,10 @@ function InfoPanel({
             <button
               key={folder.id}
               onClick={() => onOpenPinned(folder.id)}
-              className="flex items-center gap-2 rounded-lg px-1.5 py-1.5 text-left text-[12.5px] text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
+              className="flex w-full items-center gap-2 rounded-lg px-1.5 py-1.5 text-left text-[12.5px] text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
             >
-              <FolderIcon className="h-3.5 w-3.5 text-neutral-400 dark:text-neutral-600" />
-              <span className="truncate">{folder.title}</span>
+              <FolderIcon className="h-3.5 w-3.5 shrink-0 text-neutral-400 dark:text-neutral-600" />
+              <span className="min-w-0 flex-1 truncate">{folder.title}</span>
             </button>
           ))}
         </div>
