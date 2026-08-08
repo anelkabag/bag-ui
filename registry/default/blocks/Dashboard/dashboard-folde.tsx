@@ -1327,14 +1327,18 @@ function FolderDetailView({
 
   return (
     <div>
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3 min-w-0">
-          <div className="flex h-14 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-neutral-100">
-            <FolderGraphic variant={folder.variant} hovered={false} />
-          </div>
           <div className="min-w-0">
-            <h1 className="truncate text-[22px] font-semibold text-neutral-900">{folder.title}</h1>
-            <p className="mt-0.5 text-[13px] text-neutral-500">{folder.files.length} files</p>
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="pointer-events-none transform scale-50 origin-center -ml-1">
+                <FolderGraphic variant={folder.variant} hovered={false} />
+              </div>
+              <div className="min-w-0">
+                <h1 className="truncate text-[22px] font-semibold text-neutral-900">{folder.title}</h1>
+                <p className="mt-0.5 text-[13px] text-neutral-500">{folder.files.length} files</p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -2020,7 +2024,7 @@ export default function baguiDashboard() {
         />
 
         <div className="flex flex-1 overflow-hidden">
-          <div className="flex-1 overflow-y-auto bg-[#F8F8F9] px-8 py-7 ">
+          <div className="flex-1 overflow-y-auto bg-[#F8F8F9] px-6">
             <AnimatePresence mode="wait">
               <motion.div
                 key={openFolderId ? `folder-${openFolderId}` : `nav-${activeNav}-${activeProjectId}`}
