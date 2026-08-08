@@ -557,23 +557,21 @@ const CURRENT_USER = "Anelka Bag";
 /*  Small atoms                                                        */
 /* ================================================================== */
 
-function KintsugiMark() {
+function AppLogo() {
   const isDark = useIsDark();
   return (
-    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] bg-neutral-900 dark:bg-neutral-100">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <path d="M1 9.5L5.5 5.5L4 2.5" stroke={isDark ? "#0A0A0A" : "white"} strokeWidth="1.1" strokeLinecap="round" />
-        <path d="M5.5 5.5L11 3.5" stroke={isDark ? "#0A0A0A" : "white"} strokeWidth="1.1" strokeLinecap="round" />
-        <path d="M6.8 5.9L13 11" stroke={isDark ? "#0A0A0A" : "white"} strokeWidth="1.1" strokeLinecap="round" />
-      </svg>
-    </div>
+    <img
+      src={isDark ? "/logoW.png" : "/logo.png"}
+      alt="BagUi"
+      className="h-8 w-8 shrink-0 rounded-[10px] object-contain"
+    />
   );
 }
 
-function Avatar({ seed, className }: { seed: string; className?: string }) {
+function Avatar({ seed, src, className }: { seed: string; src?: string; className?: string }) {
   return (
     <img
-      src={`https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(seed)}&backgroundColor=b6e3f4`}
+      src={src ?? `https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(seed)}&backgroundColor=b6e3f4`}
       alt={seed}
       className={cn("shrink-0 rounded-full bg-neutral-100 object-cover dark:bg-neutral-800 dark:ring-1 dark:ring-neutral-800", className)}
     />
@@ -850,11 +848,11 @@ function Sidebar({
       <div className={cn("flex items-center pb-5", collapsed ? "justify-center" : "justify-between px-1")}>
         {!collapsed && (
           <div className="flex items-center gap-2">
-            <KintsugiMark />
+            <AppLogo />
             <span className="whitespace-nowrap text-[14.5px] font-semibold text-neutral-900 dark:text-neutral-50">BagUi</span>
           </div>
         )}
-        {collapsed && <KintsugiMark />}
+        {collapsed && <AppLogo />}
         {!collapsed && (
           <button
             onClick={onToggleCollapsed}
@@ -988,7 +986,7 @@ function Sidebar({
         <div className="my-3 h-px bg-neutral-100 dark:bg-neutral-800" />
 
         <div className={cn("flex items-center gap-2.5 rounded-lg px-1.5 py-1.5", collapsed && "justify-center px-0")}>
-          <Avatar seed="Anelka Bag" className="h-8 w-8" />
+          <Avatar seed="Anelka Bag" src="/avatar.png" className="h-8 w-8" />
           {!collapsed && (
             <>
               <div className="min-w-0 flex-1">
