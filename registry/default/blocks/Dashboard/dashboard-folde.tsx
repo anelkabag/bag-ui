@@ -563,7 +563,7 @@ function AppLogo() {
     <img
       src={isDark ? "/logoW.png" : "/logo.png"}
       alt="BagUi"
-      className="h-8 w-8 shrink-0 rounded-[10px] object-contain"
+      className="h-4 w-4 shrink-0 rounded-[4px] object-contain"
     />
   );
 }
@@ -849,7 +849,10 @@ function Sidebar({
         {!collapsed && (
           <div className="flex items-center gap-2">
             <AppLogo />
-            <span className="whitespace-nowrap text-[14.5px] font-semibold text-neutral-900 dark:text-neutral-50">BagUi</span>
+            <div className="flex min-w-0 flex-col leading-tight">
+              <span className="whitespace-nowrap text-[16px] font-semibold text-neutral-900 dark:text-neutral-50">BagUi</span>
+              <p className="whitespace-nowrap text-[11px] text-neutral-400 dark:text-neutral-600">Open Source Ui Blocks</p>
+            </div>
           </div>
         )}
         {collapsed && <AppLogo />}
