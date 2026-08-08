@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useMemo, useRef, useEffect } from "react";
+import React, { useState, useCallback, useMemo, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import {
   Home,
@@ -1254,38 +1254,6 @@ function HomeView({
     return sortFolders(list, sortBy);
   }, [folders, search, sortBy, tagFilter]);
 
-  const [orderedFolders, setOrderedFolders] = useState<Folder[]>(() => visible);
-  useEffect(() => setOrderedFolders(visible), [visible]);
-
-  const dragFolderItem = useRef<number | null>(null);
-  const dragFolderOver = useRef<number | null>(null);
-
-  function onFolderDragStart(e: any, index: number) {
-    dragFolderItem.current = index;
-    e.dataTransfer.effectAllowed = "move";
-    try {
-      e.dataTransfer.setData("text/plain", String(index));
-    } catch {}
-  }
-
-  function onFolderDragOver(e: any, index: number) {
-    e.preventDefault();
-    dragFolderOver.current = index;
-  }
-
-  function onFolderDrop(e: React.DragEvent) {
-    e.preventDefault();
-    const from = dragFolderItem.current;
-    const to = dragFolderOver.current;
-    if (from == null || to == null) return;
-    const list = Array.from(orderedFolders);
-    const item = list.splice(from, 1)[0];
-    list.splice(to, 0, item);
-    setOrderedFolders(list);
-    dragFolderItem.current = null;
-    dragFolderOver.current = null;
-  }
-
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
@@ -1309,17 +1277,8 @@ function HomeView({
       ) : (
         <motion.div layout transition={{ layout: { duration: 0.4, ease: "easeOut" } }} className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center">
           <AnimatePresence initial={false} mode="popLayout">
-            {orderedFolders.map((folder, index) => (
-              <div
-                key={folder.id}
-                draggable
-                onDragStart={(e) => onFolderDragStart(e, index)}
-                onDragOver={(e) => onFolderDragOver(e, index)}
-                onDrop={onFolderDrop}
-                className="w-full"
-              >
-                <FolderTile folder={folder} onOpen={onOpenFolder} />
-              </div>
+            {visible.map((folder) => (
+              <FolderTile key={folder.id} folder={folder} onOpen={onOpenFolder} />
             ))}
           </AnimatePresence>
         </motion.div>
@@ -1366,38 +1325,6 @@ function FolderDetailView({
     return sortFiles(list, sortBy);
   }, [folder.files, search, sortBy]);
 
-  const [orderedFiles, setOrderedFiles] = useState<FileItem[]>(() => visible);
-  useEffect(() => setOrderedFiles(visible), [visible]);
-
-  const dragFileItem = useRef<number | null>(null);
-  const dragFileOver = useRef<number | null>(null);
-
-  function onFileDragStart(e: any, index: number) {
-    dragFileItem.current = index;
-    e.dataTransfer.effectAllowed = "move";
-    try {
-      e.dataTransfer.setData("text/plain", String(index));
-    } catch {}
-  }
-
-  function onFileDragOver(e: any, index: number) {
-    e.preventDefault();
-    dragFileOver.current = index;
-  }
-
-  function onFileDrop(e: React.DragEvent) {
-    e.preventDefault();
-    const from = dragFileItem.current;
-    const to = dragFileOver.current;
-    if (from == null || to == null) return;
-    const list = Array.from(orderedFiles);
-    const item = list.splice(from, 1)[0];
-    list.splice(to, 0, item);
-    setOrderedFiles(list);
-    dragFileItem.current = null;
-    dragFileOver.current = null;
-  }
-
   return (
     <div>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -1441,15 +1368,11 @@ function FolderDetailView({
       ) : (
         <motion.div layout transition={{ layout: { duration: 0.4, ease: "easeOut" } }} className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
           <AnimatePresence initial={false} mode="popLayout">
-            {orderedFiles.map((file, index) => (
+            {visible.map((file) => (
               <motion.button
                 key={file.id}
                 type="button"
                 layout
-                draggable
-                onDragStart={(e) => onFileDragStart(e, index)}
-                onDragOver={(e) => onFileDragOver(e, index)}
-                onDrop={onFileDrop}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12 }}
@@ -2101,7 +2024,7 @@ export default function baguiDashboard() {
         />
 
         <div className="flex flex-1 overflow-hidden">
-          <div className="flex-1 overflow-y-auto bg-[#F8F8F9] px-6">
+          <div className="flex-1 overflow-y-auto bg-[#F8F8F9] px-8">
             <AnimatePresence mode="wait">
               <motion.div
                 key={openFolderId ? `folder-${openFolderId}` : `nav-${activeNav}-${activeProjectId}`}
