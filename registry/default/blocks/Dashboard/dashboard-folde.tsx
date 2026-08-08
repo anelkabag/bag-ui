@@ -1143,7 +1143,7 @@ const FolderTile = React.memo(function FolderTile({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -6, scale: 0.97 }}
       transition={{ duration: 0.2 }}
-      className="group inline-flex w-max flex-col items-center gap-6 text-center"
+      className="group inline-flex w-max flex-col items-center gap-6"
     >
       <motion.button
         type="button"
@@ -1157,24 +1157,29 @@ const FolderTile = React.memo(function FolderTile({
         <FolderGraphic variant={folder.variant} hovered={hovered} />
       </motion.button>
 
-      <div className="mt-3 flex w-full max-w-[160px] flex-col items-center gap-1 text-center">
-        <h3 className={cn("truncate text-[15px] font-semibold", active ? "text-white" : "text-neutral-900 dark:text-neutral-100")}>
-          {folder.title}
-        </h3>
-        <p className={cn("text-[13px]", active ? "text-white/80" : "text-neutral-500 dark:text-neutral-500")}>{folder.notesCount} notes</p>
-        <span
-          className={cn(
-            "rounded-full px-2 py-0.5 text-[11px] font-medium",
-            active ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400"
-          )}
-        >
-          {folder.tag}
-        </span>
+      <div className="mt-3 flex w-full max-w-[200px] flex-col gap-1.5">
+        <div className="flex items-center justify-between gap-2">
+          <h3 className={cn("min-w-0 truncate text-[15px] font-semibold", active ? "text-white" : "text-neutral-900 dark:text-neutral-100")}>
+            {folder.title}
+          </h3>
+          <span
+            className={cn(
+              "shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium",
+              active ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400"
+            )}
+          >
+            {folder.tag}
+          </span>
+        </div>
+        <div className="flex items-center justify-between gap-2">
+          <p className={cn("min-w-0 truncate text-[13px]", active ? "text-white/80" : "text-neutral-500 dark:text-neutral-500")}>
+            {folder.notesCount} notes
+          </p>
+          <p className={cn("shrink-0 text-[13px]", active ? "text-white/70" : "text-neutral-400 dark:text-neutral-600")}>
+            {formatSize(folder.sizeKb)}
+          </p>
+        </div>
       </div>
-
-      <p className={cn("text-[13px]", active ? "text-white/70" : "text-neutral-400 dark:text-neutral-600")}>
-        {formatSize(folder.sizeKb)}
-      </p>
     </motion.div>
   );
 });
