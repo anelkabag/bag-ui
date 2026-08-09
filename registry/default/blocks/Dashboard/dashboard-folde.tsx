@@ -564,7 +564,7 @@ function AppLogo() {
     <img
       src={isDark ? "/logoW.png" : "/logo.png"}
       alt="BagUi"
-      className="h-4 w-4 shrink-0 rounded-[4px] object-contain"
+      className="h-6 w-6 shrink-0 rounded-[4px] object-contain"
     />
   );
 }
@@ -852,7 +852,7 @@ function Sidebar({
             <AppLogo />
             <div className="flex min-w-0 flex-col leading-tight">
               <span className="whitespace-nowrap text-[16px] font-semibold text-neutral-900 dark:text-neutral-50">BagUi</span>
-              <p className="whitespace-nowrap text-[11px] text-neutral-400 dark:text-neutral-600">Open Source Ui Blocks</p>
+              <p className="whitespace-nowrap text-[11px] text-neutral-400 dark:text-neutral-600 mt-1">Open Source Ui Blocks</p>
             </div>
           </div>
         )}
@@ -1407,7 +1407,7 @@ function HomeView({
   return (
     <div>
       <div className="mb-6 flex items-center justify-between gap-4">
-        <h1 className="min-w-0 truncate text-[22px] font-semibold text-neutral-900 dark:text-neutral-50">{projectName}</h1>
+        <h1 className="min-w-0 truncate text-[22px] font-semibold text-neutral-900 dark:text-neutral-50 mt-4">{projectName}</h1>
       </div>
 
       <Toolbar
@@ -1485,7 +1485,7 @@ function FolderDetailView({
           <div className="min-w-0">
             <div className="flex items-center gap-3 min-w-0">
               <div className="pointer-events-none transform scale-50 origin-center -ml-1">
-                <FolderGraphic variant={folder.variant} hovered={false} />
+                <FolderGraphic variant={folder.variant} hovered={true} />
               </div>
               <div className="min-w-0">
                 <h1 className="truncate text-[22px] font-semibold text-neutral-900 dark:text-neutral-50">{folder.title}</h1>
