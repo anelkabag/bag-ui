@@ -564,7 +564,7 @@ function AppLogo() {
     <img
       src={isDark ? "/logoW.png" : "/logo.png"}
       alt="BagUi"
-      className="h-6 w-6 shrink-0 rounded-[4px] object-contain"
+      className="h-6 w-6 shrink-0 object-contain"
     />
   );
 }
@@ -587,7 +587,7 @@ function Switch({ checked, onChange, label }: { checked: boolean; onChange: () =
       aria-label={label}
       onClick={onChange}
       className={cn(
-        "relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200",
+        "relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200 cursor-pointer",
         checked ? "bg-neutral-900 dark:bg-neutral-100" : "bg-neutral-200 dark:bg-neutral-800"
       )}
     >
@@ -735,7 +735,7 @@ function ThemeToggle({
       {!collapsed && (
         <span
           className={cn(
-            "relative h-5 w-9 shrink-0 rounded-full transition-colors duration-200",
+            "relative h-5 w-9 shrink-0 rounded-full transition-colors duration-200 cursor-pointer",
             isDark ? "bg-neutral-100" : "bg-neutral-200"
           )}
         >
@@ -860,7 +860,7 @@ function Sidebar({
         {!collapsed && (
           <button
             onClick={onToggleCollapsed}
-            className="flex h-6 w-6 items-center justify-center rounded-md text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 dark:text-neutral-600 dark:hover:bg-neutral-800 dark:hover:text-neutral-300"
+            className="flex h-6 w-6 items-center justify-center rounded-md text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 dark:text-neutral-600 dark:hover:bg-neutral-800 dark:hover:text-neutral-300 cursor-pointer"
           >
             <ChevronsRight className="h-[15px] w-[15px]" />
           </button>
@@ -904,7 +904,7 @@ function Sidebar({
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.18 }}
-              className="ml-[18px] overflow-hidden border-l border-neutral-200 pl-3 dark:border-neutral-800"
+              className="ml-[18px] overflow-hidden border-l border-neutral-200 pl-3 dark:border-neutral-800 cursor-pointer"
             >
               <div className="flex flex-col gap-0.5 py-0.5">
                 {projects.map((p) => (
