@@ -665,7 +665,7 @@ function Dropdown({
   if (!open) return null;
   return (
     <>
-      <div className="fixed inset-0 z-40" onClick={onClose} />
+      <div className="fixed inset-0 z-40 cursor-pointer" onClick={onClose} />
       <motion.div
         initial={{ opacity: 0, y: -6, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -700,7 +700,7 @@ function ThemeToggle({
       onClick={onToggle}
       title={collapsed ? (isDark ? "Switch to light mode" : "Switch to dark mode") : undefined}
       className={cn(
-        "relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[7px] text-[13.5px] text-neutral-500 transition-colors hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-500 dark:hover:bg-neutral-900 dark:hover:text-neutral-200",
+        "relative flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-[7px] text-[13.5px] text-neutral-500 transition-colors hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-500 dark:hover:bg-neutral-900 dark:hover:text-neutral-200",
         collapsed && "justify-center px-0"
       )}
     >
@@ -774,7 +774,7 @@ const NavItem = React.memo(function NavItem({
       onClick={onClick}
       title={collapsed ? label : undefined}
       className={cn(
-        "relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[7px] text-[13.5px] transition-colors",
+        "relative flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-[7px] text-[13.5px] transition-colors",
         collapsed && "justify-center px-0",
         active
           ? "bg-neutral-100 font-medium text-neutral-900 dark:bg-neutral-800 dark:text-neutral-50"
@@ -882,7 +882,7 @@ function Sidebar({
         <button
           onClick={onToggleProjectsExpanded}
           className={cn(
-            "flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[7px] text-[13.5px] text-neutral-500 hover:bg-neutral-50 dark:text-neutral-500 dark:hover:bg-neutral-900",
+            "flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-[7px] text-[13.5px] text-neutral-500 hover:bg-neutral-50 dark:text-neutral-500 dark:hover:bg-neutral-900",
             collapsed && "justify-center px-0"
           )}
         >
@@ -956,7 +956,7 @@ function Sidebar({
               <Dropdown open onClose={onToggleNotifications} anchorClassName={collapsed ? "left-[60px] bottom-0 w-[300px]" : "left-1 right-1 bottom-[calc(100%+6px)] w-[260px]"}>
                 <div className="flex items-center justify-between border-b border-neutral-100 px-3.5 py-2.5 dark:border-neutral-800">
                   <span className="text-[13px] font-medium text-neutral-900 dark:text-neutral-50">Notifications</span>
-                  <button onClick={onMarkAllRead} className="text-[11.5px] text-neutral-400 hover:text-neutral-700 dark:text-neutral-600 dark:hover:text-neutral-200">
+                  <button onClick={onMarkAllRead} className="cursor-pointer text-[11.5px] text-neutral-400 hover:text-neutral-700 dark:text-neutral-600 dark:hover:text-neutral-200">
                     Mark all read
                   </button>
                 </div>
@@ -1038,7 +1038,7 @@ function TopBar({
             onClick={onBack}
             disabled={!showBack}
             className={cn(
-              "flex h-7 w-7 shrink-0 items-center justify-center rounded-md transition-colors",
+              "flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-md transition-colors",
               showBack
                 ? "text-neutral-500 hover:bg-neutral-100 dark:text-neutral-500 dark:hover:bg-neutral-800"
                 : "text-neutral-200 dark:text-neutral-800"
@@ -1047,7 +1047,7 @@ function TopBar({
             <ArrowLeft className="h-4 w-4" />
           </button>
           <div className="flex min-w-0 items-center gap-1.5 text-neutral-400 dark:text-neutral-600">
-            <button onClick={onGoProjectRoot} className="flex shrink-0 items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-200">
+            <button onClick={onGoProjectRoot} className="flex shrink-0 cursor-pointer items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-200">
               <FolderIcon className="h-3.5 w-3.5 shrink-0" />
               <span>Projects</span>
             </button>
@@ -1055,7 +1055,7 @@ function TopBar({
             <button
               onClick={onGoProjectRoot}
               className={cn(
-                "flex min-w-0 items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-200",
+                "flex min-w-0 cursor-pointer items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-200",
                 !folderTitle ? "shrink-0" : "shrink"
               )}
             >
@@ -1072,12 +1072,12 @@ function TopBar({
         </div>
 
         <div className="flex shrink-0 items-center gap-1.5 text-[13.5px] text-neutral-500 dark:text-neutral-400">
-          <button className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 hover:bg-neutral-50 dark:hover:bg-neutral-900">
+          <button className="flex cursor-pointer items-center gap-1.5 rounded-lg px-2.5 py-1.5 hover:bg-neutral-50 dark:hover:bg-neutral-900">
             <Settings className="h-[15px] w-[15px]" />
             Manage
           </button>
           <div className="relative">
-            <button onClick={onShare} className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 hover:bg-neutral-50 dark:hover:bg-neutral-900">
+            <button onClick={onShare} className="flex cursor-pointer items-center gap-1.5 rounded-lg px-2.5 py-1.5 hover:bg-neutral-50 dark:hover:bg-neutral-900">
               <Share2 className="h-[15px] w-[15px]" />
               Share
             </button>
@@ -1102,20 +1102,20 @@ function TopBar({
           <div className="relative">
             <button
               onClick={() => setMoreOpen((v) => !v)}
-              className="flex h-7 w-7 items-center justify-center rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800"
+              className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800"
             >
               <MoreHorizontal className="h-[15px] w-[15px]" />
             </button>
             <AnimatePresence>
               {moreOpen && (
                 <Dropdown open onClose={() => setMoreOpen(false)} anchorClassName="right-0 top-[calc(100%+6px)] w-[190px] py-1.5">
-                  <button className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-neutral-600 hover:bg-neutral-50 dark:text-neutral-400 dark:hover:bg-neutral-800">
+                  <button className="flex cursor-pointer w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-neutral-600 hover:bg-neutral-50 dark:text-neutral-400 dark:hover:bg-neutral-800">
                     <Pencil className="h-3.5 w-3.5" /> Rename project
                   </button>
-                  <button className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-neutral-600 hover:bg-neutral-50 dark:text-neutral-400 dark:hover:bg-neutral-800">
+                  <button className="flex cursor-pointer w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-neutral-600 hover:bg-neutral-50 dark:text-neutral-400 dark:hover:bg-neutral-800">
                     <Download className="h-3.5 w-3.5" /> Export all
                   </button>
-                  <button className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-rose-500 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10">
+                  <button className="flex cursor-pointer w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-rose-500 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10">
                     <Trash2 className="h-3.5 w-3.5" /> Delete project
                   </button>
                 </Dropdown>
@@ -1321,7 +1321,7 @@ function Toolbar({
           className="w-full bg-transparent text-[13.5px] text-neutral-700 placeholder:text-neutral-400 focus:outline-none dark:text-neutral-200 dark:placeholder:text-neutral-600"
         />
         {search && (
-          <button onClick={() => onSearch("")} className="text-neutral-300 hover:text-neutral-500 dark:text-neutral-700 dark:hover:text-neutral-400">
+          <button onClick={() => onSearch("")} className="cursor-pointer text-neutral-300 hover:text-neutral-500 dark:text-neutral-700 dark:hover:text-neutral-400">
             <X className="h-3.5 w-3.5" />
           </button>
         )}
@@ -1329,7 +1329,7 @@ function Toolbar({
       <div className="relative">
         <button
           onClick={() => setSortOpen((v) => !v)}
-          className="flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[13.5px] text-neutral-600 hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800"
+          className="flex cursor-pointer items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[13.5px] text-neutral-600 hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800"
         >
           <SlidersHorizontal className="h-[15px] w-[15px]" />
           {sortLabel[sortBy]}
@@ -1359,7 +1359,7 @@ function Toolbar({
       {onNewDraft && (
         <button
           onClick={onNewDraft}
-          className="flex items-center gap-1.5 rounded-full bg-neutral-900 px-4 py-2.5 text-[13.5px] font-medium text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+          className="flex cursor-pointer items-center gap-1.5 rounded-full bg-neutral-900 px-4 py-2.5 text-[13.5px] font-medium text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
         >
           <Plus className="h-[15px] w-[15px]" />
           {newDraftLabel ?? "New draft"}
@@ -1645,7 +1645,7 @@ function FlatFileListView({
                     e.stopPropagation();
                     onDownloadFile(file);
                   }}
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-neutral-400 opacity-0 hover:bg-neutral-200/60 hover:text-neutral-700 group-hover:opacity-100 dark:text-neutral-600 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
+                  className="flex cursor-pointer h-7 w-7 shrink-0 items-center justify-center rounded-md text-neutral-400 opacity-0 hover:bg-neutral-200/60 hover:text-neutral-700 group-hover:opacity-100 dark:text-neutral-600 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
                 >
                   <Download className="h-4 w-4" />
                 </button>
@@ -1888,7 +1888,7 @@ function InfoPanel({
             <button
               key={folder.id}
               onClick={() => onOpenPinned(folder.id)}
-              className="flex w-full items-center gap-2 rounded-lg px-1.5 py-1.5 text-left text-[12.5px] text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
+              className="flex cursor-pointer w-full items-center gap-2 rounded-lg px-1.5 py-1.5 text-left text-[12.5px] text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
             >
               <FolderIcon className="h-3.5 w-3.5 shrink-0 text-neutral-400 dark:text-neutral-600" />
               <span className="min-w-0 flex-1 truncate">{folder.title}</span>
@@ -1898,7 +1898,7 @@ function InfoPanel({
       </div>
 
       <div className="mt-auto flex flex-col gap-1 border-t border-neutral-100 pt-4 dark:border-neutral-800">
-        <button className="flex items-center gap-2.5 rounded-lg px-1.5 py-2 text-[13.5px] text-neutral-500 hover:text-neutral-900 dark:text-neutral-500 dark:hover:text-neutral-100">
+        <button className="flex cursor-pointer items-center gap-2.5 rounded-lg px-1.5 py-2 text-[13.5px] text-neutral-500 hover:text-neutral-900 dark:text-neutral-500 dark:hover:text-neutral-100">
           <Inbox className="h-[15px] w-[15px]" />
           Activity
         </button>
