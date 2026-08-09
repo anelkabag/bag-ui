@@ -173,21 +173,21 @@ const folderPalettesDark = {
     flapFill: "#4B4B4F",
     flapStroke: "#5D5D62",
     cardFill: "#ECECEE",
-    cardStroke: "#DBDBDD",
+    cardStroke: "#E5E7EB",
     cardLineFill: "#C7C7CB",
   },
   blue: {
     flapFill: "#2B4A6E",
     flapStroke: "#3E6690",
     cardFill: "#ECECEE",
-    cardStroke: "#DBDBDD",
+    cardStroke: "#E5E7EB",
     cardLineFill: "#C7C7CB",
   },
   black: {
     flapFill: "#F5F5F7",
     flapStroke: "#E4E4E7",
     cardFill: "#FFFFFF",
-    cardStroke: "#ECECEE",
+    cardStroke: "#E5E7EB",
     cardLineFill: "#E2E2E5",
   }
 } as const;
@@ -195,9 +195,10 @@ const folderPalettesDark = {
 const cardSpring = { type: "spring" as const, stiffness: 150, damping: 15 };
 
 function MiniCard({ palette }: { palette: (typeof folderPalettes)[FolderVariant] }) {
+  const isDark = useIsDark();
   return (
     <svg width="70" height="92" viewBox="0 0 70 92" fill="none">
-      <rect width="70" height="92" rx="12" fill={palette.cardFill} stroke={palette.cardStroke} />
+      <rect width="70" height="92" rx="12" fill={palette.cardFill} stroke={palette.cardStroke} strokeWidth={isDark ? 1.75 : 1} />
       <rect x="9" y="14" width="52" height="6" rx="3" fill={palette.cardLineFill} />
       <rect x="9" y="28" width="36" height="4" rx="2" fill={palette.cardLineFill} opacity={0.75} />
       <rect x="9" y="37" width="36" height="4" rx="2" fill={palette.cardLineFill} opacity={0.75} />
