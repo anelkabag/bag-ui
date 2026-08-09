@@ -139,6 +139,14 @@ const FLAP_PATH =
   "M0 25C0 11.1929 11.1929 0 25 0H136.084C143.044 0 149.689 2.90139 154.42 8.00608L178.08 33.5343C182.811 38.639 189.456 41.5404 196.416 41.5404H296C309.807 41.5404 321 52.7333 321 66.5404V216C321 229.807 309.807 241 296 241H25C11.1929 241 0 229.807 0 216V25Z";
 
 /* Light theme — soft neutrals + a single blue accent */
+type FolderPalette = {
+  readonly flapFill: string;
+  readonly flapStroke: string;
+  readonly cardFill: string;
+  readonly cardStroke: string;
+  readonly cardLineFill: string;
+};
+
 const folderPalettes = {
   neutral: {
     flapFill: "#EFEFF1",
@@ -161,7 +169,7 @@ const folderPalettes = {
     cardStroke: "#374151",
     cardLineFill: "#374151",
   }
-} as const;
+} as const satisfies Record<FolderVariant, FolderPalette>;
 
 /* Dark theme — kept deliberately monochrome (charcoal / graphite / off-white),
    with the "blue" variant surviving as the one accent, muted to a deep
@@ -190,11 +198,11 @@ const folderPalettesDark = {
     cardStroke: "#E5E7EB",
     cardLineFill: "#E2E2E5",
   }
-} as const;
+} as const satisfies Record<FolderVariant, FolderPalette>;
 
 const cardSpring = { type: "spring" as const, stiffness: 150, damping: 15 };
 
-function MiniCard({ palette }: { palette: (typeof folderPalettes)[FolderVariant] }) {
+function MiniCard({ palette }: { palette: FolderPalette }) {
   const isDark = useIsDark();
   return (
     <svg width="70" height="92" viewBox="0 0 70 92" fill="none">
