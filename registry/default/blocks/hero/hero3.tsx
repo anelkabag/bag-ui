@@ -261,7 +261,7 @@ export default function Hero3() {
               <div className="flex flex-1 overflow-hidden text-[11px]">
                 <div className="w-28 shrink-0 overflow-y-auto border-r border-neutral-200 bg-neutral-50 px-3 py-3">
                   <p className="mb-2 font-medium tracking-wide text-neutral-400">
-                    CREATE REACT APP
+                    BagUi App
                   </p>
                   <ul className="space-y-1.5">
                     {FILES.map((f) => (
@@ -317,7 +317,7 @@ export default function Hero3() {
               </div>
               <p className="truncate font-mono text-[12px] text-neutral-700">
                 <span className="text-neutral-400">{">"}</span> curl -fsSL
-                https://forge.ai/install | sh
+                https://bagui.pro/docs/install | sh
               </p>
             </motion.div>
           </div>
@@ -331,18 +331,18 @@ export default function Hero3() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.6 }}
-          className="flex flex-col divide-y divide-neutral-200 overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm sm:flex-row sm:divide-x sm:divide-y-0"
+          className="flex flex-col divide-y divide-gray-300 overflow-hidden border-2 border-dashed border-gray-300 bg-white shadow-sm sm:flex-row sm:divide-x sm:divide-y-0"
         >
           {LOGOS.map(({ name, slug }) => (
             <div
               key={name}
-              className="group flex flex-1 items-center justify-center gap-2 py-8 text-neutral-400 transition-colors hover:text-neutral-700"
+              className="group flex flex-1 items-center justify-center gap-2 py-8 text-neutral-400 transition-colors hover:text-neutral-700 cursor-pointer"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`https://cdn.simpleicons.org/${slug}`}
                 alt={`${name} logo`}
-                className="h-4 w-4 grayscale opacity-60 transition duration-300 group-hover:grayscale-0 group-hover:opacity-100"
+                className="h-4 w-4 grayscale opacity-60 transition duration-300 group-hover:grayscale-0 group-hover:opacity-100 "
               />
               <span className="text-sm font-medium">{name}</span>
             </div>
