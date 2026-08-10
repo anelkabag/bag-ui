@@ -49,6 +49,7 @@ import {
   Moon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { summarizeStorage } from "@/lib/storage";
 
 /* ================================================================== */
 /*  Theme (dark mode) context                                          */
@@ -1818,6 +1819,7 @@ function InfoPanel({
   allTags,
   pinnedFolders,
   onOpenPinned,
+  storageSummary,
 }: {
   selected: SelectedItem;
   activeTagFilter: TagName | null;
@@ -1825,6 +1827,7 @@ function InfoPanel({
   allTags: TagName[];
   pinnedFolders: Folder[];
   onOpenPinned: (id: string) => void;
+  storageSummary: { documentsKb: number; imagesKb: number; totalKb: number };
 }) {
   const properties = useMemo(() => {
     if (!selected) return null;
@@ -1842,11 +1845,14 @@ function InfoPanel({
     ];
   }, [selected]);
 
+  const docProgress = Math.min(100, Math.round((storageSummary.documentsKb / Math.max(storageSummary.totalKb, 1)) * 100));
+  const imageProgress = Math.min(100, Math.round((storageSummary.imagesKb / Math.max(storageSummary.totalKb, 1)) * 100));
+
   return (
     <aside className="flex w-[248px] shrink-0 flex-col overflow-y-auto border-l border-neutral-200 bg-white px-5 py-6 dark:border-neutral-800 dark:bg-[#0C0C0E]">
       <div className="flex flex-col gap-3">
-        <StatCard label="Documents" value="48.5 GB" progress={32} barColor="bg-blue-500" />
-        <StatCard label="Images" value="182.4 MB" progress={8} barColor="bg-rose-500" />
+        <StatCard label="Documents" value={formatSize(storageSummary.documentsKb)} progress={docProgress || 1} barColor="bg-blue-500" />
+        <StatCard label="Images" value={formatSize(storageSummary.imagesKb)} progress={imageProgress || 1} barColor="bg-rose-500" />
       </div>
 
       <div className="mt-7">
@@ -2160,6 +2166,11 @@ export default function baguiDashboard() {
 
   const pinnedFolders = useMemo(() => activeProject.folders.slice(0, 3), [activeProject]);
 
+  const storageSummary = useMemo(() => {
+    const files = activeProject.folders.flatMap((folder) => folder.files);
+    return summarizeStorage(files);
+  }, [activeProject]);
+
   return (
     <ThemeContext.Provider value={isDark}>
       <div
@@ -2280,6 +2291,7 @@ export default function baguiDashboard() {
               onToggleTag={toggleTagFilter}
               allTags={allTags}
               pinnedFolders={pinnedFolders}
+              storageSummary={storageSummary}
               onOpenPinned={(id) => {
                 setActiveNav("home");
                 openFolderById(id);
