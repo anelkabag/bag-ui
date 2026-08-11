@@ -75,7 +75,7 @@ export default function PricingPage() {
             </p>
 
             <Link
-              href="https://github.com/sponsors/anelkabag"
+              href="https://izifvnmq.mychariow.store/prd_3kfqis2v/checkout"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full flex items-center justify-center gap-2 text-center text-sm font-medium py-2.5 rounded-lg transition-all mb-6 bg-white text-black hover:bg-gray-100"
