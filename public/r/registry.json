@@ -395,6 +395,23 @@
       }
     },
     {
+      "name": "dashboard-wallet",
+      "type": "registry:block",
+      "title": "Modern Wallet Dashboard",
+      "description": "",
+      "dependencies": ["framer-motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/Dashboard/dashboard-wallet.tsx",
+          "type": "registry:block",
+          "target": "components/Dashboard/dashboard-Wallet.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
       "name": "chat-app1",
       "type": "registry:block",
       "title": "Dashboard Chat App",
