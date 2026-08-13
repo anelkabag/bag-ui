@@ -299,39 +299,29 @@ function InfoTip({ text }: { text: string }) {
   );
 }
 
-function PlatformIcon({ platform }: { platform: "google" | "meta" | "tiktok" | "linkedin" }) {
-  if (platform === "google") {
-    return (
-      <span
-        className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white"
-        style={{ background: "conic-gradient(#4285F4 0deg 90deg, #34A853 90deg 180deg, #FBBC05 180deg 270deg, #EA4335 270deg 360deg)" }}
-      >
-        G
-      </span>
-    );
-  }
-  if (platform === "meta") {
-    return (
-      <span className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-[#0866FF] text-white">
-        <InfinityIcon className="h-3 w-3" />
-      </span>
-    );
-  }
-  if (platform === "tiktok") {
-    return (
-      <span className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-black text-white ring-1 ring-white/10">
-        <Music2 className="h-2.5 w-2.5" />
-      </span>
-    );
-  }
+type Platform = "google" | "meta" | "tiktok" | "linkedin";
+
+const platformLogos: Record<Platform, string> = {
+  google: "https://cdn.simpleicons.org/google",
+  meta: "https://cdn.simpleicons.org/meta/0866FF",
+  tiktok: "https://cdn.simpleicons.org/tiktok",
+  linkedin: "https://cdn.simpleicons.org/linkedin/0A66C2",
+};
+
+function PlatformIcon({ platform }: { platform: Platform }) {
   return (
-    <span className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-[5px] bg-[#0A66C2] text-[9px] font-bold text-white">in</span>
+    <img
+      src={platformLogos[platform]}
+      alt=""
+      className="h-5 w-5 object-contain"
+      loading="lazy"
+    />
   );
 }
 
 function BaguiLogo() {
   return (
-    <div className="flex h-5 w-5 shrink-0 items-center justify-center overflow-hidden">
+    <div className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden">
       <img
         src="/logoW.png"
         alt="BagUi"
@@ -505,8 +495,8 @@ function Sidebar({
         <div className="relative mt-3 border-t border-white/[0.06] pt-3">
           <button onClick={() => setProfileOpen((o) => !o)} className="flex w-full items-center gap-2.5 rounded-lg px-1 py-1 hover:bg-white/5">
             <img
-              src="https://api.dicebear.com/9.x/notionists/svg?seed=Rayhan-Cansaas&backgroundColor=27272a"
-              alt="Cansaas Agency"
+              src="/avatar.png"
+              alt="Anelka Bag"
               className="h-8 w-8 shrink-0 rounded-full border border-white/10 bg-neutral-800 object-cover"
             />
             <div className="min-w-0 flex-1 text-left">
@@ -1055,7 +1045,7 @@ export default function AdformaDashboard() {
   const tabCopy = topTabCopy[topTab];
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-[#0A0A0B] text-white">
+    <div className="flex h-screen w-full overflow-hidden bg-black text-white">
       <Sidebar activeKey={sidebarKey} collapsed={collapsed} onSelect={handleSelectSidebar} onToggleCollapse={() => setCollapsed((c) => !c)} />
       <div className="flex flex-1 flex-col overflow-hidden">
         <TopBar query={query} onQueryChange={setQuery} />
