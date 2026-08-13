@@ -302,10 +302,10 @@ function InfoTip({ text }: { text: string }) {
 type Platform = "google" | "meta" | "tiktok" | "linkedin";
 
 const platformLogos: Record<Platform, string> = {
-  google: "https://cdn.simpleicons.org/google",
-  meta: "https://cdn.simpleicons.org/meta/0866FF",
-  tiktok: "https://cdn.simpleicons.org/tiktok",
-  linkedin: "https://cdn.simpleicons.org/linkedin/0A66C2",
+  google: "https://api.iconify.design/logos/google-icon.svg",
+  meta: "https://api.iconify.design/logos/meta-icon.svg",
+  tiktok: "https://api.iconify.design/logos/tiktok-icon.svg",
+  linkedin: "https://api.iconify.design/logos/linkedin-icon.svg",
 };
 
 function PlatformIcon({ platform }: { platform: Platform }) {
