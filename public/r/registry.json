@@ -412,6 +412,23 @@
       }
     },
     {
+      "name": "dashboard-ads",
+      "type": "registry:block",
+      "title": "Modern Ads Dashboard",
+      "description": "",
+      "dependencies": ["framer-motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/Dashboard/dashboard-ads.tsx",
+          "type": "registry:block",
+          "target": "components/Dashboard/dashboard-ads.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
       "name": "chat-app1",
       "type": "registry:block",
       "title": "Dashboard Chat App",

@@ -329,13 +329,14 @@ function PlatformIcon({ platform }: { platform: "google" | "meta" | "tiktok" | "
   );
 }
 
-function FindexaLikeLogo() {
+function BaguiLogo() {
   return (
-    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-white/[0.07]">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <circle cx="7" cy="7" r="5.5" stroke="white" strokeWidth="1.2" />
-        <circle cx="7" cy="7" r="1.4" fill="white" />
-      </svg>
+    <div className="flex h-5 w-5 shrink-0 items-center justify-center overflow-hidden">
+      <img
+        src="/logoW.png"
+        alt="BagUi"
+        className="h-full w-full object-contain"
+      />
     </div>
   );
 }
@@ -419,11 +420,11 @@ function Sidebar({
       <div className={cn("mb-5 flex items-center", collapsed ? "justify-center" : "justify-between")}>
         {!collapsed ? (
           <div className="flex items-center gap-2">
-            <FindexaLikeLogo />
-            <span className="text-[15px] font-semibold tracking-tight text-white">Adforma</span>
+            <BaguiLogo />
+            <span className="text-[15px] font-semibold tracking-tight text-white">BagUI</span>
           </div>
         ) : (
-          <FindexaLikeLogo />
+          <BaguiLogo />
         )}
         {!collapsed && (
           <button onClick={onToggleCollapse} className="flex h-6 w-6 items-center justify-center rounded-md text-neutral-500 hover:bg-white/5 hover:text-neutral-300">
@@ -509,8 +510,8 @@ function Sidebar({
               className="h-8 w-8 shrink-0 rounded-full border border-white/10 bg-neutral-800 object-cover"
             />
             <div className="min-w-0 flex-1 text-left">
-              <p className="truncate text-[11.5px] font-medium uppercase tracking-wide text-white">Cansaas Agency</p>
-              <p className="truncate text-[10.5px] normal-case tracking-normal text-neutral-500">rayhancansaas@email.com</p>
+              <p className="truncate text-[11.5px] font-medium uppercase tracking-wide text-white">Anelka Bag</p>
+              <p className="truncate text-[10.5px] normal-case tracking-normal text-neutral-500">ceo@bagui.pro</p>
             </div>
             <ChevronDown className="h-3.5 w-3.5 shrink-0 text-neutral-500" />
           </button>
@@ -995,10 +996,24 @@ function EmptyStateDark({ icon: Icon, title, description }: { icon: IconType; ti
 /* Dashboard view                                                       */
 /* ------------------------------------------------------------------ */
 
-function DashboardView({ query, year, onYearChange }: { query: string; year: "2026" | "2025"; onYearChange: (y: "2026" | "2025") => void }) {
+function DashboardView({
+  query,
+  year,
+  onYearChange,
+}: {
+  query: string;
+  year: "2026" | "2025";
+  onYearChange: (y: "2026" | "2025") => void;
+}) {
   return (
-    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }} className="flex flex-col gap-4">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.2 }}
+      className="flex flex-col gap-4"
+    >
+      <div className="grid grid-cols-3 gap-4 md:grid-cols-3">
         {stats.map((stat) => (
           <StatCard key={stat.label} stat={stat} />
         ))}
