@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Heart, Sparkles } from "lucide-react";
+import { Heart, Sparkles, Server, Globe, Wrench } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
 import Navbar from "@/components/navbar";
 import { Footer } from "@/components/footer";
@@ -11,7 +11,29 @@ import { Footer } from "@/components/footer";
 const perks = [
   "Your name (or logo) featured on the sponsors page",
   "Priority access to discuss upcoming features",
+  "A direct line to shape what gets built next",
   "The satisfaction of keeping the project 100% open source",
+];
+
+const costs = [
+  {
+    icon: Server,
+    title: "Hosting & servers",
+    description:
+      "Keeping the app fast and online 24/7, even as more people start using it.",
+  },
+  {
+    icon: Globe,
+    title: "Domain & infrastructure",
+    description:
+      "Domain renewal, SSL, storage, and the small recurring bills that add up every month.",
+  },
+  {
+    icon: Wrench,
+    title: "Maintenance & new features",
+    description:
+      "The hours spent fixing bugs, reviewing issues, and shipping what the community asks for.",
+  },
 ];
 
 export default function PricingPage() {
@@ -25,7 +47,7 @@ export default function PricingPage() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="mb-18 text-center m-6"
+          className="mb-14 text-center m-6"
         >
           <p className="text-sm tracking-[0.25em] text-muted-foreground mb-4">
             Open Source
@@ -36,11 +58,38 @@ export default function PricingPage() {
           </h1>
 
           <p className="text-muted-foreground text-sm max-w-xl leading-relaxed mx-auto">
-            The project is now 100% open source. Every block, every template,
-            the full source code &mdash; free to use, no account required, no
-            limits. If the project helps you out, you can support its
-            development below.
+            Every block, every template, the full source code &mdash; free to
+            use, no account required, no limits. But &ldquo;free&rdquo; still
+            has a real bill behind it: hosting, domains, and the hours spent
+            maintaining it. That bill is covered entirely by people like you.
           </p>
+        </motion.div>
+
+        {/* Where the money goes */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto mb-14"
+        >
+          {costs.map(({ icon: Icon, title, description }) => (
+            <div
+              key={title}
+              className="rounded-xl border border-border bg-card p-5 text-center"
+            >
+              <div className="flex justify-center mb-3">
+                <div className="flex items-center justify-center w-9 h-9 rounded-full bg-muted">
+                  <Icon size={16} className="text-foreground" />
+                </div>
+              </div>
+              <p className="text-sm font-semibold text-foreground mb-1">
+                {title}
+              </p>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                {description}
+              </p>
+            </div>
+          ))}
         </motion.div>
 
         <div className="border-t border-border mb-10" />
@@ -49,7 +98,7 @@ export default function PricingPage() {
             pour qu'elle reste un accent visible en light ET en dark mode.
             zinc-900/800 plutôt que du noir pur pour ne pas se fondre dans
             le fond de page en dark mode. */}
-        <div className="max-w-xl mx-auto mb-16">
+        <div className="max-w-xl mx-auto mb-6">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -67,24 +116,32 @@ export default function PricingPage() {
               </p>
             </div>
 
-            <p className="text-2xl font-bold tracking-tight mb-2">Any amount</p>
+            <p className="text-2xl font-bold tracking-tight mb-2">
+              Any amount keeps it running
+            </p>
 
             <p className="text-sm mb-6 leading-relaxed text-gray-300">
-              No obligation, no strings attached &mdash; just a way to say
-              thanks and help fund the time spent building this project.
+              No obligation, no strings attached &mdash; every contribution,
+              big or small, goes straight back into hosting and development.
+              If this project has ever saved you time or money, this is the
+              easiest way to pay it forward.
             </p>
 
             <Link
               href={process.env.NEXT_PUBLIC_CHECKOUT_URL || "#"}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 text-center text-sm font-medium py-2.5 rounded-lg transition-all mb-6 bg-white text-black hover:bg-gray-100"
+              className="w-full flex items-center justify-center gap-2 text-center text-sm font-medium py-2.5 rounded-lg transition-all bg-white text-black hover:bg-gray-100"
             >
               <FaGithub size={16} />
               Become a sponsor on GitHub
             </Link>
 
-            <div className="border-t border-white/10 mb-5" />
+            <p className="text-[11px] text-gray-400 text-center mt-3">
+              Takes less than a minute &middot; cancel anytime
+            </p>
+
+            <div className="border-t border-white/10 my-5" />
 
             <p className="text-[11px] uppercase tracking-widest font-semibold mb-3 text-gray-400">
               As a sponsor
@@ -100,7 +157,10 @@ export default function PricingPage() {
           </motion.div>
         </div>
 
-        <p className="text-xs text-muted-foreground text-center mb-16">
+        <p className="text-xs text-muted-foreground text-center mb-16 max-w-md mx-auto leading-relaxed">
+          Not able to sponsor right now? Starring the repo, sharing it, or
+          reporting a bug helps just as much.
+          <br />
           Got a question, an idea, or want to contribute?{" "}
           <a
             href="mailto:anelka.bag@gmail.com"
