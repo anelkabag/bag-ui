@@ -309,7 +309,11 @@ function Sidebar({
   return (
     <aside className="flex h-full w-[224px] shrink-0 flex-col overflow-y-auto border-r border-white/[0.06] bg-[#0E0E10] px-3 py-4">
       <div className="mb-5 flex items-center gap-2 px-1">
-        <Zap className="h-5 w-5 fill-white text-white" />
+        <img
+          src="/logoW.png"
+          alt="Zap"
+          className="h-5 w-5"
+        />
         <span className="text-[17px] font-bold text-white">BagUi</span>
       </div>
 
