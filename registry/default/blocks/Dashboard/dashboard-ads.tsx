@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import React, { memo, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import { motion, AnimatePresence, MotionConfig } from "motion/react";
 import {
   Globe,
   Clock,
@@ -72,6 +72,9 @@ type SortKey = "name" | "status" | "budget" | "spent" | "conversions" | "convRat
 /* ------------------------------------------------------------------ */
 /* Static data                                                         */
 /* ------------------------------------------------------------------ */
+/* Tout ce qui suit est défini au niveau module : ces références ne     */
+/* changent jamais entre deux rendus, ce qui les rend "gratuites" à     */
+/* passer en props à des composants mémoïsés (React.memo).             */
 
 const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 
@@ -225,6 +228,10 @@ function Dropdown({
     };
   }, [open, onClose]);
 
+  // Pas de React.memo ici : `children` est recréé à chaque rendu du
+  // parent (nouvel arbre JSX), donc une comparaison de props peu
+  // profonde échouerait de toute façon. Le composant reste léger
+  // (rien n'est monté au DOM quand `open` est false).
   return (
     <AnimatePresence>
       {open && (
@@ -260,6 +267,7 @@ function DropdownItem({
 }) {
   return (
     <button
+      type="button"
       onClick={onClick}
       className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-[11.5px] uppercase tracking-wide text-neutral-300 transition-colors hover:bg-white/5"
     >
@@ -274,7 +282,12 @@ function MoreHorizontalMenu() {
   const [open, setOpen] = useState(false);
   return (
     <div className="relative">
-      <button onClick={() => setOpen((o) => !o)} className="flex h-6 w-6 items-center justify-center rounded-md text-neutral-500 hover:bg-white/5">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-label="More options"
+        className="flex h-6 w-6 items-center justify-center rounded-md text-neutral-500 hover:bg-white/5"
+      >
         <MoreVertical className="h-[15px] w-[15px]" />
       </button>
       <Dropdown open={open} onClose={() => setOpen(false)} anchor="right" width={150}>
@@ -289,7 +302,12 @@ function InfoTip({ text }: { text: string }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="relative">
-      <button onClick={() => setOpen((o) => !o)} className="flex h-5 w-5 items-center justify-center rounded-md text-neutral-600 hover:bg-white/5 hover:text-neutral-400">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-label="More information"
+        className="flex h-5 w-5 items-center justify-center rounded-md text-neutral-600 hover:bg-white/5 hover:text-neutral-400"
+      >
         <Info className="h-3.5 w-3.5" />
       </button>
       <Dropdown open={open} onClose={() => setOpen(false)} anchor="right" width={190}>
@@ -308,25 +326,29 @@ const platformLogos: Record<Platform, string> = {
   linkedin: "https://api.iconify.design/logos/linkedin-icon.svg",
 };
 
-function PlatformIcon({ platform }: { platform: Platform }) {
+// `width`/`height` explicites : le navigateur réserve l'espace avant que
+// le SVG distant ne charge, ce qui évite un saut de mise en page (CLS).
+// `decoding="async"` évite de bloquer le thread principal sur le décodage.
+// -> Pour aller plus loin : héberger ces logos en local (bundle) supprimerait
+// complètement la dépendance réseau vers api.iconify.design.
+const PlatformIcon = memo(function PlatformIcon({ platform }: { platform: Platform }) {
   return (
     <img
       src={platformLogos[platform]}
       alt=""
+      width={20}
+      height={20}
+      decoding="async"
       className="h-5 w-5 object-contain"
       loading="lazy"
     />
   );
-}
+});
 
 function BaguiLogo() {
   return (
     <div className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden">
-      <img
-        src="/logoW.png"
-        alt="BagUi"
-        className="h-full w-full object-contain"
-      />
+      <img src="/logoW.png" alt="BagUi" width={28} height={28} decoding="async" className="h-full w-full object-contain" />
     </div>
   );
 }
@@ -335,14 +357,21 @@ function BaguiLogo() {
 /* Sidebar                                                              */
 /* ------------------------------------------------------------------ */
 
-function NavItem({
+// NavItem est mémoïsé : dans une liste, c'est le composant qui bénéficie
+// le plus de React.memo. Pour que ça marche vraiment, il ne doit PAS
+// recevoir un onClick recréé à chaque rendu du parent (sinon la comparaison
+// de props échoue systématiquement et le memo ne sert à rien) : on lui
+// passe donc `onSelect` (référence stable, cf. Sidebar/AdformaDashboard)
+// et `itemKey` (valeur primitive), et c'est NavItem qui compose le handler.
+const NavItem = memo(function NavItem({
   icon,
   iconNode,
   label,
   active,
   collapsed,
   badge,
-  onClick,
+  itemKey,
+  onSelect,
 }: {
   icon?: IconType;
   iconNode?: React.ReactNode;
@@ -350,12 +379,14 @@ function NavItem({
   active?: boolean;
   collapsed?: boolean;
   badge?: number;
-  onClick?: () => void;
+  itemKey?: SidebarKey;
+  onSelect?: (key: SidebarKey) => void;
 }) {
   const IconComp = icon;
   return (
     <button
-      onClick={onClick}
+      type="button"
+      onClick={() => itemKey && onSelect?.(itemKey)}
       title={collapsed ? label : undefined}
       className={cn(
         "relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[8px] text-[12px] uppercase tracking-wide transition-colors",
@@ -372,21 +403,30 @@ function NavItem({
       )}
     </button>
   );
-}
+});
 
-function SectionHeader({ label, open, onToggle, collapsed }: { label: string; open: boolean; onToggle: () => void; collapsed: boolean }) {
+const SectionHeader = memo(function SectionHeader({ label, open, onToggle, collapsed }: { label: string; open: boolean; onToggle: () => void; collapsed: boolean }) {
   if (collapsed) return null;
   return (
-    <button onClick={onToggle} className="flex w-full items-center justify-between px-2.5 pb-1.5 text-[10px] uppercase tracking-widest text-neutral-600 hover:text-neutral-400">
+    <button
+      type="button"
+      onClick={onToggle}
+      className="flex w-full items-center justify-between px-2.5 pb-1.5 text-[10px] uppercase tracking-widest text-neutral-600 hover:text-neutral-400"
+    >
       {label}
       <motion.span animate={{ rotate: open ? 0 : -90 }} transition={{ duration: 0.15 }}>
         <ChevronDown className="h-3 w-3" />
       </motion.span>
     </button>
   );
-}
+});
 
-function Sidebar({
+// Sidebar est mémoïsé. `onSelect` et `onToggleCollapse` doivent rester
+// des références stables côté appelant (useCallback dans AdformaDashboard),
+// sinon le memo ne sert à rien : tant que activeKey/collapsed ne changent
+// pas, tout re-rendu du parent (ex: la personne tape dans la recherche)
+// est ignoré ici sans repasser par le DOM.
+const Sidebar = memo(function Sidebar({
   activeKey,
   collapsed,
   onSelect,
@@ -400,6 +440,10 @@ function Sidebar({
   const [generalOpen, setGeneralOpen] = useState(true);
   const [accountOpen, setAccountOpen] = useState(true);
   const [profileOpen, setProfileOpen] = useState(false);
+
+  // Stabilisées car transmises à SectionHeader, qui est mémoïsé.
+  const toggleGeneral = useCallback(() => setGeneralOpen((o) => !o), []);
+  const toggleAccount = useCallback(() => setAccountOpen((o) => !o), []);
 
   return (
     <motion.aside
@@ -417,14 +461,21 @@ function Sidebar({
           <BaguiLogo />
         )}
         {!collapsed && (
-          <button onClick={onToggleCollapse} className="flex h-6 w-6 items-center justify-center rounded-md text-neutral-500 hover:bg-white/5 hover:text-neutral-300">
+          <button
+            type="button"
+            onClick={onToggleCollapse}
+            aria-label="Collapse sidebar"
+            className="flex h-6 w-6 items-center justify-center rounded-md text-neutral-500 hover:bg-white/5 hover:text-neutral-300"
+          >
             <PanelLeftClose className="h-[14px] w-[14px]" />
           </button>
         )}
       </div>
       {collapsed && (
         <button
+          type="button"
           onClick={onToggleCollapse}
+          aria-label="Expand sidebar"
           className="mb-4 flex h-7 w-7 items-center justify-center self-center rounded-md text-neutral-500 hover:bg-white/5 hover:text-neutral-300"
         >
           <PanelLeftClose className="h-[14px] w-[14px] rotate-180" />
@@ -433,7 +484,7 @@ function Sidebar({
 
       <nav className="flex flex-1 flex-col gap-4 overflow-y-auto">
         <div className="flex flex-col gap-0.5">
-          <SectionHeader label="General" open={generalOpen} onToggle={() => setGeneralOpen((o) => !o)} collapsed={collapsed} />
+          <SectionHeader label="General" open={generalOpen} onToggle={toggleGeneral} collapsed={collapsed} />
           <AnimatePresence initial={false}>
             {(generalOpen || collapsed) && (
               <motion.div
@@ -451,7 +502,8 @@ function Sidebar({
                     badge={item.badge}
                     active={activeKey === item.key}
                     collapsed={collapsed}
-                    onClick={() => onSelect(item.key)}
+                    itemKey={item.key}
+                    onSelect={onSelect}
                   />
                 ))}
               </motion.div>
@@ -460,7 +512,7 @@ function Sidebar({
         </div>
 
         <div className="flex flex-col gap-0.5">
-          <SectionHeader label="Account" open={accountOpen} onToggle={() => setAccountOpen((o) => !o)} collapsed={collapsed} />
+          <SectionHeader label="Account" open={accountOpen} onToggle={toggleAccount} collapsed={collapsed} />
           <AnimatePresence initial={false}>
             {(accountOpen || collapsed) && (
               <motion.div
@@ -477,7 +529,8 @@ function Sidebar({
                     label={item.label}
                     active={activeKey === item.key}
                     collapsed={collapsed}
-                    onClick={() => onSelect(item.key)}
+                    itemKey={item.key}
+                    onSelect={onSelect}
                   />
                 ))}
               </motion.div>
@@ -487,16 +540,19 @@ function Sidebar({
       </nav>
 
       <div className="flex flex-col gap-0.5 pt-3">
-        <NavItem icon={Settings} label="Settings" active={activeKey === "settings"} collapsed={collapsed} onClick={() => onSelect("settings")} />
+        <NavItem icon={Settings} label="Settings" itemKey="settings" active={activeKey === "settings"} collapsed={collapsed} onSelect={onSelect} />
         <NavItem icon={LogOut} label="Logout" collapsed={collapsed} />
       </div>
 
       {!collapsed && (
         <div className="relative mt-3 border-t border-white/[0.06] pt-3">
-          <button onClick={() => setProfileOpen((o) => !o)} className="flex w-full items-center gap-2.5 rounded-lg px-1 py-1 hover:bg-white/5">
+          <button type="button" onClick={() => setProfileOpen((o) => !o)} className="flex w-full items-center gap-2.5 rounded-lg px-1 py-1 hover:bg-white/5">
             <img
               src="/avatar.png"
               alt="Anelka Bag"
+              width={32}
+              height={32}
+              decoding="async"
               className="h-8 w-8 shrink-0 rounded-full border border-white/10 bg-neutral-800 object-cover"
             />
             <div className="min-w-0 flex-1 text-left">
@@ -513,7 +569,7 @@ function Sidebar({
       )}
     </motion.aside>
   );
-}
+});
 
 /* ------------------------------------------------------------------ */
 /* Top bar + tabs                                                       */
@@ -525,11 +581,12 @@ function TopBar({ query, onQueryChange }: { query: string; onQueryChange: (v: st
   return (
     <div className="flex items-center justify-between px-6 pb-4 pt-5 font-mono">
       <div className="flex w-[320px] items-center gap-2 rounded-lg border border-white/[0.07] bg-white/[0.03] px-3 py-2">
-        <Search className="h-[14px] w-[14px] text-neutral-500" />
+        <Search className="h-[14px] w-[14px] text-neutral-500" aria-hidden="true" />
         <input
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
           placeholder="SEARCH..."
+          aria-label="Search campaigns"
           className="w-full bg-transparent text-[11.5px] uppercase tracking-wide text-neutral-200 placeholder:text-neutral-500 focus:outline-none"
         />
         <span className="flex items-center gap-0.5 rounded-md bg-white/[0.06] px-1.5 py-0.5 text-[10px] text-neutral-500">
@@ -540,7 +597,9 @@ function TopBar({ query, onQueryChange }: { query: string; onQueryChange: (v: st
       <div className="flex items-center gap-2.5">
         <div className="relative">
           <button
+            type="button"
             onClick={() => setOpenMenu((m) => (m === "notif" ? null : "notif"))}
+            aria-label="Notifications"
             className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.07] bg-white/[0.03] text-neutral-400 hover:text-neutral-200"
           >
             <Bell className="h-[15px] w-[15px]" />
@@ -558,6 +617,7 @@ function TopBar({ query, onQueryChange }: { query: string; onQueryChange: (v: st
 
         <div className="relative">
           <button
+            type="button"
             onClick={() => setOpenMenu((m) => (m === "add" ? null : "add"))}
             className="flex items-center gap-1.5 rounded-lg bg-blue-500 px-3 py-2 text-[11.5px] font-medium uppercase tracking-wide text-white hover:bg-blue-600"
           >
@@ -574,13 +634,17 @@ function TopBar({ query, onQueryChange }: { query: string; onQueryChange: (v: st
   );
 }
 
-function TopTabs({ activeTab, onSelect }: { activeTab: TopTabKey; onSelect: (key: TopTabKey) => void }) {
+// TopTabs est mémoïsé et `onSelect` (handleSelectTab) est stabilisé côté
+// AdformaDashboard : quand la personne tape dans la recherche, activeTab
+// ne change pas donc ce composant ne se re-rend pas du tout.
+const TopTabs = memo(function TopTabs({ activeTab, onSelect }: { activeTab: TopTabKey; onSelect: (key: TopTabKey) => void }) {
   return (
     <div className="flex items-center gap-1 border-b border-white/[0.06] px-6 pb-3 font-mono">
       {topTabs.map((tab) => {
         const active = tab.key === activeTab;
         return (
           <button
+            type="button"
             key={tab.key}
             onClick={() => onSelect(tab.key)}
             className={cn(
@@ -596,13 +660,16 @@ function TopTabs({ activeTab, onSelect }: { activeTab: TopTabKey; onSelect: (key
       })}
     </div>
   );
-}
+});
 
 /* ------------------------------------------------------------------ */
 /* Stat cards                                                           */
 /* ------------------------------------------------------------------ */
 
-function StatCard({ stat }: { stat: (typeof stats)[number] }) {
+// `stat` vient toujours du tableau `stats` défini au niveau module : sa
+// référence ne change jamais, donc ce memo élimine complètement le
+// re-rendu des 6 cartes à chaque frappe dans la recherche.
+const StatCard = memo(function StatCard({ stat }: { stat: (typeof stats)[number] }) {
   const Icon = stat.icon;
   const TrendIcon = stat.direction === "up" ? TrendingUp : TrendingDown;
   return (
@@ -625,32 +692,44 @@ function StatCard({ stat }: { stat: (typeof stats)[number] }) {
       </p>
     </div>
   );
-}
+});
 
 /* ------------------------------------------------------------------ */
 /* Ad performance line chart                                            */
 /* ------------------------------------------------------------------ */
 
-function AdPerformanceChart({ year, onYearChange }: { year: "2026" | "2025"; onYearChange: (y: "2026" | "2025") => void }) {
+// Mémoïsé : props = {year, onYearChange}. `onYearChange` est `setYear`
+// (référence stable garantie par React), donc tant que `year` ne change
+// pas, ce graphique (SVG + framer-motion) ignore les re-rendus causés par
+// la recherche ou par la sélection d'un autre onglet.
+const AdPerformanceChart = memo(function AdPerformanceChart({ year, onYearChange }: { year: "2026" | "2025"; onYearChange: (y: "2026" | "2025") => void }) {
   const [hovered, setHovered] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const values = adPerfDatasets[year];
   const activeIndex = hovered ?? 4;
 
-  const max = Math.max(...values);
-  const min = Math.min(...values);
-  const span = max - min || 1;
-  const pad = span * 0.25;
-  const lo = min - pad;
-  const hi = max + pad;
+  // Le calcul des points SVG ne dépend que de `values` (donc de `year`),
+  // pas de `hovered` : on le sort du corps du rendu pour ne pas le refaire
+  // à chaque déplacement de souris sur le graphique.
+  const { points, pointsAttr, total } = useMemo(() => {
+    const max = Math.max(...values);
+    const min = Math.min(...values);
+    const span = max - min || 1;
+    const pad = span * 0.25;
+    const lo = min - pad;
+    const hi = max + pad;
+    const pts = values.map((v, i) => ({
+      x: (i / (values.length - 1)) * 100,
+      y: 100 - ((v - lo) / (hi - lo)) * 100,
+    }));
+    return {
+      points: pts,
+      pointsAttr: pts.map((p) => `${p.x},${p.y}`).join(" "),
+      total: values.reduce((a, b) => a + b, 0),
+    };
+  }, [values]);
 
-  const points = values.map((v, i) => ({
-    x: (i / (values.length - 1)) * 100,
-    y: 100 - ((v - lo) / (hi - lo)) * 100,
-  }));
-  const pointsAttr = points.map((p) => `${p.x},${p.y}`).join(" ");
   const active = points[activeIndex];
-  const total = values.reduce((a, b) => a + b, 0);
 
   return (
     <div className="rounded-xl border border-white/[0.06] bg-[#141416] p-5 font-mono">
@@ -658,6 +737,7 @@ function AdPerformanceChart({ year, onYearChange }: { year: "2026" | "2025"; onY
         <span className="text-[11.5px] uppercase tracking-wider text-neutral-400">Ad Performance</span>
         <div className="relative">
           <button
+            type="button"
             onClick={() => setMenuOpen((o) => !o)}
             className="flex items-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2.5 py-1.5 text-[11px] uppercase tracking-wide text-neutral-300"
           >
@@ -736,7 +816,7 @@ function AdPerformanceChart({ year, onYearChange }: { year: "2026" | "2025"; onY
       </div>
     </div>
   );
-}
+});
 
 /* ------------------------------------------------------------------ */
 /* Campaign breakdown bar chart                                         */
@@ -745,7 +825,10 @@ function AdPerformanceChart({ year, onYearChange }: { year: "2026" | "2025"; onY
 const catColor = { high: "bg-emerald-400", moderate: "bg-amber-400", low: "bg-rose-400" } as const;
 const catLabel = { high: "High (>4X)", moderate: "Moderate (2-4X)", low: "Low (<2X)" } as const;
 
-function CampaignBreakdownChart() {
+// Aucune prop : avec React.memo, ce composant ne se re-rend jamais tant
+// que son propre état interne (activeCats / hovered) ne change pas, quoi
+// qu'il se passe ailleurs sur la page (recherche, changement d'année...).
+const CampaignBreakdownChart = memo(function CampaignBreakdownChart() {
   const [activeCats, setActiveCats] = useState<Set<"high" | "moderate" | "low">>(new Set(["high", "moderate", "low"]));
   const [hovered, setHovered] = useState<number | null>(null);
 
@@ -768,6 +851,7 @@ function CampaignBreakdownChart() {
         <div className="flex items-center gap-3">
           {(["high", "moderate", "low"] as const).map((cat) => (
             <button
+              type="button"
               key={cat}
               onClick={() => toggleCat(cat)}
               className={cn("flex items-center gap-1.5 text-[10.5px] uppercase tracking-wide transition-opacity", activeCats.has(cat) ? "opacity-100" : "opacity-30")}
@@ -807,7 +891,7 @@ function CampaignBreakdownChart() {
       </div>
     </div>
   );
-}
+});
 
 /* ------------------------------------------------------------------ */
 /* Deployment table                                                      */
@@ -825,13 +909,23 @@ const columns: { key: SortKey; label: string }[] = [
   { key: "ctr", label: "CTR" },
 ];
 
-function DeploymentTable({ query }: { query: string }) {
+// Mémoïsé : quand `year` change (graphique du dessus) ou qu'un onglet
+// sans rapport se re-rend, `query` (string primitive) reste identique et
+// cette table entière — tri, filtre, lignes animées — est ignorée.
+const DeploymentTable = memo(function DeploymentTable({ query }: { query: string }) {
   const [statusFilter, setStatusFilter] = useState<"ALL" | CampaignStatus>("ALL");
   const [statusMenuOpen, setStatusMenuOpen] = useState(false);
   const [dateMenuOpen, setDateMenuOpen] = useState(false);
   const [dateRange, setDateRange] = useState(dateRangePresets[0]);
   const [sortKey, setSortKey] = useState<SortKey>("name");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+
+  // useDeferredValue laisse la frappe rester instantanée dans le champ de
+  // recherche : le filtrage/tri (potentiellement coûteux avec beaucoup de
+  // lignes) est calculé en tâche "différée", interruptible par la
+  // prochaine frappe. Sans effet visible ici avec 6 lignes, mais évite
+  // un jank si `campaignsSeed` vient un jour d'une vraie API.
+  const deferredQuery = useDeferredValue(query);
 
   function handleSort(key: SortKey) {
     if (key === sortKey) {
@@ -844,7 +938,7 @@ function DeploymentTable({ query }: { query: string }) {
 
   const rows = useMemo(() => {
     const filtered = campaignsSeed.filter((c) => {
-      const matchesQuery = c.name.toLowerCase().includes(query.trim().toLowerCase());
+      const matchesQuery = c.name.toLowerCase().includes(deferredQuery.trim().toLowerCase());
       const matchesStatus = statusFilter === "ALL" || c.status === statusFilter;
       return matchesQuery && matchesStatus;
     });
@@ -863,7 +957,7 @@ function DeploymentTable({ query }: { query: string }) {
       return 0;
     });
     return sorted;
-  }, [query, statusFilter, sortKey, sortDir]);
+  }, [deferredQuery, statusFilter, sortKey, sortDir]);
 
   return (
     <div className="rounded-xl border border-white/[0.06] bg-[#141416] font-mono">
@@ -873,6 +967,7 @@ function DeploymentTable({ query }: { query: string }) {
           <span className="text-[12px] uppercase tracking-wide text-white">Deployment in progress</span>
           <div className="relative">
             <button
+              type="button"
               onClick={() => setStatusMenuOpen((o) => !o)}
               className="flex items-center gap-1.5 rounded-md bg-white/[0.06] px-2.5 py-1 text-[10.5px] uppercase tracking-wide text-neutral-300 hover:bg-white/[0.1]"
             >
@@ -896,6 +991,7 @@ function DeploymentTable({ query }: { query: string }) {
         </div>
         <div className="relative">
           <button
+            type="button"
             onClick={() => setDateMenuOpen((o) => !o)}
             className="flex items-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 text-[11px] uppercase tracking-wide text-neutral-300"
           >
@@ -922,7 +1018,13 @@ function DeploymentTable({ query }: { query: string }) {
         <div className="min-w-[820px]">
           <div className="grid grid-cols-9 gap-2 px-4 py-2.5 text-[10.5px] uppercase tracking-wide text-neutral-500">
             {columns.map((col) => (
-              <button key={col.key} onClick={() => handleSort(col.key)} className="flex items-center gap-1 text-left hover:text-neutral-300">
+              <button
+                type="button"
+                key={col.key}
+                onClick={() => handleSort(col.key)}
+                aria-label={`Sort by ${col.label}`}
+                className="flex items-center gap-1 text-left hover:text-neutral-300"
+              >
                 {col.label}
                 <ArrowDownUp className={cn("h-3 w-3", sortKey === col.key ? "text-blue-400" : "text-neutral-600")} />
               </button>
@@ -958,13 +1060,13 @@ function DeploymentTable({ query }: { query: string }) {
       </div>
     </div>
   );
-}
+});
 
 /* ------------------------------------------------------------------ */
 /* Empty state (non-overview sections)                                  */
 /* ------------------------------------------------------------------ */
 
-function EmptyStateDark({ icon: Icon, title, description }: { icon: IconType; title: string; description: string }) {
+const EmptyStateDark = memo(function EmptyStateDark({ icon: Icon, title, description }: { icon: IconType; title: string; description: string }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -980,7 +1082,7 @@ function EmptyStateDark({ icon: Icon, title, description }: { icon: IconType; ti
       <p className="max-w-[280px] text-[12px] normal-case tracking-normal text-neutral-500">{description}</p>
     </motion.div>
   );
-}
+});
 
 /* ------------------------------------------------------------------ */
 /* Dashboard view                                                       */
@@ -1030,38 +1132,49 @@ export default function AdformaDashboard() {
   const [query, setQuery] = useState("");
   const [year, setYear] = useState<"2026" | "2025">("2026");
 
-  function handleSelectSidebar(key: SidebarKey) {
+  // Références stables passées à Sidebar / TopTabs (tous deux mémoïsés) :
+  // sans useCallback, une nouvelle fonction serait créée à CHAQUE rendu
+  // de AdformaDashboard (ex: à chaque frappe dans la recherche), ce qui
+  // casserait le memo de ces composants pour rien.
+  const handleSelectSidebar = useCallback((key: SidebarKey) => {
     setSidebarKey(key);
     setTopTab("dashboard");
     setQuery("");
-  }
+  }, []);
 
-  function handleSelectTab(key: TopTabKey) {
+  const handleSelectTab = useCallback((key: TopTabKey) => {
     setTopTab(key);
     setQuery("");
-  }
+  }, []);
+
+  const toggleCollapse = useCallback(() => setCollapsed((c) => !c), []);
 
   const sidebarCopy = sectionCopy[sidebarKey];
   const tabCopy = topTabCopy[topTab];
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-black text-white">
-      <Sidebar activeKey={sidebarKey} collapsed={collapsed} onSelect={handleSelectSidebar} onToggleCollapse={() => setCollapsed((c) => !c)} />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <TopBar query={query} onQueryChange={setQuery} />
-        {sidebarKey === "overview" && <TopTabs activeTab={topTab} onSelect={handleSelectTab} />}
-        <main className="flex-1 overflow-y-auto px-6 py-5">
-          <AnimatePresence mode="wait">
-            {sidebarKey === "overview" && topTab === "dashboard" ? (
-              <DashboardView key="dashboard" query={query} year={year} onYearChange={setYear} />
-            ) : sidebarKey === "overview" && tabCopy ? (
-              <EmptyStateDark key={topTab} icon={tabCopy.icon} title={tabCopy.title} description={tabCopy.description} />
-            ) : (
-              sidebarCopy && <EmptyStateDark key={sidebarKey} icon={sidebarCopy.icon} title={sidebarCopy.title} description={sidebarCopy.description} />
-            )}
-          </AnimatePresence>
-        </main>
+    // Respecte prefers-reduced-motion pour toutes les animations
+    // framer-motion de l'arbre en une seule ligne, sans toucher à chaque
+    // composant animé individuellement.
+    <MotionConfig reducedMotion="user">
+      <div className="flex h-screen w-full overflow-hidden bg-black text-white">
+        <Sidebar activeKey={sidebarKey} collapsed={collapsed} onSelect={handleSelectSidebar} onToggleCollapse={toggleCollapse} />
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <TopBar query={query} onQueryChange={setQuery} />
+          {sidebarKey === "overview" && <TopTabs activeTab={topTab} onSelect={handleSelectTab} />}
+          <main className="flex-1 overflow-y-auto px-6 py-5">
+            <AnimatePresence mode="wait">
+              {sidebarKey === "overview" && topTab === "dashboard" ? (
+                <DashboardView key="dashboard" query={query} year={year} onYearChange={setYear} />
+              ) : sidebarKey === "overview" && tabCopy ? (
+                <EmptyStateDark key={topTab} icon={tabCopy.icon} title={tabCopy.title} description={tabCopy.description} />
+              ) : (
+                sidebarCopy && <EmptyStateDark key={sidebarKey} icon={sidebarCopy.icon} title={sidebarCopy.title} description={sidebarCopy.description} />
+              )}
+            </AnimatePresence>
+          </main>
+        </div>
       </div>
-    </div>
+    </MotionConfig>
   );
 }
