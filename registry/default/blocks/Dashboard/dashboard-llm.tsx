@@ -311,7 +311,7 @@ function Sidebar({ activeNav, onSelect }: { activeNav: NavKey; onSelect: (key: N
       <img
         src="/logoW.png"
         alt="Logo"
-        className="h-6 w-6 object-contain"
+        className="h-6 w-6 object-contain mb-4"
       />
 
       <div className="flex flex-col gap-1">
