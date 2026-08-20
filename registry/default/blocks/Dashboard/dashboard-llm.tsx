@@ -308,11 +308,11 @@ function RailIcon({ icon: Icon, label, active, onClick }: { icon: IconType; labe
 function Sidebar({ activeNav, onSelect }: { activeNav: NavKey; onSelect: (key: NavKey) => void }) {
   return (
     <aside className="flex h-full w-[56px] shrink-0 flex-col items-center gap-1 border-r border-white/[0.06] bg-[#0C0D0B] py-4">
-      <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-xl bg-white">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <path d="M7 1L13 12H1L7 1Z" fill="#0C0D0B" />
-        </svg>
-      </div>
+      <img
+        src="/logoW.png"
+        alt="Logo"
+        className="h-6 w-6 object-contain"
+      />
 
       <div className="flex flex-col gap-1">
         {mainNav.map((item) => (
