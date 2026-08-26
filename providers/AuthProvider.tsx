@@ -129,10 +129,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signInWithGoogle = async () => {
+    // Redirect through /auth/callback so the OAuth `code` returned by Google
+    // is exchanged for a session (via exchangeCodeForSession) before the user
+    // lands on /blocks. Redirecting straight to /blocks skips that exchange
+    // and the user comes back with no valid session.
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/blocks`,
+        redirectTo: `${window.location.origin}/auth/callback?next=/blocks`,
       },
     });
   };
