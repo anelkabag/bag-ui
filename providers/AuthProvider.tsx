@@ -99,34 +99,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signUp = async (email: string, password: string, username: string) => {
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      const response = await fetch("/api/auth", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          action: "sign_up",
-          email,
-          password,
-          username,
-        }),
-      });
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { username },
+      emailRedirectTo: `${window.location.origin}/auth/callback?next=/blocks`,
+    },
+  });
 
-      const data = await response.json().catch(() => null);
-      if (!response.ok) {
-        return data?.error || "Unable to create account";
-      }
+  setLoading(false);
 
-      return null;
-    } catch {
-      return "Unable to create account";
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (error) {
+    return error.message;
+  }
+
+  if (data.user && data.user.identities?.length === 0) {
+    return "An account with this email already exists.";
+  }
+
+  return null;
+};
 
   const signInWithGoogle = async () => {
     // Redirect through /auth/callback so the OAuth `code` returned by Google
