@@ -131,7 +131,7 @@ export default function RegisterPage() {
         <div className="mt-6">
           <button
             onClick={signInWithGoogle}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-border bg-transparent py-3 text-sm font-semibold text-foreground transition hover:border-ring"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-border bg-transparent py-3 text-sm font-semibold text-foreground transition hover:border-ring cursor-pointer"
           >
             <img
               src="https://api.iconify.design/logos/google-icon.svg"

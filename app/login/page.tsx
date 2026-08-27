@@ -227,7 +227,7 @@ export default function LoginPage() {
           >
             <button
               onClick={handleGoogle}
-              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm transition-colors"
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm transition-colors cursor-pointer"
             >
               <img
                 src="https://api.iconify.design/logos/google-icon.svg"
