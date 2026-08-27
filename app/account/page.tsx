@@ -215,24 +215,6 @@ export default async function AccountPage() {
             <ProfileEditForm profile={profile} email={user.email || ""} />
           </div>
         </div>
-
-        {/* Security */}
-        <div className="rounded-[32px] border border-white/10 bg-[#111111]/90 p-10 shadow-2xl shadow-black/40">
-          <p className="text-sm uppercase tracking-[0.35em] text-white/40">
-            Security
-          </p>
-          <div className="mt-6">
-            <p className="text-sm text-white/70">
-              Your session is securely managed by Supabase Auth with
-              persistent tokens and server-side session restoration.
-            </p>
-            <div className="mt-4 rounded-lg border border-green-500/30 bg-green-500/10 p-3">
-              <p className="text-sm text-green-400">
-                ✓ Secure authentication
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
     </main>
   );
