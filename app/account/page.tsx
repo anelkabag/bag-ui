@@ -111,7 +111,7 @@ export default async function AccountPage() {
             {/* Avatar + name + edit button */}
             <div className="-mt-12 flex flex-col gap-6 sm:-mt-14 sm:flex-row sm:items-end sm:justify-between">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:gap-6">
-                <div className="h-24 w-24 shrink-0 overflow-hidden rounded-3xl border-4 border-[#111111] bg-white/5 sm:h-28 sm:w-28">
+                <div className="h-24 w-24 shrink-0 overflow-hidden rounded-3xl border-4 border-[#111111] bg-white/5 sm:h-28 sm:w-28 z-10">
                   <Image
                     src={profile.avatar_url ?? "/faviconblack.png"}
                     alt="Avatar"
