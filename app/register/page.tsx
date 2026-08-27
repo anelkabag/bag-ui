@@ -122,7 +122,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-2xl bg-foreground py-3 text-sm font-semibold text-background transition hover:bg-foreground/90 disabled:opacity-60"
+            className="w-full rounded-2xl bg-foreground py-3 text-sm font-semibold text-background transition hover:bg-foreground/90 disabled:opacity-60 cursor-pointer"
           >
             {loading ? "Creating account…" : "Create account"}
           </button>
