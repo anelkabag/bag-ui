@@ -227,13 +227,13 @@ export default function LoginPage() {
           >
             <button
               onClick={handleGoogle}
-              className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm transition-colors"
             >
               <img
-              src="https://api.iconify.design/logos/google-icon.svg"
-              alt="Google"
-              className="h-4 w-4"
-            />
+                src="https://api.iconify.design/logos/google-icon.svg"
+                alt="Google"
+                className="h-4 w-4"
+              />
               Continue with Google
             </button>
           </motion.div>
