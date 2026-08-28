@@ -240,7 +240,7 @@ const INITIAL_PROJECTS: Project[] = [
 function Avatar({ name, className }: { name: string; className?: string }) {
   return (
     <img
-      src={`https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(name)}&backgroundColor=1f2937`}
+      src={"/avatar.png"}
       alt={name}
       title={name}
       className={cn("shrink-0 rounded-full border-2 border-[#0B0B0D] bg-neutral-800 object-cover", className)}
