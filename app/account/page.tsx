@@ -1,9 +1,8 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import { Mail, Bookmark, Pencil, CheckCircle2, Circle } from "lucide-react";
+import { Mail, Bookmark, Pencil, CheckCircle2, Circle, BadgeCheck } from "lucide-react";
 import { ProfileEditForm } from "@/components/ProfileEditForm";
-import type { Database } from "@/types/supabase";
 
 export default async function AccountPage() {
   const supabase = await createSupabaseServerClient();
@@ -19,7 +18,9 @@ export default async function AccountPage() {
 
   const { data: profileData, error } = await supabase
     .from("profiles")
-    .select("id, email, username, avatar_url, created_at, updated_at")
+    .select(
+      "id, email, username, avatar_url, created_at, updated_at, plan, subscription_plan"
+    )
     .eq("id", user.id)
     .maybeSingle<{
       id: string;
@@ -28,6 +29,8 @@ export default async function AccountPage() {
       avatar_url: string | null;
       created_at: string;
       updated_at: string;
+      plan: string | null;
+      subscription_plan: string | null;
     }>();
 
   if (error && error.code !== "PGRST116") {
@@ -47,7 +50,21 @@ export default async function AccountPage() {
     avatar_url: null,
     created_at: user.created_at ?? new Date().toISOString(),
     updated_at: user.updated_at ?? new Date().toISOString(),
+    plan: null,
+    subscription_plan: null,
   };
+
+  // Résolution du plan — même ordre de priorité que dans UserMenu
+  const rawPlan =
+    profile.plan ??
+    profile.subscription_plan ??
+    user.user_metadata?.plan ??
+    user.user_metadata?.subscription_plan ??
+    user.app_metadata?.plan ??
+    user.app_metadata?.subscription_plan ??
+    "free";
+  const plan = String(rawPlan ?? "free").toLowerCase();
+  const isProPlan = ["monthly", "yearly", "lifetime", "pro"].includes(plan);
 
   const joinedShort = new Date(profile.created_at).toLocaleDateString("en-US", {
     month: "long",
@@ -109,8 +126,8 @@ export default async function AccountPage() {
 
           <div className="px-8 pb-8 sm:px-10">
             {/* Avatar + name + edit button */}
-            <div className="-mt-12 flex flex-col gap-6 sm:-mt-14 sm:flex-row sm:items-end sm:justify-between">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:gap-6">
+            <div className="-mt-12 flex flex-col gap-6 sm:-mt-14 sm:flex-row sm:items-start sm:justify-between">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
                 <div className="h-24 w-24 shrink-0 overflow-hidden rounded-3xl border-4 border-[#111111] bg-white/5 sm:h-28 sm:w-28 z-10">
                   <Image
                     src={profile.avatar_url ?? "/faviconblack.png"}
@@ -120,9 +137,16 @@ export default async function AccountPage() {
                     className="h-full w-full object-cover"
                   />
                 </div>
-                <div className="pb-1">
-                  <h1 className="text-2xl font-semibold sm:text-3xl">
+                <div className="pt-1 sm:pt-2">
+                  <h1 className="flex items-center gap-1.5 text-2xl font-semibold sm:text-3xl">
                     {profile.username}
+                    {isProPlan && (
+                      <BadgeCheck
+                        size={20}
+                        className="shrink-0 text-sky-400 sm:h-6 sm:w-6"
+                        aria-label="Premium member"
+                      />
+                    )}
                   </h1>
                   <p className="mt-1 text-sm text-white/60">BagUI Member</p>
                   <span className="mt-3 inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/60">
@@ -132,7 +156,7 @@ export default async function AccountPage() {
               </div>
               <a
                 href="#edit-profile"
-                className="inline-flex h-9 items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 text-xs font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
+                className="inline-flex h-9 shrink-0 items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 text-xs font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
               >
                 <Pencil size={14} />
                 Edit Profile
