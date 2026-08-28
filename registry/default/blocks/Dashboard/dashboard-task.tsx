@@ -1529,7 +1529,7 @@ function TopBar({
   onTabChange: (tab: TabKey) => void;
   search: string;
   onSearch: (v: string) => void;
-  searchInputRef: React.RefObject<HTMLInputElement>;
+    searchInputRef: React.RefObject<HTMLInputElement | null>;
   statusFilter: TaskStatus | "all";
   onStatusFilter: (v: TaskStatus | "all") => void;
   sortBy: "manual" | "priority" | "due" | "title";
