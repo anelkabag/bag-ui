@@ -427,14 +427,19 @@ function Sidebar({
       className="relative flex h-full shrink-0 flex-col overflow-hidden border-r border-white/[0.06] bg-[#0E0E10] py-4"
     >
       <div className={cn("flex items-center gap-2.5 px-3 pb-4", collapsed && "justify-center px-0")}>
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-violet-600 text-[13px] font-bold text-white">
-          C
+        <div className="h-8 w-8 shrink-0 overflow-hidden rounded-lg">
+            <img
+                src="/faviconsblack.png"
+                alt="Logo BagUi"
+                className="h-full w-full object-cover"
+            />
         </div>
+
         {!collapsed && (
           <>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-[13px] font-medium text-neutral-100">Courtney Henry</p>
-              <p className="truncate text-[11.5px] text-neutral-500">The Walt Disney Company</p>
+              <p className="truncate text-[13px] font-medium text-neutral-100">BagUI</p>
+              <p className="truncate text-[11.5px] text-neutral-500">Open Source Ui Blocks</p>
             </div>
             <button
               onClick={onToggleCollapsed}
