@@ -124,108 +124,107 @@ export default async function AccountPage() {
       <div className="mx-auto max-w-4xl space-y-6">
         {/* Profile header */}
         <div className="overflow-hidden rounded-[32px] border border-white/10 bg-[#111111]/90 shadow-2xl shadow-black/40">
-  {/* Cover */}
-  <div
-    className="relative h-36 sm:h-44"
-    style={{
-      backgroundImage:
-        "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02) 60%), linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)",
-      backgroundSize: "auto, 28px 28px, 28px 28px",
-      backgroundColor: "#141414",
-    }}
-  >
-    <span className="absolute right-6 top-6 text-xs font-semibold uppercase tracking-[0.35em] text-white/30">
-      Bag\Ui
-    </span>
-  </div>
-
-  <div className="px-6 pb-8 sm:px-10">
-    {/* Profile header */}
-    <div className="relative">
-      {/* Avatar */}
-      <div className="-mt-12 flex justify-center sm:-mt-14 sm:justify-start">
-        <div className="relative z-20 h-24 w-24 shrink-0 overflow-hidden rounded-3xl border-4 border-[#111111] bg-[#111111] shadow-xl sm:h-28 sm:w-28">
-          <Image
-            src={profile.avatar_url ?? "/faviconblack.png"}
-            alt="Avatar"
-            width={112}
-            height={112}
-            className="h-full w-full object-cover"
-          />
-        </div>
-      </div>
-
-      {/* Name + actions */}
-      <div className="mt-5 flex flex-col gap-5 sm:mt-4 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h1 className="flex items-center gap-2 text-2xl font-semibold text-white sm:text-3xl">
-            <span>{profile.username}</span>
-
-            {isProPlan && (
-              <BadgeCheck
-                size={20}
-                className="shrink-0 text-sky-400 sm:h-6 sm:w-6"
-                aria-label="Premium member"
-              />
-            )}
-          </h1>
-
-          <p className="mt-1 text-sm text-white/60">
-            BagUI Member
-          </p>
-
-          <span className="mt-3 inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/60">
-            Joined {joinedShort}
+        {/* Cover */}
+        <div
+          className="relative h-36 overflow-hidden sm:h-44"
+          style={{
+            background:
+              "linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(35, 35, 35) 35%, rgb(255, 255, 255) 50%, rgb(35, 35, 35) 65%, rgb(0, 0, 0) 100%)",
+          }}
+        >
+          <span className="absolute right-6 top-6 text-xs font-semibold uppercase tracking-[0.35em] text-black/40">
+            Bag\Ui
           </span>
         </div>
 
-        <a
-          href="#edit-profile"
-          className="inline-flex h-9 shrink-0 items-center justify-center gap-2 self-start rounded-full border border-white/10 bg-white/5 px-4 text-xs font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
-        >
-          <Pencil size={14} />
-          Edit Profile
-        </a>
+
+      <div className="px-6 pb-8 sm:px-10">
+        {/* Profile header */}
+        <div className="relative">
+          {/* Avatar */}
+          <div className="-mt-12 flex justify-center sm:-mt-14 sm:justify-start">
+            <div className="relative z-20 h-24 w-24 shrink-0 overflow-hidden rounded-3xl border-4 border-[#111111] bg-[#111111] shadow-xl sm:h-28 sm:w-28">
+              <Image
+                src={profile.avatar_url ?? "/faviconblack.png"}
+                alt="Avatar"
+                width={112}
+                height={112}
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+
+          {/* Name + actions */}
+          <div className="mt-5 flex flex-col gap-5 sm:mt-4 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <h1 className="flex items-center gap-2 text-2xl font-semibold text-white sm:text-3xl">
+                <span>{profile.username}</span>
+
+                {isProPlan && (
+                  <BadgeCheck
+                    size={20}
+                    className="shrink-0 text-sky-400 sm:h-6 sm:w-6"
+                    aria-label="Premium member"
+                  />
+                )}
+              </h1>
+
+              <p className="mt-1 text-sm text-white/60">
+                BagUI Member
+              </p>
+
+              <span className="mt-3 inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/60">
+                Joined {joinedShort}
+              </span>
+            </div>
+
+            <a
+              href="#edit-profile"
+              className="inline-flex h-9 shrink-0 items-center justify-center gap-2 self-start rounded-full border border-white/10 bg-white/5 px-4 text-xs font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
+            >
+              <Pencil size={14} />
+              Edit Profile
+            </a>
+          </div>
+        </div>
+
+        {/* Quick actions */}
+        <div className="mt-7 flex items-center justify-between border-t border-white/10 pt-6">
+          <div className="flex items-center gap-3">
+            <a
+              href={`mailto:${user.email}`}
+              title="Send email"
+              className={iconBtnClass}
+            >
+              <Mail size={16} />
+            </a>
+          </div>
+
+          <button
+            type="button"
+            title="Save profile"
+            className={iconBtnClass}
+          >
+            <Bookmark size={16} />
+          </button>
+        </div>
+
+        {/* Tabs */}
+        <div className="mt-4 flex items-center gap-2 overflow-x-auto text-sm">
+          <span className="shrink-0 rounded-full bg-white/10 px-4 py-2 font-medium text-white shadow-sm">
+            Overview
+          </span>
+
+          <span className="shrink-0 px-4 py-2 text-white/40">
+            Security
+          </span>
+
+          <span className="shrink-0 px-4 py-2 text-white/40">
+            Activity
+          </span>
+        </div>
       </div>
     </div>
-
-    {/* Quick actions */}
-    <div className="mt-7 flex items-center justify-between border-t border-white/10 pt-6">
-      <div className="flex items-center gap-3">
-        <a
-          href={`mailto:${user.email}`}
-          title="Send email"
-          className={iconBtnClass}
-        >
-          <Mail size={16} />
-        </a>
-      </div>
-
-      <button
-        type="button"
-        title="Save profile"
-        className={iconBtnClass}
-      >
-        <Bookmark size={16} />
-      </button>
-    </div>
-
-    {/* Tabs */}
-    <div className="mt-4 flex items-center gap-2 overflow-x-auto text-sm">
-      <span className="shrink-0 rounded-full bg-white/10 px-4 py-2 font-medium text-white shadow-sm">
-        Overview
-      </span>
-
-      <span className="shrink-0 px-4 py-2 text-white/40">
-        Security
-      </span>
-
-      <span className="shrink-0 px-4 py-2 text-white/40">
-        Activity
-      </span>
-    </div>
-  </div>
-</div>
 
 
         {/* Summary */}
