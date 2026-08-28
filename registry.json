@@ -404,7 +404,7 @@
         {
           "path": "registry/default/blocks/Dashboard/dashboard-wallet.tsx",
           "type": "registry:block",
-          "target": "components/Dashboard/dashboard-Wallet.tsx"
+          "target": "components/Dashboard/dashboard-wallet.tsx"
         }
       ],
       "access": {
@@ -456,6 +456,23 @@
           "path": "registry/default/blocks/Dashboard/dashboard-llm.tsx",
           "type": "registry:block",
           "target": "components/Dashboard/dashboard-llm.tsx"
+        }
+      ],
+      "access": {
+        "tier": "pro"
+      }
+    },
+    {
+      "name": "dashboard-task",
+      "type": "registry:block",
+      "title": "Modern Task Dashboard",
+      "description": "",
+      "dependencies": ["framer-motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/Dashboard/dashboard-task.tsx",
+          "type": "registry:block",
+          "target": "components/Dashboard/dashboard-task.tsx"
         }
       ],
       "access": {
