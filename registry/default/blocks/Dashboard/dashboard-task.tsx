@@ -429,7 +429,7 @@ function Sidebar({
       <div className={cn("flex items-center gap-2.5 px-3 pb-4", collapsed && "justify-center px-0")}>
         <div className="h-8 w-8 shrink-0 overflow-hidden rounded-lg">
             <img
-                src="/faviconsblack.png"
+                src="/faviconblack.png"
                 alt="Logo BagUi"
                 className="h-full w-full object-cover"
             />
