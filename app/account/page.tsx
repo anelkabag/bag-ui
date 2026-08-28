@@ -19,7 +19,7 @@ export default async function AccountPage() {
   const { data: profileData, error } = await supabase
     .from("profiles")
     .select(
-      "id, email, username, avatar_url, created_at, updated_at, plan, subscription_plan"
+      "id, email, username, avatar_url, created_at, updated_at, plan"
     )
     .eq("id", user.id)
     .maybeSingle<{
@@ -30,11 +30,11 @@ export default async function AccountPage() {
       created_at: string;
       updated_at: string;
       plan: string | null;
-      subscription_plan: string | null;
     }>();
 
-  if (error && error.code !== "PGRST116") {
-    redirect("/login");
+  // Ne PAS rediriger vers /login si le profil a une erreur
+  if (error) {
+    console.error("Erreur lors de la lecture du profil:", error);
   }
 
   const username =
@@ -50,39 +50,45 @@ export default async function AccountPage() {
     avatar_url: null,
     created_at: user.created_at ?? new Date().toISOString(),
     updated_at: user.updated_at ?? new Date().toISOString(),
-    plan: null,
-    subscription_plan: null,
+    plan: "free",
   };
 
-  // Résolution du plan — même ordre de priorité que dans UserMenu
+  // Le plan vient maintenant de profiles.plan
   const rawPlan =
     profile.plan ??
-    profile.subscription_plan ??
     user.user_metadata?.plan ??
-    user.user_metadata?.subscription_plan ??
     user.app_metadata?.plan ??
-    user.app_metadata?.subscription_plan ??
     "free";
-  const plan = String(rawPlan ?? "free").toLowerCase();
+
+  const plan = String(rawPlan).toLowerCase();
+
   const isProPlan = ["monthly", "yearly", "lifetime", "pro"].includes(plan);
 
-  const joinedShort = new Date(profile.created_at).toLocaleDateString("en-US", {
-    month: "long",
-    year: "numeric",
-  });
+  const joinedShort = new Date(profile.created_at).toLocaleDateString(
+    "en-US",
+    {
+      month: "long",
+      year: "numeric",
+    }
+  );
 
-  const joinedLong = new Date(profile.created_at).toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const joinedLong = new Date(profile.created_at).toLocaleDateString(
+    "en-US",
+    {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }
+  );
 
   const isEmailVerified = Boolean(user.email_confirmed_at);
+
   const provider = user.app_metadata?.provider
     ? user.app_metadata.provider.charAt(0).toUpperCase() +
       user.app_metadata.provider.slice(1)
     : "Email";
+
   const lastActive = user.last_sign_in_at
     ? new Date(user.last_sign_in_at).toLocaleDateString("en-US", {
         month: "short",
@@ -100,9 +106,18 @@ export default async function AccountPage() {
       detail: isEmailVerified ? "Confirmed" : "Pending",
       active: isEmailVerified,
     },
-    { label: "Sign-in Provider", detail: provider, active: false },
-    { label: "Last Active", detail: lastActive, active: false },
+    {
+      label: "Sign-in Provider",
+      detail: provider,
+      active: false,
+    },
+    {
+      label: "Last Active",
+      detail: lastActive,
+      active: false,
+    },
   ];
+
 
   return (
     <main className="min-h-screen bg-[#0b0b0b] px-6 py-10 text-white">
