@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import Image from "next/image";
 import { Mail, Bookmark, Pencil, CheckCircle2, Circle, BadgeCheck } from "lucide-react";
 import { ProfileEditForm } from "@/components/ProfileEditForm";
+import { DownloadsHistory } from "@/components/DownloadsHistory";
 
 export default async function AccountPage() {
   const supabase = await createSupabaseServerClient();
@@ -35,6 +36,63 @@ export default async function AccountPage() {
   // Ne PAS rediriger vers /login si le profil a une erreur
   if (error) {
     console.error("Erreur lors de la lecture du profil:", error);
+  }
+
+  // Récupérer l'historique de téléchargements
+  interface DownloadItem {
+    component: string;
+    count: number;
+    lastDownloaded: string;
+    os: string;
+    cli_version?: string;
+  }
+
+  let downloadsData: { downloads: DownloadItem[]; total: number } = {
+    downloads: [],
+    total: 0,
+  };
+  try {
+    const { data: downloads, error: downloadsError } = await supabase
+      .from("component_downloads")
+      .select("id, component, created_at, os, cli_version")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(50);
+
+    if (!downloadsError && downloads) {
+      // Grouper par composant et compter les téléchargements
+      const groupedDownloads: DownloadItem[] = downloads.reduce(
+        (acc: DownloadItem[], download) => {
+          const existing = acc.find((d) => d.component === download.component);
+          if (existing) {
+            existing.count += 1;
+            if (
+              new Date(download.created_at) >
+              new Date(existing.lastDownloaded)
+            ) {
+              existing.lastDownloaded = download.created_at;
+            }
+          } else {
+            acc.push({
+              component: download.component,
+              count: 1,
+              lastDownloaded: download.created_at,
+              os: download.os || "Unknown",
+              cli_version: download.cli_version,
+            });
+          }
+          return acc;
+        },
+        []
+      );
+
+      downloadsData = {
+        downloads: groupedDownloads,
+        total: downloads.length,
+      };
+    }
+  } catch (err) {
+    console.error("Erreur lors de la récupération des téléchargements:", err);
   }
 
   const username =
@@ -276,6 +334,12 @@ export default async function AccountPage() {
             <ProfileEditForm profile={profile} email={user.email || ""} />
           </div>
         </div>
+
+        {/* Downloads history */}
+        <DownloadsHistory
+          downloads={downloadsData.downloads}
+          total={downloadsData.total}
+        />
       </div>
     </main>
   );
