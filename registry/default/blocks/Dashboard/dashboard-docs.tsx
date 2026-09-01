@@ -312,15 +312,16 @@ function Sidebar({ activeNav, onSelect, activeProject, onSelectProject }: { acti
   return (
     <aside className="flex h-full w-[232px] shrink-0 flex-col gap-3 overflow-y-auto border-r border-white/[0.06] bg-[#0E0E10] p-3">
       <button className="flex items-center gap-2.5 rounded-xl bg-white/[0.05] p-2.5 hover:bg-white/[0.08]">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-sky-400 to-blue-600">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <circle cx="7" cy="7" r="5.4" stroke="white" strokeWidth="1.3" />
-            <circle cx="7" cy="7" r="1.6" fill="white" />
-          </svg>
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg overflow-hidden">
+            <img
+                src="/faviconblack.png"
+                alt="Logo BagUi"
+                className="h-8 w-8 object-contain"
+            />
         </span>
         <div className="min-w-0 flex-1 text-left">
-          <p className="truncate text-[13px] font-medium text-white">Courtney Henry</p>
-          <p className="truncate text-[11px] text-neutral-500">Nimbus Studio</p>
+          <p className="truncate text-[13px] font-medium text-white">BagUi</p>
+          <p className="truncate text-[11px] text-neutral-500">Open Source Ui Blocks</p>
         </div>
         <span className="text-neutral-500">
           <Columns3 className="h-4 w-4 rotate-90" />
