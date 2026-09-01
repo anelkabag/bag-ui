@@ -9,6 +9,13 @@ import Navbar from "@/components/navbar";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Tab = "pnpm" | "npm" | "bun" | "yarn";
+type Framework =
+  | "next"
+  | "vite"
+  | "tanstack"
+  | "laravel"
+  | "react-router"
+  | "astro";
 type Section = { id: string; label: string };
 type DocsPage = "installation" | "contributing";
 
@@ -23,6 +30,7 @@ const NAV_LINKS = [
 // "On this page" pour la page Installation — ne contient PAS Contributing.
 const INSTALLATION_SECTIONS: Section[] = [
   { id: "introduction", label: "Introduction" },
+  { id: "create-app", label: "Create your app" },
   { id: "requirements", label: "Requirements" },
   { id: "register-namespace", label: "Register the namespace" },
   { id: "install-a-block", label: "Install a free block" },
@@ -80,6 +88,110 @@ const REGISTRY_JSON = `{
     "@bagui": "https://bagui.pro/r/{name}.json"
   }
 }`;
+
+// ─── Framework scaffolding ──────────────────────────────────────────────────────
+const FRAMEWORKS: {
+  key: Framework;
+  label: string;
+  blurb: string;
+  note: string;
+  docsHref: string;
+  docsLabel: string;
+}[] = [
+  {
+    key: "next",
+    label: "Next.js",
+    blurb: "A React framework with file-system routing and server rendering.",
+    note: "Choose the recommended defaults when prompted — TypeScript, Tailwind CSS and the App Router are all Bag/UI needs.",
+    docsHref: "https://nextjs.org/docs/app/getting-started/installation",
+    docsLabel: "Next.js",
+  },
+  {
+    key: "vite",
+    label: "Vite",
+    blurb: "A fast, lightweight build tool for a plain React single-page app.",
+    note: "Pick the React + TypeScript template — shadcn/ui needs TypeScript to generate typed components.",
+    docsHref: "https://vite.dev/guide/",
+    docsLabel: "Vite",
+  },
+  {
+    key: "tanstack",
+    label: "TanStack Start",
+    blurb: "A full-stack React framework built on TanStack Router.",
+    note: "In the prompts, choose TanStack Start, the React framework, and the recommended defaults. Skip the shadcn add-on — you'll wire it up in the next step.",
+    docsHref: "https://tanstack.com/start/latest",
+    docsLabel: "TanStack",
+  },
+  {
+    key: "laravel",
+    label: "Laravel",
+    blurb: "A PHP framework, paired with React and Inertia for the frontend.",
+    note: "Choose the React starter kit when prompted so Inertia and React are wired up for you.",
+    docsHref: "https://laravel.com/framework/docs/installation",
+    docsLabel: "Laravel",
+  },
+  {
+    key: "react-router",
+    label: "React Router",
+    blurb: "React Router in Framework Mode — routing, loaders and SSR out of the box.",
+    note: "This scaffolds Tailwind CSS and the ~/* import alias for you automatically.",
+    docsHref: "https://reactrouter.com/home",
+    docsLabel: "React Router",
+  },
+  {
+    key: "astro",
+    label: "Astro",
+    blurb: "A content-focused framework that ships minimal JavaScript by default.",
+    note: "Say yes to TypeScript and add the React integration when prompted — shadcn/ui components need it to render.",
+    docsHref: "https://docs.astro.build/en/getting-started/",
+    docsLabel: "Astro",
+  },
+];
+
+const FRAMEWORK_CREATE_CMDS: Record<Framework, Record<Tab, string> | string> =
+  {
+    next: {
+      pnpm: "pnpm create next-app@latest my-app",
+      npm: "npx create-next-app@latest my-app",
+      bun: "bun create next-app my-app",
+      yarn: "yarn create next-app my-app",
+    },
+    vite: {
+      pnpm: "pnpm create vite@latest my-app -- --template react-ts",
+      npm: "npm create vite@latest my-app -- --template react-ts",
+      bun: "bun create vite my-app --template react-ts",
+      yarn: "yarn create vite my-app --template react-ts",
+    },
+    tanstack: {
+      pnpm: "pnpm dlx @tanstack/cli@latest create",
+      npm: "npx @tanstack/cli@latest create",
+      bun: "bunx @tanstack/cli@latest create",
+      yarn: "yarn dlx @tanstack/cli@latest create",
+    },
+    laravel: "composer global require laravel/installer\nlaravel new my-app",
+    "react-router": {
+      pnpm: "pnpm create react-router@latest my-app",
+      npm: "npx create-react-router@latest my-app",
+      bun: "bun create react-router my-app",
+      yarn: "yarn create react-router my-app",
+    },
+    astro: {
+      pnpm: "pnpm create astro@latest my-app",
+      npm: "npm create astro@latest my-app",
+      bun: "bun create astro my-app",
+      yarn: "yarn create astro my-app",
+    },
+  };
+
+// Flag to pass to `shadcn init` for a setup tailored to each framework.
+// Laravel has no flag — the CLI auto-detects it from the project root.
+const FRAMEWORK_INIT_FLAG: Partial<Record<Framework, string>> = {
+  next: "-t next",
+  vite: "-t vite",
+  tanstack: "-t start",
+  "react-router": "-t react-router",
+  astro: "-t astro",
+};
 
 // ─── Contributing snippets ─────────────────────────────────────────────────────
 const CONTRIB_CLONE_CMD = `git clone https://github.com/anelkabag/bagui.git
@@ -189,11 +301,13 @@ function CodeBlock({
   cmds,
   mono = false,
   content,
+  lang = "json",
 }: {
   tabs?: Tab[];
   cmds?: Record<Tab, string>;
   mono?: boolean;
   content?: string;
+  lang?: string;
 }) {
   const [active, setActive] = useState<Tab>("pnpm");
   const [copied, setCopied] = useState(false);
@@ -226,7 +340,7 @@ function CodeBlock({
       )}
       {!tabs && mono && (
         <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-background">
-          <span className="text-xs text-muted-foreground font-mono">json</span>
+          <span className="text-xs text-muted-foreground font-mono">{lang}</span>
         </div>
       )}
       <div className="relative group">
@@ -265,6 +379,32 @@ function CodeBlock({
   );
 }
 
+function FrameworkPicker({
+  active,
+  onSelect,
+}: {
+  active: Framework;
+  onSelect: (framework: Framework) => void;
+}) {
+  return (
+    <div className="flex flex-wrap gap-2 my-5">
+      {FRAMEWORKS.map((fw) => (
+        <button
+          key={fw.key}
+          onClick={() => onSelect(fw.key)}
+          className={`px-3.5 py-1.5 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
+            active === fw.key
+              ? "bg-foreground text-background border-foreground"
+              : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/40"
+          }`}
+        >
+          {fw.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function SectionHeading({
   id,
   children,
@@ -299,6 +439,10 @@ function Prose({ children }: { children: React.ReactNode }) {
 // Petite classe partagée pour le code inline dans le texte (inchangée en logique, juste stylée pour le dark mode)
 const inlineCode =
   "text-foreground bg-muted rounded px-1.5 py-0.5 text-xs font-mono";
+
+// Shared style for inline text links inside Prose paragraphs.
+const textLink =
+  "text-foreground underline underline-offset-2 hover:opacity-70 transition-opacity";
 
 // ─── Left sidebar ─────────────────────────────────────────────────────────────
 function LeftSidebar({
@@ -369,7 +513,11 @@ function TOC({ sections, active }: { sections: Section[]; active: string }) {
 export default function DocsPage() {
   const [activePage, setActivePage] = useState<DocsPage>("installation");
   const [activeSection, setActiveSection] = useState("introduction");
+  const [framework, setFramework] = useState<Framework>("next");
   const tabs: Tab[] = ["pnpm", "npm", "bun", "yarn"];
+  const selectedFramework = FRAMEWORKS.find((f) => f.key === framework)!;
+  const frameworkCreateCmd = FRAMEWORK_CREATE_CMDS[framework];
+  const frameworkInitFlag = FRAMEWORK_INIT_FLAG[framework];
 
   const sections =
     activePage === "installation"
@@ -478,18 +626,91 @@ export default function DocsPage() {
                   </Prose>
                 </section>
 
+                {/* Create your app */}
+                <section id="create-app">
+                  <SectionHeading id="create-app">
+                    Create your app
+                  </SectionHeading>
+                  <Prose>
+                    Starting from zero? Pick your framework below, run the
+                    scaffold command, then jump to{" "}
+                    <a href="#requirements" className={textLink}>
+                      Requirements
+                    </a>{" "}
+                    to wire up shadcn/ui. Already have a project with
+                    shadcn/ui configured? Skip straight to Requirements —
+                    nothing in this section applies to you.
+                  </Prose>
+
+                  <FrameworkPicker active={framework} onSelect={setFramework} />
+
+                  <p className="text-muted-foreground text-[0.925rem] leading-7 mt-1">
+                    {selectedFramework.blurb}
+                  </p>
+
+                  {typeof frameworkCreateCmd === "string" ? (
+                    <CodeBlock
+                      mono
+                      lang="bash"
+                      content={frameworkCreateCmd}
+                    />
+                  ) : (
+                    <CodeBlock cmds={frameworkCreateCmd} tabs={tabs} />
+                  )}
+
+                  <p className="text-muted-foreground text-[0.85rem] leading-6 mt-3">
+                    {selectedFramework.note}{" "}
+                    <a
+                      href={selectedFramework.docsHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={textLink}
+                    >
+                      {selectedFramework.docsLabel} docs ↗
+                    </a>
+                  </p>
+                </section>
+
                 {/* Requirements */}
                 <section id="requirements">
                   <SectionHeading id="requirements">
                     Requirements
                   </SectionHeading>
                   <Prose>
-                    Your project should already run React 19, Tailwind CSS v4
-                    and shadcn/ui. If shadcn isn&apos;t initialized yet, run{" "}
-                    <code className={inlineCode}>init</code> from your project
-                    root and follow the prompts.
+                    Your project should run React 19, Tailwind CSS v4 and
+                    shadcn/ui. Coming from the framework guide above? Run this
+                    from your new project&apos;s root — same command, no
+                    flags needed. Already have shadcn/ui running? You can
+                    skip straight to{" "}
+                    <a href="#register-namespace" className={textLink}>
+                      Register the namespace
+                    </a>
+                    .
                   </Prose>
                   <CodeBlock cmds={INIT_CMDS} tabs={tabs} />
+                  <p className="text-muted-foreground text-[0.85rem] leading-6 mt-3">
+                    Tip: for a setup tailored to your framework, add the
+                    matching flag
+                    {frameworkInitFlag ? (
+                      <>
+                        {" "}
+                        — for {selectedFramework.label}, that&apos;s{" "}
+                        <code className={inlineCode}>
+                          {frameworkInitFlag}
+                        </code>
+                      </>
+                    ) : (
+                      ""
+                    )}
+                    :{" "}
+                    <code className={inlineCode}>-t next</code>,{" "}
+                    <code className={inlineCode}>-t vite</code>,{" "}
+                    <code className={inlineCode}>-t start</code>,{" "}
+                    <code className={inlineCode}>-t react-router</code> or{" "}
+                    <code className={inlineCode}>-t astro</code>. Laravel
+                    doesn&apos;t use a flag — the CLI detects it
+                    automatically.
+                  </p>
                 </section>
 
                 {/* Register namespace */}
