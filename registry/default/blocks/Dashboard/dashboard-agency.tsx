@@ -1588,13 +1588,13 @@ export default function Dashboard() {
     <div
       className={`min-h-screen w-full p-0 ${isDark ? "bg-black text-white" : "bg-gray-50 text-gray-900"}`}
     >
-      <div className="flex items-stretch gap-0 w-full min-h-screen">
+      <div className="w-full min-h-screen">
         {/* Sidebar */}
         <motion.aside
           initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4 }}
-          className={`sticky top-0 flex h-screen max-h-screen box-border flex-col w-[248px] shrink-0 overflow-hidden border-r p-3 ${
+          className={`fixed inset-y-0 left-0 z-30 flex h-screen max-h-screen box-border w-[248px] flex-col overflow-hidden border-r p-3 ${
             isDark ? "bg-black border-neutral-800" : "bg-white border-gray-100"
           }`}
         >
@@ -1731,7 +1731,7 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.05 }}
-          className={`flex-1 min-w-0 flex flex-col gap-4 p-3 md:p-4 ${
+          className={`ml-[248px] flex min-h-screen min-w-0 flex-col gap-4 p-3 md:p-4 ${
             isDark ? "bg-black" : "bg-gray-50"
           }`}
         >
