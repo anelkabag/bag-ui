@@ -72,24 +72,25 @@ const SOCIAL_LINKS = [
 
 export function Footer1() {
     return (
-        <footer className="border-t border-gray-100 mt-24 py-16 px-6">
+        <footer className="mt-24 border-t border-border bg-background px-6 py-16 text-foreground">
             <div className="max-w-7xl mx-auto px-6 pt-10s">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-14">
                     <div className="col-span-2 md:col-span-1">
                         <div className="flex items-center gap-2 mb-3">
-                            <Image src="/logo.png" alt="BagUI" width={16} height={16} />
-                            <span className="text-black font-semibold text-sm">Bag\Ui</span>
+                            <Image src="/logo.png" alt="BagUI" width={16} height={16} className="dark:hidden" />
+                            <Image src="/logoW.png" alt="BagUI" width={16} height={16} className="hidden dark:block" />
+                            <span className="text-sm font-semibold text-foreground">Bag\Ui</span>
                         </div>
-                        <p className="text-gray-400 text-xs leading-relaxed max-w-[180px]">
+                        <p className="max-w-[180px] text-xs leading-relaxed text-muted-foreground">
                             Spend less time building UI from scratch. Ship faster with Bag/UI.
                         </p>
                     </div>
                     <div>
-                        <p className="text-gray-400 text-xs font-semibold uppercase tracking-widest mb-4">Product</p>
+                        <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Product</p>
                         <ul className="space-y-2.5">
                             {FOOTER_PRODUCT.map((l) => (
                                 <li key={l.label}>
-                                    <Link href={l.href} className="text-gray-500 hover:text-black text-sm transition-colors">
+                                    <Link href={l.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
                                         {l.label}
                                     </Link>
                                 </li>
@@ -97,11 +98,11 @@ export function Footer1() {
                         </ul>
                     </div>
                     <div>
-                        <p className="text-gray-400 text-xs font-semibold uppercase tracking-widest mb-4">More</p>
+                        <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground">More</p>
                         <ul className="space-y-2.5">
                             {FOOTER_MORE.map((l) => (
                                 <li key={l.label}>
-                                    <Link href={l.href} className="text-gray-500 hover:text-black text-sm transition-colors">
+                                    <Link href={l.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
                                         {l.label}
                                     </Link>
                                 </li>
@@ -109,11 +110,11 @@ export function Footer1() {
                         </ul>
                     </div>
                     <div>
-                        <p className="text-gray-400 text-xs font-semibold uppercase tracking-widest mb-4">Legal</p>
+                        <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Legal</p>
                         <ul className="space-y-2.5">
                             {FOOTER_LEGAL.map((l) => (
                                 <li key={l.label}>
-                                    <Link href={l.href} className="text-gray-500 hover:text-black text-sm transition-colors">
+                                    <Link href={l.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
                                         {l.label}
                                     </Link>
                                 </li>
@@ -121,14 +122,14 @@ export function Footer1() {
                         </ul>
                     </div>
                 </div>
-                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pt-8 border-t border-gray-100">
-                    <p className="text-gray-400 text-xs">
+                <div className="flex flex-col items-start justify-between gap-6 border-t border-border pt-8 md:flex-row md:items-center">
+                    <p className="text-xs text-muted-foreground">
                         © {new Date().getFullYear()} Bag/UI - is not officially affiliated with shadcn/ui or Tailwind CSS. Built by{" "}
                         <a
                             href="https://www.anelka.life/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-[13px] text-gray-400 hover:text-black transition-colors underline underline-offset-4"
+                            className="text-[13px] text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
                         >
                             Anelka Bag
                         </a>
@@ -141,7 +142,7 @@ export function Footer1() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 title={label}
-                                className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-black  transition-all duration-200"
+                                className="flex h-9 w-9 items-center justify-center text-muted-foreground transition-all duration-200 hover:text-foreground"
                             >
                                 <Icon size={18} />
                             </a>

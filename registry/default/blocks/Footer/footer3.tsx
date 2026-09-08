@@ -104,16 +104,13 @@ function HeroBanner() {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.4 }}
-      className="relative isolate overflow-hidden rounded-[32px] bg-zinc-950 px-6 py-20 text-center sm:py-28"
+      className="relative isolate overflow-hidden rounded-[32px] bg-muted px-6 py-20 text-center text-foreground sm:py-28 dark:bg-zinc-950 dark:text-white"
     >
       {/* ambient glow rising from the bottom, monochrome instead of blue */}
       <motion.div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(120% 65% at 50% 120%, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0.08) 35%, transparent 68%)",
-        }}
+        className="bg-[radial-gradient(120%_65%_at_50%_120%,rgba(0,0,0,0.12)_0%,rgba(0,0,0,0.04)_35%,transparent_68%)] dark:bg-[radial-gradient(120%_65%_at_50%_120%,rgba(255,255,255,0.24)_0%,rgba(255,255,255,0.08)_35%,transparent_68%)]"
         animate={reduceMotion ? undefined : { opacity: [0.55, 1, 0.55] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
       />
@@ -121,20 +118,17 @@ function HeroBanner() {
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "conic-gradient(from 205deg at 50% 105%, transparent 0deg, rgba(255,255,255,0.10) 35deg, transparent 80deg, transparent 280deg, rgba(255,255,255,0.10) 325deg, transparent 360deg)",
-        }}
+        className="bg-[conic-gradient(from_205deg_at_50%_105%,transparent_0deg,rgba(0,0,0,0.06)_35deg,transparent_80deg,transparent_280deg,rgba(0,0,0,0.06)_325deg,transparent_360deg)] dark:bg-[conic-gradient(from_205deg_at_50%_105%,transparent_0deg,rgba(255,255,255,0.10)_35deg,transparent_80deg,transparent_280deg,rgba(255,255,255,0.10)_325deg,transparent_360deg)]"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white/15 to-transparent blur-2xl"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/10 to-transparent blur-2xl dark:from-white/15"
       />
 
       <div className="relative z-10 mx-auto max-w-2xl">
         <h2
           style={font}
-          className="text-3xl font-semibold leading-[1.15] tracking-tight text-white sm:text-5xl"
+          className="text-3xl font-semibold leading-[1.15] tracking-tight text-foreground sm:text-5xl dark:text-white"
         >
           Transform customer support
           <br className="hidden sm:block" /> with intelligent AI agents
@@ -144,7 +138,7 @@ function HeroBanner() {
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           style={font}
-          className="mt-9 inline-flex items-center gap-1.5 rounded-full bg-white px-6 py-3 text-sm font-semibold text-zinc-950 transition-colors duration-200 hover:bg-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 cursor-pointer"
+          className="mt-9 inline-flex cursor-pointer items-center gap-1.5 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors duration-200 hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-muted dark:focus-visible:ring-offset-zinc-950"
         >
           Start Free Trial
           <ChevronRight className="h-4 w-4" />
@@ -167,7 +161,7 @@ function SocialLink({
     <a
       href={href}
       aria-label={label}
-      className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 text-zinc-600 transition-colors duration-200 hover:border-zinc-950 hover:bg-zinc-950 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400"
+      className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors duration-200 hover:border-foreground hover:bg-foreground hover:text-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
       <Icon className="h-4 w-4" />
     </a>
@@ -178,19 +172,14 @@ function BrandColumn() {
   return (
     <motion.div variants={fadeUp} className="flex flex-col gap-5 lg:max-w-xs">
       <div className="flex items-center gap-2">
-        <Image
-          src="/logo.png"
-          alt="AutoMagic Logo"
-          width={20}
-          height={20}
-          className="object-contain"
-        />
+        <Image src="/logo.png" alt="BagUI Logo" width={20} height={20} className="object-contain dark:hidden" />
+        <Image src="/logoW.png" alt="BagUI Logo" width={20} height={20} className="hidden object-contain dark:block" />
 
-        <span style={font} className="text-lg font-semibold text-zinc-950">
+        <span style={font} className="text-lg font-semibold text-foreground">
           Bag\Ui
         </span>
       </div>
-      <p style={font} className="text-sm leading-relaxed text-zinc-500">
+      <p style={font} className="text-sm leading-relaxed text-muted-foreground">
         Modern AI support platform designed to automate conversations and
         deliver faster customer responses.
       </p>
@@ -206,7 +195,7 @@ function BrandColumn() {
 function LinkColumn({ title, links }: { title: string; links: string[] }) {
   return (
     <motion.div variants={fadeUp} className="flex flex-col gap-4">
-      <h4 style={font} className="text-sm font-semibold text-zinc-950">
+      <h4 style={font} className="text-sm font-semibold text-foreground">
         {title}
       </h4>
       <ul className="flex flex-col gap-3">
@@ -215,7 +204,7 @@ function LinkColumn({ title, links }: { title: string; links: string[] }) {
             <a
               href="#"
               style={font}
-              className="text-sm text-zinc-500 transition-colors duration-200 hover:text-zinc-950"
+              className="text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
             >
               {l}
             </a>
@@ -231,16 +220,16 @@ function CompanyColumn() {
 
   return (
     <motion.div variants={fadeUp} className="flex flex-col gap-4">
-      <h4 style={font} className="text-sm font-semibold text-zinc-950">
+      <h4 style={font} className="text-sm font-semibold text-foreground">
         Company
       </h4>
-      <p style={font} className="text-sm leading-relaxed text-zinc-500">
+      <p style={font} className="text-sm leading-relaxed text-muted-foreground">
         Helping teams create faster, smarter, and more reliable customer support
         experiences with AI
       </p>
       <form
         onSubmit={(e) => e.preventDefault()}
-        className="flex items-center justify-between gap-1 rounded-full border border-zinc-200 py-1 pl-4 pr-1 transition-colors duration-200 focus-within:border-zinc-400"
+        className="flex items-center justify-between gap-1 rounded-full border border-border py-1 pl-4 pr-1 transition-colors duration-200 focus-within:border-ring"
       >
         <input
           type="email"
@@ -249,14 +238,14 @@ function CompanyColumn() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email address"
           style={font}
-          className="w-full bg-transparent text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none"
+          className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
         />
         <motion.button
           type="submit"
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           style={font}
-          className="flex shrink-0 items-center gap-1 rounded-full bg-zinc-950 px-4 py-2 text-sm font-medium text-white transition-colors duration-200 hover:bg-zinc-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400"
+          className="flex shrink-0 items-center gap-1 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           Subscribe
           <ChevronRight className="h-3.5 w-3.5" />
@@ -276,25 +265,25 @@ function BottomBar() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.4 }}
       transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
-      className="mt-10 flex flex-col items-center justify-between gap-3 rounded-xl bg-zinc-100 px-6 py-4 sm:flex-row"
+      className="mt-10 flex flex-col items-center justify-between gap-3 rounded-xl bg-muted px-6 py-4 text-muted-foreground sm:flex-row"
     >
-      <p style={font} className="text-xs text-zinc-500">
+      <p style={font} className="text-xs text-muted-foreground">
         © {year} Bag\Ui. All rights reserved.
       </p>
       <div
         style={font}
-        className="flex items-center gap-4 text-xs text-zinc-500"
+        className="flex items-center gap-4 text-xs text-muted-foreground"
       >
         <a
           href="#"
-          className="transition-colors duration-200 hover:text-zinc-950"
+          className="transition-colors duration-200 hover:text-foreground"
         >
           Privacy Policy
         </a>
-        <span className="h-3 w-px bg-zinc-300" aria-hidden />
+        <span className="h-3 w-px bg-border" aria-hidden />
         <a
           href="#"
-          className="transition-colors duration-200 hover:text-zinc-950"
+          className="transition-colors duration-200 hover:text-foreground"
         >
           Terms &amp; Conditions
         </a>

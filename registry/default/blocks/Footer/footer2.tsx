@@ -63,7 +63,7 @@ function AvatarStack() {
         {AVATARS.map((a) => (
           <div
             key={a.id}
-            className="w-10 h-10 rounded-sm border-2 border-white overflow-hidden bg-zinc-100 select-none flex-shrink-0"
+            className="h-10 w-10 flex-shrink-0 select-none overflow-hidden rounded-sm border-2 border-white bg-zinc-100 dark:border-zinc-950 dark:bg-zinc-800"
           >
             <Image
               src={a.src}
@@ -84,7 +84,7 @@ function LeftHeading() {
   return (
     <motion.h2
       variants={slide}
-      className="text-[1.85rem] sm:text-[2.1rem] leading-[1.18] tracking-[-0.025em] text-zinc-900"
+      className="text-[1.85rem] leading-[1.18] tracking-[-0.025em] text-foreground sm:text-[2.1rem]"
       style={{ fontFamily: "'Geist', 'Inter', system-ui, sans-serif" }}
     >
       We build digital products
@@ -103,19 +103,19 @@ function CTACard() {
   return (
     <motion.div
       variants={slide}
-      className="flex items-center gap-4 rounded-2xl px-5 py-4 w-fit bg-gray-100"
+      className="flex w-fit items-center gap-4 rounded-2xl bg-muted px-5 py-4"
     >
       <motion.button
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
-        className="text-sm font-semibold px-5 py-2.5 rounded-xl whitespace-nowrap transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 bg-black text-white cursor-pointer"
+        className="cursor-pointer whitespace-nowrap rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         Let&apos;s talk
       </motion.button>
       <div
         className="text-[12px] leading-[1.6]"
         style={{
-          color: "#71717a",
+          color: "var(--muted-foreground)",
           fontFamily: "'Geist', 'Inter', system-ui, sans-serif",
         }}
       >
@@ -134,7 +134,7 @@ function TrustBadges() {
         <p
           className="text-[9px] font-semibold uppercase tracking-widest"
           style={{
-            color: "#71717a",
+            color: "var(--muted-foreground)",
             fontFamily: "'Geist', 'Inter', system-ui, sans-serif",
           }}
         >
@@ -142,7 +142,7 @@ function TrustBadges() {
         </p>
         <div className="flex items-center gap-1.5">
           <span
-            className="text-[1.25rem] font-bold tracking-tight leading-none text-zinc-900"
+            className="text-[1.25rem] font-bold leading-none tracking-tight text-foreground"
             style={{ fontFamily: "'Geist', 'Inter', system-ui, sans-serif" }}
           >
             Clutch
@@ -152,7 +152,7 @@ function TrustBadges() {
         <p
           className="text-[9px] -mt-0.5"
           style={{
-            color: "#71717a",
+            color: "var(--muted-foreground)",
             fontFamily: "'Geist', 'Inter', system-ui, sans-serif",
           }}
         >
@@ -160,14 +160,14 @@ function TrustBadges() {
         </p>
       </div>
 
-      <div className="w-px h-10 bg-zinc-200" />
+      <div className="h-10 w-px bg-border" />
 
       {/* Webflow */}
       <div className="flex flex-col gap-0.5">
         <p
           className="text-[9px] font-semibold uppercase tracking-widest"
           style={{
-            color: "#71717a",
+            color: "var(--muted-foreground)",
             fontFamily: "'Geist', 'Inter', system-ui, sans-serif",
           }}
         >
@@ -185,7 +185,7 @@ function TrustBadges() {
             />
           </svg>
           <span
-            className="text-[1.25rem] font-bold tracking-tight leading-none text-zinc-900"
+            className="text-[1.25rem] font-bold leading-none tracking-tight text-foreground"
             style={{ fontFamily: "'Geist', 'Inter', system-ui, sans-serif" }}
           >
             Webflow
@@ -206,13 +206,12 @@ function RightPanel() {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
-      className="h-full rounded-[2rem] flex flex-col justify-between p-10 sm:p-12"
-      style={{ backgroundColor: "#09090b" }}
+      className="flex h-full flex-col justify-between rounded-[2rem] bg-card p-10 text-card-foreground sm:p-12"
     >
       <div className="space-y-7">
         <div className="space-y-2">
           <h3
-            className="text-[#fafafa] text-2xl sm:text-[1.75rem] font-semibold leading-[1.25] tracking-[-0.02em]"
+            className="text-2xl font-semibold leading-[1.25] tracking-[-0.02em] text-card-foreground sm:text-[1.75rem]"
             style={font}
           >
             Let&apos;s build something your
@@ -221,7 +220,8 @@ function RightPanel() {
           </h3>
           <p
             className="text-base font-normal"
-            style={{ color: "#52525b", ...font }}
+            className="text-base font-normal text-muted-foreground"
+            style={font}
           >
             Ready to get started?
           </p>
@@ -231,22 +231,16 @@ function RightPanel() {
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="text-sm font-semibold px-6 py-3 rounded-xl transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-300 cursor-pointer"
-            style={{ backgroundColor: "#fafafa", color: "#09090b", ...font }}
+            className="cursor-pointer rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            style={font}
           >
             Start a Project
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="text-sm font-semibold px-6 py-3 rounded-xl transition-colors duration-200 focus:outline-none focus-visible:ring-2 cursor-pointer"
-            style={{ backgroundColor: "#27272a", color: "#fafafa", ...font }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.backgroundColor = "#3f3f46")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.backgroundColor = "#27272a")
-            }
+            className="cursor-pointer rounded-xl bg-secondary px-6 py-3 text-sm font-semibold text-secondary-foreground transition-colors duration-200 hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            style={font}
           >
             Book a Call
           </motion.button>
@@ -255,13 +249,13 @@ function RightPanel() {
 
       <div
         className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mt-10 pt-8"
-        style={{ borderTop: "1px solid #27272a" }}
+        className="mt-10 flex flex-col justify-between gap-5 border-t border-border pt-8 sm:flex-row sm:items-end"
       >
         <div className="space-y-1 ">
-          <p className="text-sm text-gray-300">
+          <p className="text-sm text-muted-foreground">
             support@bagui.dev
           </p>
-          <p className="text-xs text-[#3f3f46]" >
+          <p className="text-xs text-muted-foreground">
             © {currentYear} BagUI. All rights reserved.
           </p>
         </div>
@@ -271,24 +265,20 @@ function RightPanel() {
             <a
               key={link}
               href="#"
-              className="text-xs capitalize transition-colors duration-200"
-              style={{ color: "#52525b", ...font }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#fafafa")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#52525b")}
+              className="text-xs capitalize text-muted-foreground transition-colors duration-200 hover:text-foreground"
+              style={font}
             >
               {link}
             </a>
           ))}
           <span
             className="w-px h-3 hidden sm:block"
-            style={{ backgroundColor: "#27272a" }}
+            className="hidden h-3 w-px bg-border sm:block"
           />
           <a
             href="#"
-            className="text-xs transition-colors duration-200"
-            style={{ color: "#52525b", ...font }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#fafafa")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "#52525b")}
+            className="text-xs text-muted-foreground transition-colors duration-200 hover:text-foreground"
+            style={font}
           >
             Privacy Policy
           </a>
