@@ -13,7 +13,7 @@ import {
   FaGithub, // GitHub
   FaYoutube, // YouTube
   FaThreads, // Threads
-  FaWhatsapp, // WhatsApp
+  FaDiscord, // Discord
 } from "react-icons/fa6";
 
 const FOOTER_PRODUCT = [
@@ -68,9 +68,9 @@ const SOCIAL_LINKS = [
     Icon: FaThreads,
   },
   {
-    label: "WhatsApp",
-    href: "https://whatsapp.com/channel/0029Vb7dYvr3mFYBKj9Dew25",
-    Icon: FaWhatsapp,
+    label: "Discord",
+    href: "https://discord.gg/zScDvSZDJE",
+    Icon: FaDiscord,
   },
 ];
 
