@@ -33,12 +33,12 @@ export default async function AccountPage() {
       plan: string | null;
     }>();
 
-  // Ne PAS rediriger vers /login si le profil a une erreur
+  // Do not redirect to /login when the profile query fails.
   if (error) {
-    console.error("Erreur lors de la lecture du profil:", error);
+    console.error("Error reading profile:", error);
   }
 
-  // Récupérer l'historique de téléchargements
+  // Load the download history.
   interface DownloadItem {
     component: string;
     count: number;
@@ -60,7 +60,7 @@ export default async function AccountPage() {
       .limit(50);
 
     if (!downloadsError && downloads) {
-      // Grouper par composant et compter les téléchargements
+      // Group downloads by component and count them.
       const groupedDownloads: DownloadItem[] = downloads.reduce(
         (acc: DownloadItem[], download) => {
           const existing = acc.find((d) => d.component === download.component);
@@ -92,7 +92,7 @@ export default async function AccountPage() {
       };
     }
   } catch (err) {
-    console.error("Erreur lors de la récupération des téléchargements:", err);
+    console.error("Error fetching downloads:", err);
   }
 
   const username =
@@ -111,7 +111,7 @@ export default async function AccountPage() {
     plan: "free",
   };
 
-  // Le plan vient maintenant de profiles.plan
+  // The plan is now read from profiles.plan.
   const rawPlan =
     profile.plan ??
     user.user_metadata?.plan ??

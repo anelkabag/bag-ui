@@ -49,7 +49,7 @@ export function ProfileEditForm({ profile, email }: ProfileEditFormProps) {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || "Erreur lors de la mise à jour");
+        throw new Error(data.error || "Error updating profile");
       }
 
       setSuccess(true);
@@ -58,7 +58,7 @@ export function ProfileEditForm({ profile, email }: ProfileEditFormProps) {
 
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Une erreur est survenue");
+      setError(err instanceof Error ? err.message : "An unexpected error occurred");
     } finally {
       setIsLoading(false);
     }
@@ -75,11 +75,11 @@ export function ProfileEditForm({ profile, email }: ProfileEditFormProps) {
 
       {success && (
         <div className="rounded-lg border border-green-500/30 bg-green-500/10 p-4 text-sm text-green-400">
-          Profil mis à jour avec succès !
+          Profile updated successfully!
         </div>
       )}
 
-      {/* Affichage */}
+      {/* Profile details */}
       {!isEditing ? (
         <div className="space-y-6">
           {/* Avatar */}
@@ -94,18 +94,18 @@ export function ProfileEditForm({ profile, email }: ProfileEditFormProps) {
               />
             </div>
             <div>
-              <p className="text-sm text-white/60">Photo de profil</p>
+              <p className="text-sm text-white/60">Profile photo</p>
               <p className="text-2xl font-semibold text-white">
                 {formData.username}
               </p>
             </div>
           </div>
 
-          {/* Infos */}
+          {/* Details */}
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="rounded-lg border border-white/10 bg-white/5 p-4">
               <p className="text-xs uppercase tracking-widest text-white/40">
-                Nom d'utilisateur
+                Username
               </p>
               <p className="mt-2 text-lg font-medium text-white">
                 {formData.username}
@@ -122,7 +122,7 @@ export function ProfileEditForm({ profile, email }: ProfileEditFormProps) {
             {formData.avatar_url && (
               <div className="rounded-lg border border-white/10 bg-white/5 p-4 sm:col-span-2">
                 <p className="text-xs uppercase tracking-widest text-white/40">
-                  URL Avatar
+                  Avatar URL
                 </p>
                 <p className="mt-2 truncate text-sm text-white/80">
                   {formData.avatar_url}
@@ -135,32 +135,32 @@ export function ProfileEditForm({ profile, email }: ProfileEditFormProps) {
             onClick={() => setIsEditing(true)}
             className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-2.5 text-sm font-medium text-black transition-all hover:bg-white/90"
           >
-            Modifier le profil
+            Edit profile
           </button>
         </div>
       ) : (
-        /* Formulaire d'édition */
+        /* Edit form */
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Nom d'utilisateur */}
+          {/* Username */}
           <div>
             <label className="block text-sm font-medium text-white mb-2">
-              Nom d'utilisateur
+              Username
             </label>
             <input
               type="text"
               name="username"
               value={formData.username}
               onChange={handleChange}
-              placeholder="Votre nom d'utilisateur"
+              placeholder="Your username"
               className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/40 outline-none transition-all focus:border-white/30 focus:bg-white/10"
               disabled={isLoading}
             />
           </div>
 
-          {/* URL Avatar */}
+          {/* Avatar URL */}
           <div>
             <label className="block text-sm font-medium text-white mb-2">
-              URL de la photo de profil
+              Profile photo URL
             </label>
             <input
               type="url"
@@ -173,14 +173,14 @@ export function ProfileEditForm({ profile, email }: ProfileEditFormProps) {
             />
           </div>
 
-          {/* Aperçu */}
+          {/* Preview */}
           {formData.avatar_url && (
             <div>
-              <p className="text-sm text-white/60 mb-2">Aperçu de l'avatar</p>
+              <p className="text-sm text-white/60 mb-2">Avatar preview</p>
               <div className="h-32 w-32 overflow-hidden rounded-lg border border-white/10 bg-white/5">
                 <Image
                   src={formData.avatar_url}
-                  alt="Aperçu"
+                  alt="Preview"
                   width={128}
                   height={128}
                   className="h-full w-full object-cover"
@@ -189,21 +189,21 @@ export function ProfileEditForm({ profile, email }: ProfileEditFormProps) {
                       ...prev,
                       avatar_url: "",
                     }));
-                    setError("L'image n'a pas pu être chargée");
+                    setError("The image could not be loaded");
                   }}
                 />
               </div>
             </div>
           )}
 
-          {/* Boutons */}
+          {/* Actions */}
           <div className="flex gap-3">
             <button
               type="submit"
               disabled={isLoading}
               className="flex-1 rounded-lg bg-white px-4 py-2.5 text-sm font-medium text-black transition-all hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? "Sauvegarde..." : "Enregistrer"}
+              {isLoading ? "Saving..." : "Save"}
             </button>
             <button
               type="button"
@@ -218,7 +218,7 @@ export function ProfileEditForm({ profile, email }: ProfileEditFormProps) {
               disabled={isLoading}
               className="rounded-lg border border-white/10 px-4 py-2.5 text-sm font-medium text-white transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Annuler
+              Cancel
             </button>
           </div>
         </form>
