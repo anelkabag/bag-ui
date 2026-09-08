@@ -72,7 +72,7 @@ export default function UserMenu() {
     <div className="relative">
       <button
         onClick={toggle}
-        className="block rounded-full ring-2 ring-white shadow-sm hover:shadow-md transition cursor-pointer"
+        className="block cursor-pointer rounded-full ring-2 ring-white shadow-sm transition hover:shadow-md dark:ring-neutral-800"
       >
         <Image
           src={profile?.avatar_url ?? "/faviconblack.png"}
@@ -89,7 +89,7 @@ export default function UserMenu() {
           <div className="fixed inset-0 z-40 cursor-pointer" onClick={close} />
 
           <div
-            className={`absolute right-0 z-50 mt-2 w-60 origin-top-right overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-xl transition-all duration-150 ease-out ${
+            className={`absolute right-0 z-50 mt-2 w-60 origin-top-right overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-xl transition-all duration-150 ease-out dark:border-neutral-800 dark:bg-neutral-950 dark:shadow-black/40 ${
               open
                 ? "scale-100 opacity-100 translate-y-0"
                 : "scale-95 opacity-0 -translate-y-1"
@@ -97,12 +97,12 @@ export default function UserMenu() {
           >
             {/* Header: identity card */}
             <div className="p-2.5">
-              <div className="flex items-center justify-between gap-3 rounded-2xl border border-gray-100 p-2.5">
+              <div className="flex items-center justify-between gap-3 rounded-2xl border border-gray-100 p-2.5 dark:border-neutral-800">
                 <div className="min-w-0">
-                  <p className="truncate font-semibold text-gray-900">
+                  <p className="truncate font-semibold text-gray-900 dark:text-neutral-50">
                     {profile?.username ?? "Your account"}
                   </p>
-                  <p className="truncate text-sm text-gray-400">{user.email}</p>
+                  <p className="truncate text-sm text-gray-400 dark:text-neutral-500">{user.email}</p>
                 </div>
 
                 <div className="relative shrink-0">
@@ -112,7 +112,7 @@ export default function UserMenu() {
                       alt="User avatar"
                       width={38}
                       height={38}
-                      className="h-[38px] w-[38px] rounded-full border-2 border-white object-cover"
+                      className="h-[38px] w-[38px] rounded-full border-2 border-white object-cover dark:border-neutral-950"
                     />
                   </div>
                 </div>
@@ -120,7 +120,7 @@ export default function UserMenu() {
             </div>
 
             {/* Primary actions */}
-            <div className="flex flex-col gap-0.5 px-2.5 pb-2 text-sm text-gray-700">
+            <div className="flex flex-col gap-0.5 px-2.5 pb-2 text-sm text-gray-700 dark:text-neutral-300">
               <MenuItem
                 href="/account"
                 icon={<BadgeCheck className="h-5 w-5" />}
@@ -135,8 +135,8 @@ export default function UserMenu() {
                 icon={<MessageCircle className="h-5 w-5" />}
                 onClick={() => close()}
                 right={
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100">
-                    <Plus className="h-3.5 w-3.5 text-gray-500" />
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 dark:bg-neutral-800">
+                    <Plus className="h-3.5 w-3.5 text-gray-500 dark:text-neutral-400" />
                   </span>
                 }
               >
@@ -151,8 +151,8 @@ export default function UserMenu() {
                   <span
                     className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${
                       isProPlan
-                        ? "bg-emerald-100 text-emerald-700"
-                        : "bg-gray-800 text-white"
+                        ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"
+                        : "bg-gray-800 text-white dark:bg-neutral-800"
                     }`}
                   >
                     {isProPlan ? (
@@ -174,10 +174,10 @@ export default function UserMenu() {
               </MenuItem>
             </div>
 
-            <div className="border-t border-gray-100" />
+            <div className="border-t border-gray-100 dark:border-neutral-800" />
 
             {/* Secondary actions */}
-            <div className="flex flex-col gap-0.5 p-2.5 text-sm text-gray-700">
+            <div className="flex flex-col gap-0.5 p-2.5 text-sm text-gray-700 dark:text-neutral-300">
               <MenuItem
                 href="/help"
                 icon={<Info className="h-5 w-5" />}
@@ -220,17 +220,17 @@ function MenuItem({
 }) {
   const className = `group flex w-full items-center justify-between gap-3 rounded-2xl px-2.5 py-2 text-left transition-colors duration-150 cursor-pointer ${
     active
-      ? "bg-gray-100 font-medium text-gray-900"
-      : "text-gray-700 hover:bg-gray-50 active:bg-gray-100"
+      ? "bg-gray-100 font-medium text-gray-900 dark:bg-neutral-800 dark:text-neutral-50"
+      : "text-gray-700 hover:bg-gray-50 active:bg-gray-100 dark:text-neutral-300 dark:hover:bg-neutral-900 dark:active:bg-neutral-800"
   }`;
 
   const content = (
     <>
       <span className="flex items-center gap-3">
-        <span className="text-gray-700 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:text-gray-900">
+        <span className="text-gray-700 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:text-gray-900 dark:text-neutral-400 dark:group-hover:text-neutral-100">
           {icon}
         </span>
-        <span className="transition-colors duration-150 group-hover:text-gray-900">
+        <span className="transition-colors duration-150 group-hover:text-gray-900 dark:group-hover:text-neutral-50">
           {children}
         </span>
       </span>

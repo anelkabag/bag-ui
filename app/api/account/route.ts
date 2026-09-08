@@ -21,7 +21,7 @@ export async function GET() {
 
   const { data: profile, error } = await supabase
     .from("profiles")
-    .select("id, email, username, avatar_url, created_at, updated_at")
+    .select("id, email, username, avatar_url, created_at, updated_at, plan")
     .eq("id", user.id)
     .maybeSingle<{
       id: string;
@@ -30,6 +30,7 @@ export async function GET() {
       avatar_url: string | null;
       created_at: string;
       updated_at: string;
+      plan: string | null;
     }>();
 
   if (error && error.code !== "PGRST116") {
