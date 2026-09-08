@@ -247,12 +247,11 @@ function RightPanel() {
       </div>
 
       <div
-        className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mt-10 pt-8"
         className="mt-10 flex flex-col justify-between gap-5 border-t border-border pt-8 sm:flex-row sm:items-end"
       >
         <div className="space-y-1 ">
           <p className="text-sm text-muted-foreground">
-            support@bagui.dev
+            support@bagui.pro
           </p>
           <p className="text-xs text-muted-foreground">
             © {currentYear} BagUI. All rights reserved.
@@ -270,10 +269,7 @@ function RightPanel() {
               {link}
             </a>
           ))}
-          <span
-            className="w-px h-3 hidden sm:block"
-            className="hidden h-3 w-px bg-border sm:block"
-          />
+          <span className="hidden h-3 w-px bg-border sm:block" />
           <a
             href="#"
             className="text-xs text-muted-foreground transition-colors duration-200 hover:text-foreground"
