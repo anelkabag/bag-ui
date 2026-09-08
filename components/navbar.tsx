@@ -11,7 +11,7 @@ import UnauthNav from "@/components/auth/UnauthNav";
 const NAV_LINKS = [
   { label: "Blocks", href: "/blocks" },
   { label: "Templates", href: "/templates" },
-  { label: "Components", href: "/components" },
+  // { label: "Components", href: "/components" },
   { label: "Pricing", href: "/pricing" },
   { label: "Docs", href: "/docs" },
 ] as const;
