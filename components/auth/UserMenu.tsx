@@ -131,7 +131,7 @@ export default function UserMenu() {
               </MenuItem>
 
               <MenuItem
-                href="https://whatsapp.com/channel/0029Vb7dYvr3mFYBKj9Dew25"
+                href="https://discord.gg/zScDvSZDJE"
                 icon={<MessageCircle className="h-5 w-5" />}
                 onClick={() => close()}
                 right={
