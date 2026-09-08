@@ -1,5 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createSupabaseRouteHandlerClient } from "@/lib/supabase/server";
+import {
+  createSupabaseRouteHandlerClient,
+  createSupabaseServiceRoleClient,
+} from "@/lib/supabase/server";
 
 export async function GET() {
   const supabase = await createSupabaseRouteHandlerClient();
@@ -131,6 +134,86 @@ export async function PUT(request: NextRequest) {
     console.error("Error:", error);
     return NextResponse.json(
       { error: "Erreur interne du serveur" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const supabase = await createSupabaseRouteHandlerClient();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user || !user.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await request.json().catch(() => null);
+    const password = typeof body?.password === "string" ? body.password : "";
+
+    if (!password) {
+      return NextResponse.json(
+        { error: "Password is required" },
+        { status: 400 },
+      );
+    }
+
+    const { error: passwordError } = await supabase.auth.signInWithPassword({
+      email: user.email,
+      password,
+    });
+
+    if (passwordError) {
+      return NextResponse.json({ error: "Invalid password" }, { status: 400 });
+    }
+
+    const serviceSupabase = await createSupabaseServiceRoleClient();
+
+    const { error: downloadsError } = await serviceSupabase
+      .from("component_downloads")
+      .delete()
+      .eq("user_id", user.id);
+
+    if (downloadsError) {
+      console.error("Error deleting download history:", downloadsError);
+      return NextResponse.json(
+        { error: "Unable to delete account data" },
+        { status: 500 },
+      );
+    }
+
+    const { error: profileError } = await serviceSupabase
+      .from("profiles")
+      .delete()
+      .eq("id", user.id);
+
+    if (profileError) {
+      console.error("Error deleting profile:", profileError);
+      return NextResponse.json(
+        { error: "Unable to delete account data" },
+        { status: 500 },
+      );
+    }
+
+    const { error: deleteUserError } =
+      await serviceSupabase.auth.admin.deleteUser(user.id);
+
+    if (deleteUserError) {
+      console.error("Error deleting auth user:", deleteUserError);
+      return NextResponse.json(
+        { error: "Unable to delete account" },
+        { status: 500 },
+      );
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Error deleting account:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
       { status: 500 },
     );
   }

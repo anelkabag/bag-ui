@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Mail, Bookmark, Pencil, CheckCircle2, Circle, BadgeCheck } from "lucide-react";
 import { ProfileEditForm } from "@/components/ProfileEditForm";
 import { DownloadsHistory } from "@/components/DownloadsHistory";
+import { AccountActions } from "@/components/AccountActions";
 
 export default async function AccountPage() {
   const supabase = await createSupabaseServerClient();
@@ -340,6 +341,16 @@ export default async function AccountPage() {
           downloads={downloadsData.downloads}
           total={downloadsData.total}
         />
+
+        {/* Account actions */}
+        <div className="rounded-[32px] border border-white/10 bg-[#111111]/90 p-10 shadow-2xl shadow-black/40">
+          <p className="text-sm uppercase tracking-[0.35em] text-white/40">
+            Account Actions
+          </p>
+          <div className="mt-6">
+            <AccountActions />
+          </div>
+        </div>
       </div>
     </main>
   );
