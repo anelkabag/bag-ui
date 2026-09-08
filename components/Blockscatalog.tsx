@@ -92,7 +92,7 @@ export default function BlocksCatalog() {
 
   return (
     <div className="w-full border-t border-border">
-      <section className="px-6 md:px-12 lg:px-16">
+      <section className="px-0 md:px-12 lg:px-16">
         <div className="mx-auto max-w-7xl border-x border-border px-6 py-16 md:py-20">
           {/* Header */}
           <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
