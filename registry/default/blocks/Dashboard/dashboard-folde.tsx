@@ -1951,7 +1951,7 @@ export default function baguiDashboard() {
   const [toasts, setToasts] = useState<{ id: number; message: string }[]>([]);
   const toastIdRef = useRef(0);
 
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true);
   const toggleDark = useCallback(() => setIsDark((v) => !v), []);
 
   const pushToast = useCallback((message: string) => {
