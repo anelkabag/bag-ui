@@ -109,16 +109,14 @@ function HeroBanner() {
       {/* ambient glow rising from the bottom, monochrome instead of blue */}
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute inset-0"
-        className="bg-[radial-gradient(120%_65%_at_50%_120%,rgba(0,0,0,0.12)_0%,rgba(0,0,0,0.04)_35%,transparent_68%)] dark:bg-[radial-gradient(120%_65%_at_50%_120%,rgba(255,255,255,0.24)_0%,rgba(255,255,255,0.08)_35%,transparent_68%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_65%_at_50%_120%,rgba(0,0,0,0.12)_0%,rgba(0,0,0,0.04)_35%,transparent_68%)] dark:bg-[radial-gradient(120%_65%_at_50%_120%,rgba(255,255,255,0.24)_0%,rgba(255,255,255,0.08)_35%,transparent_68%)]"
         animate={reduceMotion ? undefined : { opacity: [0.55, 1, 0.55] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
       />
       {/* faint converging light beams */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0"
-        className="bg-[conic-gradient(from_205deg_at_50%_105%,transparent_0deg,rgba(0,0,0,0.06)_35deg,transparent_80deg,transparent_280deg,rgba(0,0,0,0.06)_325deg,transparent_360deg)] dark:bg-[conic-gradient(from_205deg_at_50%_105%,transparent_0deg,rgba(255,255,255,0.10)_35deg,transparent_80deg,transparent_280deg,rgba(255,255,255,0.10)_325deg,transparent_360deg)]"
+        className="pointer-events-none absolute inset-0 bg-[conic-gradient(from_205deg_at_50%_105%,transparent_0deg,rgba(0,0,0,0.06)_35deg,transparent_80deg,transparent_280deg,rgba(0,0,0,0.06)_325deg,transparent_360deg)] dark:bg-[conic-gradient(from_205deg_at_50%_105%,transparent_0deg,rgba(255,255,255,0.10)_35deg,transparent_80deg,transparent_280deg,rgba(255,255,255,0.10)_325deg,transparent_360deg)]"
       />
       <div
         aria-hidden
