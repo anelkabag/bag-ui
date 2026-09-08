@@ -219,7 +219,6 @@ function RightPanel() {
             customers will remember.
           </h3>
           <p
-            className="text-base font-normal"
             className="text-base font-normal text-muted-foreground"
             style={font}
           >
