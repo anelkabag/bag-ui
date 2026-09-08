@@ -34,7 +34,7 @@
         }
       ],
       "access": {
-        "tier": "free"
+        "tier": "pro"
       }
     },
     {
@@ -51,7 +51,7 @@
         }
       ],
       "access": {
-        "tier": "free"
+        "tier": "pro"
       }
     },
     {
@@ -68,7 +68,7 @@
         }
       ],
       "access": {
-        "tier": "pro"
+        "tier": "free"
       }
     },
     {
@@ -473,6 +473,23 @@
           "path": "registry/default/blocks/Dashboard/dashboard-task.tsx",
           "type": "registry:block",
           "target": "components/Dashboard/dashboard-task.tsx"
+        }
+      ],
+      "access": {
+        "tier": "pro"
+      }
+    },
+    {
+      "name": "dashboard-docs",
+      "type": "registry:block",
+      "title": "Modern Docs Dashboard",
+      "description": "",
+      "dependencies": ["framer-motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/Dashboard/dashboard-docs.tsx",
+          "type": "registry:block",
+          "target": "components/Dashboard/dashboard-docs.tsx"
         }
       ],
       "access": {
