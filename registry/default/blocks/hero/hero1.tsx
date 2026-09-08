@@ -52,7 +52,7 @@ export default function Hero1() {
     >
       <motion.header
         className={[
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+          "relative z-50 transition-all duration-300",
           scrolled
             ? "bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md shadow-[0_1px_0_0_rgba(0,0,0,0.06)] dark:shadow-[0_1px_0_0_rgba(255,255,255,0.06)]"
             : "bg-transparent",
@@ -196,7 +196,7 @@ export default function Hero1() {
         </AnimatePresence>
       </motion.header>
 
-      <section className="relative pt-28 pb-24 md:pt-36 md:pb-32 overflow-hidden">
+      <section className="relative pt-12 pb-24 md:pt-16 md:pb-32 overflow-hidden">
         <motion.div
           className="pointer-events-none absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full bg-zinc-100 dark:bg-zinc-900"
           style={{ y: y1 }}
