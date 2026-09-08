@@ -119,7 +119,7 @@ const monthVariants: Variants = {
 
 export default function Hero2() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true);
 
   const [viewDate, setViewDate] = useState({
     year: TODAY.year,
