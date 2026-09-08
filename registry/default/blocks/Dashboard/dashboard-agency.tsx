@@ -1594,10 +1594,9 @@ export default function Dashboard() {
           initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4 }}
-          className={`sticky top-0 flex flex-col w-[248px] shrink-0 border-r p-3 ${
+          className={`sticky top-0 flex h-screen max-h-screen box-border flex-col w-[248px] shrink-0 overflow-hidden border-r p-3 ${
             isDark ? "bg-black border-neutral-800" : "bg-white border-gray-100"
           }`}
-          style={{ height: "100vh" }}
         >
           <div className="flex items-center justify-between mb-4">
             <button
