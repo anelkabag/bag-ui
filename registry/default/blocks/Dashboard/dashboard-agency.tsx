@@ -1421,7 +1421,7 @@ export default function Dashboard() {
   const [activePage, setActivePage] = useState("Dashboard");
   const [txs, setTxs] = useState<Transaction[]>(initialTransactions);
   const [query, setQuery] = useState("");
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [nextId, setNextId] = useState(4914);
   const [notifOpen, setNotifOpen] = useState(false);
