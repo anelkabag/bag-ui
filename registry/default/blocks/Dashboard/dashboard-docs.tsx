@@ -48,7 +48,7 @@ type NavKey = "home" | "tasks" | "calendar" | "teams" | "docs" | "automations" |
 
 type DocFile = { id: string; name: string; sharedBy: string; size: string; created: string };
 
-type DocCategory = { id: string; title: string; description: string; icon: IconType; files: DocFile[] };
+type DocCategory = { id: string; title: string; description: string; icon: IconType; projectId: string; files: DocFile[] };
 
 type FilterKey = "all" | "connected" | "notConnected";
 
@@ -94,6 +94,7 @@ const docCategories: DocCategory[] = [
     id: "specs",
     title: "Product Specs",
     icon: ArrowUpDown,
+    projectId: "atlas",
     description: "Centralized documentation for feature requirements, user stories, and technical specs across releases.",
     files: [
       { id: "f1", name: "checkout-redesign-spec.pdf", sharedBy: "Sarah M.", size: "240 KB", created: "June 30, 2025 · 2:10 PM" },
@@ -105,6 +106,7 @@ const docCategories: DocCategory[] = [
     id: "guidelines",
     title: "Engineering Guidelines",
     icon: Clock,
+    projectId: "orion",
     description: "Best practices, coding standards, and architecture decisions to keep engineering consistent and scalable.",
     files: [
       { id: "f4", name: "code-review-checklist.md", sharedBy: "Mehedi H.", size: "12 KB", created: "June 29, 2025 · 9:00 AM" },
@@ -115,6 +117,7 @@ const docCategories: DocCategory[] = [
     id: "api",
     title: "API References",
     icon: Braces,
+    projectId: "orion",
     description: "Endpoint definitions, payload structures, and authentication guides for internal and external API use.",
     files: [
       { id: "f6", name: "public-api-v2.yaml", sharedBy: "Ahsan R.", size: "88 KB", created: "June 27, 2025 · 11:40 AM" },
@@ -126,6 +129,7 @@ const docCategories: DocCategory[] = [
     id: "design",
     title: "Design System",
     icon: Palette,
+    projectId: "atlas",
     description: "Components, UI patterns, usage rules, and branding assets for maintaining visual and UX consistency.",
     files: [
       { id: "f9", name: "color-tokens-v4.json", sharedBy: "Farah T.", size: "9 KB", created: "June 30, 2025 · 5:20 PM" },
@@ -136,6 +140,7 @@ const docCategories: DocCategory[] = [
     id: "release",
     title: "Release Notes",
     icon: ScrollText,
+    projectId: "nimbus",
     description: "Chronological logs of version changes, bug fixes, new features, and known issues.",
     files: [
       { id: "f11", name: "changelog-v2.6.md", sharedBy: "Ahsan R.", size: "14 KB", created: "July 1, 2025 · 9:30 AM" },
@@ -146,6 +151,7 @@ const docCategories: DocCategory[] = [
     id: "sprint",
     title: "Sprint Archives",
     icon: Zap,
+    projectId: "helio",
     description: "Past sprint plans, retrospectives, and key decisions for tracking team velocity and iteration history.",
     files: [
       { id: "f13", name: "task-api-spec-v1.2.pdf", sharedBy: "Sarah M.", size: "18 KB", created: "June 28, 2025 · 3:46 PM" },
@@ -157,14 +163,20 @@ const docCategories: DocCategory[] = [
   },
 ];
 
-const shortcuts = [
-  "Research & Testing",
-  "Integrations & Webhooks",
-  "API Specs & References",
-  "Analytics & Metrics",
-  "Security & Compliance",
-  "Roadmaps & OKRs",
-  "Archived Projects",
+const extraFilePool: Omit<DocFile, "id">[] = [
+  { name: "meeting-notes-2025-07-02.md", sharedBy: "Sarah M.", size: "8 KB", created: "July 2, 2025 · 10:00 AM" },
+  { name: "decision-log.xlsx", sharedBy: "Ahsan R.", size: "22 KB", created: "July 3, 2025 · 2:30 PM" },
+  { name: "stakeholder-feedback.pdf", sharedBy: "Farah T.", size: "56 KB", created: "July 4, 2025 · 9:45 AM" },
+];
+
+const shortcuts: { label: string; categoryId: string }[] = [
+  { label: "Research & Testing", categoryId: "specs" },
+  { label: "Integrations & Webhooks", categoryId: "api" },
+  { label: "API Specs & References", categoryId: "api" },
+  { label: "Analytics & Metrics", categoryId: "release" },
+  { label: "Security & Compliance", categoryId: "guidelines" },
+  { label: "Roadmaps & OKRs", categoryId: "specs" },
+  { label: "Archived Projects", categoryId: "sprint" },
 ];
 
 const engagementBaseline = [30, 34, 33, 38, 42, 40, 46, 50, 48, 54, 58, 55];
@@ -312,16 +324,15 @@ function Sidebar({ activeNav, onSelect, activeProject, onSelectProject }: { acti
   return (
     <aside className="flex h-full w-[232px] shrink-0 flex-col gap-3 overflow-y-auto border-r border-white/[0.06] bg-[#0E0E10] p-3">
       <button className="flex items-center gap-2.5 rounded-xl bg-white/[0.05] p-2.5 hover:bg-white/[0.08]">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg overflow-hidden">
-            <img
-                src="/faviconblack.png"
-                alt="Logo BagUi"
-                className="h-8 w-8 object-contain"
-            />
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-sky-400 to-blue-600">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <circle cx="7" cy="7" r="5.4" stroke="white" strokeWidth="1.3" />
+            <circle cx="7" cy="7" r="1.6" fill="white" />
+          </svg>
         </span>
         <div className="min-w-0 flex-1 text-left">
-          <p className="truncate text-[13px] font-medium text-white">BagUi</p>
-          <p className="truncate text-[11px] text-neutral-500">Open Source Ui Blocks</p>
+          <p className="truncate text-[13px] font-medium text-white">Courtney Henry</p>
+          <p className="truncate text-[11px] text-neutral-500">Nimbus Studio</p>
         </div>
         <span className="text-neutral-500">
           <Columns3 className="h-4 w-4 rotate-90" />
@@ -476,24 +487,67 @@ function CategoryCard({
   connected,
   onToggleConnect,
   onOpen,
+  onDelete,
   active,
   view,
+  projectColor,
 }: {
   category: DocCategory;
   connected: boolean;
   onToggleConnect: () => void;
   onOpen: () => void;
+  onDelete: () => void;
   active: boolean;
   view: "grid" | "list";
+  projectColor?: string;
 }) {
   const Icon = category.icon;
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const connectButton = (
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        onToggleConnect();
+      }}
+      className={cn(
+        "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-medium transition-colors",
+        connected ? "bg-emerald-500/15 text-emerald-400" : "bg-white/[0.07] text-neutral-300 hover:bg-white/[0.12]"
+      )}
+    >
+      {connected && <Check className="h-3.5 w-3.5" />}
+      {connected ? "Connected" : "Connect"}
+    </button>
+  );
+
+  const menu = (
+    <div className="relative" onClick={(e) => e.stopPropagation()}>
+      <button onClick={() => setMenuOpen((o) => !o)} className="flex h-7 w-7 items-center justify-center rounded-md text-neutral-500 hover:bg-white/10 hover:text-neutral-200">
+        <MoreVertical className="h-3.5 w-3.5" />
+      </button>
+      <Dropdown open={menuOpen} onClose={() => setMenuOpen(false)} anchor="right" width={150}>
+        <DropdownItem icon={Pencil} label="Rename" onClick={() => setMenuOpen(false)} />
+        <DropdownItem
+          icon={Trash2}
+          label="Delete"
+          onClick={() => {
+            onDelete();
+            setMenuOpen(false);
+          }}
+        />
+      </Dropdown>
+    </div>
+  );
+
   if (view === "list") {
     return (
-      <motion.button
+      <motion.div
         layout
         onClick={onOpen}
+        role="button"
+        tabIndex={0}
         className={cn(
-          "flex w-full items-center gap-3 rounded-xl border p-3.5 text-left transition-colors",
+          "flex w-full cursor-pointer items-center gap-3 rounded-xl border p-3.5 text-left transition-colors",
           active ? "border-sky-400/40 bg-sky-400/[0.05]" : "border-white/[0.06] bg-[#141416] hover:bg-white/[0.03]"
         )}
       >
@@ -502,52 +556,43 @@ function CategoryCard({
         </span>
         <div className="min-w-0 flex-1">
           <p className="truncate text-[13.5px] font-medium text-white">{category.title}</p>
-          <p className="truncate text-[12px] text-neutral-500">{category.files.length} files</p>
+          <span className="flex items-center gap-1.5 text-[12px] text-neutral-500">
+            {projectColor && <span className={cn("h-1.5 w-1.5 rounded-full", projectColor)} />}
+            {category.files.length} files
+          </span>
         </div>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggleConnect();
-          }}
-          className={cn(
-            "shrink-0 rounded-lg px-3 py-1.5 text-[12px] font-medium transition-colors",
-            connected ? "bg-emerald-500/15 text-emerald-400" : "bg-white/[0.07] text-neutral-300 hover:bg-white/[0.12]"
-          )}
-        >
-          {connected ? "Connected" : "Connect"}
-        </button>
-      </motion.button>
+        {connectButton}
+        {menu}
+      </motion.div>
     );
   }
 
   return (
-    <motion.button
+    <motion.div
       layout
       onClick={onOpen}
+      role="button"
+      tabIndex={0}
       className={cn(
-        "flex flex-col items-start rounded-2xl border p-4 text-left transition-colors",
+        "flex cursor-pointer flex-col items-start rounded-2xl border p-4 text-left transition-colors",
         active ? "border-sky-400/40 bg-sky-400/[0.05]" : "border-white/[0.06] bg-[#141416] hover:bg-white/[0.03]"
       )}
     >
-      <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/[0.06] text-neutral-300">
-        <Icon className="h-4 w-4" />
-      </span>
+      <div className="flex w-full items-start justify-between">
+        <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/[0.06] text-neutral-300">
+          <Icon className="h-4 w-4" />
+        </span>
+        {menu}
+      </div>
       <p className="mt-3 text-[14.5px] font-semibold text-white">{category.title}</p>
       <p className="mt-1.5 text-[12px] leading-snug text-neutral-500">{category.description}</p>
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onToggleConnect();
-        }}
-        className={cn(
-          "mt-4 flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-medium transition-colors",
-          connected ? "bg-emerald-500/15 text-emerald-400" : "bg-white/[0.07] text-neutral-300 hover:bg-white/[0.12]"
-        )}
-      >
-        {connected && <Check className="h-3.5 w-3.5" />}
-        {connected ? "Connected" : "Connect"}
-      </button>
-    </motion.button>
+      {projectColor && (
+        <span className="mt-2 flex items-center gap-1.5 text-[11px] text-neutral-500">
+          <span className={cn("h-1.5 w-1.5 rounded-full", projectColor)} /> {category.files.length} files
+        </span>
+      )}
+      <div className="mt-4">{connectButton}</div>
+    </motion.div>
   );
 }
 
@@ -692,8 +737,52 @@ function ViewsEditsChart() {
 /* Detail panel                                                         */
 /* ------------------------------------------------------------------ */
 
-function DetailPanel({ category }: { category: DocCategory | null }) {
+function FileRow({ file }: { file: DocFile }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
+      <button onClick={() => setOpen((o) => !o)} className="flex w-full items-start gap-2.5 text-left">
+        <img src={avatarUrl(file.sharedBy)} alt={file.sharedBy} className="mt-0.5 h-6 w-6 shrink-0 rounded-full border border-white/10 bg-neutral-800 object-cover" />
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-[12.5px] font-medium text-neutral-200">{file.name}</p>
+          <p className="text-[11px] text-neutral-500">Shared By: {file.sharedBy}</p>
+          <p className="text-[11px] text-neutral-500">Size: {file.size}</p>
+          <p className="text-[11px] text-neutral-500">Created Time: {file.created}</p>
+        </div>
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.16 }} className="overflow-hidden">
+            <div className="mt-2 flex flex-col gap-1 border-t border-white/[0.05] pt-2 text-[11px] text-neutral-500">
+              <p>Type: {file.name.split(".").pop()?.toUpperCase()}</p>
+              <p>Version: v1.0</p>
+              <p>Last opened: {file.created}</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <button onClick={() => setOpen((o) => !o)} className="mt-2 rounded-lg bg-white/[0.06] px-2.5 py-1 text-[11px] text-neutral-300 hover:bg-white/[0.1]">
+        {open ? "Hide details" : "Details"}
+      </button>
+    </div>
+  );
+}
+
+function DetailPanel({
+  category,
+  query,
+  onDelete,
+  onAddFile,
+  canAddFile,
+}: {
+  category: DocCategory | null;
+  query: string;
+  onDelete: () => void;
+  onAddFile: () => void;
+  canAddFile: boolean;
+}) {
   const [bookmarked, setBookmarked] = useState(false);
+  const [syncing, setSyncing] = useState(false);
 
   if (!category) {
     return (
@@ -704,20 +793,41 @@ function DetailPanel({ category }: { category: DocCategory | null }) {
     );
   }
 
+  const q = query.trim().toLowerCase();
+  const visibleFiles = q ? category.files.filter((f) => f.name.toLowerCase().includes(q) || f.sharedBy.toLowerCase().includes(q)) : category.files;
+
   return (
     <aside className="flex h-full w-[300px] shrink-0 flex-col overflow-y-auto border-l border-white/[0.06] bg-[#0E0E10] p-4">
       <div className="mb-4 flex items-center gap-1">
         {panelActions.map((a) => {
           const isBookmark = a.label === "Bookmark";
+          const isDelete = a.label === "Delete";
+          const isSync = a.label === "Sync";
           const on = isBookmark && bookmarked;
           return (
             <button
               key={a.label}
-              onClick={isBookmark ? () => setBookmarked((b) => !b) : undefined}
+              onClick={
+                isBookmark
+                  ? () => setBookmarked((b) => !b)
+                  : isDelete
+                  ? onDelete
+                  : isSync
+                  ? () => {
+                      setSyncing(true);
+                      setTimeout(() => setSyncing(false), 900);
+                    }
+                  : undefined
+              }
               title={a.label}
-              className={cn("flex h-8 w-8 items-center justify-center rounded-lg transition-colors", on ? "bg-sky-400/20 text-sky-300" : "text-neutral-500 hover:bg-white/5 hover:text-neutral-200")}
+              className={cn(
+                "flex h-8 w-8 items-center justify-center rounded-lg transition-colors",
+                on ? "bg-sky-400/20 text-sky-300" : isDelete ? "text-neutral-500 hover:bg-rose-500/10 hover:text-rose-400" : "text-neutral-500 hover:bg-white/5 hover:text-neutral-200"
+              )}
             >
-              <a.icon className={cn("h-[15px] w-[15px]", on && "fill-current")} />
+              <motion.span animate={isSync && syncing ? { rotate: 360 } : { rotate: 0 }} transition={{ duration: 0.7, ease: "linear", repeat: isSync && syncing ? Infinity : 0 }}>
+                <a.icon className={cn("h-[15px] w-[15px]", on && "fill-current")} />
+              </motion.span>
             </button>
           );
         })}
@@ -728,22 +838,32 @@ function DetailPanel({ category }: { category: DocCategory | null }) {
           <p className="text-[15px] font-semibold text-white">{category.title}</p>
           <p className="mt-1.5 text-[12px] leading-relaxed text-neutral-500">{category.description}</p>
 
+          <AnimatePresence>
+            {syncing && (
+              <motion.p initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="mt-2 text-[11px] text-sky-400">
+                Syncing latest files...
+              </motion.p>
+            )}
+          </AnimatePresence>
+
           <div className="mt-4 flex flex-col gap-2.5">
-            {category.files.map((f) => (
-              <div key={f.id} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
-                <div className="flex items-start gap-2.5">
-                  <img src={avatarUrl(f.sharedBy)} alt={f.sharedBy} className="mt-0.5 h-6 w-6 shrink-0 rounded-full border border-white/10 bg-neutral-800 object-cover" />
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-[12.5px] font-medium text-neutral-200">{f.name}</p>
-                    <p className="text-[11px] text-neutral-500">Shared By: {f.sharedBy}</p>
-                    <p className="text-[11px] text-neutral-500">Size: {f.size}</p>
-                    <p className="text-[11px] text-neutral-500">Created Time: {f.created}</p>
-                  </div>
-                </div>
-                <button className="mt-2 rounded-lg bg-white/[0.06] px-2.5 py-1 text-[11px] text-neutral-300 hover:bg-white/[0.1]">Details</button>
-              </div>
-            ))}
+            <AnimatePresence initial={false}>
+              {visibleFiles.map((f) => (
+                <motion.div key={f.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                  <FileRow file={f} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+            {visibleFiles.length === 0 && <p className="py-4 text-center text-[12px] text-neutral-500">No files match "{query}".</p>}
           </div>
+
+          <button
+            onClick={onAddFile}
+            disabled={!canAddFile}
+            className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-white/[0.12] py-2 text-[12px] text-neutral-400 transition-colors hover:border-sky-400/40 hover:text-sky-300 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <Plus className="h-3.5 w-3.5" /> {canAddFile ? "Add file" : "No more sample files"}
+          </button>
         </motion.div>
       </AnimatePresence>
     </aside>
@@ -773,40 +893,131 @@ function EmptyStateDark({ icon: Icon, title, description }: { icon: IconType; ti
 }
 
 /* ------------------------------------------------------------------ */
+/* Stats row                                                             */
+/* ------------------------------------------------------------------ */
+
+function StatChip({
+  icon: Icon,
+  label,
+  value,
+  active,
+  onClick,
+}: {
+  icon: IconType;
+  label: string;
+  value: string | number;
+  active?: boolean;
+  onClick?: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "flex flex-1 items-center gap-3 rounded-2xl border p-3.5 text-left transition-colors",
+        active ? "border-sky-400/40 bg-sky-400/[0.06] ring-1 ring-sky-400/25" : "border-white/[0.06] bg-[#141416] hover:bg-white/[0.03]",
+        !onClick && "cursor-default"
+      )}
+    >
+      <span className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-lg", active ? "bg-sky-400/20 text-sky-300" : "bg-white/[0.06] text-neutral-300")}>
+        <Icon className="h-4 w-4" />
+      </span>
+      <div className="min-w-0">
+        <p className="font-mono text-[18px] font-semibold text-white">{value}</p>
+        <p className="truncate text-[11.5px] text-neutral-500">{label}</p>
+      </div>
+    </button>
+  );
+}
+
+function StatsRow({
+  categories,
+  connectedIds,
+  filter,
+  onFilterChange,
+  projectFilter,
+}: {
+  categories: DocCategory[];
+  connectedIds: Set<string>;
+  filter: FilterKey;
+  onFilterChange: (f: FilterKey) => void;
+  projectFilter: string | null;
+}) {
+  const scoped = projectFilter ? categories.filter((c) => c.projectId === projectFilter) : categories;
+  const totalDocs = scoped.reduce((a, c) => a + c.files.length, 0);
+  const connectedCount = scoped.filter((c) => connectedIds.has(c.id)).length;
+  const notConnectedCount = scoped.length - connectedCount;
+
+  return (
+    <div className="flex flex-col gap-3 sm:flex-row">
+      <StatChip icon={FileText} label="Total docs" value={totalDocs} active={filter === "all"} onClick={() => onFilterChange("all")} />
+      <StatChip icon={Check} label="Connected sources" value={connectedCount} active={filter === "connected"} onClick={() => onFilterChange("connected")} />
+      <StatChip icon={X} label="Not connected" value={notConnectedCount} active={filter === "notConnected"} onClick={() => onFilterChange("notConnected")} />
+      <StatChip icon={Folder} label="Categories" value={scoped.length} />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Docs view                                                             */
 /* ------------------------------------------------------------------ */
 
 function DocsView({
+  categories,
   query,
   filter,
+  onFilterChange,
   connectedIds,
   onToggleConnect,
+  onDeleteCategory,
   view,
-  onViewChange,
   selectedId,
   onSelect,
+  projectFilter,
+  onClearProjectFilter,
+  projectColorFor,
 }: {
+  categories: DocCategory[];
   query: string;
   filter: FilterKey;
+  onFilterChange: (f: FilterKey) => void;
   connectedIds: Set<string>;
   onToggleConnect: (id: string) => void;
+  onDeleteCategory: (id: string) => void;
   view: "grid" | "list";
-  onViewChange: (v: "grid" | "list") => void;
-  selectedId: string;
+  selectedId: string | null;
   onSelect: (id: string) => void;
+  projectFilter: string | null;
+  onClearProjectFilter: () => void;
+  projectColorFor: (projectId: string) => string | undefined;
 }) {
   const visibleCategories = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return docCategories.filter((c) => {
+    return categories.filter((c) => {
       const matchesQuery = !q || c.title.toLowerCase().includes(q) || c.description.toLowerCase().includes(q);
       const isConnected = connectedIds.has(c.id);
       const matchesFilter = filter === "all" || (filter === "connected" && isConnected) || (filter === "notConnected" && !isConnected);
-      return matchesQuery && matchesFilter;
+      const matchesProject = !projectFilter || c.projectId === projectFilter;
+      return matchesQuery && matchesFilter && matchesProject;
     });
-  }, [query, filter, connectedIds]);
+  }, [categories, query, filter, connectedIds, projectFilter]);
+
+  const projectName = projectFilter ? projects.find((p) => p.id === projectFilter)?.name : null;
 
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }} className="flex flex-col gap-6 px-7 pb-7">
+      <StatsRow categories={categories} connectedIds={connectedIds} filter={filter} onFilterChange={onFilterChange} projectFilter={projectFilter} />
+
+      {projectName && (
+        <div className="flex items-center gap-2">
+          <span className="flex items-center gap-1.5 rounded-full bg-sky-400/15 px-2.5 py-1 text-[11.5px] text-sky-300">
+            Filtered by project: {projectName}
+            <button onClick={onClearProjectFilter} className="text-sky-400 hover:text-white">
+              ✕
+            </button>
+          </span>
+        </div>
+      )}
+
       <motion.div layout className={cn(view === "grid" ? "grid grid-cols-1 gap-3.5 sm:grid-cols-2 xl:grid-cols-3" : "flex flex-col gap-2.5")}>
         <AnimatePresence initial={false}>
           {visibleCategories.map((c) => (
@@ -816,8 +1027,10 @@ function DocsView({
               connected={connectedIds.has(c.id)}
               onToggleConnect={() => onToggleConnect(c.id)}
               onOpen={() => onSelect(c.id)}
+              onDelete={() => onDeleteCategory(c.id)}
               active={selectedId === c.id}
               view={view}
+              projectColor={projectColorFor(c.projectId)}
             />
           ))}
         </AnimatePresence>
@@ -828,7 +1041,7 @@ function DocsView({
         <p className="mb-3 text-[14px] font-medium text-white">Shortcut</p>
         <div className="flex gap-5 overflow-x-auto pb-1">
           {shortcuts.map((s) => (
-            <ShortcutFolder key={s} label={s} active={false} onClick={() => onSelect(docCategories[shortcuts.indexOf(s) % docCategories.length].id)} />
+            <ShortcutFolder key={s.label} label={s.label} active={selectedId === s.categoryId} onClick={() => onSelect(s.categoryId)} />
           ))}
         </div>
       </div>
@@ -847,12 +1060,14 @@ function DocsView({
 
 export default function DocsDashboard() {
   const [activeNav, setActiveNav] = useState<NavKey>("docs");
-  const [activeProject, setActiveProject] = useState<string | null>(null);
+  const [projectFilter, setProjectFilter] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<FilterKey>("all");
   const [view, setView] = useState<"grid" | "list">("grid");
   const [connectedIds, setConnectedIds] = useState<Set<string>>(new Set(["sprint"]));
-  const [selectedId, setSelectedId] = useState<string>("sprint");
+  const [selectedId, setSelectedId] = useState<string | null>("sprint");
+  const [categories, setCategories] = useState<DocCategory[]>(docCategories);
+  const [filePoolIndex, setFilePoolIndex] = useState(0);
 
   function toggleConnect(id: string) {
     setConnectedIds((prev) => {
@@ -867,12 +1082,33 @@ export default function DocsDashboard() {
     setActiveNav(key);
   }
 
+  function handleSelectProject(id: string) {
+    setProjectFilter((p) => (p === id ? null : id));
+  }
+
+  function handleDeleteCategory(id: string) {
+    setCategories((prev) => prev.filter((c) => c.id !== id));
+    setSelectedId((s) => (s === id ? null : s));
+  }
+
+  function handleAddFile() {
+    if (!selectedId || filePoolIndex >= extraFilePool.length) return;
+    const next = extraFilePool[filePoolIndex];
+    const id = `nf-${Date.now()}`;
+    setCategories((prev) => prev.map((c) => (c.id === selectedId ? { ...c, files: [{ id, ...next }, ...c.files] } : c)));
+    setFilePoolIndex((i) => i + 1);
+  }
+
+  function projectColorFor(projectId: string) {
+    return projects.find((p) => p.id === projectId)?.color;
+  }
+
   const navCopy = sectionCopy[activeNav];
-  const selectedCategory = docCategories.find((c) => c.id === selectedId) ?? null;
+  const selectedCategory = categories.find((c) => c.id === selectedId) ?? null;
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-[#0B0B0C] text-white">
-      <Sidebar activeNav={activeNav} onSelect={handleSelectNav} activeProject={activeProject} onSelectProject={(id) => setActiveProject((p) => (p === id ? null : id))} />
+      <Sidebar activeNav={activeNav} onSelect={handleSelectNav} activeProject={projectFilter} onSelectProject={handleSelectProject} />
       <div className="flex flex-1 flex-col overflow-hidden">
         {activeNav === "docs" ? (
           <TopBar query={query} onQueryChange={setQuery} filter={filter} onFilterChange={setFilter} view={view} onViewChange={setView} />
@@ -884,14 +1120,19 @@ export default function DocsDashboard() {
             {activeNav === "docs" ? (
               <DocsView
                 key="docs"
+                categories={categories}
                 query={query}
                 filter={filter}
+                onFilterChange={setFilter}
                 connectedIds={connectedIds}
                 onToggleConnect={toggleConnect}
+                onDeleteCategory={handleDeleteCategory}
                 view={view}
-                onViewChange={setView}
                 selectedId={selectedId}
                 onSelect={setSelectedId}
+                projectFilter={projectFilter}
+                onClearProjectFilter={() => setProjectFilter(null)}
+                projectColorFor={projectColorFor}
               />
             ) : (
               navCopy && <EmptyStateDark key={activeNav} icon={navCopy.icon} title={navCopy.title} description={navCopy.description} />
@@ -899,7 +1140,9 @@ export default function DocsDashboard() {
           </AnimatePresence>
         </main>
       </div>
-      {activeNav === "docs" && <DetailPanel category={selectedCategory} />}
+      {activeNav === "docs" && (
+        <DetailPanel category={selectedCategory} query={query} onDelete={() => selectedId && handleDeleteCategory(selectedId)} onAddFile={handleAddFile} canAddFile={filePoolIndex < extraFilePool.length} />
+      )}
     </div>
   );
 }
