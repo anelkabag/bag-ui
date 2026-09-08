@@ -1588,13 +1588,13 @@ export default function Dashboard() {
     <div
       className={`min-h-screen w-full p-0 ${isDark ? "bg-black text-white" : "bg-gray-50 text-gray-900"}`}
     >
-      <div className="w-full min-h-screen">
+      <div className="relative w-full min-h-screen">
         {/* Sidebar */}
         <motion.aside
           initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4 }}
-          className={`fixed inset-y-0 left-0 z-30 flex h-screen max-h-screen box-border w-[248px] flex-col overflow-hidden border-r p-3 ${
+          className={`absolute inset-y-0 left-0 z-30 flex h-full max-h-full box-border w-[248px] flex-col overflow-hidden border-r p-3 ${
             isDark ? "bg-black border-neutral-800" : "bg-white border-gray-100"
           }`}
         >
