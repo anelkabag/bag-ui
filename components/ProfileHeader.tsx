@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Mail, Bookmark, Pencil, BadgeCheck, X } from "lucide-react";
+import { Mail, Pencil, BadgeCheck, X, Check } from "lucide-react";
+import { FaInstagram, FaXTwitter } from "react-icons/fa6";
+import type { IconType } from "react-icons";
 import { ProfileEditForm } from "@/components/ProfileEditForm";
 
 interface ProfileHeaderProps {
@@ -20,6 +22,18 @@ interface ProfileHeaderProps {
   joinedShort: string;
 }
 
+type SocialPlatform = "instagram" | "twitter";
+
+interface SocialLink {
+  platform: SocialPlatform;
+  handle: string;
+}
+
+const SOCIAL_ICONS: Record<SocialPlatform, IconType> = {
+  instagram: FaInstagram,
+  twitter: FaXTwitter,
+};
+
 export function ProfileHeader({
   profile,
   email,
@@ -29,24 +43,62 @@ export function ProfileHeader({
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [showBadgeTip, setShowBadgeTip] = useState(false);
 
+  const [bio, setBio] = useState("");
+  const [isEditingBio, setIsEditingBio] = useState(false);
+  const [bioDraft, setBioDraft] = useState("");
+
+  const [socials, setSocials] = useState<SocialLink[]>([]);
+  const [isAddingSocial, setIsAddingSocial] = useState(false);
+  const [pendingPlatform, setPendingPlatform] =
+    useState<SocialPlatform | null>(null);
+  const [handleDraft, setHandleDraft] = useState("");
+
   const pillClass =
-    "inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/60";
+    "inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/60";
+
+  const startEditingBio = () => {
+    setBioDraft(bio);
+    setIsEditingBio(true);
+  };
+
+  const saveBio = () => {
+    setBio(bioDraft.trim());
+    setIsEditingBio(false);
+  };
+
+  const cancelAddSocial = () => {
+    setIsAddingSocial(false);
+    setPendingPlatform(null);
+    setHandleDraft("");
+  };
+
+  const confirmAddSocial = () => {
+    if (!pendingPlatform || !handleDraft.trim()) return;
+    setSocials((prev) => [
+      ...prev.filter((s) => s.platform !== pendingPlatform),
+      {
+        platform: pendingPlatform,
+        handle: handleDraft.trim().replace(/^@/, ""),
+      },
+    ]);
+    cancelAddSocial();
+  };
 
   return (
     <>
       {/* Avatar + top-right actions */}
-      <div className="relative flex flex-col items-center gap-4 -mt-12 sm:-mt-14 sm:flex-row sm:items-start sm:justify-between">
-        <div className="relative z-20 h-24 w-24 shrink-0 overflow-hidden rounded-3xl border-4 border-[#111111] bg-[#111111] shadow-xl sm:h-28 sm:w-28">
+      <div className="relative flex flex-col items-center gap-4 -mt-14 sm:-mt-16 sm:flex-row sm:items-start sm:justify-between">
+        <div className="relative z-20 h-28 w-28 shrink-0 overflow-hidden rounded-3xl border-4 border-[#111111] bg-[#111111] shadow-xl sm:h-32 sm:w-32">
           <Image
             src={profile.avatar_url ?? "/faviconblack.png"}
             alt="Avatar"
-            width={112}
-            height={112}
+            width={128}
+            height={128}
             className="h-full w-full object-cover"
           />
         </div>
 
-        <div className="flex items-center gap-2 sm:mt-14 sm:flex-col sm:items-end">
+        <div className="flex items-center gap-2 sm:mt-16 sm:flex-col sm:items-end">
           <button
             type="button"
             onClick={() => setIsEditOpen(true)}
@@ -55,17 +107,20 @@ export function ProfileHeader({
             <Pencil size={14} />
             Edit Profile
           </button>
-          <button
-            type="button"
-            title="Save profile"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition hover:bg-white/10 hover:text-white"
+
+          <span
+            className={`inline-flex h-9 shrink-0 items-center justify-center rounded-full border px-4 text-xs font-medium ${
+              isProPlan
+                ? "border-sky-400/30 bg-sky-400/10 text-sky-400"
+                : "border-white/10 bg-white/5 text-white/60"
+            }`}
           >
-            <Bookmark size={16} />
-          </button>
+            {isProPlan ? "Pro Plan" : "Free Plan"}
+          </span>
         </div>
       </div>
 
-      {/* Name + badge + pills */}
+      {/* Name + badge + bio + pills */}
       <div className="mt-5 text-center sm:text-left">
         <h1 className="flex items-center justify-center gap-2 text-2xl font-semibold text-white sm:justify-start sm:text-3xl">
           <span>{profile.username}</span>
@@ -96,8 +151,54 @@ export function ProfileHeader({
           )}
         </h1>
 
-        <p className="mt-1 text-sm text-white/60">BagUI Member</p>
+        {/* Bio */}
+        <div className="mt-2 flex justify-center sm:justify-start">
+          {isEditingBio ? (
+            <div className="flex w-full max-w-sm items-start gap-2">
+              <textarea
+                autoFocus
+                rows={2}
+                value={bioDraft}
+                onChange={(e) => setBioDraft(e.target.value)}
+                placeholder="Write something about yourself..."
+                className="w-full resize-none rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/80 outline-none placeholder:text-white/30 focus:border-white/20"
+              />
+              <div className="flex flex-col gap-1">
+                <button
+                  type="button"
+                  onClick={saveBio}
+                  className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition hover:bg-white/10 hover:text-white"
+                >
+                  <Check size={13} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsEditingBio(false)}
+                  className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition hover:bg-white/10 hover:text-white"
+                >
+                  <X size={13} />
+                </button>
+              </div>
+            </div>
+          ) : bio ? (
+            <p
+              onClick={startEditingBio}
+              className="max-w-sm cursor-pointer text-sm leading-relaxed text-white/60 transition hover:text-white/80"
+            >
+              {bio}
+            </p>
+          ) : (
+            <button
+              type="button"
+              onClick={startEditingBio}
+              className="text-sm text-white/40 transition hover:text-white/60"
+            >
+              + Add a bio
+            </button>
+          )}
+        </div>
 
+        {/* Pills: joined, mail, socials, add social */}
         <div className="mt-4 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
           <span className={pillClass}>Joined {joinedShort}</span>
 
@@ -109,13 +210,81 @@ export function ProfileHeader({
             <Mail size={12} />
           </a>
 
-          <button
-            type="button"
-            onClick={() => setIsEditOpen(true)}
-            className={`${pillClass} border-dashed transition hover:bg-white/10 hover:text-white`}
-          >
-            Add social network +
-          </button>
+          {socials.map((social) => {
+            const Icon = SOCIAL_ICONS[social.platform];
+            return (
+              <span key={social.platform} className={pillClass}>
+                <Icon size={12} />@{social.handle}
+              </span>
+            );
+          })}
+
+          {isAddingSocial ? (
+            pendingPlatform ? (
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 py-1 pl-3 pr-1.5 text-xs text-white/60">
+                {(() => {
+                  const Icon = SOCIAL_ICONS[pendingPlatform];
+                  return <Icon size={12} />;
+                })()}
+                <input
+                  autoFocus
+                  value={handleDraft}
+                  onChange={(e) => setHandleDraft(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && confirmAddSocial()}
+                  placeholder="username"
+                  className="w-24 bg-transparent text-xs text-white outline-none placeholder:text-white/30"
+                />
+                <button
+                  type="button"
+                  onClick={confirmAddSocial}
+                  className="flex h-5 w-5 items-center justify-center rounded-full text-white/60 hover:text-white"
+                >
+                  <Check size={12} />
+                </button>
+                <button
+                  type="button"
+                  onClick={cancelAddSocial}
+                  className="flex h-5 w-5 items-center justify-center rounded-full text-white/60 hover:text-white"
+                >
+                  <X size={12} />
+                </button>
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2 py-1">
+                <button
+                  type="button"
+                  title="Instagram"
+                  onClick={() => setPendingPlatform("instagram")}
+                  className="flex h-6 w-6 items-center justify-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white"
+                >
+                  <FaInstagram size={14} />
+                </button>
+                <button
+                  type="button"
+                  title="X (Twitter)"
+                  onClick={() => setPendingPlatform("twitter")}
+                  className="flex h-6 w-6 items-center justify-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white"
+                >
+                  <FaXTwitter size={14} />
+                </button>
+                <button
+                  type="button"
+                  onClick={cancelAddSocial}
+                  className="flex h-6 w-6 items-center justify-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white"
+                >
+                  <X size={12} />
+                </button>
+              </span>
+            )
+          ) : (
+            <button
+              type="button"
+              onClick={() => setIsAddingSocial(true)}
+              className={`${pillClass} border-dashed transition hover:bg-white/10 hover:text-white`}
+            >
+              Add social network +
+            </button>
+          )}
         </div>
       </div>
 
