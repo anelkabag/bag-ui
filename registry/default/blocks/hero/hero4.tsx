@@ -20,6 +20,8 @@ import {
   CreditCard,
   UserPlus,
   HardDrive,
+  Sun,
+  Moon,
 } from "lucide-react";
 import {
   Area,
@@ -252,7 +254,7 @@ function ChartTooltip({
 export default function Hero1() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [announceIndex, setAnnounceIndex] = useState(0);
-  const [isDark] = useState(true);
+  const [isDark, setIsDark] = useState(true);
   const [activeDashNav, setActiveDashNav] = useState("Dashboard");
   const [activeSubTab, setActiveSubTab] = useState("Overview");
   const [range, setRange] = useState<RangeKey>("12M");
@@ -290,48 +292,78 @@ export default function Hero1() {
   );
 
   return (
-    <div className="bg-white">
+    <div className={isDark ? "bg-zinc-950 text-white" : "bg-white text-zinc-900"}>
       {/* Navbar */}
-      <header className={`sticky top-0 z-50 border-b ${isDark ? "border-zinc-800 bg-zinc-950/80" : "border-zinc-100 bg-white/80"} backdrop-blur`}>
+      <header
+        className={`sticky top-0 z-50 border-b backdrop-blur transition-colors ${
+          isDark ? "border-zinc-800 bg-zinc-950/80" : "border-zinc-100 bg-white/80"
+        }`}
+      >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
           <div className="flex items-center gap-9">
             <a href="#" className="flex items-center gap-2">
-              {isDark ? (
-                <img src="/logoW.png" alt="BagUI logo" className="h-7 w-auto object-contain" />
-              ) : (
-                <img src="/logo.png" alt="BagUI logo" className="h-7 w-auto object-contain" />
-              )}
+              <img
+                src={isDark ? "/logoW.png" : "/logo.png"}
+                alt="BagUI logo"
+                className="h-7 w-auto object-contain"
+              />
             </a>
             <nav className="hidden items-center gap-7 lg:flex">
               {navLinks.map(({ label, chevron }) => (
                 <a
                   key={label}
                   href="#"
-                  className="flex items-center gap-1 text-[13px] font-medium text-zinc-600 transition-colors hover:text-zinc-900"
+                  className={`flex items-center gap-1 text-[13px] font-medium transition-colors ${
+                    isDark ? "text-zinc-300 hover:text-white" : "text-zinc-600 hover:text-zinc-900"
+                  }`}
                 >
                   {label}
-                  {chevron && <ChevronDown className="h-3.5 w-3.5 text-zinc-400" />}
+                  {chevron && (
+                    <ChevronDown className={`h-3.5 w-3.5 ${isDark ? "text-zinc-500" : "text-zinc-400"}`} />
+                  )}
                 </a>
               ))}
             </nav>
           </div>
 
           <div className="hidden items-center gap-5 lg:flex">
-            <a href="#" className="text-[13px] font-medium text-zinc-600 hover:text-zinc-900">
+            <button
+              onClick={() => setIsDark((v) => !v)}
+              aria-label="Toggle theme"
+              className={`grid h-9 w-9 place-items-center rounded-full border transition-colors ${
+                isDark ? "border-zinc-700 bg-zinc-900 text-zinc-200 hover:bg-zinc-800" : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100"
+              }`}
+            >
+              {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </button>
+            <a href="#" className={`text-[13px] font-medium ${isDark ? "text-zinc-300 hover:text-white" : "text-zinc-600 hover:text-zinc-900"}`}>
               Log in
             </a>
-            <button className="rounded-full bg-zinc-900 px-4 py-2 text-[13px] font-medium text-white transition-colors hover:bg-zinc-800 cursor-pointer">
+            <button className={`rounded-full px-4 py-2 text-[13px] font-medium transition-colors cursor-pointer ${
+              isDark ? "bg-white text-zinc-900 hover:bg-zinc-200" : "bg-zinc-900 text-white hover:bg-zinc-800"
+            }`}>
               Start free trial
             </button>
           </div>
 
-          <button
-            aria-label="Toggle menu"
-            onClick={() => setMobileOpen((v) => !v)}
-            className="rounded-md p-2 text-zinc-700 lg:hidden"
-          >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          <div className="flex items-center gap-2 lg:hidden">
+            <button
+              onClick={() => setIsDark((v) => !v)}
+              aria-label="Toggle theme"
+              className={`grid h-8 w-8 place-items-center rounded-full border transition-colors ${
+                isDark ? "border-zinc-700 bg-zinc-900 text-zinc-200" : "border-zinc-200 bg-white text-zinc-700"
+              }`}
+            >
+              {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </button>
+            <button
+              aria-label="Toggle menu"
+              onClick={() => setMobileOpen((v) => !v)}
+              className={`rounded-md p-2 ${isDark ? "text-zinc-200" : "text-zinc-700"}`}
+            >
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
 
         <AnimatePresence>
@@ -343,17 +375,25 @@ export default function Hero1() {
               transition={{ duration: 0.25, ease: "easeOut" }}
               className="overflow-hidden border-b border-zinc-100 lg:hidden"
             >
-              <div className="flex flex-col gap-1 px-6 py-4">
+              <div className={`flex flex-col gap-1 px-6 py-4 ${isDark ? "bg-zinc-950" : "bg-white"}`}>
                 {navLinks.map(({ label }) => (
-                  <a key={label} href="#" className="rounded-md px-2 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50">
+                  <a
+                    key={label}
+                    href="#"
+                    className={`rounded-md px-2 py-2 text-sm font-medium ${
+                      isDark ? "text-zinc-200 hover:bg-zinc-900" : "text-zinc-700 hover:bg-zinc-50"
+                    }`}
+                  >
                     {label}
                   </a>
                 ))}
-                <div className="mt-2 flex flex-col gap-2 border-t border-zinc-100 pt-3">
-                  <a href="#" className="px-2 py-1 text-sm font-medium text-zinc-600">
+                <div className={`mt-2 flex flex-col gap-2 border-t pt-3 ${isDark ? "border-zinc-800" : "border-zinc-100"}`}>
+                  <a href="#" className={`px-2 py-1 text-sm font-medium ${isDark ? "text-zinc-300" : "text-zinc-600"}`}>
                     Log in
                   </a>
-                  <button className="w-full rounded-full bg-zinc-900 py-2.5 text-sm font-medium text-white cursor-pointer">
+                  <button className={`w-full rounded-full py-2.5 text-sm font-medium cursor-pointer ${
+                    isDark ? "bg-white text-zinc-900" : "bg-zinc-900 text-white"
+                  }`}>
                     Start free trial
                   </button>
                 </div>
