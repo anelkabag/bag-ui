@@ -28,9 +28,9 @@
       "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
-          "path": "registry/default/blocks/hero/hero2.tsx",
+          "path": "registry/default/blocks/hero/hero01.tsx",
           "type": "registry:block",
-          "target": "components/blocks/hero-ex-2.tsx"
+          "target": "components/blocks/hero-ex-1.tsx"
         }
       ],
       "access": {
@@ -45,9 +45,9 @@
       "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
-          "path": "registry/default/blocks/hero/hero4.tsx",
+          "path": "registry/default/blocks/hero/hero02.tsx",
           "type": "registry:block",
-          "target": "components/blocks/hero-ex-4.tsx"
+          "target": "components/blocks/hero-ex-2.tsx"
         }
       ],
       "access": {
@@ -62,7 +62,7 @@
       "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
-          "path": "registry/default/blocks/hero/hero3.tsx",
+          "path": "registry/default/blocks/hero/hero03.tsx",
           "type": "registry:block",
           "target": "components/blocks/hero-ex-3.tsx"
         }
@@ -79,9 +79,9 @@
       "dependencies": ["framer-motion", "lucide-react"],
       "files": [
         {
-          "path": "registry/default/blocks/hero/hero1.tsx",
+          "path": "registry/default/blocks/hero/hero04.tsx",
           "type": "registry:block",
-          "target": "components/blocks/hero1.tsx"
+          "target": "components/blocks/hero-ex-4.tsx"
         }
       ],
       "access": {
