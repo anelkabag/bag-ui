@@ -131,7 +131,7 @@ export function ProfileHeader({
           />
         </div>
 
-        <div className="flex items-center gap-2 sm:mt-16 sm:flex-col sm:items-end">
+        <div className="mt-3 flex items-center gap-2 sm:mt-16 sm:flex-col sm:items-end">
           <button
             type="button"
             onClick={() => setIsEditOpen(true)}
@@ -154,7 +154,7 @@ export function ProfileHeader({
       </div>
 
       {/* Name + badge + bio + pills */}
-      <div className="mt-5 text-center sm:text-left">
+      <div className="mt-2 text-center sm:text-left">
         <h1 className="flex items-center justify-center gap-2 text-2xl font-semibold text-white sm:justify-start sm:text-3xl">
           <span>{profile.username}</span>
 
