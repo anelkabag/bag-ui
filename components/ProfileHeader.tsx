@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Mail, Pencil, BadgeCheck, X, Check } from "lucide-react";
-import { FaInstagram, FaXTwitter } from "react-icons/fa6";
+import { Pencil, BadgeCheck, X, Check } from "lucide-react";
+import { FaInstagram, FaXTwitter, FaLinkedin, FaGithub } from "react-icons/fa6";
 import type { IconType } from "react-icons";
 import { ProfileEditForm } from "@/components/ProfileEditForm";
 
@@ -22,17 +22,46 @@ interface ProfileHeaderProps {
   joinedShort: string;
 }
 
-type SocialPlatform = "instagram" | "twitter";
+type SocialPlatform = "instagram" | "twitter" | "linkedin" | "github";
 
 interface SocialLink {
   platform: SocialPlatform;
   handle: string;
 }
 
-const SOCIAL_ICONS: Record<SocialPlatform, IconType> = {
-  instagram: FaInstagram,
-  twitter: FaXTwitter,
-};
+interface SocialPlatformConfig {
+  id: SocialPlatform;
+  label: string;
+  icon: IconType;
+  url: (handle: string) => string;
+}
+
+const SOCIAL_PLATFORMS: SocialPlatformConfig[] = [
+  {
+    id: "instagram",
+    label: "Instagram",
+    icon: FaInstagram,
+    url: (handle) => `https://instagram.com/${handle}`,
+  },
+  {
+    id: "twitter",
+    label: "X (Twitter)",
+    icon: FaXTwitter,
+    url: (handle) => `https://x.com/${handle}`,
+  },
+  {
+    id: "linkedin",
+    label: "LinkedIn",
+    icon: FaLinkedin,
+    url: (handle) => `https://linkedin.com/in/${handle}`,
+  },
+  {
+    id: "github",
+    label: "GitHub",
+    icon: FaGithub,
+    url: (handle) => `https://github.com/${handle}`,
+  },
+];
 
 export function ProfileHeader({
   profile,
@@ -54,7 +83,11 @@ export function ProfileHeader({
   const [handleDraft, setHandleDraft] = useState("");
 
   const pillClass =
-    "inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/60";
+    "inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs text-white/60 sm:text-sm";
+
+  const availablePlatforms = SOCIAL_PLATFORMS.filter(
+    (p) => !socials.some((s) => s.platform === p.id)
+  );
 
   const startEditingBio = () => {
     setBioDraft(bio);
@@ -75,7 +108,7 @@ export function ProfileHeader({
   const confirmAddSocial = () => {
     if (!pendingPlatform || !handleDraft.trim()) return;
     setSocials((prev) => [
-      ...prev.filter((s) => s.platform !== pendingPlatform),
+      ...prev,
       {
         platform: pendingPlatform,
         handle: handleDraft.trim().replace(/^@/, ""),
@@ -198,85 +231,93 @@ export function ProfileHeader({
           )}
         </div>
 
-        {/* Pills: joined, mail, socials, add social */}
+        {/* Pills: joined, socials, add social */}
         <div className="mt-4 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
           <span className={pillClass}>Joined {joinedShort}</span>
 
-          <a
-            href={`mailto:${email}`}
-            title="Send email"
-            className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 transition hover:bg-white/10 hover:text-white"
-          >
-            <Mail size={12} />
-          </a>
-
           {socials.map((social) => {
-            const Icon = SOCIAL_ICONS[social.platform];
+            const config = SOCIAL_PLATFORMS.find(
+              (p) => p.id === social.platform
+            )!;
+            const Icon = config.icon;
             return (
-              <span key={social.platform} className={pillClass}>
-                <Icon size={12} />@{social.handle}
-              </span>
+              <a
+                key={social.platform}
+                href={config.url(social.handle)}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={config.label}
+                className={`${pillClass} transition hover:bg-white/10 hover:text-white`}
+              >
+                <Icon size={14} />
+                <span>@{social.handle}</span>
+              </a>
             );
           })}
 
-          {isAddingSocial ? (
-            pendingPlatform ? (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 py-1 pl-3 pr-1.5 text-xs text-white/60">
-                {(() => {
-                  const Icon = SOCIAL_ICONS[pendingPlatform];
-                  return <Icon size={12} />;
-                })()}
-                <input
-                  autoFocus
-                  value={handleDraft}
-                  onChange={(e) => setHandleDraft(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && confirmAddSocial()}
-                  placeholder="username"
-                  className="w-24 bg-transparent text-xs text-white outline-none placeholder:text-white/30"
-                />
-                <button
-                  type="button"
-                  onClick={confirmAddSocial}
-                  className="flex h-5 w-5 items-center justify-center rounded-full text-white/60 hover:text-white"
-                >
-                  <Check size={12} />
-                </button>
-                <button
-                  type="button"
-                  onClick={cancelAddSocial}
-                  className="flex h-5 w-5 items-center justify-center rounded-full text-white/60 hover:text-white"
-                >
-                  <X size={12} />
-                </button>
-              </span>
-            ) : (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2 py-1">
-                <button
-                  type="button"
-                  title="Instagram"
-                  onClick={() => setPendingPlatform("instagram")}
-                  className="flex h-6 w-6 items-center justify-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white"
-                >
-                  <FaInstagram size={14} />
-                </button>
-                <button
-                  type="button"
-                  title="X (Twitter)"
-                  onClick={() => setPendingPlatform("twitter")}
-                  className="flex h-6 w-6 items-center justify-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white"
-                >
-                  <FaXTwitter size={14} />
-                </button>
-                <button
-                  type="button"
-                  onClick={cancelAddSocial}
-                  className="flex h-6 w-6 items-center justify-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white"
-                >
-                  <X size={12} />
-                </button>
-              </span>
-            )
-          ) : (
+          {isAddingSocial && (
+            <>
+              {pendingPlatform ? (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 py-1.5 pl-3.5 pr-1.5 text-xs text-white/60 sm:text-sm">
+                  {(() => {
+                    const config = SOCIAL_PLATFORMS.find(
+                      (p) => p.id === pendingPlatform
+                    )!;
+                    const Icon = config.icon;
+                    return <Icon size={14} />;
+                  })()}
+                  <input
+                    autoFocus
+                    value={handleDraft}
+                    onChange={(e) => setHandleDraft(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && confirmAddSocial()}
+                    placeholder="username"
+                    className="w-24 bg-transparent text-xs text-white outline-none placeholder:text-white/30 sm:text-sm"
+                  />
+                  <button
+                    type="button"
+                    onClick={confirmAddSocial}
+                    className="flex h-5 w-5 items-center justify-center rounded-full text-white/60 hover:text-white"
+                  >
+                    <Check size={12} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={cancelAddSocial}
+                    className="flex h-5 w-5 items-center justify-center rounded-full text-white/60 hover:text-white"
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2 py-1.5">
+                  {availablePlatforms.map((p) => {
+                    const Icon = p.icon;
+                    return (
+                      <button
+                        key={p.id}
+                        type="button"
+                        title={p.label}
+                        onClick={() => setPendingPlatform(p.id)}
+                        className="flex h-6 w-6 items-center justify-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white"
+                      >
+                        <Icon size={14} />
+                      </button>
+                    );
+                  })}
+                  <button
+                    type="button"
+                    onClick={cancelAddSocial}
+                    className="flex h-6 w-6 items-center justify-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white"
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              )}
+            </>
+          )}
+
+          {!isAddingSocial && availablePlatforms.length > 0 && (
             <button
               type="button"
               onClick={() => setIsAddingSocial(true)}
