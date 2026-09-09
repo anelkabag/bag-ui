@@ -176,15 +176,9 @@ export default function Hero2() {
         variants={fadeUp}
         className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 py-6"
       >
-        <div className="flex items-center">
-          <Image
-            src={isDark ? "/logoW.png" : "/logo.png"}
-            alt="BagUi logo"
-            width={140}
-            height={38}
-            className="h-9 w-auto object-contain"
-          />
-        </div>
+        <span className="text-[19px] font-semibold tracking-tight">
+          BagUi.pro
+        </span>
 
         <div className="hidden items-center gap-7 md:flex">
           {NAV_LINKS.map((link) => (
