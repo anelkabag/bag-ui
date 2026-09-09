@@ -8,10 +8,10 @@ import { Terminal } from "lucide-react";
 /*  Icons — inline, no external icon package required                     */
 /* ---------------------------------------------------------------------- */
 
-function LogoMark({ className = "" }: { className?: string }) {
+function LogoMark({ className = "", theme = "dark" }: { className?: string; theme?: "dark" | "light" }) {
   return (
     <img
-      src="/logoW.png"
+      src={theme === "dark" ? "/logoW.png" : "/logo.png"}
       alt="Logo"
       className={className}
     />
@@ -418,6 +418,7 @@ const LOGOS = [
 export default function Hero3() {
   const shouldReduceMotion = useReducedMotion();
   const ease = [0.16, 1, 0.3, 1] as const;
+  const isDark = true;
 
   // Code editor interactivity — which file is open, and which tabs are shown.
   const [activeFile, setActiveFile] = useState<string>("DevOpsAssistant.ts");
@@ -471,7 +472,7 @@ export default function Hero3() {
           className="flex items-center justify-between border-2 border-dashed border-gray-300 bg-white px-6 py-4 shadow-sm dark:border-white/15 dark:bg-black sm:px-10"
         >
           <div className="flex items-center gap-10">
-            <LogoMark className="h-5 w-5 text-neutral-950 dark:text-white" />
+            <LogoMark className="h-8 w-auto object-contain" theme={isDark ? "dark" : "light"} />
             <div className="hidden items-center gap-8 text-sm text-neutral-600 dark:text-white/60 lg:flex">
               {NAV_LINKS.map((link) => (
                 <a
