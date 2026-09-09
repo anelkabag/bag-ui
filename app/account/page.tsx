@@ -1,8 +1,7 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import Image from "next/image";
-import { Mail, Bookmark, Pencil, CheckCircle2, Circle, BadgeCheck } from "lucide-react";
-import { ProfileEditForm } from "@/components/ProfileEditForm";
+import { CheckCircle2, Circle } from "lucide-react";
+import { ProfileHeader } from "@/components/Profileheader";
 import { DownloadsHistory } from "@/components/DownloadsHistory";
 import { AccountActions } from "@/components/AccountActions";
 
@@ -156,9 +155,6 @@ export default async function AccountPage() {
       })
     : "—";
 
-  const iconBtnClass =
-    "flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition hover:bg-white/10 hover:text-white";
-
   const statusChips = [
     {
       label: "Email Verified",
@@ -198,78 +194,15 @@ export default async function AccountPage() {
 
 
       <div className="px-6 pb-8 sm:px-10">
-        {/* Profile header */}
-        <div className="relative">
-          {/* Avatar */}
-          <div className="-mt-12 flex justify-center sm:-mt-14 sm:justify-start">
-            <div className="relative z-20 h-24 w-24 shrink-0 overflow-hidden rounded-3xl border-4 border-[#111111] bg-[#111111] shadow-xl sm:h-28 sm:w-28">
-              <Image
-                src={profile.avatar_url ?? "/faviconblack.png"}
-                alt="Avatar"
-                width={112}
-                height={112}
-                className="h-full w-full object-cover"
-              />
-            </div>
-          </div>
-
-          {/* Name + actions */}
-          <div className="mt-5 flex flex-col gap-5 sm:mt-4 sm:flex-row sm:items-start sm:justify-between">
-            <div>
-              <h1 className="flex items-center gap-2 text-2xl font-semibold text-white sm:text-3xl">
-                <span>{profile.username}</span>
-
-                {isProPlan && (
-                  <BadgeCheck
-                    size={20}
-                    className="shrink-0 text-sky-400 sm:h-6 sm:w-6"
-                    aria-label="Premium member"
-                  />
-                )}
-              </h1>
-
-              <p className="mt-1 text-sm text-white/60">
-                BagUI Member
-              </p>
-
-              <span className="mt-3 inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/60">
-                Joined {joinedShort}
-              </span>
-            </div>
-
-            <a
-              href="#edit-profile"
-              className="inline-flex h-9 shrink-0 items-center justify-center gap-2 self-start rounded-full border border-white/10 bg-white/5 px-4 text-xs font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
-            >
-              <Pencil size={14} />
-              Edit Profile
-            </a>
-          </div>
-        </div>
-
-        {/* Quick actions */}
-        <div className="mt-7 flex items-center justify-between border-t border-white/10 pt-6">
-          <div className="flex items-center gap-3">
-            <a
-              href={`mailto:${user.email}`}
-              title="Send email"
-              className={iconBtnClass}
-            >
-              <Mail size={16} />
-            </a>
-          </div>
-
-          <button
-            type="button"
-            title="Save profile"
-            className={iconBtnClass}
-          >
-            <Bookmark size={16} />
-          </button>
-        </div>
+        <ProfileHeader
+          profile={profile}
+          email={user.email || ""}
+          isProPlan={isProPlan}
+          joinedShort={joinedShort}
+        />
 
         {/* Tabs */}
-        <div className="mt-4 flex items-center gap-2 overflow-x-auto text-sm">
+        <div className="mt-7 flex items-center gap-2 overflow-x-auto border-t border-white/10 pt-6 text-sm">
           <span className="shrink-0 rounded-full bg-white/10 px-4 py-2 font-medium text-white shadow-sm">
             Overview
           </span>
@@ -317,22 +250,6 @@ export default async function AccountPage() {
                 <span className="text-white/40">• {chip.detail}</span>
               </span>
             ))}
-          </div>
-        </div>
-
-        {/* Edit profile form */}
-        <div
-          id="edit-profile"
-          className="rounded-[32px] border border-white/10 bg-[#111111]/90 p-10 shadow-2xl shadow-black/40"
-        >
-          <p className="text-sm uppercase tracking-[0.35em] text-white/40">
-            Edit Profile
-          </p>
-          <h2 className="mt-4 text-2xl font-semibold">
-            Update your information
-          </h2>
-          <div className="mt-6">
-            <ProfileEditForm profile={profile} email={user.email || ""} />
           </div>
         </div>
 
