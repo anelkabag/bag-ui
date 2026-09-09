@@ -252,6 +252,7 @@ function ChartTooltip({
 export default function Hero1() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [announceIndex, setAnnounceIndex] = useState(0);
+  const [isDark] = useState(true);
   const [activeDashNav, setActiveDashNav] = useState("Dashboard");
   const [activeSubTab, setActiveSubTab] = useState("Overview");
   const [range, setRange] = useState<RangeKey>("12M");
@@ -291,14 +292,15 @@ export default function Hero1() {
   return (
     <div className="bg-white">
       {/* Navbar */}
-      <header className="sticky top-0 z-50 border-b border-zinc-100 bg-white/80 backdrop-blur">
+      <header className={`sticky top-0 z-50 border-b ${isDark ? "border-zinc-800 bg-zinc-950/80" : "border-zinc-100 bg-white/80"} backdrop-blur`}>
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
           <div className="flex items-center gap-9">
             <a href="#" className="flex items-center gap-2">
-              <span className="flex h-6 w-6 items-center justify-center rounded-md bg-zinc-900">
-                <ArrowUpRight className="h-3.5 w-3.5 text-white" />
-              </span>
-              <span className="text-sm font-semibold text-zinc-900">Untitled UI</span>
+              {isDark ? (
+                <img src="/logoW.png" alt="BagUI logo" className="h-7 w-auto object-contain" />
+              ) : (
+                <img src="/logo.png" alt="BagUI logo" className="h-7 w-auto object-contain" />
+              )}
             </a>
             <nav className="hidden items-center gap-7 lg:flex">
               {navLinks.map(({ label, chevron }) => (
