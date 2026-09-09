@@ -1,7 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { CheckCircle2, Circle } from "lucide-react";
-import { ProfileHeader } from "@/components/Profileheader";
+import { ProfileHeader } from "@/components/ProfileHeader";
 import { DownloadsHistory } from "@/components/DownloadsHistory";
 import { AccountActions } from "@/components/AccountActions";
 
@@ -130,50 +129,6 @@ export default async function AccountPage() {
     }
   );
 
-  const joinedLong = new Date(profile.created_at).toLocaleDateString(
-    "en-US",
-    {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }
-  );
-
-  const isEmailVerified = Boolean(user.email_confirmed_at);
-
-  const provider = user.app_metadata?.provider
-    ? user.app_metadata.provider.charAt(0).toUpperCase() +
-      user.app_metadata.provider.slice(1)
-    : "Email";
-
-  const lastActive = user.last_sign_in_at
-    ? new Date(user.last_sign_in_at).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      })
-    : "—";
-
-  const statusChips = [
-    {
-      label: "Email Verified",
-      detail: isEmailVerified ? "Confirmed" : "Pending",
-      active: isEmailVerified,
-    },
-    {
-      label: "Sign-in Provider",
-      detail: provider,
-      active: false,
-    },
-    {
-      label: "Last Active",
-      detail: lastActive,
-      active: false,
-    },
-  ];
-
-
   return (
     <main className="min-h-screen bg-[#0b0b0b] px-6 py-10 text-white">
       <div className="mx-auto max-w-4xl space-y-6">
@@ -200,58 +155,9 @@ export default async function AccountPage() {
           isProPlan={isProPlan}
           joinedShort={joinedShort}
         />
-
-        {/* Tabs */}
-        <div className="mt-7 flex items-center gap-2 overflow-x-auto border-t border-white/10 pt-6 text-sm">
-          <span className="shrink-0 rounded-full bg-white/10 px-4 py-2 font-medium text-white shadow-sm">
-            Overview
-          </span>
-
-          <span className="shrink-0 px-4 py-2 text-white/40">
-            Security
-          </span>
-
-          <span className="shrink-0 px-4 py-2 text-white/40">
-            Activity
-          </span>
-        </div>
       </div>
     </div>
 
-
-        {/* Summary */}
-        <div className="rounded-[32px] border border-white/10 bg-[#111111]/90 p-10 shadow-2xl shadow-black/40">
-          <p className="text-sm uppercase tracking-[0.35em] text-white/40">
-            Summary
-          </p>
-          <p className="mt-6 text-sm leading-relaxed text-white/60">
-            {profile.username} has been a BagUI member since {joinedLong},
-            signed in with {user.email}.
-          </p>
-        </div>
-
-        {/* Account status */}
-        <div className="rounded-[32px] border border-white/10 bg-[#111111]/90 p-10 shadow-2xl shadow-black/40">
-          <p className="text-sm uppercase tracking-[0.35em] text-white/40">
-            Account Status
-          </p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            {statusChips.map((chip) => (
-              <span
-                key={chip.label}
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80"
-              >
-                {chip.active ? (
-                  <CheckCircle2 size={16} className="text-green-400" />
-                ) : (
-                  <Circle size={16} className="text-white/30" />
-                )}
-                {chip.label}
-                <span className="text-white/40">• {chip.detail}</span>
-              </span>
-            ))}
-          </div>
-        </div>
 
         {/* Downloads history */}
         <DownloadsHistory
