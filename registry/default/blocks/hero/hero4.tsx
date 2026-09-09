@@ -484,7 +484,7 @@ export default function Hero1() {
                   <span className="flex h-5 w-5 items-center justify-center rounded bg-zinc-900">
                     <ArrowUpRight className="h-3 w-3 text-white" />
                   </span>
-                  <span className="hidden sm:inline">Untitled UI</span>
+                  <span className="hidden sm:inline">BagUI</span>
                 </span>
                 <nav className="hidden items-center gap-1 text-xs font-medium text-zinc-500 sm:flex">
                   {dashNav.map((label) => (

@@ -21,9 +21,9 @@
       }
     },
     {
-      "name": "hero2",
+      "name": "hero1",
       "type": "registry:block",
-      "title": "Hero Exemple 2",
+      "title": "Hero Exemple 1",
       "description": "Hero section with navbar and animated event dashboard preview.",
       "dependencies": ["framer-motion", "lucide-react"],
       "files": [
@@ -38,9 +38,9 @@
       }
     },
     {
-      "name": "hero4",
+      "name": "hero2",
       "type": "registry:block",
-      "title": "Hero Exemple 4",
+      "title": "Hero Exemple 2",
       "description": "Hero section with navbar and animated event dashboard preview.",
       "dependencies": ["framer-motion", "lucide-react"],
       "files": [
@@ -57,7 +57,7 @@
     {
       "name": "hero3",
       "type": "registry:block",
-      "title": "Hero Exemple 2",
+      "title": "Hero Exemple 3",
       "description": "Hero section with navbar and animated event dashboard preview.",
       "dependencies": ["framer-motion", "lucide-react"],
       "files": [
@@ -72,9 +72,9 @@
       }
     },
     {
-      "name": "hero1",
+      "name": "hero4",
       "type": "registry:block",
-      "title": "Hero Exemple 1",
+      "title": "Hero Exemple 4",
       "description": "Hero section with navbar and animated event dashboard preview.",
       "dependencies": ["framer-motion", "lucide-react"],
       "files": [
