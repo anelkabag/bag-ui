@@ -502,28 +502,14 @@ export default function Hero1() {
           How it works
         </motion.button>
 
-        <svg viewBox="0 0 160 200" className="pointer-events-none absolute right-[7.5rem] top-[29.5rem] z-20 hidden h-48 w-40 lg:block">
-          <motion.path
-            d="M148,10 C118,55 96,70 78,96 C56,128 42,150 22,178"
-            fill="none"
-            stroke="#18181b"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ duration: 0.9, delay: 0.9, ease: "easeInOut" }}
-          />
-          <motion.path
-            d="M22,178 L34,158 M22,178 L44,182"
-            fill="none"
-            stroke="#18181b"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ duration: 0.3, delay: 1.75 }}
-          />
-        </svg>
+        <motion.img
+          src="/vector.svg"
+          alt=""
+          className="pointer-events-none absolute right-[7.5rem] top-[29.5rem] z-20 hidden h-48 w-40 rotate-[57.04deg] lg:block"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.9, delay: 0.9, ease: "easeInOut" }}
+        />
 
         {/* Dashboard preview */}
         <motion.div
