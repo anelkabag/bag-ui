@@ -1,4 +1,4 @@
-import {motion, Variants} from 'framer-motion';
+import {motion, Variants} from 'motion/react';
 
 export default function CTASection() {
     const containerVariants: Variants = {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion, Variants } from "framer-motion";
+import { AnimatePresence, motion, Variants } from "motion/react";
 import {
   ChevronDown,
   ArrowUpRight,
@@ -39,7 +39,7 @@ import {
  *
  * Usage:
  *   1. Drop this file in e.g. `components/hero-1.tsx`
- *   2. npm i lucide-react framer-motion recharts
+ *   2. npm i lucide-react motion/react recharts
  *   3. Load Geist in layout.tsx:
  *        import { Geist } from "next/font/google";
  *        const geist = Geist({ subsets: ["latin"] });

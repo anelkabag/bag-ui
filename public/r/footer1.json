@@ -4,7 +4,7 @@
   "title": "Footer Exemple 1",
   "description": "",
   "dependencies": [
-    "framer-motion",
+    "motion/react",
     "lucide-react"
   ],
   "files": [

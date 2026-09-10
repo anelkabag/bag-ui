@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { Search, MoreVertical, Send, Plus, Smile, ChevronLeft, Image as ImageIcon, Bell, Edit3, CheckCheck } from "lucide-react";
 
 // Type definitions

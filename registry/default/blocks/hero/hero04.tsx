@@ -8,7 +8,7 @@ import {
   useScroll,
   useTransform,
   AnimatePresence,
-} from "framer-motion";
+} from "motion/react";
 import { ArrowRight, Calendar, Moon, Sun, Menu, X } from "lucide-react";
 
 export default function Hero1() {

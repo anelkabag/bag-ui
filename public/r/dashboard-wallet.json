@@ -4,7 +4,7 @@
   "title": "Modern Wallet Dashboard",
   "description": "",
   "dependencies": [
-    "framer-motion",
+    "motion/react",
     "lucide-react"
   ],
   "files": [

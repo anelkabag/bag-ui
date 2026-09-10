@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useState, useRef } from "react";
 
 // ─── Avatars ──────────────────────────────────────────────────────────────────

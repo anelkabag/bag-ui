@@ -4,7 +4,7 @@
   "title": "Hero Exemple 2",
   "description": "Hero section with navbar and animated event dashboard preview.",
   "dependencies": [
-    "framer-motion",
+    "motion/react",
     "lucide-react"
   ],
   "files": [

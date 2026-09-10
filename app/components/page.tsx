@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import registryJson from "@/registry.json";
 import { RegistryItem } from "@/lib/block-categories";
 import { getComponentAccessTier } from "@/lib/access";

@@ -1,5 +1,5 @@
 "use client";
-import { motion, useInView, cubicBezier } from "framer-motion";
+import { motion, useInView, cubicBezier } from "motion/react";
 import { useRef } from "react";
 import Link from "next/link";
 export default function CTASection() {

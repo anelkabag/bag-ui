@@ -13,7 +13,7 @@
  *     monochrome ambient light on a zinc-950 panel.
  *
  * Dependencies (already present in a standard BagUI/shadcn setup):
- *   npm install framer-motion lucide-react
+ *   npm install motion/react lucide-react
  *
  * Font setup (in app/layout.tsx), same as BagUI:
  *   import { Geist } from "next/font/google";
@@ -23,7 +23,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "motion/react";
 import { ChevronRight } from "lucide-react";
 import {
   FaXTwitter, // X

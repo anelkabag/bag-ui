@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { Heart, Sparkles, Server, Globe, Wrench } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
 import Navbar from "@/components/navbar";

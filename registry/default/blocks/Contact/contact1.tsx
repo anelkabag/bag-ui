@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, Variants } from "framer-motion";
+import { motion, Variants } from "motion/react";
 import { Video, Clock, CalendarDays, Globe, X } from "lucide-react";
 import Image from "next/image";
 

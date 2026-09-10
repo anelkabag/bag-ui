@@ -25,7 +25,7 @@
       "type": "registry:block",
       "title": "Hero Exemple 1",
       "description": "Hero section with navbar and animated event dashboard preview.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/hero/hero01.tsx",
@@ -42,7 +42,7 @@
       "type": "registry:block",
       "title": "Hero Exemple 2",
       "description": "Hero section with navbar and animated event dashboard preview.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/hero/hero02.tsx",
@@ -59,7 +59,7 @@
       "type": "registry:block",
       "title": "Hero Exemple 3",
       "description": "Hero section with navbar and animated event dashboard preview.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/hero/hero03.tsx",
@@ -76,7 +76,7 @@
       "type": "registry:block",
       "title": "Hero Exemple 4",
       "description": "Hero section with navbar and animated event dashboard preview.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/hero/hero04.tsx",
@@ -93,7 +93,7 @@
       "type": "registry:block",
       "title": "Navbar Exemple 1",
       "description": "Modern responsive navigation bar with animated interactions, customizable links, and mobile menu support.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/navbar/navbar1.tsx",
@@ -110,7 +110,7 @@
       "type": "registry:block",
       "title": "Navbar Exemple 2",
       "description": "Modern responsive navigation bar with animated interactions, customizable links, and mobile menu support.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/navbar/navbar2.tsx",
@@ -127,7 +127,7 @@
       "type": "registry:block",
       "title": "FAQ Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/faq/faq1.tsx",
@@ -144,7 +144,7 @@
       "type": "registry:block",
       "title": "CTA Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Cta/cta1.tsx",
@@ -161,7 +161,7 @@
       "type": "registry:block",
       "title": "CTA Exemple 2",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Cta/cta2.tsx",
@@ -178,7 +178,7 @@
       "type": "registry:block",
       "title": "Testimonial Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Testimonial/testimonial1.tsx",
@@ -195,7 +195,7 @@
       "type": "registry:block",
       "title": "Contact Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Contact/contact1.tsx",
@@ -212,7 +212,7 @@
       "type": "registry:block",
       "title": "Contact Exemple 2",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Contact/contact2.tsx",
@@ -229,7 +229,7 @@
       "type": "registry:block",
       "title": "Feature Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Feature/feature1.tsx",
@@ -246,7 +246,7 @@
       "type": "registry:block",
       "title": "Feature Exemple 2",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Feature/feature2.tsx",
@@ -263,7 +263,7 @@
       "type": "registry:block",
       "title": "Feature Exemple 3",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Feature/feature3.tsx",
@@ -280,7 +280,7 @@
       "type": "registry:block",
       "title": "Pricing Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Pricing/pricing1.tsx",
@@ -297,7 +297,7 @@
       "type": "registry:block",
       "title": "Pricing Exemple 2",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Pricing/pricing2.tsx",
@@ -314,7 +314,7 @@
       "type": "registry:block",
       "title": "Pricing Exemple 3",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Pricing/pricing3.tsx",
@@ -331,7 +331,7 @@
       "type": "registry:block",
       "title": "Login Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/SignUp/login1.tsx",
@@ -348,7 +348,7 @@
       "type": "registry:block",
       "title": "Sidebar Exemple 1",
       "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Sidebar/sidebar1.tsx",
@@ -365,7 +365,7 @@
       "type": "registry:block",
       "title": "Modern Store Dashboard",
       "description": "",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard-finance.tsx",
@@ -382,7 +382,7 @@
       "type": "registry:block",
       "title": "Modern Agency Dashboard",
       "description": "",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard-agency.tsx",
@@ -399,7 +399,7 @@
       "type": "registry:block",
       "title": "Modern Folder Dashboard",
       "description": "",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard-folde.tsx",
@@ -416,7 +416,7 @@
       "type": "registry:block",
       "title": "Modern Wallet Dashboard",
       "description": "",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard-wallet.tsx",
@@ -433,7 +433,7 @@
       "type": "registry:block",
       "title": "Modern Ads Dashboard",
       "description": "",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard-ads.tsx",
@@ -450,7 +450,7 @@
       "type": "registry:block",
       "title": "Modern Analytics Dashboard",
       "description": "",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard-analytic.tsx",
@@ -467,7 +467,7 @@
       "type": "registry:block",
       "title": "Modern LLM Dashboard",
       "description": "",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard-llm.tsx",
@@ -484,7 +484,7 @@
       "type": "registry:block",
       "title": "Modern Task Dashboard",
       "description": "",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard-task.tsx",
@@ -501,7 +501,7 @@
       "type": "registry:block",
       "title": "Modern Docs Dashboard",
       "description": "",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard-docs.tsx",
@@ -518,7 +518,7 @@
       "type": "registry:block",
       "title": "Dashboard Chat App",
       "description": "",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/Chat-App1.tsx",
@@ -535,7 +535,7 @@
       "type": "registry:block",
       "title": "Footer Exemple 1",
       "description": "",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Footer/footer1.tsx",
@@ -552,7 +552,7 @@
       "type": "registry:block",
       "title": "Footer Exemple 2",
       "description": "",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Footer/footer2.tsx",
@@ -569,7 +569,7 @@
       "type": "registry:block",
       "title": "Footer Exemple 3",
       "description": "",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Footer/footer3.tsx",
@@ -586,7 +586,7 @@
       "type": "registry:block",
       "title": "Template Open Agents.",
       "description": "",
-      "dependencies": ["framer-motion", "lucide-react"],
+      "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/templates/template1.tsx",

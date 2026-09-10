@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import Navbar from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import registryJson from "@/registry.json";

@@ -700,7 +700,7 @@ const StatCard = memo(function StatCard({ stat }: { stat: (typeof stats)[number]
 
 // Mémoïsé : props = {year, onYearChange}. `onYearChange` est `setYear`
 // (référence stable garantie par React), donc tant que `year` ne change
-// pas, ce graphique (SVG + framer-motion) ignore les re-rendus causés par
+// pas, ce graphique (SVG + motion/react) ignore les re-rendus causés par
 // la recherche ou par la sélection d'un autre onglet.
 const AdPerformanceChart = memo(function AdPerformanceChart({ year, onYearChange }: { year: "2026" | "2025"; onYearChange: (y: "2026" | "2025") => void }) {
   const [hovered, setHovered] = useState<number | null>(null);
@@ -1154,7 +1154,7 @@ export default function AdformaDashboard() {
 
   return (
     // Respecte prefers-reduced-motion pour toutes les animations
-    // framer-motion de l'arbre en une seule ligne, sans toucher à chaque
+    // motion/react de l'arbre en une seule ligne, sans toucher à chaque
     // composant animé individuellement.
     <MotionConfig reducedMotion="user">
       <div className="flex h-screen w-full overflow-hidden bg-black text-white">

@@ -4,7 +4,7 @@
   "title": "FAQ Exemple 1",
   "description": "Frequently asked questions section with collapsible items.",
   "dependencies": [
-    "framer-motion",
+    "motion/react",
     "lucide-react"
   ],
   "files": [

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useInView, cubicBezier } from "framer-motion";
+import { motion, useInView, cubicBezier } from "motion/react";
 import { Mail, MapPin, Phone, ArrowRight, Check } from "lucide-react";
 
 // ─── Animation variants ──────────────────────────────────────────────────────

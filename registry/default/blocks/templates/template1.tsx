@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { ChevronRight, CodeXml, Sun, Moon } from 'lucide-react';
 import Link from "next/link";
 

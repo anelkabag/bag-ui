@@ -28,7 +28,7 @@
  * black primary actions, soft-pill status colors. Primary black surfaces
  * invert to white in dark mode to keep the strict black/white/gray language.
  *
- * Dependencies: npm install framer-motion lucide-react
+ * Dependencies: npm install motion/react lucide-react
  *
  * Fix note: the crash ("Cannot read properties of undefined (reading 'rows')")
  * happened because `active` could hold a nav label with no matching key in
@@ -39,7 +39,7 @@
  */
 
 import { useMemo, useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, type Variants } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "motion/react";
 import {
   Search,
   LayoutGrid,
