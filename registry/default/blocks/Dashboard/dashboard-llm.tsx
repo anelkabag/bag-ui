@@ -738,7 +738,7 @@ const GuardrailTable = React.forwardRef<
                 <span className="font-mono text-neutral-300">{r.time}</span>
                 <span className="truncate text-neutral-400">{r.clientId}</span>
                 <span className="truncate text-neutral-200">{r.violation}</span>
-                <span className="truncate font-mono text-neutral-500">"{r.snippet}"</span>
+                <span className="truncate font-mono text-neutral-500">&quot;{r.snippet}&quot;</span>
                 <span className="text-right">
                   <span className={cn("inline-block rounded-md px-2 py-0.5 text-[11px]", actionStyle(r.action))}>{r.action}</span>
                 </span>
@@ -772,18 +772,26 @@ function RuleCard({ rule }: { rule: Rule }) {
   const [open, setOpen] = useState(rule.priority === "High");
   return (
     <div className="overflow-hidden rounded-lg border border-white/[0.07] bg-white/[0.02]">
-      <button onClick={() => setOpen((o) => !o)} className="flex w-full items-center justify-between px-3.5 py-3">
-        <span className="flex items-center gap-2 text-[12.5px] text-neutral-200">
-          Rule {rule.id.replace("r", "0")} <span className="text-neutral-600">·</span>
-          <span className={cn("rounded-md px-2 py-0.5 text-[11px] font-medium", priorityStyle(rule.priority))}>{rule.priority}</span>
-        </span>
-        <span className="flex items-center gap-2">
-          <MoreMenu items={[{ label: "Edit Rule", icon: Pencil }, { label: "Duplicate", icon: NotebookText }]} />
+      <div className="flex w-full items-center justify-between px-3.5 py-3">
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          className="flex flex-1 items-center justify-between text-left"
+          aria-expanded={open}
+          aria-label={`Toggle rule ${rule.id}`}
+        >
+          <span className="flex items-center gap-2 text-[12.5px] text-neutral-200">
+            Rule {rule.id.replace("r", "0")} <span className="text-neutral-600">·</span>
+            <span className={cn("rounded-md px-2 py-0.5 text-[11px] font-medium", priorityStyle(rule.priority))}>{rule.priority}</span>
+          </span>
           <motion.span animate={{ rotate: open ? 90 : 0 }} transition={{ duration: 0.15 }}>
             <ChevronRight className="h-3.5 w-3.5 text-neutral-500" />
           </motion.span>
-        </span>
-      </button>
+        </button>
+        <div className="ml-2 shrink-0">
+          <MoreMenu items={[{ label: "Edit Rule", icon: Pencil }, { label: "Duplicate", icon: NotebookText }]} />
+        </div>
+      </div>
       <AnimatePresence initial={false}>
         {open && (
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.18 }} className="overflow-hidden">
