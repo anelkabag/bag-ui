@@ -6,7 +6,7 @@ import path from "node:path";
 import {
   ensureProjectIdConfig,
   getOrCreateAnalyticsProjectId,
-} from "./analytics.ts";
+} from "../analytics";
 
 test("getOrCreateAnalyticsProjectId reuses a stored project id", () => {
   const store = new Map<string, string>();

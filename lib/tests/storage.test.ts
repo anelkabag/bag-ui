@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { summarizeStorage } from "./storage";
+import { summarizeStorage } from "../storage";
 
 test("summarizeStorage groups documents and images by size", () => {
   const summary = summarizeStorage([
