@@ -21,13 +21,21 @@ export async function GET() {
 
   const { data: profile, error } = await supabase
     .from("profiles")
-    .select("id, email, username, avatar_url, created_at, updated_at, plan")
+    .select(
+      "id, email, username, avatar_url, bio, phone, instagram_username, twitter_username, linkedin_username, github_username, created_at, updated_at, plan"
+    )
     .eq("id", user.id)
     .maybeSingle<{
       id: string;
       email: string;
       username: string;
       avatar_url: string | null;
+      bio: string | null;
+      phone: string | null;
+      instagram_username: string | null;
+      twitter_username: string | null;
+      linkedin_username: string | null;
+      github_username: string | null;
       created_at: string;
       updated_at: string;
       plan: string | null;
@@ -54,6 +62,12 @@ export async function GET() {
     email: user.email ?? "",
     username,
     avatar_url: profile?.avatar_url ?? null,
+    bio: profile?.bio ?? null,
+    phone: profile?.phone ?? null,
+    instagram_username: profile?.instagram_username ?? null,
+    twitter_username: profile?.twitter_username ?? null,
+    linkedin_username: profile?.linkedin_username ?? null,
+    github_username: profile?.github_username ?? null,
     created_at:
       profile?.created_at ?? user.created_at ?? new Date().toISOString(),
     updated_at:
@@ -83,7 +97,17 @@ export async function PUT(request: NextRequest) {
 
     // Récupérer les données de la requête
     const body = await request.json();
-    const { username, avatar_url } = body;
+    const {
+      username,
+      avatar_url,
+      bio,
+      phone,
+      socials,
+      instagram_username,
+      twitter_username,
+      linkedin_username,
+      github_username,
+    } = body;
 
     // Validation basique
     if (!username || username.trim().length === 0) {
@@ -111,12 +135,34 @@ export async function PUT(request: NextRequest) {
       );
     }
 
+    const normalizedSocials = {
+      instagram_username:
+        typeof socials?.instagram === "string"
+          ? socials.instagram.trim().replace(/^@/, "") || null
+          : instagram_username ?? null,
+      twitter_username:
+        typeof socials?.twitter === "string"
+          ? socials.twitter.trim().replace(/^@/, "") || null
+          : twitter_username ?? null,
+      linkedin_username:
+        typeof socials?.linkedin === "string"
+          ? socials.linkedin.trim().replace(/^@/, "") || null
+          : linkedin_username ?? null,
+      github_username:
+        typeof socials?.github === "string"
+          ? socials.github.trim().replace(/^@/, "") || null
+          : github_username ?? null,
+    };
+
     // Mettre à jour le profil
     const { data, error } = await supabase
       .from("profiles")
       .update({
         username: username.trim(),
         avatar_url: avatar_url?.trim() || null,
+        bio: typeof bio === "string" ? bio.trim() || null : null,
+        phone: typeof phone === "string" ? phone.trim() || null : null,
+        ...normalizedSocials,
         updated_at: new Date().toISOString(),
       })
       .eq("id", user.id)

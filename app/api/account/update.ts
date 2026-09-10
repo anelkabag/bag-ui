@@ -17,7 +17,17 @@ export async function PUT(request: NextRequest) {
 
     // Récupérer les données de la requête
     const body = await request.json();
-    const { username, avatar_url } = body;
+    const {
+      username,
+      avatar_url,
+      bio,
+      phone,
+      socials,
+      instagram_username,
+      twitter_username,
+      linkedin_username,
+      github_username,
+    } = body;
 
     // Validation basique
     if (!username || username.trim().length === 0) {
@@ -45,12 +55,34 @@ export async function PUT(request: NextRequest) {
       );
     }
 
+    const normalizedSocials = {
+      instagram_username:
+        typeof socials?.instagram === "string"
+          ? socials.instagram.trim().replace(/^@/, "") || null
+          : instagram_username ?? null,
+      twitter_username:
+        typeof socials?.twitter === "string"
+          ? socials.twitter.trim().replace(/^@/, "") || null
+          : twitter_username ?? null,
+      linkedin_username:
+        typeof socials?.linkedin === "string"
+          ? socials.linkedin.trim().replace(/^@/, "") || null
+          : linkedin_username ?? null,
+      github_username:
+        typeof socials?.github === "string"
+          ? socials.github.trim().replace(/^@/, "") || null
+          : github_username ?? null,
+    };
+
     // Mettre à jour le profil
     const { data, error } = await supabase
       .from("profiles")
       .update({
         username: username.trim(),
         avatar_url: avatar_url?.trim() || null,
+        bio: typeof bio === "string" ? bio.trim() || null : null,
+        phone: typeof phone === "string" ? phone.trim() || null : null,
+        ...normalizedSocials,
         updated_at: new Date().toISOString(),
       })
       .eq("id", session.user.id)

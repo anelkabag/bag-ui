@@ -15,6 +15,12 @@ export type Database = {
           email: string;
           username: string;
           avatar_url: string | null;
+          bio: string | null;
+          phone: string | null;
+          instagram_username: string | null;
+          twitter_username: string | null;
+          linkedin_username: string | null;
+          github_username: string | null;
           created_at: string;
           updated_at: string;
           plan?: string | null;
@@ -25,6 +31,12 @@ export type Database = {
           email: string;
           username: string;
           avatar_url?: string | null;
+          bio?: string | null;
+          phone?: string | null;
+          instagram_username?: string | null;
+          twitter_username?: string | null;
+          linkedin_username?: string | null;
+          github_username?: string | null;
           created_at?: string;
           updated_at?: string;
           plan?: string | null;
@@ -34,6 +46,12 @@ export type Database = {
           email?: string;
           username?: string;
           avatar_url?: string | null;
+          bio?: string | null;
+          phone?: string | null;
+          instagram_username?: string | null;
+          twitter_username?: string | null;
+          linkedin_username?: string | null;
+          github_username?: string | null;
           created_at?: string;
           updated_at?: string;
           plan?: string | null;

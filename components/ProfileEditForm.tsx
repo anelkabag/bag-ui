@@ -76,7 +76,12 @@ export function ProfileEditForm({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          bio,
+          phone,
+          socials,
+        }),
       });
 
       if (!response.ok) {

@@ -31,14 +31,51 @@ create index if not exists component_downloads_user_id_idx
 
 
 -- =========================================================
--- 3. Activer RLS
+-- 3. Colonnes profil
+-- =========================================================
+
+alter table public.profiles
+  add column if not exists bio text,
+  add column if not exists phone text,
+  add column if not exists instagram_username text,
+  add column if not exists twitter_username text,
+  add column if not exists linkedin_username text,
+  add column if not exists github_username text;
+
+
+-- =========================================================
+-- 4. Activer RLS profiles
+-- =========================================================
+
+alter table public.profiles enable row level security;
+
+
+drop policy if exists "Users can view all profiles" on public.profiles;
+drop policy if exists "Users can update their own profile" on public.profiles;
+
+create policy "Users can view all profiles"
+on public.profiles
+for select
+to authenticated, anon
+using (true);
+
+create policy "Users can update their own profile"
+on public.profiles
+for update
+to authenticated
+using (auth.uid() = id)
+with check (auth.uid() = id);
+
+
+-- =========================================================
+-- 5. Activer RLS downloads
 -- =========================================================
 
 alter table public.component_downloads enable row level security;
 
 
 -- =========================================================
--- 4. Policies
+-- 6. Policies downloads
 -- =========================================================
 
 -- Supprime les policies existantes si elles existent

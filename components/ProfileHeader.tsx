@@ -13,6 +13,12 @@ interface ProfileHeaderProps {
     email: string;
     username: string;
     avatar_url: string | null;
+    bio: string | null;
+    phone: string | null;
+    instagram_username: string | null;
+    twitter_username: string | null;
+    linkedin_username: string | null;
+    github_username: string | null;
     created_at: string;
     updated_at: string;
     plan: string | null;
@@ -69,13 +75,18 @@ export function ProfileHeader({
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [showBadgeTip, setShowBadgeTip] = useState(false);
 
-  const [bio, setBio] = useState("");
+  const [bio, setBio] = useState(profile.bio ?? "");
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [bioDraft, setBioDraft] = useState("");
 
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState(profile.phone ?? "");
 
-  const [socials, setSocials] = useState<SocialLinks>({});
+  const [socials, setSocials] = useState<SocialLinks>({
+    ...(profile.instagram_username ? { instagram: profile.instagram_username } : {}),
+    ...(profile.twitter_username ? { twitter: profile.twitter_username } : {}),
+    ...(profile.linkedin_username ? { linkedin: profile.linkedin_username } : {}),
+    ...(profile.github_username ? { github: profile.github_username } : {}),
+  });
   const [isAddingSocial, setIsAddingSocial] = useState(false);
   const [pendingPlatform, setPendingPlatform] =
     useState<SocialPlatform | null>(null);

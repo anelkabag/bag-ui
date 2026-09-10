@@ -19,7 +19,7 @@ export default async function AccountPage() {
   const { data: profileData, error } = await supabase
     .from("profiles")
     .select(
-      "id, email, username, avatar_url, created_at, updated_at, plan"
+      "id, email, username, avatar_url, bio, phone, instagram_username, twitter_username, linkedin_username, github_username, created_at, updated_at, plan"
     )
     .eq("id", user.id)
     .maybeSingle<{
@@ -27,6 +27,12 @@ export default async function AccountPage() {
       email: string;
       username: string;
       avatar_url: string | null;
+      bio: string | null;
+      phone: string | null;
+      instagram_username: string | null;
+      twitter_username: string | null;
+      linkedin_username: string | null;
+      github_username: string | null;
       created_at: string;
       updated_at: string;
       plan: string | null;
@@ -105,6 +111,12 @@ export default async function AccountPage() {
     email: user.email ?? "",
     username,
     avatar_url: null,
+    bio: null,
+    phone: null,
+    instagram_username: null,
+    twitter_username: null,
+    linkedin_username: null,
+    github_username: null,
     created_at: user.created_at ?? new Date().toISOString(),
     updated_at: user.updated_at ?? new Date().toISOString(),
     plan: "free",
