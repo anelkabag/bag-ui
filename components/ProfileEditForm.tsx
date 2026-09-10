@@ -3,17 +3,41 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { Trash2 } from "lucide-react";
 import type { Database } from "@/types/supabase";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  SOCIAL_PLATFORMS,
+  type SocialPlatform,
+  type SocialLinks,
+} from "@/components/ProfileHeader";
 
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
 interface ProfileEditFormProps {
   profile: Profile | null;
   email: string;
+  bio: string;
+  onBioChange: (bio: string) => void;
+  phone: string;
+  onPhoneChange: (phone: string) => void;
+  socials: SocialLinks;
+  onSocialsChange: (platform: SocialPlatform, handle: string) => void;
 }
 
-export function ProfileEditForm({ profile, email }: ProfileEditFormProps) {
+export function ProfileEditForm({
+  profile,
+  email,
+  bio,
+  onBioChange,
+  phone,
+  onPhoneChange,
+  socials,
+  onSocialsChange,
+}: ProfileEditFormProps) {
   const router = useRouter();
+  const { signOut } = useAuth();
+
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +48,15 @@ export function ProfileEditForm({ profile, email }: ProfileEditFormProps) {
     avatar_url: profile?.avatar_url || "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Delete account
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -61,6 +93,42 @@ export function ProfileEditForm({ profile, email }: ProfileEditFormProps) {
       setError(err instanceof Error ? err.message : "An unexpected error occurred");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleDeleteAccount = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+    setDeleteError(null);
+
+    if (!deletePassword) {
+      setDeleteError("Enter your password to delete your account.");
+      return;
+    }
+
+    setIsDeleting(true);
+
+    try {
+      const response = await fetch("/api/account", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: deletePassword }),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Unable to delete your account.");
+      }
+
+      await signOut();
+      router.replace("/");
+      router.refresh();
+    } catch (err) {
+      setDeleteError(
+        err instanceof Error ? err.message : "Unable to delete your account."
+      );
+      setIsDeleting(false);
     }
   };
 
@@ -119,6 +187,26 @@ export function ProfileEditForm({ profile, email }: ProfileEditFormProps) {
               <p className="mt-2 text-lg font-medium text-white">{email}</p>
             </div>
 
+            {phone && (
+              <div className="rounded-lg border border-white/10 bg-white/5 p-4">
+                <p className="text-xs uppercase tracking-widest text-white/40">
+                  Phone
+                </p>
+                <p className="mt-2 text-lg font-medium text-white">{phone}</p>
+              </div>
+            )}
+
+            {bio && (
+              <div className="rounded-lg border border-white/10 bg-white/5 p-4 sm:col-span-2">
+                <p className="text-xs uppercase tracking-widest text-white/40">
+                  Bio
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-white/80">
+                  {bio}
+                </p>
+              </div>
+            )}
+
             {formData.avatar_url && (
               <div className="rounded-lg border border-white/10 bg-white/5 p-4 sm:col-span-2">
                 <p className="text-xs uppercase tracking-widest text-white/40">
@@ -155,6 +243,67 @@ export function ProfileEditForm({ profile, email }: ProfileEditFormProps) {
               className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/40 outline-none transition-all focus:border-white/30 focus:bg-white/10"
               disabled={isLoading}
             />
+          </div>
+
+          {/* Phone */}
+          <div>
+            <label className="block text-sm font-medium text-white mb-2">
+              Phone number
+            </label>
+            <input
+              type="tel"
+              name="phone"
+              value={phone}
+              onChange={(e) => onPhoneChange(e.target.value)}
+              placeholder="+1 555 555 5555"
+              className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/40 outline-none transition-all focus:border-white/30 focus:bg-white/10"
+              disabled={isLoading}
+            />
+          </div>
+
+          {/* Bio */}
+          <div>
+            <label className="block text-sm font-medium text-white mb-2">
+              Bio
+            </label>
+            <textarea
+              name="bio"
+              rows={3}
+              value={bio}
+              onChange={(e) => onBioChange(e.target.value)}
+              placeholder="Write something about yourself..."
+              className="w-full resize-none rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/40 outline-none transition-all focus:border-white/30 focus:bg-white/10"
+              disabled={isLoading}
+            />
+          </div>
+
+          {/* Social links */}
+          <div>
+            <label className="block text-sm font-medium text-white mb-2">
+              Social networks
+            </label>
+            <div className="space-y-3">
+              {SOCIAL_PLATFORMS.map((platform) => {
+                const Icon = platform.icon;
+                return (
+                  <div key={platform.id} className="flex items-center gap-3">
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/60">
+                      <Icon size={16} />
+                    </span>
+                    <input
+                      type="text"
+                      value={socials[platform.id] || ""}
+                      onChange={(e) =>
+                        onSocialsChange(platform.id, e.target.value)
+                      }
+                      placeholder={`${platform.label} username`}
+                      className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/40 outline-none transition-all focus:border-white/30 focus:bg-white/10"
+                      disabled={isLoading}
+                    />
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           {/* Avatar URL */}
@@ -222,6 +371,92 @@ export function ProfileEditForm({ profile, email }: ProfileEditFormProps) {
             </button>
           </div>
         </form>
+      )}
+
+      {/* Danger zone: delete account */}
+      <div className="border-t border-red-500/20 pt-6">
+        <h2 className="flex items-center gap-2 text-sm font-semibold text-red-300">
+          <Trash2 size={16} />
+          Delete account
+        </h2>
+        <p className="mt-1 text-sm leading-relaxed text-white/50">
+          Permanently delete your BagUI account and everything tied to it.
+        </p>
+        <button
+          type="button"
+          onClick={() => setIsDeleteModalOpen(true)}
+          className="mt-3 inline-flex items-center gap-2 rounded-full bg-red-500/15 px-4 py-2 text-sm font-medium text-red-300 transition hover:bg-red-500/25"
+        >
+          <Trash2 size={14} />
+          Delete account
+        </button>
+      </div>
+
+      {/* Delete account confirmation modal */}
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center px-4 py-8">
+          <div
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={() => !isDeleting && setIsDeleteModalOpen(false)}
+          />
+          <div className="relative z-10 w-full max-w-md rounded-[28px] border border-red-500/20 bg-[#111111] p-7 shadow-2xl shadow-black/40">
+            <h3 className="flex items-center gap-2 text-lg font-semibold text-red-300">
+              <Trash2 size={18} />
+              Delete your account
+            </h3>
+            <p className="mt-2 text-sm leading-relaxed text-white/60">
+              This action is permanent. If you delete your account, you will
+              lose:
+            </p>
+            <ul className="mt-3 space-y-1.5 text-sm text-white/50">
+              <li>• Your profile, username, and avatar</li>
+              <li>• Your bio, phone number, and connected social links</li>
+              <li>• Your full component download history</li>
+              <li>• Your current plan and BagUI Pro benefits</li>
+            </ul>
+
+            <form onSubmit={handleDeleteAccount} className="mt-5 space-y-3">
+              <label className="sr-only" htmlFor="delete-account-password">
+                Account password
+              </label>
+              <input
+                id="delete-account-password"
+                type="password"
+                value={deletePassword}
+                onChange={(e) => setDeletePassword(e.target.value)}
+                placeholder="Account password"
+                autoComplete="current-password"
+                disabled={isDeleting}
+                className="w-full rounded-full border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-white/30 outline-none transition focus:border-red-400/50 focus:bg-white/10 disabled:opacity-50"
+              />
+
+              {deleteError && (
+                <p className="text-sm text-red-300" role="alert">
+                  {deleteError}
+                </p>
+              )}
+
+              <div className="flex gap-3 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setIsDeleteModalOpen(false)}
+                  disabled={isDeleting}
+                  className="flex-1 rounded-full border border-white/10 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isDeleting || !deletePassword}
+                  className="flex flex-1 items-center justify-center gap-2 rounded-full bg-red-500/15 px-4 py-2.5 text-sm font-medium text-red-300 transition hover:bg-red-500/25 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <Trash2 size={16} />
+                  {isDeleting ? "Deleting..." : "Delete account"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
     </div>
   );

@@ -22,12 +22,9 @@ interface ProfileHeaderProps {
   joinedShort: string;
 }
 
-type SocialPlatform = "instagram" | "twitter" | "linkedin" | "github";
+export type SocialPlatform = "instagram" | "twitter" | "linkedin" | "github";
 
-interface SocialLink {
-  platform: SocialPlatform;
-  handle: string;
-}
+export type SocialLinks = Partial<Record<SocialPlatform, string>>;
 
 interface SocialPlatformConfig {
   id: SocialPlatform;
@@ -36,7 +33,7 @@ interface SocialPlatformConfig {
   url: (handle: string) => string;
 }
 
-const SOCIAL_PLATFORMS: SocialPlatformConfig[] = [
+export const SOCIAL_PLATFORMS: SocialPlatformConfig[] = [
   {
     id: "instagram",
     label: "Instagram",
@@ -76,7 +73,9 @@ export function ProfileHeader({
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [bioDraft, setBioDraft] = useState("");
 
-  const [socials, setSocials] = useState<SocialLink[]>([]);
+  const [phone, setPhone] = useState("");
+
+  const [socials, setSocials] = useState<SocialLinks>({});
   const [isAddingSocial, setIsAddingSocial] = useState(false);
   const [pendingPlatform, setPendingPlatform] =
     useState<SocialPlatform | null>(null);
@@ -85,9 +84,11 @@ export function ProfileHeader({
   const pillClass =
     "inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs text-white/60 sm:text-sm";
 
-  const availablePlatforms = SOCIAL_PLATFORMS.filter(
-    (p) => !socials.some((s) => s.platform === p.id)
-  );
+  const availablePlatforms = SOCIAL_PLATFORMS.filter((p) => !socials[p.id]);
+
+  const updateSocial = (platform: SocialPlatform, handle: string) => {
+    setSocials((prev) => ({ ...prev, [platform]: handle }));
+  };
 
   const startEditingBio = () => {
     setBioDraft(bio);
@@ -107,13 +108,7 @@ export function ProfileHeader({
 
   const confirmAddSocial = () => {
     if (!pendingPlatform || !handleDraft.trim()) return;
-    setSocials((prev) => [
-      ...prev,
-      {
-        platform: pendingPlatform,
-        handle: handleDraft.trim().replace(/^@/, ""),
-      },
-    ]);
+    updateSocial(pendingPlatform, handleDraft.trim().replace(/^@/, ""));
     cancelAddSocial();
   };
 
@@ -131,7 +126,7 @@ export function ProfileHeader({
           />
         </div>
 
-        <div className="mt-3 flex items-center gap-2 sm:mt-16 sm:flex-col sm:items-end">
+        <div className="flex items-center gap-2 sm:mt-16 sm:flex-col sm:items-end">
           <button
             type="button"
             onClick={() => setIsEditOpen(true)}
@@ -154,7 +149,7 @@ export function ProfileHeader({
       </div>
 
       {/* Name + badge + bio + pills */}
-      <div className="mt-2 text-center sm:text-left">
+      <div className="mt-5 text-center sm:text-left">
         <h1 className="flex items-center justify-center gap-2 text-2xl font-semibold text-white sm:justify-start sm:text-3xl">
           <span>{profile.username}</span>
 
@@ -235,25 +230,25 @@ export function ProfileHeader({
         <div className="mt-4 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
           <span className={pillClass}>Joined {joinedShort}</span>
 
-          {socials.map((social) => {
-            const config = SOCIAL_PLATFORMS.find(
-              (p) => p.id === social.platform
-            )!;
-            const Icon = config.icon;
-            return (
-              <a
-                key={social.platform}
-                href={config.url(social.handle)}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={config.label}
-                className={`${pillClass} transition hover:bg-white/10 hover:text-white`}
-              >
-                <Icon size={14} />
-                <span>@{social.handle}</span>
-              </a>
-            );
-          })}
+          {(Object.entries(socials) as [SocialPlatform, string][])
+            .filter(([, handle]) => handle)
+            .map(([platformId, handle]) => {
+              const config = SOCIAL_PLATFORMS.find((p) => p.id === platformId)!;
+              const Icon = config.icon;
+              return (
+                <a
+                  key={platformId}
+                  href={config.url(handle)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={config.label}
+                  className={`${pillClass} transition hover:bg-white/10 hover:text-white`}
+                >
+                  <Icon size={14} />
+                  <span>@{handle}</span>
+                </a>
+              );
+            })}
 
           {isAddingSocial && (
             <>
@@ -355,7 +350,16 @@ export function ProfileHeader({
             </h2>
 
             <div className="mt-6">
-              <ProfileEditForm profile={profile} email={email} />
+              <ProfileEditForm
+                profile={profile}
+                email={email}
+                bio={bio}
+                onBioChange={setBio}
+                phone={phone}
+                onPhoneChange={setPhone}
+                socials={socials}
+                onSocialsChange={updateSocial}
+              />
             </div>
           </div>
         </div>
