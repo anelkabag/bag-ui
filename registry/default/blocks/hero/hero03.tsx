@@ -327,15 +327,6 @@ export default function Hero1() {
           </div>
 
           <div className="hidden items-center gap-5 lg:flex">
-            <button
-              onClick={() => setIsDark((v) => !v)}
-              aria-label="Toggle theme"
-              className={`grid h-9 w-9 place-items-center rounded-full border transition-colors ${
-                isDark ? "border-zinc-700 bg-zinc-900 text-zinc-200 hover:bg-zinc-800" : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100"
-              }`}
-            >
-              {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </button>
             <a href="#" className={`text-[13px] font-medium ${isDark ? "text-zinc-300 hover:text-white" : "text-zinc-600 hover:text-zinc-900"}`}>
               Log in
             </a>
@@ -347,15 +338,6 @@ export default function Hero1() {
           </div>
 
           <div className="flex items-center gap-2 lg:hidden">
-            <button
-              onClick={() => setIsDark((v) => !v)}
-              aria-label="Toggle theme"
-              className={`grid h-8 w-8 place-items-center rounded-full border transition-colors ${
-                isDark ? "border-zinc-700 bg-zinc-900 text-zinc-200" : "border-zinc-200 bg-white text-zinc-700"
-              }`}
-            >
-              {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </button>
             <button
               aria-label="Toggle menu"
               onClick={() => setMobileOpen((v) => !v)}
@@ -515,9 +497,14 @@ export default function Hero1() {
             <div className="flex items-center justify-between border-b border-zinc-100 px-5 py-3">
               <div className="flex items-center gap-6">
                 <span className="flex items-center gap-2 text-xs font-semibold text-zinc-900">
-                  <span className="flex h-5 w-5 items-center justify-center rounded bg-zinc-900">
-                    <ArrowUpRight className="h-3 w-3 text-white" />
+                  <span className="flex h-5 w-5 items-center justify-center rounded bg-zinc-900 overflow-hidden">
+                    <img
+                      src="/logoR.png"
+                      alt="Logo"
+                      className="h-full w-full object-contain"
+                    />
                   </span>
+
                   <span className="hidden sm:inline">BagUI</span>
                 </span>
                 <nav className="hidden items-center gap-1 text-xs font-medium text-zinc-500 sm:flex">
@@ -539,7 +526,11 @@ export default function Hero1() {
                   <Zap className="h-3 w-3 text-amber-500" />
                   200 credits
                 </span>
-                <span className="h-6 w-6 rounded-full bg-gradient-to-br from-zinc-300 to-zinc-400" />
+                  <img
+                    src="/avatar.png"
+                    alt="Avatar"
+                    className="h-6 w-6 rounded-full object-cover"
+                  />
               </div>
             </div>
 
