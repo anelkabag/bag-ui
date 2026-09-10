@@ -192,7 +192,7 @@ export function ProfileHeader({
           <button
             type="button"
             onClick={() => setIsEditOpen(true)}
-            className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-full border border-border bg-muted px-4 text-xs font-medium text-foreground transition hover:bg-accent hover:text-foreground mt-3"
+            className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-full border border-border bg-muted px-4 text-xs font-medium text-foreground transition hover:bg-accent hover:text-foreground mt-3 cursor-pointer"
           >
             <Pencil size={14} />
             Edit Profile
