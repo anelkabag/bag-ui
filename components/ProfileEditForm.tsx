@@ -38,7 +38,7 @@ export function ProfileEditForm({
   const router = useRouter();
   const { signOut } = useAuth();
 
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
