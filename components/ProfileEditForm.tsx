@@ -64,6 +64,26 @@ export function ProfileEditForm({
     }));
   };
 
+  const restoreSavedProfile = () => {
+    setFormData({
+      username: profile?.username || email?.split("@")[0] || "",
+      avatar_url: profile?.avatar_url || "",
+    });
+    onBioChange(profile?.bio ?? "");
+    onPhoneChange(profile?.phone ?? "");
+    (SOCIAL_PLATFORMS as readonly { id: SocialPlatform }[]).forEach((platform) => {
+      const currentValue =
+        platform.id === "instagram"
+          ? profile?.instagram_username ?? ""
+          : platform.id === "twitter"
+            ? profile?.twitter_username ?? ""
+            : platform.id === "linkedin"
+              ? profile?.linkedin_username ?? ""
+              : profile?.github_username ?? "";
+      onSocialsChange(platform.id, currentValue);
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -364,10 +384,7 @@ export function ProfileEditForm({
               onClick={() => {
                 setIsEditing(false);
                 setError(null);
-                setFormData({
-                  username: profile?.username || email?.split("@")[0] || "",
-                  avatar_url: profile?.avatar_url || "",
-                });
+                restoreSavedProfile();
               }}
               disabled={isLoading}
               className="rounded-lg border border-white/10 px-4 py-2.5 text-sm font-medium text-white transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed"

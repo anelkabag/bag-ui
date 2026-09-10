@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Pencil, BadgeCheck, X, Check } from "lucide-react";
 import { FaInstagram, FaXTwitter, FaLinkedin, FaGithub } from "react-icons/fa6";
@@ -66,6 +66,13 @@ export const SOCIAL_PLATFORMS: SocialPlatformConfig[] = [
   },
 ];
 
+const buildProfileSocials = (profile: ProfileHeaderProps["profile"]): SocialLinks => ({
+  ...(profile.instagram_username ? { instagram: profile.instagram_username } : {}),
+  ...(profile.twitter_username ? { twitter: profile.twitter_username } : {}),
+  ...(profile.linkedin_username ? { linkedin: profile.linkedin_username } : {}),
+  ...(profile.github_username ? { github: profile.github_username } : {}),
+});
+
 export function ProfileHeader({
   profile,
   email,
@@ -81,21 +88,55 @@ export function ProfileHeader({
 
   const [phone, setPhone] = useState(profile.phone ?? "");
 
-  const [socials, setSocials] = useState<SocialLinks>({
-    ...(profile.instagram_username ? { instagram: profile.instagram_username } : {}),
-    ...(profile.twitter_username ? { twitter: profile.twitter_username } : {}),
-    ...(profile.linkedin_username ? { linkedin: profile.linkedin_username } : {}),
-    ...(profile.github_username ? { github: profile.github_username } : {}),
-  });
+  const [socials, setSocials] = useState<SocialLinks>(buildProfileSocials(profile));
   const [isAddingSocial, setIsAddingSocial] = useState(false);
   const [pendingPlatform, setPendingPlatform] =
     useState<SocialPlatform | null>(null);
   const [handleDraft, setHandleDraft] = useState("");
 
+  useEffect(() => {
+    setBio(profile.bio ?? "");
+    setPhone(profile.phone ?? "");
+    setSocials(buildProfileSocials(profile));
+  }, [profile]);
+
+  const resetProfileDrafts = () => {
+    setBio(profile.bio ?? "");
+    setPhone(profile.phone ?? "");
+    setSocials(buildProfileSocials(profile));
+    setIsEditingBio(false);
+    setBioDraft("");
+    setIsAddingSocial(false);
+    setPendingPlatform(null);
+    setHandleDraft("");
+  };
+
   const pillClass =
     "inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs text-white/60 sm:text-sm";
 
   const availablePlatforms = SOCIAL_PLATFORMS.filter((p) => !socials[p.id]);
+
+  const persistProfile = async (
+    nextBio: string,
+    nextPhone: string,
+    nextSocials: SocialLinks,
+  ) => {
+    try {
+      await fetch("/api/account", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: profile.username,
+          avatar_url: profile.avatar_url,
+          bio: nextBio,
+          phone: nextPhone,
+          socials: nextSocials,
+        }),
+      });
+    } catch (error) {
+      console.error("Error saving profile from header:", error);
+    }
+  };
 
   const updateSocial = (platform: SocialPlatform, handle: string) => {
     setSocials((prev) => ({ ...prev, [platform]: handle }));
@@ -106,9 +147,11 @@ export function ProfileHeader({
     setIsEditingBio(true);
   };
 
-  const saveBio = () => {
-    setBio(bioDraft.trim());
+  const saveBio = async () => {
+    const nextBio = bioDraft.trim();
+    setBio(nextBio);
     setIsEditingBio(false);
+    await persistProfile(nextBio, phone, socials);
   };
 
   const cancelAddSocial = () => {
@@ -117,10 +160,18 @@ export function ProfileHeader({
     setHandleDraft("");
   };
 
-  const confirmAddSocial = () => {
+  const confirmAddSocial = async () => {
     if (!pendingPlatform || !handleDraft.trim()) return;
-    updateSocial(pendingPlatform, handleDraft.trim().replace(/^@/, ""));
+
+    const nextHandle = handleDraft.trim().replace(/^@/, "");
+    const nextSocials = {
+      ...socials,
+      [pendingPlatform]: nextHandle,
+    };
+
+    setSocials(nextSocials);
     cancelAddSocial();
+    await persistProfile(bio, phone, nextSocials);
   };
 
   return (
@@ -340,7 +391,10 @@ export function ProfileHeader({
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8">
           <div
             className="absolute inset-0 bg-black/70 backdrop-blur-sm"
-            onClick={() => setIsEditOpen(false)}
+            onClick={() => {
+              resetProfileDrafts();
+              setIsEditOpen(false);
+            }}
           />
           <div className="relative z-10 max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-[32px] border border-white/10 bg-[#111111] p-8 shadow-2xl shadow-black/40">
             <div className="flex items-center justify-between">
@@ -349,7 +403,10 @@ export function ProfileHeader({
               </p>
               <button
                 type="button"
-                onClick={() => setIsEditOpen(false)}
+                onClick={() => {
+                  resetProfileDrafts();
+                  setIsEditOpen(false);
+                }}
                 className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 transition hover:bg-white/10 hover:text-white"
               >
                 <X size={14} />
