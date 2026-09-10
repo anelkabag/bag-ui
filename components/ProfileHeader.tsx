@@ -188,7 +188,7 @@ export function ProfileHeader({
           />
         </div>
 
-        <div className="flex items-center gap-2 sm:mt-16 sm:flex-col sm:items-end">
+        <div className="flex items-center gap-2 sm:mt-16 sm:flex-col sm:items-end mt-3">
           <button
             type="button"
             onClick={() => setIsEditOpen(true)}
