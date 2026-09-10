@@ -16,8 +16,8 @@ export function AccountActions() {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h2 className="text-lg font-semibold text-white">Session</h2>
-        <p className="mt-1 text-sm text-white/50">
+        <h2 className="text-lg font-semibold text-foreground">Session</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
           Sign out of your BagUI account on this device.
         </p>
       </div>
@@ -25,7 +25,7 @@ export function AccountActions() {
         type="button"
         onClick={handleSignOut}
         disabled={isSigningOut}
-        className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
+        className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-muted px-4 py-2 text-sm font-medium text-foreground transition hover:bg-accent hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
       >
         <LogOut size={16} />
         {isSigningOut ? "Signing out..." : "Sign out"}

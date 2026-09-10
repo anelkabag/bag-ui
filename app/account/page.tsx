@@ -142,34 +142,32 @@ export default async function AccountPage() {
   );
 
   return (
-    <main className="min-h-screen bg-[#0b0b0b] px-6 py-10 text-white">
+    <main className="min-h-screen bg-background px-6 py-10 text-foreground">
       <div className="mx-auto max-w-4xl space-y-6">
         {/* Profile header */}
-        <div className="overflow-hidden rounded-[32px] border border-white/10 bg-[#111111]/90 shadow-2xl shadow-black/40">
-        {/* Cover */}
-        <div
-          className="relative h-36 overflow-hidden sm:h-44"
-          style={{
-            background:
-              "linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(35, 35, 35) 35%, rgb(255, 255, 255) 50%, rgb(35, 35, 35) 65%, rgb(0, 0, 0) 100%)",
-          }}
-        >
-          <span className="absolute right-6 top-6 text-xs font-semibold uppercase tracking-[0.35em] text-black/40">
-            Bag\Ui
-          </span>
+        <div className="overflow-hidden rounded-[32px] border border-border bg-card/90 shadow-2xl shadow-black/20">
+          {/* Cover */}
+          <div
+            className="relative h-36 overflow-hidden sm:h-44"
+            style={{
+              background:
+                "linear-gradient(135deg, rgb(15, 23, 42) 0%, rgb(148, 163, 184) 35%, rgb(255, 255, 255) 50%, rgb(148, 163, 184) 65%, rgb(15, 23, 42) 100%)",
+            }}
+          >
+            <span className="absolute right-6 top-6 text-xs font-semibold uppercase tracking-[0.35em] text-slate-900/40 dark:text-white/30">
+              Bag\Ui
+            </span>
+          </div>
+
+          <div className="px-6 pb-8 sm:px-10">
+            <ProfileHeader
+              profile={profile}
+              email={user.email || ""}
+              isProPlan={isProPlan}
+              joinedShort={joinedShort}
+            />
+          </div>
         </div>
-
-
-      <div className="px-6 pb-8 sm:px-10">
-        <ProfileHeader
-          profile={profile}
-          email={user.email || ""}
-          isProPlan={isProPlan}
-          joinedShort={joinedShort}
-        />
-      </div>
-    </div>
-
 
         {/* Downloads history */}
         <DownloadsHistory
@@ -178,8 +176,8 @@ export default async function AccountPage() {
         />
 
         {/* Account actions */}
-        <div className="rounded-[32px] border border-white/10 bg-[#111111]/90 p-10 shadow-2xl shadow-black/40">
-          <p className="text-sm uppercase tracking-[0.35em] text-white/40">
+        <div className="rounded-[32px] border border-border bg-card/90 p-10 shadow-2xl shadow-black/20">
+          <p className="text-sm uppercase tracking-[0.35em] text-muted-foreground">
             Account Actions
           </p>
           <div className="mt-6">

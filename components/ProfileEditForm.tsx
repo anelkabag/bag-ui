@@ -177,7 +177,7 @@ export function ProfileEditForm({
         <div className="space-y-6">
           {/* Avatar */}
           <div className="flex items-center gap-6">
-            <div className="h-24 w-24 overflow-hidden rounded-full border border-white/10 bg-white/5">
+            <div className="h-24 w-24 overflow-hidden rounded-full border border-border bg-muted">
               <Image
                 src={formData.avatar_url || "/faviconblack.png"}
                 alt="Avatar"
@@ -187,8 +187,8 @@ export function ProfileEditForm({
               />
             </div>
             <div>
-              <p className="text-sm text-white/60">Profile photo</p>
-              <p className="text-2xl font-semibold text-white">
+              <p className="text-sm text-muted-foreground">Profile photo</p>
+              <p className="text-2xl font-semibold text-foreground">
                 {formData.username}
               </p>
             </div>
@@ -196,48 +196,48 @@ export function ProfileEditForm({
 
           {/* Details */}
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-lg border border-white/10 bg-white/5 p-4">
-              <p className="text-xs uppercase tracking-widest text-white/40">
+            <div className="rounded-lg border border-border bg-muted/70 p-4">
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">
                 Username
               </p>
-              <p className="mt-2 text-lg font-medium text-white">
+              <p className="mt-2 text-lg font-medium text-foreground">
                 {formData.username}
               </p>
             </div>
 
-            <div className="rounded-lg border border-white/10 bg-white/5 p-4">
-              <p className="text-xs uppercase tracking-widest text-white/40">
+            <div className="rounded-lg border border-border bg-muted/70 p-4">
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">
                 Email
               </p>
-              <p className="mt-2 text-lg font-medium text-white">{email}</p>
+              <p className="mt-2 text-lg font-medium text-foreground">{email}</p>
             </div>
 
             {phone && (
-              <div className="rounded-lg border border-white/10 bg-white/5 p-4">
-                <p className="text-xs uppercase tracking-widest text-white/40">
+              <div className="rounded-lg border border-border bg-muted/70 p-4">
+                <p className="text-xs uppercase tracking-widest text-muted-foreground">
                   Phone
                 </p>
-                <p className="mt-2 text-lg font-medium text-white">{phone}</p>
+                <p className="mt-2 text-lg font-medium text-foreground">{phone}</p>
               </div>
             )}
 
             {bio && (
-              <div className="rounded-lg border border-white/10 bg-white/5 p-4 sm:col-span-2">
-                <p className="text-xs uppercase tracking-widest text-white/40">
+              <div className="rounded-lg border border-border bg-muted/70 p-4 sm:col-span-2">
+                <p className="text-xs uppercase tracking-widest text-muted-foreground">
                   Bio
                 </p>
-                <p className="mt-2 text-sm leading-relaxed text-white/80">
+                <p className="mt-2 text-sm leading-relaxed text-foreground/80">
                   {bio}
                 </p>
               </div>
             )}
 
             {formData.avatar_url && (
-              <div className="rounded-lg border border-white/10 bg-white/5 p-4 sm:col-span-2">
-                <p className="text-xs uppercase tracking-widest text-white/40">
+              <div className="rounded-lg border border-border bg-muted/70 p-4 sm:col-span-2">
+                <p className="text-xs uppercase tracking-widest text-muted-foreground">
                   Avatar URL
                 </p>
-                <p className="mt-2 truncate text-sm text-white/80">
+                <p className="mt-2 truncate text-sm text-foreground/80">
                   {formData.avatar_url}
                 </p>
               </div>
@@ -246,7 +246,7 @@ export function ProfileEditForm({
 
           <button
             onClick={() => setIsEditing(true)}
-            className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-2.5 text-sm font-medium text-black transition-all hover:bg-white/90"
+            className="inline-flex items-center gap-2 rounded-lg bg-foreground px-6 py-2.5 text-sm font-medium text-background transition-all hover:opacity-90"
           >
             Edit profile
           </button>
@@ -256,7 +256,7 @@ export function ProfileEditForm({
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Username */}
           <div>
-            <label className="block text-sm font-medium text-white mb-2">
+            <label className="mb-2 block text-sm font-medium text-foreground">
               Username
             </label>
             <input
@@ -265,14 +265,14 @@ export function ProfileEditForm({
               value={formData.username}
               onChange={handleChange}
               placeholder="Your username"
-              className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/40 outline-none transition-all focus:border-white/30 focus:bg-white/10"
+              className="w-full rounded-lg border border-border bg-muted px-4 py-3 text-foreground placeholder:text-muted-foreground outline-none transition-all focus:border-ring"
               disabled={isLoading}
             />
           </div>
 
           {/* Phone */}
           <div>
-            <label className="block text-sm font-medium text-white mb-2">
+            <label className="mb-2 block text-sm font-medium text-foreground">
               Phone number
             </label>
             <input
@@ -281,14 +281,14 @@ export function ProfileEditForm({
               value={phone}
               onChange={(e) => onPhoneChange(e.target.value)}
               placeholder="+1 555 555 5555"
-              className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/40 outline-none transition-all focus:border-white/30 focus:bg-white/10"
+              className="w-full rounded-lg border border-border bg-muted px-4 py-3 text-foreground placeholder:text-muted-foreground outline-none transition-all focus:border-ring"
               disabled={isLoading}
             />
           </div>
 
           {/* Bio */}
           <div>
-            <label className="block text-sm font-medium text-white mb-2">
+            <label className="mb-2 block text-sm font-medium text-foreground">
               Bio
             </label>
             <textarea
@@ -297,14 +297,14 @@ export function ProfileEditForm({
               value={bio}
               onChange={(e) => onBioChange(e.target.value)}
               placeholder="Write something about yourself..."
-              className="w-full resize-none rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/40 outline-none transition-all focus:border-white/30 focus:bg-white/10"
+              className="w-full resize-none rounded-lg border border-border bg-muted px-4 py-3 text-foreground placeholder:text-muted-foreground outline-none transition-all focus:border-ring"
               disabled={isLoading}
             />
           </div>
 
           {/* Social links */}
           <div>
-            <label className="block text-sm font-medium text-white mb-2">
+            <label className="mb-2 block text-sm font-medium text-foreground">
               Social networks
             </label>
             <div className="space-y-3">
@@ -312,7 +312,7 @@ export function ProfileEditForm({
                 const Icon = platform.icon;
                 return (
                   <div key={platform.id} className="flex items-center gap-3">
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/60">
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-border bg-muted text-muted-foreground">
                       <Icon size={16} />
                     </span>
                     <input
@@ -322,7 +322,7 @@ export function ProfileEditForm({
                         onSocialsChange(platform.id, e.target.value)
                       }
                       placeholder={`${platform.label} username`}
-                      className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/40 outline-none transition-all focus:border-white/30 focus:bg-white/10"
+                      className="w-full rounded-lg border border-border bg-muted px-4 py-3 text-foreground placeholder:text-muted-foreground outline-none transition-all focus:border-ring"
                       disabled={isLoading}
                     />
                   </div>
@@ -333,7 +333,7 @@ export function ProfileEditForm({
 
           {/* Avatar URL */}
           <div>
-            <label className="block text-sm font-medium text-white mb-2">
+            <label className="mb-2 block text-sm font-medium text-foreground">
               Profile photo URL
             </label>
             <input
@@ -342,7 +342,7 @@ export function ProfileEditForm({
               value={formData.avatar_url}
               onChange={handleChange}
               placeholder="https://exemple.com/photo.jpg"
-              className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/40 outline-none transition-all focus:border-white/30 focus:bg-white/10"
+              className="w-full rounded-lg border border-border bg-muted px-4 py-3 text-foreground placeholder:text-muted-foreground outline-none transition-all focus:border-ring"
               disabled={isLoading}
             />
           </div>
@@ -350,8 +350,8 @@ export function ProfileEditForm({
           {/* Preview */}
           {formData.avatar_url && (
             <div>
-              <p className="text-sm text-white/60 mb-2">Avatar preview</p>
-              <div className="h-32 w-32 overflow-hidden rounded-lg border border-white/10 bg-white/5">
+              <p className="mb-2 text-sm text-muted-foreground">Avatar preview</p>
+              <div className="h-32 w-32 overflow-hidden rounded-lg border border-border bg-muted">
                 <Image
                   src={formData.avatar_url}
                   alt="Preview"
@@ -375,7 +375,7 @@ export function ProfileEditForm({
             <button
               type="submit"
               disabled={isLoading}
-              className="flex-1 rounded-lg bg-white px-4 py-2.5 text-sm font-medium text-black transition-all hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 rounded-lg bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? "Saving..." : "Save"}
             </button>
@@ -387,7 +387,7 @@ export function ProfileEditForm({
                 restoreSavedProfile();
               }}
               disabled={isLoading}
-              className="rounded-lg border border-white/10 px-4 py-2.5 text-sm font-medium text-white transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rounded-lg border border-border bg-muted px-4 py-2.5 text-sm font-medium text-foreground transition-all hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>
@@ -401,7 +401,7 @@ export function ProfileEditForm({
           <Trash2 size={16} />
           Delete account
         </h2>
-        <p className="mt-1 text-sm leading-relaxed text-white/50">
+        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
           Permanently delete your BagUI account and everything tied to it.
         </p>
         <button
@@ -421,16 +421,16 @@ export function ProfileEditForm({
             className="absolute inset-0 bg-black/70 backdrop-blur-sm"
             onClick={() => !isDeleting && setIsDeleteModalOpen(false)}
           />
-          <div className="relative z-10 w-full max-w-md rounded-[28px] border border-red-500/20 bg-[#111111] p-7 shadow-2xl shadow-black/40">
+          <div className="relative z-10 w-full max-w-md rounded-[28px] border border-red-500/20 bg-card p-7 shadow-2xl shadow-black/20">
             <h3 className="flex items-center gap-2 text-lg font-semibold text-red-300">
               <Trash2 size={18} />
               Delete your account
             </h3>
-            <p className="mt-2 text-sm leading-relaxed text-white/60">
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
               This action is permanent. If you delete your account, you will
               lose:
             </p>
-            <ul className="mt-3 space-y-1.5 text-sm text-white/50">
+            <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground">
               <li>• Your profile, username, and avatar</li>
               <li>• Your bio, phone number, and connected social links</li>
               <li>• Your full component download history</li>
@@ -449,7 +449,7 @@ export function ProfileEditForm({
                 placeholder="Account password"
                 autoComplete="current-password"
                 disabled={isDeleting}
-                className="w-full rounded-full border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-white/30 outline-none transition focus:border-red-400/50 focus:bg-white/10 disabled:opacity-50"
+                className="w-full rounded-full border border-border bg-muted px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none transition focus:border-red-400/50 focus:bg-accent disabled:opacity-50"
               />
 
               {deleteError && (
@@ -463,7 +463,7 @@ export function ProfileEditForm({
                   type="button"
                   onClick={() => setIsDeleteModalOpen(false)}
                   disabled={isDeleting}
-                  className="flex-1 rounded-full border border-white/10 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 rounded-full border border-border bg-muted px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Cancel
                 </button>

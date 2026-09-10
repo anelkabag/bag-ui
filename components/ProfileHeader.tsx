@@ -112,7 +112,7 @@ export function ProfileHeader({
   };
 
   const pillClass =
-    "inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs text-white/60 sm:text-sm";
+    "inline-flex items-center gap-1.5 rounded-full border border-border bg-muted/70 px-3.5 py-1.5 text-xs text-muted-foreground sm:text-sm";
 
   const availablePlatforms = SOCIAL_PLATFORMS.filter((p) => !socials[p.id]);
 
@@ -192,7 +192,7 @@ export function ProfileHeader({
           <button
             type="button"
             onClick={() => setIsEditOpen(true)}
-            className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 text-xs font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
+            className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-full border border-border bg-muted px-4 text-xs font-medium text-foreground transition hover:bg-accent hover:text-foreground"
           >
             <Pencil size={14} />
             Edit Profile
@@ -213,7 +213,7 @@ export function ProfileHeader({
 
       {/* Name + badge + bio + pills */}
       <div className="mt-5 text-center sm:text-left">
-        <h1 className="flex items-center justify-center gap-2 text-2xl font-semibold text-white sm:justify-start sm:text-3xl">
+        <h1 className="flex items-center justify-center gap-2 text-2xl font-semibold text-foreground sm:justify-start sm:text-3xl">
           <span>{profile.username}</span>
 
           {isProPlan ? (
@@ -230,11 +230,11 @@ export function ProfileHeader({
             >
               <BadgeCheck
                 size={20}
-                className="text-white/30 sm:h-6 sm:w-6"
+                className="text-muted-foreground sm:h-6 sm:w-6"
                 aria-label="Locked badge"
               />
               {showBadgeTip && (
-                <span className="absolute left-1/2 top-full z-30 mt-2 w-56 -translate-x-1/2 rounded-lg border border-white/10 bg-[#111111] px-3 py-2 text-[11px] leading-snug text-white/60 shadow-2xl shadow-black/40">
+                <span className="absolute left-1/2 top-full z-30 mt-2 w-56 -translate-x-1/2 rounded-lg border border-border bg-popover px-3 py-2 text-[11px] leading-snug text-muted-foreground shadow-2xl shadow-black/20">
                   Support BagUI in Pricing to unlock the Pro badge.
                 </span>
               )}
@@ -252,20 +252,20 @@ export function ProfileHeader({
                 value={bioDraft}
                 onChange={(e) => setBioDraft(e.target.value)}
                 placeholder="Write something about yourself..."
-                className="w-full resize-none rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/80 outline-none placeholder:text-white/30 focus:border-white/20"
+                className="w-full resize-none rounded-2xl border border-border bg-muted px-3 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-ring"
               />
               <div className="flex flex-col gap-1">
                 <button
                   type="button"
                   onClick={saveBio}
-                  className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition hover:bg-white/10 hover:text-white"
+                  className="flex h-7 w-7 items-center justify-center rounded-full border border-border bg-muted text-muted-foreground transition hover:bg-accent hover:text-foreground"
                 >
                   <Check size={13} />
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsEditingBio(false)}
-                  className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition hover:bg-white/10 hover:text-white"
+                  className="flex h-7 w-7 items-center justify-center rounded-full border border-border bg-muted text-muted-foreground transition hover:bg-accent hover:text-foreground"
                 >
                   <X size={13} />
                 </button>
@@ -274,7 +274,7 @@ export function ProfileHeader({
           ) : bio ? (
             <p
               onClick={startEditingBio}
-              className="max-w-sm cursor-pointer text-sm leading-relaxed text-white/60 transition hover:text-white/80"
+              className="max-w-sm cursor-pointer text-sm leading-relaxed text-muted-foreground transition hover:text-foreground"
             >
               {bio}
             </p>
@@ -282,7 +282,7 @@ export function ProfileHeader({
             <button
               type="button"
               onClick={startEditingBio}
-              className="text-sm text-white/40 transition hover:text-white/60"
+              className="text-sm text-muted-foreground transition hover:text-foreground"
             >
               + Add a bio
             </button>
@@ -305,7 +305,7 @@ export function ProfileHeader({
                   target="_blank"
                   rel="noopener noreferrer"
                   title={config.label}
-                  className={`${pillClass} transition hover:bg-white/10 hover:text-white`}
+                  className={`${pillClass} transition hover:bg-accent hover:text-foreground`}
                 >
                   <Icon size={14} />
                   <span>@{handle}</span>
@@ -316,7 +316,7 @@ export function ProfileHeader({
           {isAddingSocial && (
             <>
               {pendingPlatform ? (
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 py-1.5 pl-3.5 pr-1.5 text-xs text-white/60 sm:text-sm">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted py-1.5 pl-3.5 pr-1.5 text-xs text-muted-foreground sm:text-sm">
                   {(() => {
                     const config = SOCIAL_PLATFORMS.find(
                       (p) => p.id === pendingPlatform
@@ -330,25 +330,25 @@ export function ProfileHeader({
                     onChange={(e) => setHandleDraft(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && confirmAddSocial()}
                     placeholder="username"
-                    className="w-24 bg-transparent text-xs text-white outline-none placeholder:text-white/30 sm:text-sm"
+                    className="w-24 bg-transparent text-xs text-foreground outline-none placeholder:text-muted-foreground sm:text-sm"
                   />
                   <button
                     type="button"
                     onClick={confirmAddSocial}
-                    className="flex h-5 w-5 items-center justify-center rounded-full text-white/60 hover:text-white"
+                    className="flex h-5 w-5 items-center justify-center rounded-full text-muted-foreground hover:text-foreground"
                   >
                     <Check size={12} />
                   </button>
                   <button
                     type="button"
                     onClick={cancelAddSocial}
-                    className="flex h-5 w-5 items-center justify-center rounded-full text-white/60 hover:text-white"
+                    className="flex h-5 w-5 items-center justify-center rounded-full text-muted-foreground hover:text-foreground"
                   >
                     <X size={12} />
                   </button>
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2 py-1.5">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted px-2 py-1.5">
                   {availablePlatforms.map((p) => {
                     const Icon = p.icon;
                     return (
@@ -357,7 +357,7 @@ export function ProfileHeader({
                         type="button"
                         title={p.label}
                         onClick={() => setPendingPlatform(p.id)}
-                        className="flex h-6 w-6 items-center justify-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white"
+                        className="flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground transition hover:bg-accent hover:text-foreground"
                       >
                         <Icon size={14} />
                       </button>
@@ -366,7 +366,7 @@ export function ProfileHeader({
                   <button
                     type="button"
                     onClick={cancelAddSocial}
-                    className="flex h-6 w-6 items-center justify-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white"
+                    className="flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground transition hover:bg-accent hover:text-foreground"
                   >
                     <X size={12} />
                   </button>
@@ -379,7 +379,7 @@ export function ProfileHeader({
             <button
               type="button"
               onClick={() => setIsAddingSocial(true)}
-              className={`${pillClass} border-dashed transition hover:bg-white/10 hover:text-white`}
+              className={`${pillClass} border-dashed transition hover:bg-accent hover:text-foreground`}
             >
               Add social network +
             </button>
@@ -397,9 +397,9 @@ export function ProfileHeader({
               setIsEditOpen(false);
             }}
           />
-          <div className="relative z-10 max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-[32px] border border-white/10 bg-[#111111] p-8 shadow-2xl shadow-black/40">
+          <div className="relative z-10 max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-[32px] border border-border bg-card/95 p-8 shadow-2xl shadow-black/20">
             <div className="flex items-center justify-between">
-              <p className="text-sm uppercase tracking-[0.35em] text-white/40">
+              <p className="text-sm uppercase tracking-[0.35em] text-muted-foreground">
                 Edit Profile
               </p>
               <button
@@ -408,13 +408,13 @@ export function ProfileHeader({
                   resetProfileDrafts();
                   setIsEditOpen(false);
                 }}
-                className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 transition hover:bg-white/10 hover:text-white"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-muted text-muted-foreground transition hover:bg-accent hover:text-foreground"
               >
                 <X size={14} />
               </button>
             </div>
 
-            <h2 className="mt-4 text-xl font-semibold text-white">
+            <h2 className="mt-4 text-xl font-semibold text-foreground">
               Update your information
             </h2>
 
