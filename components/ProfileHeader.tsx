@@ -178,7 +178,7 @@ export function ProfileHeader({
     <>
       {/* Avatar + top-right actions */}
       <div className="relative flex flex-col items-center gap-4 -mt-14 sm:-mt-16 sm:flex-row sm:items-start sm:justify-between">
-        <div className="relative z-20 h-28 w-28 shrink-0 overflow-hidden rounded-3xl border-4 border-[#111111] bg-[#111111] shadow-xl sm:h-32 sm:w-32">
+        <div className="relative z-20 h-28 w-28 shrink-0 overflow-hidden rounded-3xl border-4 border-border bg-muted shadow-xl sm:h-32 sm:w-32">
           <Image
             src={profile.avatar_url ?? "/faviconblack.png"}
             alt="Avatar"
@@ -192,7 +192,7 @@ export function ProfileHeader({
           <button
             type="button"
             onClick={() => setIsEditOpen(true)}
-            className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-full border border-border bg-muted px-4 text-xs font-medium text-foreground transition hover:bg-accent hover:text-foreground"
+            className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-full border border-border bg-muted px-4 text-xs font-medium text-foreground transition hover:bg-accent hover:text-foreground mt-3"
           >
             <Pencil size={14} />
             Edit Profile
@@ -202,7 +202,7 @@ export function ProfileHeader({
             className={`inline-flex h-9 shrink-0 items-center justify-center rounded-full border px-4 text-xs font-medium ${
               isProPlan
                 ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-400"
-                : "border-white/10 bg-white/5 text-white/60"
+                : "border-border bg-muted text-muted-foreground"
             }`}
           >
             {isProPlan ? "Pro Plan" : "Free Plan"}
