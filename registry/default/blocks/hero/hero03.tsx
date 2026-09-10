@@ -405,8 +405,6 @@ export default function Hero1() {
 
       {/* Hero */}
       <section className="relative overflow-hidden px-6 pb-20 pt-16 sm:pt-20">
-        <div className="pointer-events-none absolute -right-6 top-14 hidden h-48 w-48 rotate-[16deg] border border-zinc-200/90 lg:block" />
-        <div className="pointer-events-none absolute right-[19%] top-40 hidden h-px w-64 rotate-[-32deg] bg-zinc-200 lg:block" />
 
         <motion.div variants={container} initial="hidden" animate="show" className="relative mx-auto max-w-2xl">
           <motion.div variants={item}>
@@ -502,15 +500,6 @@ export default function Hero1() {
           How it works
         </motion.button>
 
-        <motion.img
-          src="/vector.svg"
-          alt=""
-          className="pointer-events-none absolute right-[7.5rem] top-[29.5rem] z-20 hidden h-48 w-40 rotate-[57.04deg] lg:block"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.9, delay: 0.9, ease: "easeInOut" }}
-        />
-
         {/* Dashboard preview */}
         <motion.div
           initial={{ opacity: 0, y: 28 }}
@@ -581,7 +570,7 @@ export default function Hero1() {
             </div>
 
             {/* body */}
-            <div className="h-[300px] overflow-y-auto px-5 py-5 sm:h-[320px]">
+            <div className="h-[380px] overflow-y-auto px-5 py-5 sm:h-[430px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeSubTab}
