@@ -418,7 +418,11 @@ export default function Hero1() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -6 }}
                 transition={{ duration: 0.35 }}
-                className="inline-flex items-center gap-3 rounded-full border border-zinc-200 bg-white py-1 pl-1 pr-3 text-xs text-zinc-700 shadow-sm transition-colors hover:border-zinc-300"
+                className={`inline-flex items-center gap-3 rounded-full border py-1 pl-1 pr-3 text-xs shadow-sm transition-colors ${
+                  isDark
+                    ? "border-zinc-700 bg-zinc-900/80 text-zinc-200 hover:border-zinc-600"
+                    : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300"
+                }`}
               >
                 <span className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 font-medium text-emerald-700">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
@@ -434,12 +438,19 @@ export default function Hero1() {
 
           <motion.h1
             variants={item}
-            className="mt-6 text-[2.6rem] font-semibold leading-[1.08] tracking-tight text-zinc-900 sm:text-5xl md:text-[3.4rem]"
+            className={`mt-6 text-[2.6rem] font-semibold leading-[1.08] tracking-tight sm:text-5xl md:text-[3.4rem] ${
+              isDark ? "text-white" : "text-zinc-900"
+            }`}
           >
             Dream big, build fast, and grow your online business.
           </motion.h1>
 
-          <motion.p variants={item} className="mt-5 max-w-md text-[15px] leading-relaxed text-zinc-500">
+          <motion.p
+            variants={item}
+            className={`mt-5 max-w-md text-[15px] leading-relaxed ${
+              isDark ? "text-zinc-300" : "text-zinc-600"
+            }`}
+          >
             Whether you&apos;re launching a new venture or scaling an established brand or product, our platform equips you to grow and thrive.
           </motion.p>
 
@@ -451,15 +462,19 @@ export default function Hero1() {
             >
               Start free trial
             </motion.button>
-            <div className="text-xs leading-snug text-zinc-500">
-              <p className="font-medium text-zinc-700">Get 7 days free</p>
+            <div className={`text-xs leading-snug ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>
+              <p className={isDark ? "font-medium text-zinc-200" : "font-medium text-zinc-700"}>Get 7 days free</p>
               <p>then 3 months for $1/month</p>
             </div>
 
             <motion.button
               whileHover={{ y: -1 }}
               whileTap={{ scale: 0.98 }}
-              className="ml-auto flex items-center gap-2 rounded-full border border-zinc-200 px-4 py-2.5 text-sm font-medium text-zinc-800 shadow-sm transition-colors hover:border-zinc-300 cursor-pointer lg:hidden"
+              className={`ml-auto flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium shadow-sm transition-colors cursor-pointer lg:hidden ${
+                isDark
+                  ? "border-zinc-700 bg-zinc-900 text-zinc-100 hover:border-zinc-600"
+                  : "border-zinc-200 bg-white text-zinc-800 hover:border-zinc-300"
+              }`}
             >
               <span className="flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900">
                 <Play className="h-2.5 w-2.5 fill-white text-white" />
@@ -475,7 +490,11 @@ export default function Hero1() {
           transition={{ duration: 0.5, delay: 0.5 }}
           whileHover={{ y: -1 }}
           whileTap={{ scale: 0.98 }}
-          className="absolute right-16 top-[26rem] z-20 hidden items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 py-2.5 text-sm font-medium text-zinc-800 shadow-sm transition-colors hover:border-zinc-300 cursor-pointer lg:flex"
+          className={`absolute right-16 top-[26rem] z-20 hidden items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium shadow-sm transition-colors cursor-pointer lg:flex ${
+            isDark
+              ? "border-zinc-700 bg-zinc-900 text-zinc-100 hover:border-zinc-600"
+              : "border-zinc-200 bg-white text-zinc-800 hover:border-zinc-300"
+          }`}
         >
           <span className="flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900">
             <Play className="h-2.5 w-2.5 fill-white text-white" />
@@ -511,7 +530,7 @@ export default function Hero1() {
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.35, ease: "easeOut" }}
-          className="relative mx-auto mt-16 max-w-5xl"
+          className="relative mx-auto mt-16 max-w-[64rem]"
         >
           <div className="pointer-events-none absolute inset-y-6 -left-6 hidden w-16 overflow-hidden rounded-l-xl border border-zinc-100 bg-zinc-50/80 opacity-70 blur-[0.5px] xl:block" />
           <div className="pointer-events-none absolute inset-y-6 -right-6 hidden w-16 overflow-hidden rounded-r-xl border border-zinc-100 bg-zinc-50/80 opacity-70 blur-[0.5px] xl:block" />
