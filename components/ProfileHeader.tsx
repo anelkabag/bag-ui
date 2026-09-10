@@ -201,12 +201,13 @@ export function ProfileHeader({
           <span
             className={`inline-flex h-9 shrink-0 items-center justify-center rounded-full border px-4 text-xs font-medium ${
               isProPlan
-                ? "border-sky-400/30 bg-sky-400/10 text-sky-400"
+                ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-400"
                 : "border-white/10 bg-white/5 text-white/60"
             }`}
           >
             {isProPlan ? "Pro Plan" : "Free Plan"}
           </span>
+
         </div>
       </div>
 
