@@ -72,23 +72,6 @@
       }
     },
     {
-      "name": "hero4",
-      "type": "registry:block",
-      "title": "Hero Exemple 4",
-      "description": "Hero section with navbar and animated event dashboard preview.",
-      "dependencies": ["motion/react", "lucide-react"],
-      "files": [
-        {
-          "path": "registry/default/blocks/hero/hero04.tsx",
-          "type": "registry:block",
-          "target": "components/blocks/hero-ex-4.tsx"
-        }
-      ],
-      "access": {
-        "tier": "free"
-      }
-    },
-    {
       "name": "hero5",
       "type": "registry:block",
       "title": "Hero Exemple 5",
@@ -103,6 +86,23 @@
       ],
       "access": {
         "tier": "pro"
+      }
+    },
+    {
+      "name": "hero4",
+      "type": "registry:block",
+      "title": "Hero Exemple 4",
+      "description": "Hero section with navbar and animated event dashboard preview.",
+      "dependencies": ["motion/react", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/hero/hero04.tsx",
+          "type": "registry:block",
+          "target": "components/blocks/hero-ex-4.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
       }
     },
     {

@@ -43,11 +43,14 @@ const otherVacancies = [
 function HireteamLogo({ size = 22, textClassName = "text-[17px]" }: { size?: number; textClassName?: string }) {
   return (
     <div className="flex items-center gap-2">
-      <svg width={size} height={size * 0.7} viewBox="0 0 30 20" fill="none">
-        <ellipse cx="11" cy="10" rx="10" ry="9" fill="#171614" />
-        <ellipse cx="21" cy="10" rx="8" ry="7.2" fill="#171614" fillOpacity="0.92" />
-      </svg>
-      <span className={`font-semibold tracking-tight text-neutral-900 ${textClassName}`}>Hireteam</span>
+      <img
+        src="/logo.png"
+        alt="Logo"
+        width={size}
+        height={size * 0.7}
+      />
+
+      <span className={`font-semibold tracking-tight text-neutral-900 ${textClassName}`}>BagUi</span>
     </div>
   );
 }
@@ -235,10 +238,10 @@ function AppPreview() {
       transition={{ duration: 0.7, ease: "easeOut", delay: 0.45 }}
       className="relative mx-auto mt-14 max-w-4xl px-4 sm:px-6"
     >
-      <div className="relative h-[320px] overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-[0_30px_60px_-30px_rgba(0,0,0,0.15)] sm:h-[360px]">
+      <div className="relative h-[320px] overflow-hidden rounded-2xl border-3 border-neutral-950 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.15)] sm:h-[360px]">
         <div className="flex h-full">
           {/* sidebar */}
-          <div className="hidden w-[190px] shrink-0 flex-col border-r border-neutral-200 p-4 sm:flex">
+          <div className="hidden w-[190px] shrink-0 flex-col border-r border-neutral-950 p-4 sm:flex">
             <HireteamLogo size={18} textClassName="text-[14.5px]" />
             <p className="mt-6 mb-2 text-[11px] font-medium uppercase tracking-wider text-neutral-400">Menu</p>
             <div className="flex flex-col gap-0.5">
@@ -250,40 +253,40 @@ function AppPreview() {
 
           {/* main */}
           <div className="flex min-w-0 flex-1 flex-col">
-            <div className="flex items-center justify-between gap-3 border-b border-neutral-200 px-5 py-3.5">
-              <p className="shrink-0 text-[13.5px] font-medium text-neutral-900">Hello, Jack Sparrow</p>
-              <div className="hidden flex-1 items-center gap-2 rounded-full border border-neutral-200 px-3 py-1.5 text-neutral-400 sm:flex sm:max-w-[220px]">
+            <div className="flex items-center justify-between gap-3 border-b border-neutral-950 px-5 py-3.5">
+              <p className="shrink-0 text-[13.5px] font-medium text-neutral-900">Hello, Anelka Bag</p>
+              <div className="hidden flex-1 items-center gap-2 rounded-full border border-neutral-950 px-3 py-1.5 text-neutral-400 sm:flex sm:max-w-[220px]">
                 <Search className="h-3.5 w-3.5" />
                 <span className="text-[12px]">Search for any new job</span>
               </div>
               <div className="flex shrink-0 items-center gap-2">
-                <span className="relative flex h-7 w-7 items-center justify-center rounded-full border border-neutral-200 text-neutral-500">
+                <span className="relative flex h-7 w-7 items-center justify-center rounded-full border border-neutral-950 text-neutral-500">
                   <Bell className="h-3.5 w-3.5" />
                   <span className="absolute right-1.5 top-1.5 h-1 w-1 rounded-full bg-neutral-900" />
                 </span>
-                <span className="relative hidden h-7 w-7 items-center justify-center rounded-full border border-neutral-200 text-neutral-500 sm:flex">
+                <span className="relative hidden h-7 w-7 items-center justify-center rounded-full border border-neutral-950 text-neutral-500 sm:flex">
                   <Bookmark className="h-3.5 w-3.5" />
                   <span className="absolute right-1.5 top-1.5 h-1 w-1 rounded-full bg-neutral-900" />
                 </span>
-                <button className="rounded-full border border-neutral-300 px-3 py-1.5 text-[12px] font-medium text-neutral-800">Applied Jobs</button>
+                <button className="rounded-full border border-neutral-950 px-3 py-1.5 text-[12px] font-medium text-neutral-800">Applied Jobs</button>
               </div>
             </div>
 
             <div className="flex-1 overflow-hidden px-5 py-4">
-              <div className="rounded-xl border border-neutral-200">
-                <div className="flex items-center gap-2 border-b border-neutral-200 px-4 py-3">
+              <div className="rounded-xl border border-neutral-950">
+                <div className="flex items-center gap-2 border-b border-neutral-950 px-4 py-3">
                   <Video className="h-4 w-4 text-neutral-700" />
                   <p className="text-[13px] font-semibold text-neutral-900">Upcoming Interview</p>
                 </div>
                 <div className="flex items-center justify-between gap-3 px-4 py-3.5">
                   <div className="flex min-w-0 items-center gap-3">
                     <img
-                      src="https://api.dicebear.com/9.x/notionists/svg?seed=Jack-Sparrow&backgroundColor=f4f1ec"
-                      alt="Jack Sparrow"
-                      className="h-9 w-9 shrink-0 rounded-full border border-neutral-200 bg-neutral-50 object-cover"
+                      src="https://api.dicebear.com/9.x/notionists/svg?seed=Anelka-Bag&backgroundColor=f4f1ec"
+                      alt="Anelka Bag"
+                      className="h-9 w-9 shrink-0 rounded-full border border-neutral-950 bg-neutral-50 object-cover"
                     />
                     <div className="min-w-0">
-                      <p className="truncate text-[13px] font-medium text-neutral-900">Jack Sparrow</p>
+                      <p className="truncate text-[13px] font-medium text-neutral-900">Anelka Bag</p>
                       <p className="truncate text-[12px] text-neutral-500">Front-End Developer</p>
                     </div>
                   </div>
@@ -301,7 +304,7 @@ function AppPreview() {
                 </div>
               </div>
 
-              <div className="mt-4 rounded-xl border border-neutral-200">
+              <div className="mt-4 rounded-xl border border-neutral-950">
                 <div className="flex items-center gap-2 px-4 py-3">
                   <Briefcase className="h-4 w-4 text-neutral-700" />
                   <p className="text-[13px] font-semibold text-neutral-900">Other Vacancies</p>
