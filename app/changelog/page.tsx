@@ -9,6 +9,7 @@ import {
   PackagePlus,
   Rocket,
   Sparkles,
+  UserRound,
   Wrench,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -30,6 +31,31 @@ type Release = {
 };
 
 const releases: Release[] = [
+  {
+    version: "0.5.0",
+    date: "September 2026",
+    title: "More to build, more access for members",
+    summary:
+      "The registry gets a new hero, a new dashboard, and a smoother experience for users with an account.",
+    changes: [
+      {
+        label: "New components",
+        icon: Sparkles,
+        items: [
+          "Added Hero Exemple 5, a new hero section for expressive landing pages.",
+          "Added Modern Task Dashboard, a complete workspace for managing tasks and progress.",
+        ],
+      },
+      {
+        label: "Account experience",
+        icon: UserRound,
+        items: [
+          "Connected users can now retrieve and install pro components.",
+          "Added the profile page to manage account information and preferences.",
+        ],
+      },
+    ],
+  },
   {
     version: "0.4.0",
     date: "September 2026",
@@ -104,6 +130,18 @@ const releases: Release[] = [
 
 const featuredComponents = [
   {
+    name: "Hero Exemple 5",
+    type: "Hero",
+    description: "An expressive hero section for a strong first impression.",
+    href: "/fullscreen/hero5",
+  },
+  {
+    name: "Modern Task Dashboard",
+    type: "Dashboard",
+    description: "A complete task workspace for planning, tracking, and focus.",
+    href: "/fullscreen/dashboard-task",
+  },
+  {
     name: "Dashboard Analytics",
     type: "Dashboard",
     description: "A focused analytics workspace with key metrics and activity.",
@@ -151,7 +189,7 @@ export default function ChangelogPage() {
 
           <div className="mt-14 grid max-w-2xl grid-cols-2 gap-px border border-border bg-border sm:grid-cols-3">
             {[
-              ["3", "releases"],
+              ["4", "releases"],
               ["40+", "components"],
               ["Open", "source"],
             ].map(([value, label]) => (
