@@ -107,19 +107,19 @@ const featuredComponents = [
     name: "Dashboard Analytics",
     type: "Dashboard",
     description: "A focused analytics workspace with key metrics and activity.",
-    href: "/blocks/dashboard-analytic",
+    href: "/fullscreen/dashboard-analytics",
   },
   {
     name: "Contact 02",
     type: "Contact",
     description: "A compact contact section designed for conversion-focused pages.",
-    href: "/blocks/contact2",
+    href: "/fullscreen/contact-2",
   },
   {
     name: "Footer 01",
     type: "Footer",
     description: "A flexible footer with product, legal, and social navigation.",
-    href: "/blocks/footer1",
+    href: "/fullscreen/footer1",
   },
 ];
 
