@@ -28,11 +28,11 @@ const COPY: Record<Mode, { heading: string; subtext: string; cta: string; prompt
   },
 };
 
-const TRUSTED_BY = [
-  { name: "Northwind", dot: "bg-orange-400" },
-  { name: "Vantage" },
-  { name: "Fenwick" },
-  { name: "Loomly" },
+const TRUSTED_BY: { name: string; slug: string }[] = [
+  { name: "Headspace", slug: "headspace" },
+  { name: "Airbnb", slug: "airbnb" },
+  { name: "Revolut", slug: "revolut" },
+  { name: "Duolingo", slug: "duolingo" },
 ];
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -108,6 +108,7 @@ export default function SignUpCard() {
   const [submitted, setSubmitted] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [failedLogos, setFailedLogos] = useState<Set<string>>(new Set());
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -382,18 +383,32 @@ export default function SignUpCard() {
 
               <div className="mt-12">
                 <p className="text-center text-[12px] text-neutral-400">Trusted by teams at</p>
-                <div className="mt-4 flex items-center justify-center gap-6">
+                <div className="mt-4 flex flex-wrap items-center justify-center gap-x-7 gap-y-3">
                   {TRUSTED_BY.map((brand, i) => (
-                    <motion.span
-                      key={brand.name}
+                    <motion.div
+                      key={brand.slug}
                       initial={{ opacity: 0, y: 4 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: 0.05 * i }}
-                      className="flex items-center gap-1.5 text-[14px] font-semibold tracking-tight text-neutral-300"
+                      transition={{ duration: 0.3, delay: prefersReduced ? 0 : 0.05 * i }}
+                      className="flex h-6 items-center"
                     >
-                      {brand.dot && <span className={cn("h-1.5 w-1.5 rounded-full", brand.dot)} />}
-                      {brand.name}
-                    </motion.span>
+                      {failedLogos.has(brand.slug) ? (
+                        <span className="text-[14px] font-semibold tracking-tight text-neutral-300">{brand.name}</span>
+                      ) : (
+                        <img
+                          src={`https://cdn.simpleicons.org/${brand.slug}`}
+                          alt={brand.name}
+                          className="h-5 w-auto grayscale opacity-60 transition-all duration-200 hover:grayscale-0 hover:opacity-100"
+                          onError={() =>
+                            setFailedLogos((prev) => {
+                              const next = new Set(prev);
+                              next.add(brand.slug);
+                              return next;
+                            })
+                          }
+                        />
+                      )}
+                    </motion.div>
                   ))}
                 </div>
               </div>
