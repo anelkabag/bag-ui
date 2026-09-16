@@ -614,6 +614,24 @@
       "access": {
         "tier": "pro"
       }
+    },
+    {
+      "name": "template2",
+      "type": "registry:block",
+      "title": "Template Example 2",
+      "description": "",
+      "dependencies": ["motion/react", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/templates/template2.tsx",
+          "type": "registry:block",
+          "target": "components/Template2.tsx"
+        }
+      ],
+      "access": {
+        "tier": "pro"
+      }
     }
+
   ]
 }
