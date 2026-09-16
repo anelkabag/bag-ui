@@ -43,9 +43,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function BrandMark() {
   return (
-    <svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden>
-      <path d="M2 24 L10 8 L14 16 L18 8 L26 24 L21 24 L18 17.5 L14 25 L10 17.5 L7 24 Z" fill="#111111" />
-    </svg>
+    <img src="/logo.png" alt="" width={34} height={34} className="object-contain" aria-hidden="true" />
   );
 }
 
@@ -251,7 +249,7 @@ export default function SignUpCard() {
                 type="button"
                 onClick={handleGoogle}
                 whileTap={{ scale: 0.98 }}
-                className="mt-7 flex w-full items-center justify-center gap-2.5 rounded-full border border-neutral-200 bg-white py-3 text-[14px] font-medium text-neutral-800 transition-colors hover:bg-neutral-50 disabled:opacity-60"
+                className="mt-7 flex w-full items-center justify-center gap-2.5 rounded-full border border-neutral-200 bg-white py-3 text-[14px] font-medium text-neutral-800 transition-colors hover:bg-neutral-50 disabled:opacity-60 cursor-pointer"
                 disabled={googleLoading}
               >
                 {googleLoading ? (
@@ -323,7 +321,7 @@ export default function SignUpCard() {
                           <button
                             type="button"
                             onClick={() => setShowPassword((v) => !v)}
-                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
+                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 cursor-pointer"
                             tabIndex={-1}
                           >
                             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -332,7 +330,7 @@ export default function SignUpCard() {
                         <button
                           type="button"
                           onClick={() => pushToast("Password reset isn't wired up in this demo.")}
-                          className="mt-1.5 ml-1 text-[12.5px] text-neutral-500 hover:text-neutral-800"
+                          className="mt-1.5 ml-1 text-[12.5px] text-neutral-500 hover:text-neutral-800 cursor-pointer"
                         >
                           Forgot password?
                         </button>
@@ -398,7 +396,7 @@ export default function SignUpCard() {
                         <img
                           src={`https://cdn.simpleicons.org/${brand.slug}`}
                           alt={brand.name}
-                          className="h-5 w-auto grayscale opacity-60 transition-all duration-200 hover:grayscale-0 hover:opacity-100"
+                          className="h-5 w-auto grayscale opacity-60 transition-all duration-200 hover:grayscale-0 hover:opacity-100 cursor-pointer"
                           onError={() =>
                             setFailedLogos((prev) => {
                               const next = new Set(prev);
