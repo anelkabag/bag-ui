@@ -168,7 +168,7 @@ function Hero() {
         <motion.h1
           variants={fadeUp}
           custom={1}
-          className="max-w-3xl text-[40px] font-extrabold leading-[1.05] tracking-[-0.02em] sm:text-[54px] md:text-[62px]"
+          className="max-w-4xl text-[50px] font-extrabold leading-[1.05] tracking-[-0.02em] sm:text-[54px] md:text-[62px]"
           style={{ color: ink }}
         >
           Identity platform built for what&apos;s next
