@@ -95,7 +95,7 @@ function BillingToggle({ billing, onChange }: { billing: Billing; onChange: (b: 
     <div className="inline-flex items-center gap-3">
       <button
         onClick={() => onChange("monthly")}
-        className={cn("text-[13.5px] transition-colors", !annual ? "font-semibold text-neutral-900" : "text-neutral-400 hover:text-neutral-600")}
+        className={cn("text-[13.5px] transition-colors", !annual ? "font-semibold text-neutral-900" : "text-neutral-400 hover:text-neutral-600 cursor-pointer")}
       >
         Monthly
       </button>
