@@ -344,6 +344,23 @@
       }
     },
     {
+      "name": "pricing-4",
+      "type": "registry:block",
+      "title": "Pricing Exemple 4",
+      "description": "Frequently asked questions section with collapsible items.",
+      "dependencies": ["motion/react", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/Pricing/pricing4.tsx",
+          "type": "registry:block",
+          "target": "components/blocks/pricing-ex-4.tsx"
+        }
+      ],
+      "access": {
+        "tier": "free"
+      }
+    },
+    {
       "name": "login1",
       "type": "registry:block",
       "title": "Login Exemple 1",
