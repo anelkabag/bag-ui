@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import NumberFlow from "@number-flow/react";
 import { Check, Star, Workflow, Sparkles, Phone, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -53,11 +54,6 @@ const ANNUAL_DISCOUNT = 0.1;
 function priceFor(plan: Plan, billing: Billing) {
   const value = billing === "annually" ? plan.monthlyPrice * (1 - ANNUAL_DISCOUNT) : plan.monthlyPrice;
   return Math.round(value * 100) / 100;
-}
-
-function splitPrice(value: number) {
-  const [intPart, decPart] = value.toFixed(2).split(".");
-  return { intPart, decPart };
 }
 
 /* ================================================================== */
@@ -126,24 +122,19 @@ function BillingToggle({ billing, onChange }: { billing: Billing; onChange: (b: 
 }
 
 function AnimatedPrice({ plan, billing }: { plan: Plan; billing: Billing }) {
-  const prefersReduced = useReducedMotion();
-  const { intPart, decPart } = splitPrice(priceFor(plan, billing));
   return (
-    <div className="flex items-end overflow-hidden">
-      <AnimatePresence mode="popLayout" initial={false}>
-        <motion.div
-          key={billing}
-          initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={prefersReduced ? { opacity: 0 } : { opacity: 0, y: -14 }}
-          transition={{ duration: 0.24, ease: "easeOut" }}
-          className="flex items-end"
-        >
-          <span className="text-[34px] font-bold leading-none tracking-tight text-neutral-900">${intPart}</span>
-          <span className="mb-0.5 text-[16px] font-medium text-neutral-400">.{decPart}</span>
-          <span className="mb-0.5 ml-1 text-[13px] text-neutral-400">/Month</span>
-        </motion.div>
-      </AnimatePresence>
+    <div className="flex flex-wrap items-end gap-x-1">
+      <NumberFlow
+        value={priceFor(plan, billing)}
+        prefix="$"
+        format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+        transformTiming={{ duration: 1200, easing: "cubic-bezier(0.16, 1, 0.3, 1)" }}
+        spinTiming={{ duration: 1200, easing: "cubic-bezier(0.16, 1, 0.3, 1)" }}
+        opacityTiming={{ duration: 450, easing: "ease-out" }}
+        willChange
+        className="text-[46px] font-bold leading-none tracking-tight text-neutral-900"
+      />
+      <span className="mb-1.5 text-[13px] text-neutral-400">/Month</span>
     </div>
   );
 }
@@ -161,25 +152,38 @@ function PricingCard({ plan, billing, onSelect }: { plan: Plan; billing: Billing
       whileHover={{ y: -3 }}
       transition={{ type: "spring", stiffness: 300, damping: 24 }}
       className={cn(
-        "flex flex-col rounded-[26px] bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]",
+        "flex flex-col rounded-[26px] bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]",
         plan.popular && "ring-1 ring-neutral-900/5"
       )}
     >
       <div className="mb-5 flex items-center justify-between">
         {plan.popular ? (
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-violet-400 via-pink-400 to-sky-400">
+          <motion.span
+            whileHover={{ rotate: 12, scale: 1.06 }}
+            transition={{ type: "spring", stiffness: 300, damping: 15 }}
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-violet-400 via-pink-400 to-sky-400"
+          >
             <Sparkles className="h-4 w-4 text-white" />
-          </span>
+          </motion.span>
         ) : (
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-900">
+          <motion.span
+            whileHover={{ rotate: 12, scale: 1.06 }}
+            transition={{ type: "spring", stiffness: 300, damping: 15 }}
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-900"
+          >
             <Workflow className="h-4 w-4 text-white" />
-          </span>
+          </motion.span>
         )}
         {plan.popular && (
-          <span className="inline-flex items-center gap-1 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-[11px] font-medium text-neutral-600 shadow-sm">
+          <motion.span
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: "spring", stiffness: 260, damping: 16, delay: 0.15 }}
+            className="inline-flex items-center gap-1 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-[11px] font-medium text-neutral-600 shadow-sm"
+          >
             <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
             Most Popular
-          </span>
+          </motion.span>
         )}
       </div>
 
@@ -206,16 +210,24 @@ function PricingCard({ plan, billing, onSelect }: { plan: Plan; billing: Billing
       <div className="mt-6 flex-1">
         <p className="text-[12.5px] font-medium text-neutral-500">{plan.featuresIntro}</p>
         <ul className="mt-2.5 flex flex-col gap-2">
-          {plan.features.map((feature) => (
-            <li key={feature} className="flex items-start gap-2 text-[13px] text-neutral-700">
+          {plan.features.map((feature, i) => (
+            <motion.li
+              key={feature}
+              initial={{ opacity: 0, x: -6 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.25, delay: 0.05 * i }}
+              className="flex items-start gap-2 text-[13px] text-neutral-700"
+            >
               <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-neutral-400" />
               {feature}
-            </li>
+            </motion.li>
           ))}
         </ul>
       </div>
 
       <motion.button
+        whileHover={{ scale: 1.015 }}
         whileTap={{ scale: 0.98 }}
         onClick={() => onSelect(plan)}
         className="mt-6 rounded-full bg-neutral-900 py-3 text-[13.5px] font-medium text-white transition-colors hover:bg-neutral-800"
@@ -290,7 +302,7 @@ export default function Pricing4() {
 
   return (
     <section className="w-full bg-white px-6 py-20">
-      <div className="mx-auto max-w-[440px] text-center">
+      <div className="mx-auto w-[60vw] max-w-none text-center">
         <motion.div {...fadeUp(0)} className="flex justify-center">
           <EyebrowBadge />
         </motion.div>
@@ -308,7 +320,7 @@ export default function Pricing4() {
         </motion.div>
       </div>
 
-      <motion.div {...fadeUp(0.2)} className="mx-auto mt-8 max-w-[440px]">
+      <motion.div {...fadeUp(0.2)} className="mx-auto mt-8 w-[60vw] max-w-none">
         <div className="rounded-[32px] bg-neutral-100 p-3">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {PLANS.map((plan) => (
