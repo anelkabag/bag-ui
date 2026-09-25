@@ -7,7 +7,7 @@ import {
   IconArrowUpRight,
   IconLayoutGrid,
   IconMaximize,
-  IconRows,
+  IconList,
 } from "@tabler/icons-react";
 import { ComponentPreview } from "@/components/component-preview";
 import { RegistryItem } from "@/lib/block-categories";
@@ -107,7 +107,7 @@ export function TemplatePreview({ templates, children }: TemplatePreviewProps) {
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            <IconRows size={15} />
+            <IconList size={15} />
             Full View
           </button>
         </div>
