@@ -49,12 +49,12 @@ const SOCIAL_LINKS = [
   },
   {
     label: "LinkedIn",
-    href: "https://linkedin.com/in/anelkabag",
+    href: "https://www.linkedin.com/company/baguioff/",
     Icon: FaLinkedin,
   },
   {
     label: "GitHub",
-    href: "https://github.com/anelkabag",
+    href: "https://github.com/anelkabag/bag-ui",
     Icon: FaGithub,
   },
   {
