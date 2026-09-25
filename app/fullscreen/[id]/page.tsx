@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { useParams } from "next/navigation";
+import Link from "next/link";
+import { useParams, useSearchParams } from "next/navigation";
 import registryJson from "@/registry.json";
 import { categoryMatchesItem, RegistryItem } from "@/lib/block-categories";
 import { componentLoaders } from "@/lib/registry-loaders";
@@ -46,7 +47,9 @@ const previewCache = new Map<string, React.ComponentType>();
 
 export default function FullscreenPreviewPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const id = typeof params?.id === "string" ? params.id : "";
+  const fromTemplates = searchParams.get("from") === "templates";
 
   const item = registry.items.find((item) => itemMatchesBlock(id, item));
 
@@ -71,11 +74,9 @@ export default function FullscreenPreviewPage() {
   useEffect(() => {
     if (!filePath) return;
     if (cachedComponent) {
-      setLoading(false);
       return;
     }
     if (!loader) {
-      setLoading(false);
       return;
     }
 
@@ -102,7 +103,7 @@ export default function FullscreenPreviewPage() {
     return () => {
       active = false;
     };
-  }, [filePath, exportName, loader, cachedComponent]);
+  }, [filePath, exportName, loader, cachedComponent, cacheKey]);
 
   if (!item) {
     return (
@@ -133,6 +134,14 @@ export default function FullscreenPreviewPage() {
 
   return (
     <div className="w-full h-screen bg-white overflow-auto">
+      {fromTemplates && (
+        <Link
+          href="/templates"
+          className="fixed left-4 top-4 z-50 inline-flex items-center rounded-full bg-black/80 px-3 py-2 text-xs font-medium text-white shadow-lg backdrop-blur transition-colors hover:bg-black"
+        >
+          Back to templates
+        </Link>
+      )}
       <Component />
     </div>
   );

@@ -10,6 +10,7 @@ import registryJson from "@/registry.json";
 import { RegistryItem } from "@/lib/block-categories";
 import { getInstallAccessState } from "@/lib/access";
 import { ComponentPreview } from "@/components/ComponentPreview";
+import { TemplatePreview } from "@/components/TemplatePreview";
 import { useAuth } from "@/hooks/useAuth";
 import {
   IconEye,
@@ -460,12 +461,12 @@ export default function TemplatesPage() {
           </div>
         </motion.div>
 
-        <div className="border-t border-border mb-10" />
-
         {templates.length > 0 ? (
-          templates.map((template, i) => (
-            <TemplateCard key={template.name} template={template} index={i} />
-          ))
+          <TemplatePreview templates={templates}>
+            {templates.map((template, i) => (
+              <TemplateCard key={template.name} template={template} index={i} />
+            ))}
+          </TemplatePreview>
         ) : (
           <div className="text-center py-12">
             <p className="text-muted-foreground">No templates available yet.</p>
