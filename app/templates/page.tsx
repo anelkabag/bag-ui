@@ -434,8 +434,8 @@ export default function TemplatesPage() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="max-w-7xl mx-auto px-6 pt-10 pb-20 border-x border-border">
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-8">
+      <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 pt-6 sm:pt-10 pb-16 sm:pb-20 border-x border-border">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground mb-6 sm:mb-10">
           <Link href="/" className="hover:text-foreground transition-colors">
             Home
           </Link>
@@ -447,13 +447,13 @@ export default function TemplatesPage() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="mb-12"
+          className="mb-6 sm:mb-10"
         >
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">
+            <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-2 sm:mb-3 leading-tight">
               Templates
             </h1>
-            <p className="text-muted-foreground text-sm max-w-xl leading-relaxed">
+            <p className="text-muted-foreground text-sm sm:text-base leading-relaxed max-w-2xl">
               Explore complete, production-ready website templates built with
               shadcn/ui, Tailwind CSS, and React. Launch modern landing pages,
               dashboards, SaaS apps, and more in minutes.
