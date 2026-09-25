@@ -2,6 +2,7 @@
 
 import React, { KeyboardEvent, ReactNode, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
 import {
   IconArrowUpRight,
@@ -44,9 +45,23 @@ function GridTemplateCard({ template }: { template: RegistryItem }) {
       className="group cursor-pointer rounded-2xl border border-border bg-card p-3 text-left shadow-sm transition-shadow hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     >
       <div className="relative overflow-hidden rounded-xl border border-border bg-background">
-        <div className="pointer-events-none">
-          <ComponentPreview item={template} height={220} className="rounded-none border-0" />
-        </div>
+        {template.cover ? (
+          <Image
+            src={template.cover}
+            alt={`${template.title || template.name} cover`}
+            width={960}
+            height={540}
+            className="pointer-events-none aspect-video w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          />
+        ) : (
+          <div className="pointer-events-none">
+            <ComponentPreview
+              item={template}
+              height={220}
+              className="rounded-none border-0"
+            />
+          </div>
+        )}
         <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/35 group-focus:bg-black/35">
           <span className="flex translate-y-2 items-center gap-1.5 rounded-full bg-background/95 px-3 py-2 text-xs font-semibold text-foreground opacity-0 shadow-sm transition-all group-hover:translate-y-0 group-hover:opacity-100 group-focus:translate-y-0 group-focus:opacity-100">
             <IconMaximize size={14} />

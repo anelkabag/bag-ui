@@ -15,6 +15,7 @@ export interface RegistryItem {
   title: string;
   type: string;
   description: string;
+  cover?: string;
   access?: AccessInfo;
   dependencies?: string[];
   files: { path: string; type: string; target?: string }[];

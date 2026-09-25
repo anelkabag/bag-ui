@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Open Agents template cover</title>
+  <desc id="desc">Dark workspace dashboard cover for the Open Agents template.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111827"/>
+      <stop offset="1" stop-color="#273449"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#67e8f9"/>
+      <stop offset="1" stop-color="#818cf8"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="url(#bg)"/>
+  <circle cx="790" cy="90" r="180" fill="#38bdf8" opacity=".08"/>
+  <rect x="48" y="42" width="864" height="456" rx="18" fill="#0b1220" stroke="#64748b" stroke-opacity=".35"/>
+  <rect x="48" y="42" width="184" height="456" rx="18" fill="#111827"/>
+  <rect x="76" y="78" width="92" height="12" rx="6" fill="url(#accent)"/>
+  <rect x="76" y="132" width="112" height="10" rx="5" fill="#94a3b8" opacity=".75"/>
+  <rect x="76" y="164" width="96" height="10" rx="5" fill="#475569"/>
+  <rect x="76" y="196" width="126" height="10" rx="5" fill="#475569"/>
+  <rect x="76" y="228" width="86" height="10" rx="5" fill="#475569"/>
+  <rect x="76" y="420" width="122" height="10" rx="5" fill="#475569"/>
+  <rect x="266" y="78" width="220" height="26" rx="8" fill="#f8fafc" opacity=".94"/>
+  <rect x="266" y="132" width="190" height="88" rx="12" fill="#172337" stroke="#334155"/>
+  <rect x="474" y="132" width="190" height="88" rx="12" fill="#172337" stroke="#334155"/>
+  <rect x="682" y="132" width="190" height="88" rx="12" fill="#172337" stroke="#334155"/>
+  <rect x="284" y="154" width="64" height="9" rx="4" fill="#64748b"/>
+  <rect x="284" y="180" width="112" height="18" rx="5" fill="#e2e8f0"/>
+  <rect x="492" y="154" width="64" height="9" rx="4" fill="#64748b"/>
+  <rect x="492" y="180" width="112" height="18" rx="5" fill="#67e8f9"/>
+  <rect x="700" y="154" width="64" height="9" rx="4" fill="#64748b"/>
+  <rect x="700" y="180" width="112" height="18" rx="5" fill="#a5b4fc"/>
+  <rect x="266" y="250" width="606" height="202" rx="14" fill="#172337" stroke="#334155"/>
+  <path d="M300 406 C356 350 394 378 444 320 S542 356 594 294 S690 340 742 278 S814 302 840 258" fill="none" stroke="url(#accent)" stroke-width="6" stroke-linecap="round"/>
+  <path d="M300 406 C356 350 394 378 444 320 S542 356 594 294 S690 340 742 278 S814 302 840 258 V420 H300Z" fill="#38bdf8" opacity=".08"/>
+</svg>
