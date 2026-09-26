@@ -78,6 +78,9 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: [
       {
