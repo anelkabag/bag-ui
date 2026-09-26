@@ -1,0 +1,26 @@
+# BagUI
+
+> BagUI is an open-source shadcn/ui registry with production-ready components, blocks, templates, and animations for React, Next.js, and Tailwind CSS. Copy, customize, and build faster.
+
+## About
+BagUI provides a curated collection of high-quality, accessible components and blocks built on top of shadcn/ui, designed for developers who want to ship faster without sacrificing quality.
+
+## Tech Stack
+- React
+- Next.js
+- Tailwind CSS
+- TypeScript
+- shadcn/ui
+
+## Key Pages
+- [Home](https://www.bagui.pro)
+- [Components](https://www.bagui.pro/components)
+- [Blocks](https://www.bagui.pro/blocks)
+- [Documentation](https://www.bagui.pro/docs)
+
+## Usage
+Components can be installed via the shadcn/ui CLI by pointing to the BagUI registry.
+
+## Contact
+- Author: Anelka Bagalane
+- Twitter/X: @anelkabag
