@@ -318,10 +318,10 @@ function UseCases() {
 }
 
 /* ───────────── Page ───────────── */
-export default function Page() {
+export default function Hero6() {
   return (
     <MotionConfig reducedMotion="user">
-      <div className="mx-auto min-h-screen max-w-[1280px] overflow-x-clip p-3.5 font-sans [--font-sans:var(--font-grotesk),ui-sans-serif,system-ui,sans-serif] [--font-mono:var(--font-space-mono),ui-monospace,monospace] [&_*:focus-visible]:outline-2 [&_*:focus-visible]:outline-offset-[3px] [&_*:focus-visible]:outline-[#19c7e8]">
+      <div className="min-h-screen w-full overflow-x-clip p-3.5 font-sans [--font-sans:var(--font-geist-sans),ui-sans-serif,system-ui,sans-serif] [--font-mono:var(--font-geist-mono),ui-monospace,monospace] [&_*:focus-visible]:outline-2 [&_*:focus-visible]:outline-offset-[3px] [&_*:focus-visible]:outline-[#19c7e8]">
         <Header />
         <HatchedDivider className="border-t-0" />
         <main className="flex flex-col">
