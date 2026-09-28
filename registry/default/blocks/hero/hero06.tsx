@@ -48,7 +48,7 @@ function Logo() {
       width={26}
       height={26}
       aria-hidden="true"
-      className="rounded-[3px] border border-[#d1d5db]/70 bg-[#ececea] object-cover"
+      className="rounded object-cover"
     />
   );
 }
@@ -321,7 +321,7 @@ function UseCases() {
 export default function Hero6() {
   return (
     <MotionConfig reducedMotion="user">
-      <div className="min-h-screen w-full overflow-x-clip p-3.5 font-sans [--font-sans:var(--font-geist-sans),ui-sans-serif,system-ui,sans-serif] [--font-mono:var(--font-geist-mono),ui-monospace,monospace] [&_*:focus-visible]:outline-2 [&_*:focus-visible]:outline-offset-[3px] [&_*:focus-visible]:outline-[#19c7e8]">
+      <div className="min-h-screen w-full overflow-x-clip px-32 py-8 font-sans [--font-sans:var(--font-geist-sans),ui-sans-serif,system-ui,sans-serif] [--font-mono:var(--font-geist-mono),ui-monospace,monospace] [&_*:focus-visible]:outline-2 [&_*:focus-visible]:outline-offset-[3px] [&_*:focus-visible]:outline-[#19c7e8]">
         <Header />
         <HatchedDivider className="border-t-0" />
         <main className="flex flex-col">
