@@ -637,7 +637,7 @@
       "type": "registry:block",
       "title": "Template Open Agents.",
       "description": "",
-      "cover": "/assets/templates/template1-cover.svg",
+      "cover": "/assets/templates/template1.svg",
       "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
@@ -655,7 +655,7 @@
       "type": "registry:block",
       "title": "Template Example 2",
       "description": "",
-      "cover": "/assets/templates/template2-cover.svg",
+      "cover": "/assets/templates/template2.svg",
       "dependencies": ["motion/react", "lucide-react"],
       "files": [
         {
