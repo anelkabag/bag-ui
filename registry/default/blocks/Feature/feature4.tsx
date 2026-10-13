@@ -115,7 +115,7 @@ function RegistryCard() {
       />
 
       <div className="relative px-5 pt-5">
-        <div className="grid size-[38px] place-items-center rounded-[10px] bg-gradient-to-br from-[#ff8a3d] to-[#f0541a] shadow-[0_4px_10px_rgba(240,84,26,0.28)]">
+        <div className="grid size-[38px] place-items-center rounded-[10px] bg-white" aria-hidden>
           <BagUIMark />
         </div>
         <h2 className="mb-3.5 mt-[62px] text-[14.5px] font-medium tracking-tight">shadcn/ui registry</h2>
@@ -242,7 +242,7 @@ function CopyPasteCard() {
 /* ---------- Page ---------- */
 export default function FeaturesSection4() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-[#ebebec] px-5 py-12 font-sans text-[#0c0c0d] antialiased dark:bg-[#111113] dark:text-zinc-100">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-black px-5 py-12 font-sans text-[#0c0c0d] antialiased dark:bg-[#111113] dark:text-zinc-100">
       <header className="mb-[34px] text-center">
         <h1 className="text-[28px] font-medium tracking-tight">Ship production-ready UI faster</h1>
         <p className="mx-auto mt-2.5 max-w-[380px] text-[12.5px] leading-[1.55] text-[#8b8b92]">
