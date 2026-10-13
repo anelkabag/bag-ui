@@ -1,52 +1,92 @@
 "use client";
 
-import { useState } from "react";
-import { motion, Variants } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import NumberFlow from "@number-flow/react";
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
-};
-
-const stagger: Variants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
-};
-
-const card =
-  "relative overflow-hidden rounded-[22px] border border-[#ececef] bg-white shadow-[0_18px_40px_rgba(15,23,42,0.04)] dark:border-[#2a2a2f] dark:bg-[#1f1f23]";
+/* ---------- Shared class tokens ---------- */
+const card = "relative overflow-hidden rounded-[20px] bg-white dark:bg-[#1f1f23]";
 const pill = "bg-[#f1f1f2] dark:bg-[#2a2a2f]";
-const subtle = "text-[10px] text-[#8b8b92]";
-const title = "text-[12.5px] font-medium text-[#111827] dark:text-zinc-100";
+const subtle = "text-[10px] text-[#a3a3aa]";
+const title = "text-[12.5px] font-medium";
 
-const ZapierMark = () => (
+/* ---------- Animated number (starts when scrolled into view) ---------- */
+function useInView<T extends HTMLElement>(threshold = 0.4) {
+  const ref = useRef<T>(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { threshold }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [threshold]);
+
+  return { ref, inView };
+}
+
+function Counter({
+  to,
+  suffix,
+  className,
+}: {
+  to: number;
+  suffix?: string;
+  className?: string;
+}) {
+  const { ref, inView } = useInView<HTMLSpanElement>();
+  return (
+    <span ref={ref} className={className}>
+      <NumberFlow
+        value={inView ? to : 0}
+        suffix={suffix}
+        format={{ useGrouping: false }}
+        transformTiming={{ duration: 1100, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }}
+        spinTiming={{ duration: 1100, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }}
+      />
+    </span>
+  );
+}
+
+/* ---------- Icons ---------- */
+const BagUIMark = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.2" strokeLinecap="round" aria-hidden>
-    <path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4" />
+    <path d="M8 4l8 16" />
   </svg>
 );
 
-const SlackIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden>
-    <rect x="1" y="5.5" width="5" height="2.4" rx="1.2" fill="#36c5f0" />
-    <rect x="5.5" y="1" width="2.4" height="5" rx="1.2" fill="#2eb67d" />
-    <rect x="8" y="6" width="5" height="2.4" rx="1.2" fill="#ecb22e" />
-    <rect x="6" y="8" width="2.4" height="5" rx="1.2" fill="#e01e5a" />
+const ReactIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+    <g stroke="#2bb4d6" strokeWidth="0.9">
+      <ellipse cx="7" cy="7" rx="6" ry="2.3" />
+      <ellipse cx="7" cy="7" rx="6" ry="2.3" transform="rotate(60 7 7)" />
+      <ellipse cx="7" cy="7" rx="6" ry="2.3" transform="rotate(120 7 7)" />
+    </g>
+    <circle cx="7" cy="7" r="1.1" fill="#2bb4d6" />
   </svg>
 );
 
-const TeamsIcon = () => (
+const NextIcon = () => (
   <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden>
-    <rect x="1" y="3" width="12" height="9" rx="2.5" fill="#5059c9" />
-    <circle cx="8" cy="3.5" r="2.3" fill="#7b83eb" />
-    <rect x="3" y="5.5" width="6" height="1.6" fill="#fff" />
-    <rect x="5.2" y="5.5" width="1.6" height="4.5" fill="#fff" />
+    <circle cx="7" cy="7" r="6.2" className="fill-black dark:fill-white" />
+    <path d="M5 4.4v5.2M5 4.4l4.2 5.2M9 4.4v3.2" fill="none" strokeWidth="1.1" strokeLinecap="round" className="stroke-white dark:stroke-black" />
   </svg>
 );
 
-const NotionIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden>
-    <rect x="1.5" y="1.5" width="11" height="11" rx="2.6" fill="#ffd23f" />
-    <path d="M4.5 4h5M4.5 7h5M4.5 10h3" stroke="#111" strokeWidth="1.3" strokeLinecap="round" />
+const TailwindIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden>
+    <path
+      fill="#38bdf8"
+      d="M12 6c-2.667 0-4.333 1.333-5 4 1-1.333 2.167-1.833 3.5-1.5.761.19 1.305.742 1.913 1.358C13.403 10.864 14.55 12 17 12c2.667 0 4.333-1.333 5-4-1 1.333-2.167 1.833-3.5 1.5-.761-.19-1.305-.742-1.913-1.358C15.597 7.136 14.45 6 12 6zm-5 6c-2.667 0-4.333 1.333-5 4 1-1.333 2.167-1.833 3.5-1.5.761.19 1.305.742 1.913 1.358C8.403 16.864 9.55 18 12 18c2.667 0 4.333-1.333 5-4-1 1.333-2.167 1.833-3.5 1.5-.761-.19-1.305-.742-1.913-1.358C10.597 13.136 9.45 12 7 12z"
+    />
   </svg>
 );
 
@@ -63,28 +103,26 @@ const KeyboardIcon = () => (
   </svg>
 );
 
-function ZapierCard() {
+/* ---------- Cards ---------- */
+function RegistryCard() {
   const [enabled, setEnabled] = useState(true);
 
   return (
-    <motion.section
-      variants={fadeUp}
-      className={`${card} flex min-h-[340px] flex-col justify-between md:col-start-1 md:row-span-3 md:row-start-1 md:min-h-[430px]`}
-    >
+    <section className={`${card} flex min-h-[340px] flex-col justify-between md:col-start-1 md:row-span-3 md:row-start-1 md:min-h-[430px]`}>
+      {/* faint grid in the top-right corner */}
       <div
         aria-hidden
-        className="pointer-events-none absolute right-0 top-0 h-[55%] w-[70%] bg-[linear-gradient(#f3efe9_1px,transparent_1px),linear-gradient(90deg,#f3efe9_1px,transparent_1px)] bg-[length:44px_44px] opacity-90 [-webkit-mask-image:radial-gradient(circle_at_100%_0,#000,transparent_70%)] [mask-image:radial-gradient(circle_at_100%_0,#000,transparent_70%)] dark:opacity-10"
+        className="pointer-events-none absolute right-0 top-0 h-[55%] w-[70%] bg-[linear-gradient(#f1ece8_1px,transparent_1px),linear-gradient(90deg,#f1ece8_1px,transparent_1px)] bg-[length:44px_44px] opacity-90 [-webkit-mask-image:radial-gradient(circle_at_100%_0,#000,transparent_70%)] [mask-image:radial-gradient(circle_at_100%_0,#000,transparent_70%)] dark:opacity-10"
       />
 
       <div className="relative px-5 pt-5">
         <div className="grid size-[38px] place-items-center rounded-[10px] bg-gradient-to-br from-[#ff8a3d] to-[#f0541a] shadow-[0_4px_10px_rgba(240,84,26,0.28)]">
-          <ZapierMark />
+          <BagUIMark />
         </div>
-        <h2 className="mb-3.5 mt-[62px] text-[14.5px] font-medium tracking-tight text-[#0f172a] dark:text-zinc-100">
-          Zapier Integration
-        </h2>
+        <h2 className="mb-3.5 mt-[62px] text-[14.5px] font-medium tracking-tight">shadcn/ui registry</h2>
         <p className="text-xs leading-[1.65] text-[#8b8b92]">
-          Unlock effortless automation. Connect your favorite apps, streamline workflows, and supercharge productivity with ease.
+          Add any block to your project through the shadcn/ui registry. The code lives in your repo, so you can
+          customize everything.
         </p>
       </div>
 
@@ -97,14 +135,14 @@ function ZapierCard() {
             <rect x="1" y="2" width="9" height="4" rx="1.2" />
             <rect x="6" y="9" width="9" height="4" rx="1.2" opacity=".75" />
           </svg>
-          Configure
+          Explore blocks
         </button>
 
         <button
           type="button"
           role="switch"
           aria-checked={enabled}
-          aria-label="Enable Zapier integration"
+          aria-label="Enable animations"
           onClick={() => setEnabled((v) => !v)}
           className={`relative h-[22px] w-10 rounded-full ${pill} focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f0541a]`}
         >
@@ -115,19 +153,19 @@ function ZapierCard() {
           />
         </button>
       </div>
-    </motion.section>
+    </section>
   );
 }
 
-function TrackersCard() {
+function StackCard() {
   return (
-    <motion.section variants={fadeUp} className={`${card} flex items-center justify-between px-4 py-3 md:col-start-2 md:row-start-1`}>
+    <section className={`${card} flex items-center justify-between px-4 py-3 md:col-start-2 md:row-start-1`}>
       <div>
-        <div className={title}>Trackers Connected</div>
-        <div className={`mt-[5px] ${subtle}`}>03 Active Integrations</div>
+        <div className={title}>Works with your stack</div>
+        <div className={`mt-[5px] ${subtle}`}>React, Next.js, Tailwind CSS</div>
       </div>
       <div className="flex" aria-hidden>
-        {[SlackIcon, TeamsIcon, NotionIcon].map((Icon, i) => (
+        {[ReactIcon, NextIcon, TailwindIcon].map((Icon, i) => (
           <span
             key={i}
             className={`grid size-[26px] place-items-center rounded-full border-2 border-[#f1ece8] bg-white shadow-[0_0_0_1px_#fff] dark:border-[#2a2a2f] dark:bg-[#1f1f23] dark:shadow-none ${i > 0 ? "-ml-1.5" : ""}`}
@@ -136,118 +174,90 @@ function TrackersCard() {
           </span>
         ))}
       </div>
-    </motion.section>
+    </section>
   );
 }
 
-function FocusCard() {
+function BlocksCard() {
   return (
-    <motion.section variants={fadeUp} className={`${card} flex min-h-[190px] flex-col p-4 md:col-start-2 md:row-start-2`}>
+    <section className={`${card} flex min-h-[190px] flex-col p-4 md:col-start-2 md:row-start-2`}>
       <div className="flex items-baseline justify-between">
-        <span className={title}>Focusing</span>
-        <span className="text-[10px] font-medium text-[#f08a5c]">Range Ratio</span>
+        <span className={title}>Blocks</span>
+        <span className="text-[10px] text-[#f08a5c]">Handcrafted</span>
       </div>
-      <div className={`mt-[5px] ${subtle}`}>Productivity Analytics</div>
+      <div className={`mt-[5px] ${subtle}`}>UI library</div>
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.96 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-        className="my-auto py-[18px] pb-3 text-[56px] font-medium leading-none tracking-[-0.04em] text-[#0f172a] dark:text-zinc-50"
-      >
-        42%
-      </motion.div>
+      <Counter to={30} className="my-auto block py-[18px] pb-3 text-[56px] font-medium leading-none tracking-[-0.04em]" />
 
       <div className={`flex justify-between ${subtle}`}>
-        <span>Maximum of focus</span>
-        <b className="font-medium text-[#0c0c0d] dark:text-zinc-100">Monthly Focus</b>
+        <span>Hero to footer</span>
+        <b className="font-medium text-[#0c0c0d] dark:text-zinc-100">Plug and ship</b>
       </div>
-    </motion.section>
+    </section>
   );
 }
 
-function ProductivityCard() {
+function OpenSourceCard() {
   return (
-    <motion.section
-      variants={fadeUp}
-      className={`${card} flex min-h-[280px] flex-col justify-between px-5 py-[18px] md:col-start-3 md:row-span-2 md:row-start-1`}
-    >
+    <section className={`${card} flex min-h-[280px] flex-col justify-between px-5 py-[18px] md:col-start-3 md:row-span-2 md:row-start-1`}>
+      {/* dotted pattern in the top-right corner */}
       <div
         aria-hidden
         className="pointer-events-none absolute right-0 top-0 h-[65%] w-[80%] bg-[radial-gradient(#d9d9de_1.1px,transparent_1.3px)] bg-[length:7px_7px] [-webkit-mask-image:radial-gradient(circle_at_100%_0,#000,transparent_72%)] [mask-image:radial-gradient(circle_at_100%_0,#000,transparent_72%)] dark:opacity-30"
       />
-      <motion.div
-        initial={{ opacity: 0, y: 14 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.4 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="relative text-[52px] font-medium leading-none tracking-[-0.04em] text-[#0f172a] dark:text-zinc-50"
-      >
-        10X
-      </motion.div>
+      <Counter to={100} suffix="%" className="relative block text-[52px] font-medium leading-none tracking-[-0.04em]" />
       <div className="relative">
-        <h3 className={`mb-[9px] ${title}`}>Team’s Productivity</h3>
+        <h3 className={`mb-[9px] ${title}`}>Open source</h3>
         <p className="max-w-[190px] text-[11px] leading-[1.6] text-[#8b8b92]">
-          Boost your team’s efficiency with our next-gen productivity solutions.
+          Open source and built together. Read the code, customize it, and contribute on GitHub.
         </p>
       </div>
-    </motion.section>
+    </section>
   );
 }
 
-function ShortcutCard() {
+function CopyPasteCard() {
   return (
-    <motion.section
-      variants={fadeUp}
-      className={`${card} flex items-center justify-between gap-3 py-3 pl-3 pr-4 md:col-span-2 md:col-start-2 md:row-start-3`}
-    >
+    <section className={`${card} flex items-center justify-between gap-3 py-3 pl-3 pr-4 md:col-span-2 md:col-start-2 md:row-start-3`}>
       <div className="flex min-w-0 items-center gap-3.5">
         <span className={`grid h-6 w-8 flex-none place-items-center rounded-md text-[#f0541a] ${pill}`} aria-hidden>
           <KeyboardIcon />
         </span>
         <div className="min-w-0">
-          <div className={title}>Shortcut Keys</div>
+          <div className={title}>Copy and paste</div>
           <div className={`mt-[5px] truncate max-md:whitespace-normal ${subtle}`}>
-            Faster way to access the features.
+            Copy a block, paste it, customize it.
           </div>
         </div>
       </div>
 
       <div className="flex flex-none items-center gap-2">
-        <kbd className={`rounded-full px-4 py-[9px] font-sans text-xs font-medium tracking-wider ${pill}`}>⌘ + ⌥</kbd>
-        <span className="text-[11px] font-medium text-[#0f172a] dark:text-zinc-100">+</span>
-        <kbd className={`grid size-8 place-items-center rounded-full font-sans text-[11px] font-medium text-[#f0541a] ${pill}`}>M</kbd>
+        <kbd className={`rounded-full px-4 py-[9px] font-sans text-xs font-medium tracking-wider ${pill}`}>⌘ + C</kbd>
+        <span className="text-[11px] font-medium">+</span>
+        <kbd className={`grid size-8 place-items-center rounded-full font-sans text-[11px] font-medium text-[#f0541a] ${pill}`}>V</kbd>
       </div>
-    </motion.section>
+    </section>
   );
 }
 
+/* ---------- Page ---------- */
 export default function FeaturesSection4() {
   return (
-    <section className="w-full px-4 py-16">
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-60px" }}
-        variants={stagger}
-        className="mx-auto max-w-[880px]"
-      >
-        <div className="mb-8 text-center">
-          <h2 className="text-[28px] font-medium tracking-tight text-[#0f172a] dark:text-zinc-50">Product Features</h2>
-          <p className="mx-auto mt-2.5 max-w-[320px] text-[12.5px] leading-[1.55] text-[#8b8b92]">
-            Organize, prioritize, and control your tasks more efficiently with a trusted workflow platform.
-          </p>
-        </div>
+    <main className="flex min-h-screen flex-col items-center justify-center bg-[#ebebec] px-5 py-12 font-sans text-[#0c0c0d] antialiased dark:bg-[#111113] dark:text-zinc-100">
+      <header className="mb-[34px] text-center">
+        <h1 className="text-[28px] font-medium tracking-tight">Ship production-ready UI faster</h1>
+        <p className="mx-auto mt-2.5 max-w-[380px] text-[12.5px] leading-[1.55] text-[#8b8b92]">
+          Handcrafted React and shadcn/ui sections that you can plug in, customize, and ship with confidence.
+        </p>
+      </header>
 
-        <div className="grid grid-cols-1 gap-1.5 rounded-[26px] border-2 border-[#fafafa] bg-[#f4f4f5] p-1.5 md:grid-cols-3 md:grid-rows-[auto_1fr_auto] dark:border-[#232327] dark:bg-[#1a1a1d]">
-          <ZapierCard />
-          <TrackersCard />
-          <FocusCard />
-          <ProductivityCard />
-          <ShortcutCard />
-        </div>
-      </motion.div>
-    </section>
+      <div className="grid w-full max-w-[880px] grid-cols-1 gap-1.5 rounded-[26px] border-2 border-[#fafafa] bg-[#f4f4f5] p-1.5 md:grid-cols-3 md:grid-rows-[auto_1fr_auto] dark:border-[#232327] dark:bg-[#1a1a1d]">
+        <RegistryCard />
+        <StackCard />
+        <BlocksCard />
+        <OpenSourceCard />
+        <CopyPasteCard />
+      </div>
+    </main>
   );
 }
