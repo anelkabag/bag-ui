@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import NumberFlow from "@number-flow/react";
 
@@ -58,9 +59,7 @@ function Counter({
 
 /* ---------- Icons ---------- */
 const BagUIMark = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.2" strokeLinecap="round" aria-hidden>
-    <path d="M8 4l8 16" />
-  </svg>
+  <Image src="/logo.png" alt="BagUI logo" width={20} height={20} className="h-5 w-5 object-contain" priority />
 );
 
 const ReactIcon = () => (
