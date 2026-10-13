@@ -259,6 +259,23 @@
       }
     },
     {
+      "name": "feature-ex-4",
+      "type": "registry:block",
+      "title": "Feature Exemple 4",
+      "description": "Frequently asked questions section with collapsible items.",
+      "dependencies": ["motion/react", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/Feature/feature4.tsx",
+          "type": "registry:block",
+          "target": "components/blocks/feature-ex-4.tsx"
+        }
+      ],
+      "access": {
+        "tier": "pro"
+      }
+    },
+    {
       "name": "feature-1",
       "type": "registry:block",
       "title": "Feature Exemple 1",
