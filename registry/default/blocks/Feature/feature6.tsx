@@ -1,4 +1,20 @@
 import type { ReactNode } from "react";
+import { Inter } from "next/font/google";
+
+/**
+ * app/page.tsx — fichier unique (composant + styles + police).
+ * Prérequis : projet Next.js (App Router) avec Tailwind CSS déjà installé
+ * (ex. `npx create-next-app@latest --ts --tailwind`).
+ */
+
+const inter = Inter({ subsets: ["latin"], weight: ["400", "500"], display: "swap" });
+
+/* Variables de couleur (clair + sombre automatique), embarquées dans le fichier */
+const THEME_CSS = `
+:root{--bg:#fff;--card:#fff;--line:#e8e8e8;--ink:#111;--mute:#8c8c8c;--panel:#f6f6f6;--dot:#d6d6d6;--stroke:#1a1a1a;--paper:#fff;--soft:#e4e4e4;--btn:#000;--btnink:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#0e0e0e;--card:#151515;--line:#2a2a2a;--ink:#f2f2f2;--mute:#8a8a8a;--panel:#1c1c1c;--dot:#333;--stroke:#e6e6e6;--paper:#151515;--soft:#333;--btn:#f2f2f2;--btnink:#000}}
+body{background:var(--bg)}
+`;
 
 /* ---------- Cartes ---------- */
 
@@ -150,8 +166,10 @@ function DarkModeIllustration() {
 
 /* ---------- Section ---------- */
 
-export default function SmartFeatures() {
+export default function Page() {
   return (
+    <div className={`${inter.className} min-h-screen bg-[var(--bg)] text-[var(--ink)] antialiased`}>
+    <style dangerouslySetInnerHTML={{ __html: THEME_CSS }} />
     <main className="mx-auto max-w-[920px] px-5 pt-[72px] pb-20">
       <h1 className="text-center text-[clamp(26px,4vw,36px)] font-normal tracking-[-0.025em]">
         Smart features for flawless screenshots
@@ -235,5 +253,6 @@ export default function SmartFeatures() {
         </BigCard>
       </div>
     </main>
+    </div>
   );
 }
