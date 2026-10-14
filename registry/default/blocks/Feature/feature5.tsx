@@ -1,4 +1,4 @@
-// components/BentoKeyBenefits.tsx
+// components/bagui/feature-bento.tsx  —  Bag/UI · Feature block (bento)
 // Next.js (App Router) + Tailwind CSS (v3.4+ ou v4). Composant serveur : pas de "use client".
 //
 // Polices (app/layout.tsx) :
@@ -11,6 +11,29 @@
 // avec la variante sombre via `dark:` (prefers-color-scheme).
 
 import type { ReactNode } from "react";
+
+/* ---------- Contenu (modifiable via props) ---------- */
+export type FeatureItem = { title: string; description: string };
+
+export type FeatureBentoProps = {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  /** Ordre : [carte haute gauche, carte large, carte basse milieu, carte basse droite] */
+  items?: [FeatureItem, FeatureItem, FeatureItem, FeatureItem];
+};
+
+const defaults: Required<FeatureBentoProps> = {
+  eyebrow: "Features",
+  title: "Ship landing pages faster",
+  description: "Handcrafted React & shadcn/ui blocks you can plug in, customize and ship with confidence.",
+  items: [
+    { title: "Copy, paste, ship", description: "Add any block to your project with a single shadcn command, no setup needed." },
+    { title: "Built on shadcn/ui", description: "React, TypeScript & Tailwind CSS blocks that follow the conventions you already use." },
+    { title: "Make it yours", description: "You own the code: change colors, content and layout without fighting a library." },
+    { title: "Open source", description: "Free blocks you can use today, and a community that helps the library grow." },
+  ],
+};
 
 /* Tokens (classes complètes pour que Tailwind les détecte) */
 const muted = "text-[color:var(--muted)]";
@@ -129,12 +152,12 @@ function AccountCard({ className = "", compact = false }: { className?: string; 
         }`}
       >
         <UserIcon />
-        Anelka’s Account
+        BagUi Account
         {!compact && <em className={`ml-auto not-italic ${muted}`}>···</em>}
       </div>
       <div className={`mb-0.5 mt-2.5 text-[8.5px] ${muted}`}>Available balance</div>
       <div className="text-[21px] font-semibold tracking-[-0.02em]">
-        <small className="mr-[3px] text-[15px]">£</small>500,00
+        <small className="mr-[3px] text-[15px]">$</small>500,00
       </div>
       <div className="mt-[9px] flex gap-[5px]">
         {["+ Top up", "⇄ Transfer", "◎ Exchange"].map((b) => (
@@ -151,7 +174,12 @@ function AccountCard({ className = "", compact = false }: { className?: string; 
 }
 
 /* ---------- Composant principal ---------- */
-export default function BentoKeyBenefits() {
+export default function FeatureBento({
+  eyebrow = defaults.eyebrow,
+  title = defaults.title,
+  description = defaults.description,
+  items = defaults.items,
+}: FeatureBentoProps) {
   return (
     <section
       className="bg-[color:var(--bg)] px-6 py-14 font-[family-name:var(--font-inter,Inter,system-ui,-apple-system,'Segoe_UI',sans-serif)] leading-[normal] text-[color:var(--ink)] antialiased max-[520px]:px-3.5 max-[520px]:py-10 [--bg:#fff] [--card:#efefef] [--card-line:#e3e3e3] [--surface:#fff] [--ink:#0d0d0d] [--muted:#6b6b6b] [--line:#ececec] [--phone:#0d0d0d] [--pink-soft:#fbd6e4] dark:[--bg:#0e0e0e] dark:[--card:#1a1a1a] dark:[--card-line:#262626] dark:[--surface:#262626] dark:[--ink:#f4f4f4] dark:[--muted:#9a9a9a] dark:[--line:#333] dark:[--phone:#3a3a3a] dark:[--pink-soft:#4a2c38]"
@@ -159,13 +187,13 @@ export default function BentoKeyBenefits() {
       <div className="mx-auto max-w-[1020px]">
         <header className="mb-10 text-center">
           <div className="font-[family-name:var(--font-mono,'JetBrains_Mono',ui-monospace,Menlo,monospace)] text-[12px] font-medium uppercase tracking-[0.06em]">
-            Key benefits
+            {eyebrow}
           </div>
           <h2 className="mb-2 mt-[14px] text-[clamp(30px,4.4vw,42px)] font-bold leading-[1.1] tracking-[-0.03em]">
-            We are simplifying finances
+            {title}
           </h2>
           <p className={`text-[17px] tracking-[-0.01em] ${muted}`}>
-            Everything you need, nothing you don’t. We do the heavy lifting.
+            {description}
           </p>
         </header>
 
@@ -185,7 +213,7 @@ export default function BentoKeyBenefits() {
                   To Anelka Bag
                   <small className={`block text-[7.5px] ${muted}`}>Today, 2:8pm</small>
                 </div>
-                <strong className="ml-auto font-semibold">$250</strong>
+                <strong className="ml-auto font-semibold">-$250</strong>
               </div>
               <div className="my-1.5 flex justify-center gap-[3px]">
                 <b className="h-[3px] w-2 rounded-[3px] bg-[#9a9a9a]" />
@@ -199,8 +227,8 @@ export default function BentoKeyBenefits() {
               <div className={`mt-2 ${miniBar}`} />
             </Phone>
             <CardCopy
-              title="Spend smarter"
-              text="Track your expenses automatically, no manual updates or spreadsheets needed."
+              title={items[0].title}
+              text={items[0].description}
               pMax="max-w-[290px]"
               className="absolute inset-x-6 bottom-6"
             />
@@ -209,8 +237,8 @@ export default function BentoKeyBenefits() {
           {/* 2 — Grow your money */}
           <Card className="max-[900px]:min-h-[360px] min-[901px]:col-span-2">
             <CardCopy
-              title="Grow your money"
-              text="Invest with beginner friendly tools & smart strategies that run in the background."
+              title={items[1].title}
+              text={items[1].description}
               className="max-w-[330px]"
             />
             <Float className="left-[292px] top-[72px] w-[186px] rounded-[14px] px-[13px] py-3 max-[900px]:left-[calc(50%-220px)] max-[900px]:top-[130px] max-[520px]:left-3">
@@ -261,8 +289,8 @@ export default function BentoKeyBenefits() {
           {/* 3 — Feel in control */}
           <Card className="max-[900px]:min-h-[300px]">
             <CardCopy
-              title="Feel in control"
-              text="A clean, modern interface that turns complex finances into clear, simple steps."
+              title={items[2].title}
+              text={items[2].description}
             />
             <Float className="left-[30px] top-[96px] w-[186px] rounded-[16px] px-[15px] py-3.5">
               <div className="flex items-start justify-between">
@@ -318,8 +346,8 @@ export default function BentoKeyBenefits() {
           {/* 4 — Hit your goals */}
           <Card className="max-[900px]:min-h-[300px]">
             <CardCopy
-              title="Hit your goals"
-              text="Set custom goals & stay motivated with daily progress tracking and insights."
+              title={items[3].title}
+              text={items[3].description}
             />
             <Phone className="left-7 top-[110px] h-[330px] w-[256px]">
               <div className={`mt-[70px] ${miniBar}`} />
