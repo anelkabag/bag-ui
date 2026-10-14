@@ -135,7 +135,7 @@ const columns: Testimonial[][] = [
 
 /* ------------------------------ Helpers ---------------------------------- */
 
-/** **bold** -> <b>, emoji -> grayscale span */
+/** **bold** -> <b>, emojis keep their original colors */
 function Rich({ text }: { text: string }) {
   const parts = text
     .split(/(\*\*.+?\*\*|\p{Extended_Pictographic}\uFE0F?)/u)
@@ -151,7 +151,7 @@ function Rich({ text }: { text: string }) {
           );
         if (/^\p{Extended_Pictographic}/u.test(part))
           return (
-            <span key={i} className="inline-block grayscale">
+            <span key={i} className="inline-block">
               {part}
             </span>
           );
