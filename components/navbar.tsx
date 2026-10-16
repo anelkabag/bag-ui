@@ -24,7 +24,7 @@ const Logo = () => (
         {/* Light Logo */}
         <Image
           src="/logo.png"
-          alt="BagUI Logo"
+          alt="BagUi Logo"
           fill
           priority
           className="object-contain dark:hidden"
@@ -33,7 +33,7 @@ const Logo = () => (
         {/* Dark Logo */}
         <Image
           src="/logoW.png"
-          alt="BagUI Logo"
+          alt="BagUi Logo"
           fill
           priority
           className="hidden object-contain dark:block"
@@ -41,7 +41,7 @@ const Logo = () => (
       </div>
 
       <span className="text-[15px] font-semibold tracking-tight text-foreground">
-        Bag\Ui
+        BagUi
       </span>
     </Link>
 
