@@ -154,7 +154,7 @@ function generateLoaders(entries: RegistryEntry[]): string {
 
 export const componentLoaders: Record<
   string,
-  () => Promise<Record<string, React.ComponentType>>
+  () => Promise<Record<string, unknown> & { default?: React.ComponentType }>
 > = {
 ${loaderEntries}
 };
