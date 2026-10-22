@@ -1,0 +1,48 @@
+{
+  "name": "bagui-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for BagUI: let AI assistants search, inspect and install BagUI components.",
+  "license": "MIT",
+  "homepage": "https://bagui.pro",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anelkabag/bag-ui.git",
+    "directory": "mcp"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "bagui",
+    "shadcn",
+    "ui",
+    "components"
+  ],
+  "bin": {
+    "bagui-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "data",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "sync-registry": "node scripts/sync-registry.mjs",
+    "build": "npm run sync-registry && esbuild src/index.ts --bundle --minify --outfile=dist/index.js --platform=node --format=cjs --target=node18 --banner:js=\"#!/usr/bin/env node\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "inspect": "npx @modelcontextprotocol/inspector node dist/index.js",
+    "prepublishOnly": "npm run typecheck && npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.15",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.6.3"
+  }
+}

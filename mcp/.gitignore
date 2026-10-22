@@ -1,0 +1,5 @@
+node_modules/
+dist/
+*.tgz
+# Generated at build time from ../registry.json (single source of truth)
+data/registry.json
