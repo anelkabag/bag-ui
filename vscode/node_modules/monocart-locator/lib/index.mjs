@@ -1,5 +1,0 @@
-import locator from './index.js';
-export const {
-    Locator, LineParser, CommentParser
-} = locator;
-export default locator;

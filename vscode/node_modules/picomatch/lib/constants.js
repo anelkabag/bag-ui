@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const WIN_SLASH = '\\\\/';
 const WIN_NO_SLASH = `[^${WIN_SLASH}]`;
 
@@ -24,7 +25,6 @@ const NO_DOT_SLASH = `(?!${DOT_LITERAL}{0,1}${END_ANCHOR})`;
 const NO_DOTS_SLASH = `(?!${DOTS_SLASH})`;
 const QMARK_NO_DOT = `[^.${SLASH_LITERAL}]`;
 const STAR = `${QMARK}*?`;
-const SEP = '/';
 
 const POSIX_CHARS = {
   DOT_LITERAL,
@@ -41,8 +41,7 @@ const POSIX_CHARS = {
   NO_DOTS_SLASH,
   QMARK_NO_DOT,
   STAR,
-  START_ANCHOR,
-  SEP
+  START_ANCHOR
 };
 
 /**
@@ -62,8 +61,7 @@ const WINDOWS_CHARS = {
   NO_DOTS_SLASH: `(?!${DOT_LITERAL}{1,2}(?:[${WIN_SLASH}]|$))`,
   QMARK_NO_DOT: `[^.${WIN_SLASH}]`,
   START_ANCHOR: `(?:^|[${WIN_SLASH}])`,
-  END_ANCHOR: `(?:[${WIN_SLASH}]|$)`,
-  SEP: '\\'
+  END_ANCHOR: `(?:[${WIN_SLASH}]|$)`
 };
 
 /**
@@ -159,6 +157,8 @@ module.exports = {
   CHAR_UNDERSCORE: 95, /* _ */
   CHAR_VERTICAL_LINE: 124, /* | */
   CHAR_ZERO_WIDTH_NOBREAK_SPACE: 65279, /* \uFEFF */
+
+  SEP: path.sep,
 
   /**
    * Create EXTGLOB_CHARS
