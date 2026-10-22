@@ -2,7 +2,7 @@
   "name": "bagui-vscode",
   "displayName": "BagUi VS Code",
   "description": "Browse, preview, and install BagUI components directly in VS Code",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "bagui",
   "license": "MIT",
   "icon": "media/icon.png",
