@@ -1,4 +1,4 @@
-# BagUI Studio
+# BagUi VS Code
 
 Browse, search, preview and install [BagUI](https://bagui.pro) components without leaving VS Code.
 
@@ -40,7 +40,7 @@ Installing a component requires a project with [shadcn/ui](https://ui.shadcn.com
 npm install
 npm run build:dev   # bundle (also copies ../registry.json to data/)
 # press F5 in VS Code to launch the Extension Host
-npm run package     # produces bagui-studio-<version>.vsix
+npm run package     # produces bagui-vscode-<version>.vsix
 ```
 
 ## License

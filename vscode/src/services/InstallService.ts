@@ -2,37 +2,17 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import * as vscode from "vscode";
 import type { Component } from "../types";
-import { DEFAULT_HOMEPAGE, isSafeSlug } from "../utils/registry";
-
-type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
+import { buildInstallCommand, type PackageManager } from "../utils/install";
+import { DEFAULT_HOMEPAGE } from "../utils/registry";
 
 const TERMINAL_NAME = "BagUI";
 
 export class InstallService {
-  /** Builds the shell command that installs a component into the current project. */
-  buildCommand(component: Component, homepage: string, manager: PackageManager = "npm"): string {
-    if (!isSafeSlug(component.name)) {
-      throw new Error(`Refusing to install a component with an unsafe name: ${component.name}`);
-    }
-
-    const url = `${homepage.replace(/\/+$/, "")}/r/${component.name}.json`;
-    switch (manager) {
-      case "pnpm":
-        return `pnpm dlx shadcn@latest add ${url}`;
-      case "yarn":
-        return `yarn dlx shadcn@latest add ${url}`;
-      case "bun":
-        return `bunx --bun shadcn@latest add ${url}`;
-      default:
-        return `npx shadcn@latest add ${url}`;
-    }
-  }
-
   /** The command shown in "Copy CLI": same as install, using the project's package manager if any. */
   async getCommand(component: Component, homepage = DEFAULT_HOMEPAGE): Promise<string> {
     const folder = vscode.workspace.workspaceFolders?.[0];
     const manager = folder ? this.detectPackageManager(folder.uri.fsPath) : "npm";
-    return this.buildCommand(component, homepage, manager);
+    return buildInstallCommand(component.name, homepage, manager);
   }
 
   async install(component: Component, homepage = DEFAULT_HOMEPAGE): Promise<void> {
@@ -48,7 +28,7 @@ export class InstallService {
       return;
     }
 
-    const command = this.buildCommand(component, homepage, this.detectPackageManager(folder.uri.fsPath));
+    const command = buildInstallCommand(component.name, homepage, this.detectPackageManager(folder.uri.fsPath));
     const terminal = this.getTerminal(folder);
 
     try {
