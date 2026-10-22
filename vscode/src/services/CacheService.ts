@@ -1,38 +1,40 @@
 import * as vscode from "vscode";
-import type { RegistryData } from "../types";
+import type { NormalizedRegistry } from "../types";
+
+interface CacheEntry {
+  sourceId: string;
+  timestamp: number;
+  registry: NormalizedRegistry;
+}
 
 export class CacheService {
-  private static readonly CACHE_KEY = "bagui.registry.cache";
-  private static readonly CACHE_TTL_MS = 12 * 60 * 60 * 1000;
+  static readonly TTL_MS = 12 * 60 * 60 * 1000;
+  private static readonly KEY = "bagui.registry.cache.v1";
 
   constructor(private readonly context: vscode.ExtensionContext) {}
 
-  async load(): Promise<RegistryData | undefined> {
-    const cached = this.context.globalState.get<
-      { data: RegistryData; timestamp: number } | undefined
-    >(CacheService.CACHE_KEY);
-
-    if (!cached) {
-      return undefined;
-    }
-
-    const isFresh = Date.now() - cached.timestamp < CacheService.CACHE_TTL_MS;
-    if (!isFresh) {
-      await this.clear();
-      return undefined;
-    }
-
-    return cached.data;
+  /** Returns the cached registry for this source if it is younger than 12 hours. */
+  getFresh(sourceId: string): NormalizedRegistry | undefined {
+    const entry = this.read(sourceId);
+    return entry && Date.now() - entry.timestamp < CacheService.TTL_MS ? entry.registry : undefined;
   }
 
-  async save(data: RegistryData): Promise<void> {
-    await this.context.globalState.update(CacheService.CACHE_KEY, {
-      data,
-      timestamp: Date.now(),
-    });
+  /** Returns the cached registry even if expired (used for offline mode). */
+  getStale(sourceId: string): NormalizedRegistry | undefined {
+    return this.read(sourceId)?.registry;
+  }
+
+  async save(sourceId: string, registry: NormalizedRegistry): Promise<void> {
+    const entry: CacheEntry = { sourceId, timestamp: Date.now(), registry };
+    await this.context.globalState.update(CacheService.KEY, entry);
   }
 
   async clear(): Promise<void> {
-    await this.context.globalState.update(CacheService.CACHE_KEY, undefined);
+    await this.context.globalState.update(CacheService.KEY, undefined);
+  }
+
+  private read(sourceId: string): CacheEntry | undefined {
+    const entry = this.context.globalState.get<CacheEntry>(CacheService.KEY);
+    return entry && entry.sourceId === sourceId ? entry : undefined;
   }
 }

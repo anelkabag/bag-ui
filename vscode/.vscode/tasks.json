@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "build:dev",
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": "$tsc"
+    }
+  ]
+}

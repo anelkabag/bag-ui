@@ -1,0 +1,6 @@
+node_modules/
+dist/
+*.vsix
+.vscode-test/
+# Generated at build time from ../registry.json (single source of truth)
+data/registry.json

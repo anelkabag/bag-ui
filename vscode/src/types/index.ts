@@ -1,11 +1,9 @@
+export type Tier = "free" | "pro";
+
 export interface RegistryItemFile {
   path: string;
   type: string;
   target?: string;
-}
-
-export interface RegistryAccess {
-  tier: "free" | "pro";
 }
 
 export interface RegistryItem {
@@ -15,7 +13,7 @@ export interface RegistryItem {
   description: string;
   files: RegistryItemFile[];
   dependencies?: string[];
-  access?: RegistryAccess;
+  access?: { tier: Tier };
   tags?: string[];
   version?: string;
   docsUrl?: string;
@@ -30,12 +28,34 @@ export interface RegistryData {
   items: RegistryItem[];
 }
 
-export interface ComponentNode {
-  id: string;
-  label: string;
-  description?: string;
-  component?: RegistryItem;
+/** A registry item once normalized: category, tags and tier are always set. */
+export interface Component extends RegistryItem {
   category: string;
-  contextValue?: string;
-  isFavorite?: boolean;
+  tags: string[];
+  tier: Tier;
 }
+
+export interface NormalizedRegistry {
+  name: string;
+  homepage: string;
+  components: Component[];
+}
+
+export interface CategoryNode {
+  kind: "category";
+  category: string;
+  label: string;
+  count: number;
+}
+
+export interface ComponentNode {
+  kind: "component";
+  /** Category (or "favorites") the node is displayed under. Keeps tree ids unique. */
+  parent: string;
+  component: Component;
+  isFavorite: boolean;
+}
+
+export type TreeNode = CategoryNode | ComponentNode;
+
+export const FAVORITES_CATEGORY = "favorites";

@@ -1,134 +1,112 @@
 {
   "name": "bagui-studio",
   "displayName": "BagUI Studio",
-  "icon": "media/icon.png",
   "description": "Browse, preview, and install BagUI components directly in VS Code",
   "version": "0.1.0",
   "publisher": "bagui",
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "homepage": "https://bagui.pro",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anelkabag/bag-ui.git",
+    "directory": "vscode"
+  },
+  "bugs": {
+    "url": "https://github.com/anelkabag/bag-ui/issues"
+  },
+  "keywords": ["bagui", "ui", "components", "shadcn", "tailwind", "react", "nextjs", "blocks"],
+  "galleryBanner": {
+    "color": "#0f172a",
+    "theme": "dark"
+  },
   "engines": {
     "vscode": "^1.95.0"
   },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onStartupFinished",
-    "onCommand:bagui.open",
-    "onCommand:bagui.searchComponent",
-    "onCommand:bagui.refreshRegistry",
-    "onCommand:bagui.installComponent",
-    "onCommand:bagui.openDocumentation",
-    "onCommand:bagui.preview",
-    "onView:bagui.components"
-  ],
+  "categories": ["Snippets", "Other"],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
-      {
-        "command": "bagui.open",
-        "title": "BagUI: Open"
-      },
-      {
-        "command": "bagui.searchComponent",
-        "title": "BagUI: Search Component"
-      },
-      {
-        "command": "bagui.refreshRegistry",
-        "title": "BagUI: Refresh Registry"
-      },
-      {
-        "command": "bagui.installComponent",
-        "title": "BagUI: Install Component"
-      },
-      {
-        "command": "bagui.openDocumentation",
-        "title": "BagUI: Open Documentation"
-      },
-      {
-        "command": "bagui.addFavorite",
-        "title": "BagUI: Add to Favorites"
-      },
-      {
-        "command": "bagui.preview",
-        "title": "BagUI: Preview Component"
-      }
+      { "command": "bagui.open", "title": "Open", "category": "BagUI", "icon": "$(layout)" },
+      { "command": "bagui.searchComponent", "title": "Search Component", "category": "BagUI", "icon": "$(search)" },
+      { "command": "bagui.refreshRegistry", "title": "Refresh Registry", "category": "BagUI", "icon": "$(refresh)" },
+      { "command": "bagui.installComponent", "title": "Install Component", "category": "BagUI", "icon": "$(cloud-download)" },
+      { "command": "bagui.openDocumentation", "title": "Open Documentation", "category": "BagUI", "icon": "$(book)" },
+      { "command": "bagui.preview", "title": "Preview Component", "category": "BagUI", "icon": "$(eye)" },
+      { "command": "bagui.addFavorite", "title": "Add to Favorites", "category": "BagUI", "icon": "$(star-empty)" },
+      { "command": "bagui.removeFavorite", "title": "Remove from Favorites", "category": "BagUI", "icon": "$(star-full)" }
     ],
     "viewsContainers": {
       "activitybar": [
-        {
-          "id": "bagui",
-          "title": "BagUI",
-          "icon": "media/icon.svg"
-        }
+        { "id": "bagui", "title": "BagUI", "icon": "media/icon.svg" }
       ]
     },
     "views": {
       "bagui": [
-        {
-          "id": "bagui.components",
-          "name": "Components"
-        }
+        { "id": "bagui.components", "name": "Components" }
       ]
     },
     "menus": {
+      "commandPalette": [
+        { "command": "bagui.preview", "when": "false" },
+        { "command": "bagui.addFavorite", "when": "false" },
+        { "command": "bagui.removeFavorite", "when": "false" }
+      ],
       "view/title": [
-        {
-          "command": "bagui.refreshRegistry",
-          "when": "view == bagui.components",
-          "group": "navigation@1"
-        }
+        { "command": "bagui.searchComponent", "when": "view == bagui.components", "group": "navigation@1" },
+        { "command": "bagui.refreshRegistry", "when": "view == bagui.components", "group": "navigation@2" }
       ],
       "view/item/context": [
-        {
-          "command": "bagui.addFavorite",
-          "when": "view == bagui.components && viewItem == component",
-          "group": "inline@1"
-        }
+        { "command": "bagui.installComponent", "when": "view == bagui.components && viewItem =~ /^component/", "group": "inline@1" },
+        { "command": "bagui.preview", "when": "view == bagui.components && viewItem =~ /^component/", "group": "1_actions@1" },
+        { "command": "bagui.installComponent", "when": "view == bagui.components && viewItem =~ /^component/", "group": "1_actions@2" },
+        { "command": "bagui.openDocumentation", "when": "view == bagui.components && viewItem =~ /^component/", "group": "1_actions@3" },
+        { "command": "bagui.addFavorite", "when": "view == bagui.components && viewItem == component", "group": "2_favorites@1" },
+        { "command": "bagui.removeFavorite", "when": "view == bagui.components && viewItem == component.favorite", "group": "2_favorites@1" }
       ]
     },
-    "configuration": [
-      {
-        "title": "BagUI",
-        "properties": {
-          "bagui.autoPreview": {
-            "type": "boolean",
-            "default": true,
-            "description": "Automatically open the preview panel when a component is selected."
-          },
-          "bagui.theme": {
-            "type": "string",
-            "enum": [
-              "system",
-              "light",
-              "dark"
-            ],
-            "default": "system",
-            "description": "Preferred theme for the BagUI preview webview."
-          },
-          "bagui.registryPath": {
-            "type": "string",
-            "default": "",
-            "description": "Optional override for the BagUI registry file path."
-          },
-          "bagui.apiUrl": {
-            "type": "string",
-            "default": "",
-            "description": "Optional API endpoint for future remote registry support."
-          }
+    "configuration": {
+      "title": "BagUI",
+      "properties": {
+        "bagui.autoPreview": {
+          "type": "boolean",
+          "default": true,
+          "description": "Open the preview panel when a component is clicked in the BagUI sidebar."
+        },
+        "bagui.theme": {
+          "type": "string",
+          "enum": ["system", "light", "dark"],
+          "default": "system",
+          "description": "Theme of the BagUI preview panel. \"system\" follows your VS Code theme."
+        },
+        "bagui.registryPath": {
+          "type": "string",
+          "default": "",
+          "description": "Optional path to a local BagUI registry.json file (absolute, or relative to the first workspace folder). Takes priority over the API URL."
+        },
+        "bagui.apiUrl": {
+          "type": "string",
+          "default": "",
+          "description": "Optional HTTPS URL of a BagUI registry JSON endpoint. When empty, the registry bundled with the extension is used."
         }
       }
-    ]
+    }
   },
   "scripts": {
-    "vscode:prepublish": "npm run build",
-    "build": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --target=node20",
-    "compile": "npm run build",
-    "watch": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --target=node20 --watch",
-    "lint": "tsc -p tsconfig.json --noEmit"
+    "sync-registry": "node scripts/sync-registry.mjs",
+    "build": "npm run sync-registry && esbuild src/extension.ts --bundle --minify --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --target=node20",
+    "build:dev": "npm run sync-registry && esbuild src/extension.ts --bundle --sourcemap --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --target=node20",
+    "watch": "esbuild src/extension.ts --bundle --sourcemap --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --target=node20 --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "npm run typecheck",
+    "vscode:prepublish": "npm run typecheck && npm run build",
+    "package": "vsce package --no-dependencies",
+    "publish:marketplace": "vsce publish --no-dependencies"
   },
   "devDependencies": {
     "@types/node": "^20.14.15",
     "@types/vscode": "^1.95.0",
+    "@vscode/vsce": "^3.2.1",
     "esbuild": "^0.24.0",
     "typescript": "^5.6.3"
   }

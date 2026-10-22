@@ -1,21 +1,14 @@
 import * as vscode from "vscode";
-import { CacheService } from "../services/CacheService";
-import { RegistryService } from "../services/RegistryService";
-import { ComponentTreeProvider } from "../providers/ComponentTreeProvider";
+import type { CommandContext } from "./context";
+import { guarded } from "./shared";
 
-export async function refreshCommand(
-  cacheService: CacheService,
-  registryService: RegistryService,
-  treeProvider: ComponentTreeProvider,
-): Promise<void> {
-  try {
-    await cacheService.clear();
-    await registryService.getComponents();
-    treeProvider.refresh();
-    vscode.window.showInformationMessage("BagUI registry refreshed");
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Unable to refresh registry";
-    vscode.window.showErrorMessage(message);
-  }
+/** BagUI: Refresh Registry */
+export function refreshCommand(ctx: CommandContext): Promise<void> {
+  return guarded(async () => {
+    await vscode.window.withProgress(
+      { location: vscode.ProgressLocation.Window, title: "BagUI: refreshing registry…" },
+      () => ctx.registry.refresh(),
+    );
+    void vscode.window.showInformationMessage("BagUI registry refreshed.");
+  }, "Unable to refresh the BagUI registry.");
 }

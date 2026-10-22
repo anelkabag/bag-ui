@@ -1,58 +1,22 @@
-import * as vscode from "vscode";
-import { RegistryService } from "../services/RegistryService";
-import { ComponentPreviewWebview } from "../webviews/ComponentPreview";
+import type { CommandContext } from "./context";
+import { guarded, resolveComponent } from "./shared";
 
-export async function searchCommand(
-  registryService: RegistryService,
-): Promise<void> {
-  const items = await registryService.getComponents();
-
-  const quickPick = vscode.window.createQuickPick<
-    vscode.QuickPickItem & { component: (typeof items)[number] }
-  >();
-  quickPick.items = items.map((component) => ({
-    label: component.title,
-    description: component.description,
-    detail: `${component.category ?? "General"} • ${component.access?.tier ?? "free"}`,
-    component,
-  }));
-  quickPick.placeholder = "Search BagUI components";
-  quickPick.matchOnDescription = true;
-  quickPick.matchOnDetail = true;
-
-  quickPick.onDidChangeValue((value) => {
-    const filtered = items.filter((component) => {
-      const haystack = [
-        component.title,
-        component.description,
-        component.name,
-        component.category ?? "",
-        ...(component.tags ?? []),
-      ]
-        .join(" ")
-        .toLowerCase();
-      return haystack.includes(value.toLowerCase());
-    });
-
-    quickPick.items = filtered.map((component) => ({
-      label: component.title,
-      description: component.description,
-      detail: `${component.category ?? "General"} • ${component.access?.tier ?? "free"}`,
-      component,
-    }));
-  });
-
-  quickPick.onDidAccept(async () => {
-    const selected = quickPick.selectedItems[0] as
-      | (vscode.QuickPickItem & { component: (typeof items)[number] })
-      | undefined;
-    if (!selected) {
-      return;
+/** BagUI: Search Component — live QuickPick, selecting a result opens its preview. */
+export function searchCommand(ctx: CommandContext): Promise<void> {
+  return guarded(async () => {
+    const component = await resolveComponent(ctx, undefined, "Search BagUI components");
+    if (component) {
+      await ctx.preview.show(component);
     }
-    quickPick.dispose();
-    await ComponentPreviewWebview.show(selected.component);
-  });
+  }, "Unable to search BagUI components.");
+}
 
-  quickPick.onDidHide(() => quickPick.dispose());
-  quickPick.show();
+/** bagui.preview — opens the preview panel for a given component. */
+export function previewCommand(ctx: CommandContext, arg: unknown): Promise<void> {
+  return guarded(async () => {
+    const component = await resolveComponent(ctx, arg, "Select a BagUI component to preview");
+    if (component) {
+      await ctx.preview.show(component);
+    }
+  }, "Unable to preview this component.");
 }

@@ -1,23 +1,9 @@
 import * as vscode from "vscode";
-import { RegistryService } from "../services/RegistryService";
-import { ComponentPreviewWebview } from "../webviews/ComponentPreview";
+import { guarded } from "./shared";
 
-export async function openCommand(
-  registryService: RegistryService,
-): Promise<void> {
-  const components = await registryService.getComponents();
-  const selected = await vscode.window.showQuickPick(
-    components.map((component) => ({
-      label: component.title,
-      description: component.description,
-      component,
-    })),
-    { placeHolder: "Select a BagUI component to preview" },
-  );
-
-  if (!selected) {
-    return;
-  }
-
-  await ComponentPreviewWebview.show(selected.component);
+/** BagUI: Open — reveals the BagUI sidebar. */
+export function openCommand(): Promise<void> {
+  return guarded(async () => {
+    await vscode.commands.executeCommand("workbench.view.extension.bagui");
+  }, "Unable to open BagUI.");
 }

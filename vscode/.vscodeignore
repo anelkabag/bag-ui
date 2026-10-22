@@ -1,6 +1,12 @@
-src/**
-node_modules/**
 .vscode/**
 .gitignore
+src/**
+scripts/**
+node_modules/**
+**/*.map
+**/*.ts
+tsconfig.json
 package-lock.json
-README.md
+pnpm-lock.yaml
+pnpm-workspace.yaml
+*.vsix

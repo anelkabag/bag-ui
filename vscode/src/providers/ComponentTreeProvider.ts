@@ -1,110 +1,127 @@
 import * as vscode from "vscode";
-import type { ComponentNode, RegistryItem } from "../types";
-import { RegistryService } from "../services/RegistryService";
+import {
+  FAVORITES_CATEGORY,
+  type CategoryNode,
+  type Component,
+  type ComponentNode,
+  type TreeNode,
+} from "../types";
+import type { FavoritesService } from "../services/FavoritesService";
+import type { RegistryService } from "../services/RegistryService";
+import { toErrorMessage } from "../utils/errors";
+import { categoryLabel } from "../utils/registry";
 
-export class ComponentTreeProvider implements vscode.TreeDataProvider<ComponentNode> {
-  private readonly _onDidChangeTreeData = new vscode.EventEmitter<
-    ComponentNode | undefined | null | void
-  >();
+export class ComponentTreeProvider implements vscode.TreeDataProvider<TreeNode>, vscode.Disposable {
+  private readonly _onDidChangeTreeData = new vscode.EventEmitter<void>();
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
-
-  private favorites = new Set<string>();
+  private readonly subscriptions: vscode.Disposable[] = [];
 
   constructor(
-    private readonly registryService: RegistryService,
-    private readonly context: vscode.ExtensionContext,
+    private readonly registry: RegistryService,
+    private readonly favorites: FavoritesService,
   ) {
-    this.favorites = new Set(
-      this.context.globalState.get<string[]>("bagui.favorites", []),
+    this.subscriptions.push(
+      this._onDidChangeTreeData,
+      registry.onDidChange(() => this.refresh()),
+      favorites.onDidChange(() => this.refresh()),
+      vscode.workspace.onDidChangeConfiguration((event) => {
+        if (event.affectsConfiguration("bagui")) {
+          this.refresh();
+        }
+      }),
     );
+  }
+
+  dispose(): void {
+    this.subscriptions.forEach((disposable) => disposable.dispose());
   }
 
   refresh(): void {
     this._onDidChangeTreeData.fire();
   }
 
-  async getChildren(element?: ComponentNode): Promise<ComponentNode[]> {
-    if (!element) {
-      const categories = await this.registryService.getCategories();
-      return [
-        {
-          id: "favorites",
-          label: "⭐ Favorites",
-          component: undefined,
-          category: "favorites",
-        },
-        ...categories.map((category) => ({
-          id: category,
-          label: this.registryService.getCategoryLabel(category),
-          component: undefined,
-          category,
-        })),
-      ];
+  async getChildren(element?: TreeNode): Promise<TreeNode[]> {
+    try {
+      if (!element) {
+        return await this.getRoots();
+      }
+      if (element.kind === "category") {
+        return await this.getCategoryChildren(element);
+      }
+      return [];
+    } catch (error) {
+      void vscode.window.showErrorMessage(toErrorMessage(error, "Unable to load BagUI components."));
+      return [];
     }
-
-    if (element.category === "favorites") {
-      const favorites = await this.getFavoriteComponents();
-      return favorites.map((item) => ({
-        id: item.name,
-        label: item.title,
-        description: item.description,
-        component: item,
-        category: element.category,
-        isFavorite: true,
-      }));
-    }
-
-    const items = await this.registryService.getComponentsByCategory(
-      element.category,
-    );
-    return items.map((item) => ({
-      id: item.name,
-      label: item.title,
-      description: item.description,
-      component: item,
-      category: element.category,
-      isFavorite: this.favorites.has(item.name),
-    }));
   }
 
-  getTreeItem(element: ComponentNode): vscode.TreeItem {
-    const item = new vscode.TreeItem(
-      element.label,
-      element.component
-        ? vscode.TreeItemCollapsibleState.None
-        : vscode.TreeItemCollapsibleState.Collapsed,
-    );
-    item.id = element.id;
-    item.description = element.description;
-    item.contextValue = element.component ? "component" : "category";
-    item.tooltip = element.component
-      ? `${element.component.title}\n${element.component.description}`
-      : undefined;
-
-    if (element.component) {
+  getTreeItem(element: TreeNode): vscode.TreeItem {
+    if (element.kind === "category") {
+      const item = new vscode.TreeItem(element.label, vscode.TreeItemCollapsibleState.Collapsed);
+      item.id = `category/${element.category}`;
+      item.contextValue = "category";
+      item.description = String(element.count);
       item.iconPath = new vscode.ThemeIcon(
-        element.isFavorite ? "star-full" : "symbol-method",
+        element.category === FAVORITES_CATEGORY ? "star-full" : "folder",
       );
+      return item;
     }
 
+    const { component, parent, isFavorite } = element;
+    const item = new vscode.TreeItem(component.title, vscode.TreeItemCollapsibleState.None);
+    item.id = `${parent}/${component.name}`;
+    item.contextValue = isFavorite ? "component.favorite" : "component";
+    item.description = component.tier === "pro" ? "Pro" : undefined;
+    item.tooltip = new vscode.MarkdownString(
+      `**${component.title}**\n\n${component.description}`,
+    );
+    item.iconPath = new vscode.ThemeIcon(isFavorite ? "star-full" : "symbol-misc");
+
+    const autoPreview = vscode.workspace.getConfiguration("bagui").get<boolean>("autoPreview", true);
+    if (autoPreview) {
+      item.command = {
+        command: "bagui.preview",
+        title: "Preview Component",
+        arguments: [component.name],
+      };
+    }
     return item;
   }
 
-  async addFavorite(component: RegistryItem): Promise<void> {
-    if (this.favorites.has(component.name)) {
-      return;
-    }
+  private async getRoots(): Promise<TreeNode[]> {
+    const [categories, components] = await Promise.all([
+      this.registry.getCategories(),
+      this.registry.getComponents(),
+    ]);
 
-    this.favorites.add(component.name);
-    await this.context.globalState.update(
-      "bagui.favorites",
-      Array.from(this.favorites),
-    );
-    this.refresh();
+    const favoritesNode: CategoryNode = {
+      kind: "category",
+      category: FAVORITES_CATEGORY,
+      label: categoryLabel(FAVORITES_CATEGORY),
+      count: components.filter((component) => this.favorites.has(component.name)).length,
+    };
+
+    const categoryNodes = categories.map<CategoryNode>((category) => ({
+      kind: "category",
+      category,
+      label: categoryLabel(category),
+      count: components.filter((component) => component.category === category).length,
+    }));
+
+    return [favoritesNode, ...categoryNodes];
   }
 
-  async getFavoriteComponents(): Promise<RegistryItem[]> {
-    const components = await this.registryService.getComponents();
-    return components.filter((component) => this.favorites.has(component.name));
+  private async getCategoryChildren(node: CategoryNode): Promise<ComponentNode[]> {
+    const components: Component[] =
+      node.category === FAVORITES_CATEGORY
+        ? (await this.registry.getComponents()).filter((c) => this.favorites.has(c.name))
+        : await this.registry.getComponentsByCategory(node.category);
+
+    return components.map<ComponentNode>((component) => ({
+      kind: "component",
+      parent: node.category,
+      component,
+      isFavorite: this.favorites.has(component.name),
+    }));
   }
 }

@@ -1,19 +1,24 @@
 import * as vscode from "vscode";
-import { InstallService } from "../services/InstallService";
-import type { RegistryItem } from "../types";
+import type { CommandContext } from "./context";
+import { guarded, resolveComponent } from "./shared";
 
-export async function installCommand(
-  installService: InstallService,
-  component: RegistryItem,
-): Promise<void> {
-  try {
-    await installService.installComponent(component);
-    vscode.window.showInformationMessage(
-      `Installation command started for ${component.title}`,
-    );
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Unknown installation error";
-    vscode.window.showErrorMessage(message);
-  }
+/** BagUI: Install Component */
+export function installCommand(ctx: CommandContext, arg: unknown): Promise<void> {
+  return guarded(async () => {
+    const component = await resolveComponent(ctx, arg, "Select a BagUI component to install");
+    if (!component) {
+      return;
+    }
+    await ctx.installer.install(component, await ctx.registry.getHomepage());
+    void vscode.window.showInformationMessage(`Installing ${component.title}…`);
+  }, "Unable to install this component.");
+}
+
+/** BagUI: Open Documentation */
+export function openDocumentationCommand(ctx: CommandContext, arg: unknown): Promise<void> {
+  return guarded(async () => {
+    const homepage = await ctx.registry.getHomepage();
+    const component = arg === undefined ? undefined : await resolveComponent(ctx, arg, "");
+    await ctx.installer.openDocumentation(component, homepage);
+  }, "Unable to open the documentation.");
 }
