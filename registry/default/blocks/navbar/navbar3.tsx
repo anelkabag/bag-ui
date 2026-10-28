@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion, type Variants } from "motion/react";
 
@@ -18,16 +19,17 @@ export interface GooeyNavbarProps {
   cta?: GooeyNavbarLink;
   /** Destination du logo. */
   logoHref?: string;
-  /** Remplace le globe par défaut. */
+  /** Remplace le logo par défaut (`/logo.png`). */
   logo?: React.ReactNode;
   /** Classes du conteneur (centré horizontalement, marge de 1.5rem en haut). */
   className?: string;
 }
 
 const DEFAULT_LINKS: GooeyNavbarLink[] = [
-  { label: "Security", href: "#security" },
-  { label: "Products", href: "#products" },
-  { label: "Support", href: "#support" },
+  { label: "Blocks", href: "#blocks" },
+  { label: "Templates", href: "#templates" },
+  { label: "Pricing", href: "#pricing" },
+  { label: "Contact", href: "#contact" },
 ];
 
 const DEFAULT_CTA: GooeyNavbarLink = { label: "Download App", href: "#download" };
@@ -49,23 +51,18 @@ const grow: Variants = {
   show: { scaleX: 1, opacity: 1, transition: spring },
 };
 
-function GlobeLogo() {
+/** Logo par défaut : place ton fichier dans `public/logo.png`. */
+function LogoImage() {
   return (
-    <svg
-      viewBox="0 0 64 64"
-      fill="none"
-      strokeWidth={5}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="size-[4.1em] stroke-[#f4f1ea]"
-      aria-hidden="true"
-    >
-      <circle cx="32" cy="32" r="28" />
-      <path d="M22 6c-10 12-10 40 3 52" />
-      <path d="M44 7c4 10 4 20-3 28" />
-      <path d="M6 36c14 2 34 4 52-6" />
-      <path d="M14 52c14-14 28-26 40-36" />
-    </svg>
+    <Image
+      src="/logoW.png"
+      alt=""
+      width={128}
+      height={128}
+      priority
+      draggable={false}
+      className="size-[3.1em] object-contain"
+    />
   );
 }
 
@@ -148,7 +145,7 @@ export function GooeyNavbar({
     links,
     cta,
     logoHref,
-    logo: logo ?? <GlobeLogo />,
+    logo: logo ?? <LogoImage />,
     animate: !reduceMotion,
   };
 
@@ -157,7 +154,7 @@ export function GooeyNavbar({
       className={cn(
         // Tout est en `em` : la taille de police du conteneur règle la taille de la barre.
         // Pour la changer : className="text-[11px]" (plus petit) ou "text-[15px]" (plus grand).
-        "flex w-full justify-center px-4 pt-6 text-[length:clamp(8px,2.2vw,13px)]",
+        "flex w-full justify-center px-4 pt-6 text-[length:clamp(7.5px,2vw,12px)]",
         className,
       )}
     >
