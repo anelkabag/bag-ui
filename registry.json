@@ -463,6 +463,23 @@
       }
     },
     {
+      "name": "login3",
+      "type": "registry:block",
+      "title": "Login Exemple 3",
+      "description": "Frequently asked questions section with collapsible items.",
+      "dependencies": ["motion/react", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/SignUp/login3.tsx",
+          "type": "registry:block",
+          "target": "components/blocks/login3.tsx"
+        }
+      ],
+      "access": {
+        "tier": "pro"
+      }
+    },
+    {
       "name": "login1",
       "type": "registry:block",
       "title": "Login Exemple 1",
