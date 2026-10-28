@@ -209,4 +209,6 @@ export function GooeyNavbar({
   );
 }
 
+export { GooeyNavbar as NavbarEx3 };
+
 export default GooeyNavbar;
