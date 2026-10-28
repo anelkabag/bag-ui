@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 
 const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
@@ -33,11 +34,7 @@ export default function SignInPage() {
           onSubmit={(e) => e.preventDefault()}
           className={`w-full max-w-[368px] ${fit}`}
         >
-          <svg className="block h-6 w-6" viewBox="0 0 24 24" fill="#0a0a0a" aria-label="Logo">
-            <path d="M1 3 9 1v9L5 11v11H1z" />
-            <path d="M23 21 15 23v-9l4-1V2h4z" />
-            <path d="M9 12l6-1v7l-6 1z" />
-          </svg>
+          <Image src="/logo.png" alt="Logo" width={24} height={24} priority className="block h-6 w-6" />
 
           <h1 className="mt-11 font-[family-name:var(--font-geist-sans)] text-[26px] font-semibold leading-7 tracking-[-0.02em]">
             Sign In
