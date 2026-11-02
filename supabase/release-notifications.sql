@@ -3,11 +3,14 @@ create extension if not exists pg_cron;
 
 create table if not exists public.notification_preferences (
   user_id uuid primary key references auth.users(id) on delete cascade,
-  product_updates_enabled boolean not null default false,
+  product_updates_enabled boolean not null default true,
   consented_at timestamptz,
   unsubscribed_at timestamptz,
   updated_at timestamptz not null default now()
 );
+
+alter table public.notification_preferences
+  alter column product_updates_enabled set default true;
 
 create table if not exists public.release_notifications (
   id uuid primary key default gen_random_uuid(),
@@ -256,11 +259,12 @@ begin
         )
         select
           release_uuid,
-          preference.user_id,
+          auth_user.id,
           auth_user.email
-        from public.notification_preferences as preference
-        join auth.users as auth_user on auth_user.id = preference.user_id
-        where preference.product_updates_enabled = true
+        from auth.users as auth_user
+        left join public.notification_preferences as preference
+          on preference.user_id = auth_user.id
+        where coalesce(preference.product_updates_enabled, true) = true
           and auth_user.email is not null
           and auth_user.email_confirmed_at is not null
         on conflict (release_id, user_id) do nothing;
@@ -316,9 +320,8 @@ begin
   with candidates as (
     select delivery.id
     from public.release_email_deliveries as delivery
-    join public.notification_preferences as preference
+    left join public.notification_preferences as preference
       on preference.user_id = delivery.user_id
-     and preference.product_updates_enabled = true
     join auth.users as auth_user
       on auth_user.id = delivery.user_id
      and auth_user.email_confirmed_at is not null
@@ -326,6 +329,7 @@ begin
       (delivery.status = 'pending' and delivery.next_attempt_at <= now())
       or (delivery.status = 'sending' and delivery.locked_until < now())
     )
+      and coalesce(preference.product_updates_enabled, true) = true
       and delivery.attempts < 8
     order by delivery.next_attempt_at, delivery.created_at
     limit greatest(1, least(coalesce(p_limit, 25), 50))
@@ -604,11 +608,12 @@ begin
       last_error = null,
       email = auth_user.email,
       updated_at = now()
-  from public.notification_preferences as preference
-  join auth.users as auth_user on auth_user.id = preference.user_id
+  from auth.users as auth_user
+  left join public.notification_preferences as preference
+    on preference.user_id = auth_user.id
   where delivery.release_id = p_release_id
-    and delivery.user_id = preference.user_id
-    and preference.product_updates_enabled = true
+    and delivery.user_id = auth_user.id
+    and coalesce(preference.product_updates_enabled, true) = true
     and auth_user.email_confirmed_at is not null
     and delivery.status = 'failed'
     and delivery.retryable = true;

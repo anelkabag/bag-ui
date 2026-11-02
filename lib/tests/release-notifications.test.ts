@@ -153,6 +153,8 @@ test("release email escapes untrusted content and includes required links", () =
   assert.match(email.html, /https:\/\/www\.bagui\.pro\/blocks\/example/);
   assert.match(email.html, /https:\/\/www\.bagui\.pro\/unsubscribe\?token=abc/);
   assert.match(email.html, /https:\/\/www\.bagui\.pro\/account#notifications/);
+  assert.match(email.html, /turn these emails off at any time/);
+  assert.match(email.text, /turn off emails about new BagUI components anytime/);
   assert.equal(
     email.headers["List-Unsubscribe-Post"],
     "List-Unsubscribe=One-Click",

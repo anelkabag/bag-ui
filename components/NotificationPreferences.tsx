@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 export function NotificationPreferences() {
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(true);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -69,7 +69,8 @@ export function NotificationPreferences() {
           </h2>
           <p className="mt-1 max-w-xl text-sm text-muted-foreground">
             Get occasional emails when new components, blocks, and other
-            resources are released. This is optional and off by default.
+            resources are released. Emails are enabled by default, and you can
+            turn them off here at any time.
           </p>
         </div>
         <button

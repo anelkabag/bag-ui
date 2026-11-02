@@ -35,6 +35,7 @@ export function buildReleaseNotificationEmail(resource: ReleaseEmailParams) {
       resource.description,
       `Category: ${resource.category}`,
       `Explore Component: ${resource.resource_url}`,
+      "You can turn off emails about new BagUI components anytime in your account email preferences or by unsubscribing below.",
       `Notification preferences: ${resource.preferencesUrl}`,
       `Unsubscribe: ${resource.unsubscribeUrl}`,
     ].join("\n\n"),
@@ -77,7 +78,7 @@ export function buildReleaseNotificationEmail(resource: ReleaseEmailParams) {
           </p>
         </td></tr>
         <tr><td class="muted" style="padding:22px 8px;color:#6b7280;font-size:12px;line-height:1.7">
-          You’re receiving this product update because you opted in to BagUI release emails.<br />
+          You’re receiving occasional emails when new BagUI resources are released. You can turn these emails off at any time in your account email preferences or by unsubscribing below.<br />
           <a href="${preferencesUrl}" style="color:inherit">Notification preferences</a>
           &nbsp;·&nbsp;
           <a href="${unsubscribeUrl}" style="color:inherit">Unsubscribe</a>

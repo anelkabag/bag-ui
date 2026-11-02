@@ -194,18 +194,21 @@ export async function runReleaseNotificationWorker() {
     );
     const { data: optedInUsers, error: preferenceError } = await supabase
       .from("notification_preferences")
-      .select("user_id")
-      .in("user_id", userIds)
-      .eq("product_updates_enabled", true);
+      .select("user_id, product_updates_enabled")
+      .in("user_id", userIds);
     if (preferenceError) {
       throw new Error(
         `Could not confirm notification preferences: ${preferenceError.code}`,
       );
     }
 
-    const optedIn = new Set((optedInUsers ?? []).map((user) => user.user_id));
+    const optedOut = new Set(
+      (optedInUsers ?? [])
+        .filter((user) => !user.product_updates_enabled)
+        .map((user) => user.user_id),
+    );
     const cancelledIds = claimed
-      .filter((delivery) => !optedIn.has(delivery.user_id))
+      .filter((delivery) => optedOut.has(delivery.user_id))
       .map((delivery) => delivery.id);
     if (cancelledIds.length > 0) {
       const { error } = await supabase
@@ -222,7 +225,9 @@ export async function runReleaseNotificationWorker() {
       }
     }
 
-    const eligible = claimed.filter((delivery) => optedIn.has(delivery.user_id));
+    const eligible = claimed.filter(
+      (delivery) => !optedOut.has(delivery.user_id),
+    );
     let sent = 0;
     let cancelledBeforeSend = cancelledIds.length;
     for (let offset = 0; offset < eligible.length; offset += 5) {

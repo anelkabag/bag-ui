@@ -236,8 +236,10 @@ The deployment callback does not send emails or wait for delivery. Supabase
 The worker processes at most 50 recipients per invocation, applies controlled
 Resend concurrency, and relies on delivery leases plus exponential retry
 backoff. Supabase `pg_cron` is only a recovery path for pending work, so Vercel
-Hobby does not need any scheduled function. Users are opted out by default;
-they can opt in or out under **Account → Email preferences**. Admins listed in
+Hobby does not need any scheduled function. Product update emails are enabled
+by default for confirmed accounts without a saved preference. Existing explicit
+opt-outs remain opted out; users can turn emails off or back on under
+**Account → Email preferences**. Admins listed in
 `RELEASE_NOTIFICATION_ADMIN_EMAILS` can inspect campaigns at
 `/admin/release-notifications` and retry eligible temporary failures.
 

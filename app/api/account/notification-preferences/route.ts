@@ -31,7 +31,7 @@ export async function GET() {
   }
 
   return NextResponse.json(
-    { productUpdatesEnabled: data?.product_updates_enabled ?? false },
+    { productUpdatesEnabled: data?.product_updates_enabled ?? true },
     { headers: { "Cache-Control": "no-store" } },
   );
 }

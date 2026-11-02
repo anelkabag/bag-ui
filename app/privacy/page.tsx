@@ -114,9 +114,9 @@ export default function PrivacyPage() {
                     <li>To improve the performance, quality, and usability of the platform.</li>
                     <li>To personalize your experience and maintain account security.</li>
                     <li>
-                      To send product release emails only when you opt in; you
-                      can change this preference in your account or unsubscribe
-                      from any release email.
+                      To send occasional product release emails by default;
+                      you can turn them off at any time in your account
+                      preferences or unsubscribe from any release email.
                     </li>
                     <li>To respond to support requests and service messages.</li>
                   </ul>
