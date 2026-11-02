@@ -113,7 +113,12 @@ export default function PrivacyPage() {
                     <li>To provide access to the catalog, account features, and downloads.</li>
                     <li>To improve the performance, quality, and usability of the platform.</li>
                     <li>To personalize your experience and maintain account security.</li>
-                    <li>To communicate updates, product notifications, and support responses.</li>
+                    <li>
+                      To send product release emails only when you opt in; you
+                      can change this preference in your account or unsubscribe
+                      from any release email.
+                    </li>
+                    <li>To respond to support requests and service messages.</li>
                   </ul>
                 </section>
 
@@ -135,9 +140,9 @@ export default function PrivacyPage() {
                   </h2>
                   <p className="mt-4 text-sm leading-7 text-muted-foreground md:text-base">
                     We do not sell personal data. We may share information with trusted
-                    service providers that help us operate the platform, such as hosting,
-                    analytics, and authentication services, under confidentiality and
-                    security obligations.
+                    service providers that help us operate the platform, including
+                    hosting, analytics, authentication, and email delivery services,
+                    under confidentiality and security obligations.
                   </p>
                 </section>
 

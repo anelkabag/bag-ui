@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { DownloadsHistory } from "@/components/DownloadsHistory";
 import { AccountActions } from "@/components/AccountActions";
+import { NotificationPreferences } from "@/components/NotificationPreferences";
 
 export default async function AccountPage() {
   const supabase = await createSupabaseServerClient();
@@ -174,6 +175,8 @@ export default async function AccountPage() {
           downloads={downloadsData.downloads}
           total={downloadsData.total}
         />
+
+        <NotificationPreferences />
 
         {/* Account actions */}
         <div className="rounded-[32px] border border-border bg-card/90 p-10 shadow-2xl shadow-black/20">
