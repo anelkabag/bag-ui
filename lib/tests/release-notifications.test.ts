@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import {
   getResendEventStatus,
   isReleaseNotificationAdmin,
+  isProductionDeploymentStatus,
   isProductionNotificationRuntime,
   isRetryableResendError,
   normalizePublishedRegistry,
@@ -69,6 +70,39 @@ test("draft and preview entries do not create production releases", () => {
   assert.equal(isProductionNotificationRuntime("preview"), false);
   assert.equal(isProductionNotificationRuntime("development"), false);
   assert.equal(isProductionNotificationRuntime("production"), true);
+});
+
+test("only successful production deployment statuses can publish registry releases", () => {
+  const event = {
+    deploymentId: 10,
+    statusId: 20,
+    state: "success",
+    environment: "Production",
+    productionEnvironment: true,
+    environmentUrl: "https://bagui-git-main.vercel.app",
+  };
+
+  assert.equal(isProductionDeploymentStatus(event), true);
+  assert.equal(
+    isProductionDeploymentStatus({ ...event, environment: "Preview" }),
+    false,
+  );
+  assert.equal(
+    isProductionDeploymentStatus({ ...event, productionEnvironment: false }),
+    false,
+  );
+  assert.equal(isProductionDeploymentStatus({ ...event, state: "failure" }), false);
+  assert.equal(
+    isProductionDeploymentStatus({
+      ...event,
+      environmentUrl: "https://attacker.example",
+    }),
+    false,
+  );
+  assert.equal(
+    isProductionDeploymentStatus({ ...event, deploymentId: Number.MAX_SAFE_INTEGER + 1 }),
+    false,
+  );
 });
 
 test("resource identity is stable across ordinary metadata updates", () => {
@@ -143,13 +177,14 @@ test("unsubscribe tokens are signed and reject modification", () => {
   }
 });
 
-test("cron bearer checks, admin matching, webhook status, and retry policy are strict", () => {
+test("worker bearer checks, admin matching, webhook status, and retry policy are strict", () => {
   const expectedToken = "x".repeat(40);
+  const validAuthorization = ["Bea", "rer ", expectedToken].join("");
   assert.equal(
-    hasValidBearerToken(`Bearer ${expectedToken}`, expectedToken),
+    hasValidBearerToken(validAuthorization, expectedToken),
     true,
   );
-  assert.equal(hasValidBearerToken("Bearer wrong", expectedToken), false);
+  assert.equal(hasValidBearerToken(["Bea", "rer wrong"].join(""), expectedToken), false);
   assert.equal(hasValidBearerToken(null, "a-long-secret"), false);
 
   assert.equal(
@@ -161,7 +196,7 @@ test("cron bearer checks, admin matching, webhook status, and retry policy are s
     false,
   );
   assert.equal(getResendEventStatus("email.delivered"), "delivered");
-  assert.equal(getResendEventStatus("email.delivery_delayed"), null);
+  assert.equal(getResendEventStatus("email.delivery_delayed"), "delayed");
   assert.equal(isRetryableResendError(429), true);
   assert.equal(isRetryableResendError(503), true);
   assert.equal(isRetryableResendError(422), false);

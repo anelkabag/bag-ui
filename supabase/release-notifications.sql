@@ -1,3 +1,6 @@
+create extension if not exists pg_net with schema extensions;
+create extension if not exists pg_cron;
+
 create table if not exists public.notification_preferences (
   user_id uuid primary key references auth.users(id) on delete cascade,
   product_updates_enabled boolean not null default false,
@@ -36,6 +39,15 @@ create table if not exists public.release_email_deliveries (
   updated_at timestamptz not null default now(),
   unique (release_id, user_id)
 );
+
+alter table public.release_email_deliveries
+  drop constraint if exists release_email_deliveries_status_check;
+alter table public.release_email_deliveries
+  add constraint release_email_deliveries_status_check
+  check (status in (
+    'pending', 'sending', 'sent', 'delayed', 'delivered',
+    'failed', 'bounced', 'complained', 'cancelled'
+  ));
 
 create table if not exists public.release_registry_state (
   singleton boolean primary key default true check (singleton),
@@ -449,6 +461,7 @@ begin
     when bool_or(delivery_status = 'bounced') then 'bounced'
     when bool_or(delivery_status = 'delivered') then 'delivered'
     when bool_or(delivery_status = 'failed') then 'failed'
+    when bool_or(delivery_status = 'delayed') then 'delayed'
     when bool_or(delivery_status = 'sent') then 'sent'
     else null
   end
@@ -516,17 +529,19 @@ begin
     update public.release_email_deliveries as delivery
     set status = case
           when (case delivery.status
-            when 'complained' then 5
-            when 'bounced' then 4
-            when 'delivered' then 3
-            when 'failed' then 2
+            when 'complained' then 6
+            when 'bounced' then 5
+            when 'delivered' then 4
+            when 'failed' then 3
+            when 'delayed' then 2
             when 'sent' then 1
             else 0
           end) >= (case p_status
-            when 'complained' then 5
-            when 'bounced' then 4
-            when 'delivered' then 3
-            when 'failed' then 2
+            when 'complained' then 6
+            when 'bounced' then 5
+            when 'delivered' then 4
+            when 'failed' then 3
+            when 'delayed' then 2
             when 'sent' then 1
             else 0
           end)
@@ -539,7 +554,9 @@ begin
         last_error = case when p_status = 'failed' then 'resend_delivery_failed' else null end,
         updated_at = now()
     where (resend_email_id = p_resend_email_id or id = p_delivery_id)
-      and p_status in ('sent', 'delivered', 'failed', 'bounced', 'complained');
+      and p_status in (
+        'sent', 'delayed', 'delivered', 'failed', 'bounced', 'complained'
+      );
 
     if p_status in ('bounced', 'complained') then
       update public.notification_preferences
@@ -612,7 +629,9 @@ select
   release.created_at,
   release.total_recipients,
   count(delivery.id) filter (
-    where delivery.status in ('sent', 'delivered', 'bounced', 'complained')
+    where delivery.status in (
+      'sent', 'delayed', 'delivered', 'bounced', 'complained'
+    )
   )::integer as emails_sent,
   count(delivery.id) filter (where delivery.status = 'delivered')::integer as delivered,
   count(delivery.id) filter (where delivery.status = 'failed')::integer as failed,
@@ -623,7 +642,8 @@ select
   count(delivery.id) filter (where delivery.status = 'complained')::integer as complained,
   count(delivery.id) filter (
     where delivery.status in ('pending', 'sending')
-  )::integer as pending
+  )::integer as pending,
+  count(delivery.id) filter (where delivery.status = 'delayed')::integer as delayed
 from public.release_notifications as release
 left join public.release_email_deliveries as delivery
   on delivery.release_id = release.id
@@ -664,3 +684,114 @@ grant execute on function public.fail_release_email_delivery(uuid, text, boolean
 grant execute on function public.complete_release_email_delivery(uuid, text) to service_role;
 grant execute on function public.apply_resend_email_event(text, text, text, text, uuid) to service_role;
 grant execute on function public.retry_release_notification(uuid) to service_role;
+
+create or replace function public.dispatch_release_notification_worker(
+  p_only_if_pending boolean default false
+)
+returns void
+language plpgsql
+security definer
+set search_path = public, vault, net, pg_temp
+as $$
+declare
+  worker_url text;
+  worker_secret text;
+begin
+  if p_only_if_pending and (
+    not exists (
+      select 1
+      from public.release_email_deliveries as delivery
+      where (
+        (delivery.status = 'pending' and delivery.next_attempt_at <= now())
+        or (delivery.status = 'sending' and delivery.locked_until < now())
+      )
+      limit 1
+    )
+    or exists (
+      select 1
+      from public.release_notification_worker_state
+      where singleton = true
+        and locked_until > now()
+    )
+  ) then
+    return;
+  end if;
+
+  select decrypted_secret
+  into worker_url
+  from vault.decrypted_secrets
+  where name = 'release_notification_worker_url'
+  order by created_at desc
+  limit 1;
+
+  select decrypted_secret
+  into worker_secret
+  from vault.decrypted_secrets
+  where name = 'release_notification_worker_secret'
+  order by created_at desc
+  limit 1;
+
+  if worker_url is null or worker_secret is null then
+    if not p_only_if_pending then
+      raise warning 'Release notification worker dispatch is not configured in Supabase Vault';
+    end if;
+    return;
+  end if;
+
+  perform net.http_post(
+    url := worker_url,
+    headers := jsonb_build_object(
+      'Content-Type', 'application/json',
+      'Authorization', 'Bearer ' || worker_secret
+    ),
+    body := '{}'::jsonb,
+    timeout_milliseconds := 60000
+  );
+end;
+$$;
+
+create or replace function public.dispatch_new_release_notification_worker()
+returns trigger
+language plpgsql
+security definer
+set search_path = public, pg_temp
+as $$
+begin
+  perform public.dispatch_release_notification_worker(false);
+  return new;
+end;
+$$;
+
+drop trigger if exists release_notification_worker_dispatch
+  on public.release_notifications;
+create trigger release_notification_worker_dispatch
+after insert on public.release_notifications
+for each row
+execute function public.dispatch_new_release_notification_worker();
+
+revoke all on function public.dispatch_release_notification_worker(boolean)
+  from public, anon, authenticated, service_role;
+revoke all on function public.dispatch_new_release_notification_worker()
+  from public, anon, authenticated, service_role;
+
+do $$
+declare
+  recovery_job_id bigint;
+begin
+  select jobid
+  into recovery_job_id
+  from cron.job
+  where jobname = 'bagui-release-notification-recovery'
+  limit 1;
+
+  if recovery_job_id is not null then
+    perform cron.unschedule(recovery_job_id);
+  end if;
+
+  perform cron.schedule(
+    'bagui-release-notification-recovery',
+    '* * * * *',
+    'select public.dispatch_release_notification_worker(true);'
+  );
+end;
+$$;

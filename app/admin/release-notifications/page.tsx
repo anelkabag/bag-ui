@@ -19,7 +19,7 @@ export default async function ReleaseNotificationAdminPage() {
   const { data, error } = await supabase
     .from("release_notification_stats")
     .select(
-      "id, resource_name, resource_type, category, created_at, total_recipients, emails_sent, delivered, failed, retryable_failed, bounced, complained, pending",
+      "id, resource_name, resource_type, category, created_at, total_recipients, emails_sent, delivered, delayed, failed, retryable_failed, bounced, complained, pending",
     )
     .order("created_at", { ascending: false })
     .limit(100);

@@ -170,39 +170,75 @@ The first command makes sure the app compiles correctly. The second prepares and
 
 ## Release email notifications
 
-BagUI detects new resources by polling the live production registry every
-minute. The first scheduled run records the current registry as a baseline and
-does not email the existing catalog. Later additions create unique campaigns and
-durable per-recipient delivery jobs in Supabase; preview deployments and local
-development are not processed.
+BagUI listens for successful GitHub `deployment_status` events from Vercel.
+Only deployments marked as production are accepted. The publisher then reads
+the canonical live registry at `https://www.bagui.pro/r/registry.json`; the
+first synchronization records the existing catalog as a baseline without
+emailing it. Later additions create unique campaigns and durable per-recipient
+delivery jobs in Supabase. Ordinary resource updates, preview deployments, and
+local development do not create campaigns.
 
 Before enabling production sends:
 
 1. Apply [`supabase/release-notifications.sql`](supabase/release-notifications.sql)
-   to the production Supabase project.
+   to the production Supabase project. The migration reuses the existing
+   delivery table as the persistent queue and enables Supabase `pg_net` and
+   `pg_cron`. New campaigns enqueue an asynchronous HTTP dispatch in the same
+   database transaction. A conditional once-per-minute Supabase recovery task
+   wakes due or expired deliveries if an HTTP dispatch or worker was
+   interrupted; this is not a Vercel Cron Job.
 2. Set these server-side environment variables in the production deployment:
    `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `RESEND_WEBHOOK_SECRET`,
-   `CRON_SECRET` (at least 32 random bytes), `NOTIFICATION_TOKEN_SECRET` (at
-   least 32 random bytes), and
+   `RELEASE_NOTIFICATION_DISPATCH_SECRET` (at least 32 random bytes),
+   `RELEASE_NOTIFICATION_WORKER_SECRET` (at least 32 random bytes),
+   `NOTIFICATION_TOKEN_SECRET` (at least 32 random bytes), and
    `RELEASE_NOTIFICATION_ADMIN_EMAILS` (comma-separated admin email addresses).
    `BAGUI_SUPPORT_EMAIL` is optional and is used as the reply-to address.
-3. Confirm that `news.bagui.pro` is listed as **verified** with sending enabled
+3. Add a GitHub Actions repository secret named
+   `RELEASE_NOTIFICATION_DISPATCH_SECRET` with the same value as the Vercel
+   dispatch secret. The workflow at
+   [`.github/workflows/release-notifications.yml`](.github/workflows/release-notifications.yml)
+   must be merged to the default branch to receive GitHub `deployment_status`
+   events, then calls
+   `https://www.bagui.pro/api/notifications/publish`. Confirm the Vercel GitHub
+   integration creates GitHub deployments with `production_environment: true`
+   for production. The publisher independently checks the event and fetches
+   the public production registry before creating campaigns.
+4. In the Supabase SQL editor, store the worker URL and the same worker secret
+   configured in Vercel in Vault:
+
+   ```sql
+   select vault.create_secret(
+     'https://www.bagui.pro/api/notifications/worker',
+     'release_notification_worker_url'
+   );
+   select vault.create_secret(
+     '<same value as RELEASE_NOTIFICATION_WORKER_SECRET>',
+     'release_notification_worker_secret'
+   );
+   ```
+
+   The database dispatches workers through `pg_net`; the worker authenticates
+   with the shared secret. Keep this value out of client-side configuration.
+5. Confirm that `news.bagui.pro` is listed as **verified** with sending enabled
    in the Resend dashboard. Public DNS currently publishes the Resend DKIM and
    sending/SPF records, but DNS alone cannot confirm the Resend account status.
    No DMARC record was found for `news.bagui.pro` or `bagui.pro`; review your
    DMARC policy with the domain administrator as a separate deliverability step.
    The worker checks the Resend account before claiming or sending any email.
-4. Configure a Resend webhook at
+6. Configure a Resend webhook at
    `https://www.bagui.pro/api/webhooks/resend` for `email.sent`,
    `email.delivered`, `email.failed`, `email.bounced`, and `email.complained`,
    then store its signing secret as `RESEND_WEBHOOK_SECRET`.
 
-The Vercel Cron entry in [`vercel.json`](vercel.json) requires a production
-deployment plan that permits a one-minute schedule. The worker caps each run
-at 50 messages and globally spaces Resend API requests at two per second. The
-cron route checks Vercel's production environment and `CRON_SECRET`. Users are
-opted out by default; they can opt in or out under **Account → Email preferences**. Admins
-listed in `RELEASE_NOTIFICATION_ADMIN_EMAILS` can review campaign counts at
+The deployment callback does not send emails or wait for delivery. Supabase
+`pg_net` dispatches the secured Next.js worker after a campaign is committed.
+The worker processes at most 50 recipients per invocation, applies controlled
+Resend concurrency, and relies on delivery leases plus exponential retry
+backoff. Supabase `pg_cron` is only a recovery path for pending work, so Vercel
+Hobby does not need any scheduled function. Users are opted out by default;
+they can opt in or out under **Account → Email preferences**. Admins listed in
+`RELEASE_NOTIFICATION_ADMIN_EMAILS` can inspect campaigns at
 `/admin/release-notifications` and retry eligible temporary failures.
 
 ---

@@ -1,0 +1,42 @@
+name: Dispatch production release notifications
+
+on:
+  deployment_status:
+    types: [success]
+
+permissions:
+  contents: read
+
+jobs:
+  dispatch:
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment.production_environment == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify BagUI of the production deployment
+        env:
+          DISPATCH_SECRET: ${{ secrets.RELEASE_NOTIFICATION_DISPATCH_SECRET }}
+          DEPLOYMENT_ID: ${{ github.event.deployment.id }}
+          STATUS_ID: ${{ github.event.deployment_status.id }}
+          STATE: ${{ github.event.deployment_status.state }}
+          ENVIRONMENT: ${{ github.event.deployment.environment }}
+          PRODUCTION_ENVIRONMENT: ${{ github.event.deployment.production_environment }}
+          ENVIRONMENT_URL: ${{ github.event.deployment_status.environment_url }}
+        run: |
+          test -n "$DISPATCH_SECRET"
+          payload="$(jq -n \
+            --argjson deploymentId "$DEPLOYMENT_ID" \
+            --argjson statusId "$STATUS_ID" \
+            --arg state "$STATE" \
+            --arg environment "$ENVIRONMENT" \
+            --argjson productionEnvironment "$PRODUCTION_ENVIRONMENT" \
+            --arg environmentUrl "$ENVIRONMENT_URL" \
+            '{deploymentId:$deploymentId,statusId:$statusId,state:$state,environment:$environment,productionEnvironment:$productionEnvironment,environmentUrl:$environmentUrl}')"
+          curl --fail-with-body --silent --show-error \
+            --retry 5 --retry-all-errors --retry-delay 2 \
+            --request POST \
+            --header "Authorization: Bearer $DISPATCH_SECRET" \
+            --header "Content-Type: application/json" \
+            --data "$payload" \
+            https://www.bagui.pro/api/notifications/publish

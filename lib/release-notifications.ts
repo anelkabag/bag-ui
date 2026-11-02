@@ -11,6 +11,15 @@ export interface PublishedResource {
   image_url: string | null;
 }
 
+export interface ProductionDeploymentStatus {
+  deploymentId: number;
+  statusId: number;
+  state: string;
+  environment: string;
+  productionEnvironment: boolean;
+  environmentUrl: string;
+}
+
 interface RegistryFile {
   path?: unknown;
 }
@@ -134,6 +143,8 @@ export function getResendEventStatus(eventType: string) {
       return "sent";
     case "email.delivered":
       return "delivered";
+    case "email.delivery_delayed":
+      return "delayed";
     case "email.failed":
       return "failed";
     case "email.bounced":
@@ -151,6 +162,37 @@ export function isRetryableResendError(statusCode: number | null | undefined) {
 
 export function isProductionNotificationRuntime(vercelEnvironment: string | undefined) {
   return vercelEnvironment === "production";
+}
+
+export function isProductionDeploymentStatus(
+  event: ProductionDeploymentStatus,
+) {
+  if (
+    !Number.isSafeInteger(event.deploymentId) ||
+    event.deploymentId <= 0 ||
+    !Number.isSafeInteger(event.statusId) ||
+    event.statusId <= 0 ||
+    event.state !== "success" ||
+    event.environment.trim().toLowerCase() !== "production" ||
+    event.productionEnvironment !== true
+  ) {
+    return false;
+  }
+
+  try {
+    const url = new URL(event.environmentUrl);
+    return (
+      url.protocol === "https:" &&
+      !url.username &&
+      !url.password &&
+      (!url.port || url.port === "443") &&
+      (url.hostname === "bagui.pro" ||
+        url.hostname === "www.bagui.pro" ||
+        url.hostname.endsWith(".vercel.app"))
+    );
+  } catch {
+    return false;
+  }
 }
 
 export function isReleaseNotificationAdmin(

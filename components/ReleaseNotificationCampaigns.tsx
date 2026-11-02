@@ -12,6 +12,7 @@ interface Campaign {
   total_recipients: number;
   emails_sent: number;
   delivered: number;
+  delayed: number;
   failed: number;
   retryable_failed: number;
   bounced: number;
@@ -69,6 +70,7 @@ export function ReleaseNotificationCampaigns({
                 <th className="px-4 py-3">Eligible</th>
                 <th className="px-4 py-3">Sent</th>
                 <th className="px-4 py-3">Delivered</th>
+                <th className="px-4 py-3">Delayed</th>
                 <th className="px-4 py-3">Failed</th>
                 <th className="px-4 py-3">Bounced / complaints</th>
                 <th className="px-4 py-3">Pending</th>
@@ -92,6 +94,7 @@ export function ReleaseNotificationCampaigns({
                   <td className="px-4 py-4">{campaign.total_recipients}</td>
                   <td className="px-4 py-4">{campaign.emails_sent}</td>
                   <td className="px-4 py-4">{campaign.delivered}</td>
+                  <td className="px-4 py-4">{campaign.delayed}</td>
                   <td className="px-4 py-4">{campaign.failed}</td>
                   <td className="px-4 py-4">
                     {campaign.bounced} / {campaign.complained}

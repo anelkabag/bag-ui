@@ -6,8 +6,6 @@ import {
 } from "@/lib/notification-security";
 import {
   isRetryableResendError,
-  normalizePublishedRegistry,
-  PRODUCTION_REGISTRY_URL,
   PRODUCTION_SITE_URL,
 } from "@/lib/release-notifications";
 import { buildReleaseNotificationEmail } from "@/lib/release-notification-email";
@@ -152,29 +150,10 @@ async function sendDelivery(
   }
 }
 
-export async function runReleaseNotificationCron() {
+export async function runReleaseNotificationWorker() {
   const supabase = await createSupabaseServiceRoleClient();
-  const registryResponse = await fetch(PRODUCTION_REGISTRY_URL, {
-    cache: "no-store",
-    signal: AbortSignal.timeout(10_000),
-  });
-  if (!registryResponse.ok) {
-    throw new Error(
-      `Production registry returned HTTP ${registryResponse.status}`,
-    );
-  }
-
-  const registry: unknown = await registryResponse.json();
-  const resources = normalizePublishedRegistry(registry);
-  const { data: createdCount, error: syncError } = await supabase.rpc(
-    "sync_release_registry",
-    { p_items: resources },
-  );
-  if (syncError) throw new Error(`Registry synchronization failed: ${syncError.code}`);
-
   if (!process.env.RESEND_API_KEY) {
-    console.error("Release notifications are queued but RESEND_API_KEY is missing");
-    return { created: createdCount ?? 0, sent: 0, skipped: "missing_resend_key" };
+    throw new Error("RESEND_API_KEY is not configured");
   }
   assertNotificationTokenSecret();
 
@@ -193,7 +172,7 @@ export async function runReleaseNotificationCron() {
     throw new Error(`Could not claim notification worker: ${workerClaimError.code}`);
   }
   if (!workerClaimed) {
-    return { created: createdCount ?? 0, sent: 0, skipped: "worker_busy" };
+    return { sent: 0, skipped: "worker_busy" };
   }
 
   try {
@@ -207,7 +186,7 @@ export async function runReleaseNotificationCron() {
 
     const claimed = (deliveries ?? []) as ClaimedDelivery[];
     if (claimed.length === 0) {
-      return { created: createdCount ?? 0, sent: 0, pending: 0 };
+      return { sent: 0, pending: 0 };
     }
 
     const userIds = Array.from(
@@ -275,14 +254,12 @@ export async function runReleaseNotificationCron() {
     }
 
     console.info("Release notification batch processed", {
-      campaignsCreated: createdCount ?? 0,
       claimed: claimed.length,
       sent,
       cancelled: cancelledBeforeSend,
     });
 
     return {
-      created: createdCount ?? 0,
       sent,
       pending: Math.max(0, claimed.length - sent),
     };
