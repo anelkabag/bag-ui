@@ -31,8 +31,7 @@ const summarize = (component: Component) => ({
 
 const readOnly = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true } as const;
 
-export function createServer(version: string): McpServer {
-  const store = new RegistryStore();
+export function createServer(version: string, store = new RegistryStore()): McpServer {
   const server = new McpServer({ name: "bagui", version });
 
   const categorySchema = z.string().min(1).optional().describe("Category slug, e.g. marketing, dashboard, navigation.");

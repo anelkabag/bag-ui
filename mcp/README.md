@@ -24,7 +24,9 @@ npm install
 npm run build
 ```
 
-Then register `node /absolute/path/to/bag-ui/mcp/dist/index.js` in your client.
+### Local connection (stdio)
+
+Register `node /absolute/path/to/bag-ui/mcp/dist/index.js` in your client.
 
 **Claude Desktop** (`claude_desktop_config.json`) / **Cursor** (`.cursor/mcp.json`):
 
@@ -55,7 +57,46 @@ claude mcp add bagui -- node /absolute/path/to/bag-ui/mcp/dist/index.js
 }
 ```
 
-Once published to npm, `"command": "npx", "args": ["-y", "bagui-mcp"]` works the same way.
+### Remote connection (Streamable HTTP)
+
+#### Vercel production (`www.bagui.pro`)
+
+The Next.js app exposes a stateless Streamable HTTP endpoint at
+`https://www.bagui.pro/mcp`, compatible with Vercel serverless functions.
+Currently, `https://bagui.pro/mcp` redirects to the canonical `www` domain, so
+use the `www` URL in MCP clients.
+
+1. Deploy this app to the Vercel project connected to `www.bagui.pro`; no
+   separate subdomain or DNS record is needed.
+2. Connect Claude Code:
+
+   ```bash
+   claude mcp add --transport http bagui https://www.bagui.pro/mcp
+   ```
+
+The root `registry.json` is bundled into the Vercel function, so no MCP
+standalone build or registry file setup is needed for this endpoint. To protect
+it with a bearer token, set `MCP_AUTH_TOKEN` in Vercel and configure the same
+token in the MCP client's HTTP authentication settings. Vercel production
+restricts MCP requests to `bagui.pro` and `www.bagui.pro`; set
+`MCP_ALLOWED_HOSTS` only if you need to allow different hostnames.
+
+#### Standalone Node.js server
+
+For deployments outside the Next.js app, build and start the standalone server:
+
+```bash
+cd mcp
+npm install
+npm run build
+MCP_TRANSPORT=http MCP_HOST=0.0.0.0 PORT=3001 npm start
+```
+
+Expose `/mcp` through HTTPS before connecting a remote client. Set
+`MCP_AUTH_TOKEN` to require a bearer token in the `Authorization` header.
+`MCP_ALLOWED_HOSTS` is a comma-separated list of accepted Host header values.
+`MCP_HOST` defaults to `127.0.0.1`; set it to `0.0.0.0` only when the
+deployment platform needs the process to listen on its network interface.
 
 ## Configuration (environment variables)
 
@@ -64,6 +105,11 @@ Once published to npm, `"command": "npx", "args": ["-y", "bagui-mcp"]` works the
 | `BAGUI_REGISTRY_PATH` | Local `registry.json` (highest priority) |
 | `BAGUI_REGISTRY_URL` | HTTPS URL of a registry JSON (cached 12 h, falls back to the bundled snapshot when offline) |
 | `BAGUI_REGISTRY_DIR` | Folder of built registry items (e.g. `public/r`) used to read component source code locally instead of fetching `https://bagui.pro/r/<slug>.json` |
+| `MCP_TRANSPORT` | Set to `http` to use Streamable HTTP; defaults to `stdio` |
+| `MCP_HOST` | HTTP bind address; defaults to `127.0.0.1` |
+| `PORT` / `MCP_PORT` | HTTP port; `PORT` takes precedence (default: `3001`) |
+| `MCP_AUTH_TOKEN` | Optional bearer token required by the HTTP endpoint |
+| `MCP_ALLOWED_HOSTS` | Optional comma-separated allowed Host header values, for HTTP DNS-rebinding protection |
 
 Without any variable, the registry snapshot bundled at build time from the repository's `registry.json` is used.
 

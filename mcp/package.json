@@ -33,6 +33,7 @@
     "sync-registry": "node scripts/sync-registry.mjs",
     "build": "npm run sync-registry && esbuild src/index.ts --bundle --minify --outfile=dist/index.js --platform=node --format=cjs --target=node18 --banner:js=\"#!/usr/bin/env node\"",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "start": "node dist/index.js",
     "inspect": "npx @modelcontextprotocol/inspector node dist/index.js",
     "prepublishOnly": "npm run typecheck && npm run build"
   },

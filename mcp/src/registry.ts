@@ -16,6 +16,8 @@ const FETCH_TIMEOUT_MS = 10_000;
 export class RegistryStore {
   private cached: { registry: NormalizedRegistry; expiresAt: number } | undefined;
 
+  constructor(private readonly bundledSnapshot?: unknown) {}
+
   async get(): Promise<NormalizedRegistry> {
     if (this.cached && Date.now() < this.cached.expiresAt) {
       return this.cached.registry;
@@ -25,7 +27,11 @@ export class RegistryStore {
     const file = process.env["BAGUI_REGISTRY_PATH"]?.trim();
 
     try {
-      const registry = file ? await readJsonFile(file) : url ? await fetchJson(url) : await readBundled();
+      const registry = file
+        ? await readJsonFile(file)
+        : url
+          ? await fetchJson(url)
+          : await readBundled(this.bundledSnapshot);
       this.cached = { registry, expiresAt: Date.now() + (url && !file ? TTL_MS : Number.POSITIVE_INFINITY) };
       return registry;
     } catch (error) {
@@ -34,7 +40,7 @@ export class RegistryStore {
         return this.cached.registry;
       }
       if (file || url) {
-        const bundled = await readBundled();
+        const bundled = await readBundled(this.bundledSnapshot);
         this.cached = { registry: bundled, expiresAt: Date.now() + 5 * 60 * 1000 };
         return bundled;
       }
@@ -86,7 +92,16 @@ async function readJsonFile(filePath: string): Promise<NormalizedRegistry> {
   return parseText(raw, filePath);
 }
 
-function readBundled(): Promise<NormalizedRegistry> {
+function readBundled(snapshot?: unknown): Promise<NormalizedRegistry> {
+  if (snapshot !== undefined) {
+    try {
+      return Promise.resolve(parseRegistry(snapshot));
+    } catch (error) {
+      return Promise.reject(
+        new Error(`Invalid bundled BagUI registry: ${error instanceof Error ? error.message : "parse error"}`),
+      );
+    }
+  }
   // dist/index.js sits next to ../data/registry.json once packaged.
   return readJsonFile(path.resolve(__dirname, "..", "data", "registry.json"));
 }
