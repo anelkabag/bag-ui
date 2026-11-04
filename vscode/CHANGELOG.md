@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.1.3
 
 - Added a visual component gallery with live search, category filters, preview, and one-click install actions.
 - Load the latest BagUI registry by default, with cached and bundled fallbacks when offline.
