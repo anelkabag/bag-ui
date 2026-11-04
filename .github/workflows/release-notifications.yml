@@ -11,7 +11,7 @@ jobs:
   dispatch:
     if: >-
       github.event.deployment_status.state == 'success' &&
-      github.event.deployment.production_environment == true
+      github.event.deployment.environment == 'Production'
     runs-on: ubuntu-latest
     steps:
       - name: Notify BagUI of the production deployment
@@ -21,7 +21,6 @@ jobs:
           STATUS_ID: ${{ github.event.deployment_status.id }}
           STATE: ${{ github.event.deployment_status.state }}
           ENVIRONMENT: ${{ github.event.deployment.environment }}
-          PRODUCTION_ENVIRONMENT: ${{ github.event.deployment.production_environment }}
           ENVIRONMENT_URL: ${{ github.event.deployment_status.environment_url }}
         run: |
           test -n "$DISPATCH_SECRET"
@@ -30,9 +29,8 @@ jobs:
             --argjson statusId "$STATUS_ID" \
             --arg state "$STATE" \
             --arg environment "$ENVIRONMENT" \
-            --argjson productionEnvironment "$PRODUCTION_ENVIRONMENT" \
             --arg environmentUrl "$ENVIRONMENT_URL" \
-            '{deploymentId:$deploymentId,statusId:$statusId,state:$state,environment:$environment,productionEnvironment:$productionEnvironment,environmentUrl:$environmentUrl}')"
+            '{deploymentId:$deploymentId,statusId:$statusId,state:$state,environment:$environment,environmentUrl:$environmentUrl}')"
           curl --fail-with-body --silent --show-error \
             --retry 5 --retry-all-errors --retry-delay 2 \
             --request POST \

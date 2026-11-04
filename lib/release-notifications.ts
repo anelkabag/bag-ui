@@ -16,7 +16,6 @@ export interface ProductionDeploymentStatus {
   statusId: number;
   state: string;
   environment: string;
-  productionEnvironment: boolean;
   environmentUrl: string;
 }
 
@@ -173,8 +172,7 @@ export function isProductionDeploymentStatus(
     !Number.isSafeInteger(event.statusId) ||
     event.statusId <= 0 ||
     event.state !== "success" ||
-    event.environment.trim().toLowerCase() !== "production" ||
-    event.productionEnvironment !== true
+    event.environment.trim().toLowerCase() !== "production"
   ) {
     return false;
   }

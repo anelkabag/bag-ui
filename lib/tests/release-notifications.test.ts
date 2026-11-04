@@ -78,7 +78,6 @@ test("only successful production deployment statuses can publish registry releas
     statusId: 20,
     state: "success",
     environment: "Production",
-    productionEnvironment: true,
     environmentUrl: "https://bagui-git-main.vercel.app",
   };
 
@@ -87,10 +86,8 @@ test("only successful production deployment statuses can publish registry releas
     isProductionDeploymentStatus({ ...event, environment: "Preview" }),
     false,
   );
-  assert.equal(
-    isProductionDeploymentStatus({ ...event, productionEnvironment: false }),
-    false,
-  );
+  const eventWithLegacyFlag = { ...event, productionEnvironment: false };
+  assert.equal(isProductionDeploymentStatus(eventWithLegacyFlag), true);
   assert.equal(isProductionDeploymentStatus({ ...event, state: "failure" }), false);
   assert.equal(
     isProductionDeploymentStatus({

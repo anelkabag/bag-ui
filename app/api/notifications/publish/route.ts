@@ -26,7 +26,6 @@ function isDeploymentStatus(
     Number.isSafeInteger(event.statusId) &&
     typeof event.state === "string" &&
     typeof event.environment === "string" &&
-    typeof event.productionEnvironment === "boolean" &&
     typeof event.environmentUrl === "string"
   );
 }
