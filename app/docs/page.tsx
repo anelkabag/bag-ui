@@ -53,8 +53,10 @@ const CONTRIBUTING_SECTIONS: Section[] = [
 const MCP_SECTIONS: Section[] = [
   { id: "mcp-overview", label: "What is MCP?" },
   { id: "mcp-features", label: "What BagUI MCP can do" },
-  { id: "mcp-build", label: "Build the server" },
-  { id: "mcp-connect", label: "Connect to VS Code" },
+  { id: "mcp-remote", label: "Remote server URL" },
+  { id: "mcp-clients", label: "Connect an AI client" },
+  { id: "mcp-build", label: "Run the server locally" },
+  { id: "mcp-connect", label: "Connect locally to VS Code" },
   { id: "mcp-use", label: "Use the tools" },
 ];
 
@@ -261,6 +263,39 @@ const MCP_VSCODE_CONFIG = `{
       "type": "stdio",
       "command": "node",
       "args": ["/absolute/path/to/bag-ui/mcp/dist/index.js"]
+    }
+  }
+}`;
+
+const MCP_REMOTE_URL = "https://www.bagui.pro/mcp";
+
+const MCP_CLAUDE_CODE_CMD = `claude mcp add --transport http bagui ${MCP_REMOTE_URL}
+claude mcp list`;
+
+const MCP_CLAUDE_DESKTOP_STEPS = `Claude Desktop → Settings → Connectors → Add custom connector
+Server URL: ${MCP_REMOTE_URL}`;
+
+const MCP_CURSOR_CONFIG = `{
+  "mcpServers": {
+    "bagui": {
+      "url": "${MCP_REMOTE_URL}"
+    }
+  }
+}`;
+
+const MCP_REMOTE_VSCODE_CONFIG = `{
+  "servers": {
+    "bagui": {
+      "type": "http",
+      "url": "${MCP_REMOTE_URL}"
+    }
+  }
+}`;
+
+const MCP_GEMINI_CONFIG = `{
+  "mcpServers": {
+    "bagui": {
+      "httpUrl": "${MCP_REMOTE_URL}"
     }
   }
 }`;
@@ -1138,10 +1173,84 @@ export default function DocsPage() {
                   </div>
                 </section>
 
-                <section id="mcp-build">
-                  <SectionHeading id="mcp-build">Build the server</SectionHeading>
+                <section id="mcp-remote">
+                  <SectionHeading id="mcp-remote">
+                    Remote server URL
+                  </SectionHeading>
                   <Prose>
-                    BagUI MCP currently runs locally over stdio. You need
+                    After this version of BagUI is deployed to Vercel, you can
+                    connect any MCP-compatible AI client to the hosted server.
+                    Use this URL as the server address:
+                  </Prose>
+                  <CodeBlock mono lang="url" content={MCP_REMOTE_URL} />
+                  <Prose>
+                    The endpoint uses Streamable HTTP and does not require
+                    installing anything on your computer. Claude, Cursor,
+                    VS Code, and Gemini CLI can connect to it. Setup differs
+                    slightly between clients.
+                  </Prose>
+                </section>
+
+                <section id="mcp-clients">
+                  <SectionHeading id="mcp-clients">
+                    Connect an AI client
+                  </SectionHeading>
+                  <Prose>
+                    Choose your AI client and register the BagUI MCP URL. These
+                    examples connect to the hosted server; no local clone or
+                    API key is needed.
+                  </Prose>
+                  <h3 className="mt-6 text-base font-semibold text-foreground">
+                    Claude Code
+                  </h3>
+                  <Prose>
+                    Run these commands in a terminal. Check the connection
+                    with <code className={inlineCode}>claude mcp list</code>.
+                  </Prose>
+                  <CodeBlock mono lang="bash" content={MCP_CLAUDE_CODE_CMD} />
+                  <h3 className="mt-6 text-base font-semibold text-foreground">
+                    Claude Desktop
+                  </h3>
+                  <Prose>
+                    Open Settings → Connectors → Add custom connector, then
+                    paste the BagUI server URL:
+                  </Prose>
+                  <CodeBlock mono lang="text" content={MCP_CLAUDE_DESKTOP_STEPS} />
+                  <h3 className="mt-6 text-base font-semibold text-foreground">
+                    Cursor
+                  </h3>
+                  <Prose>
+                    Add this entry to <code className={inlineCode}>.cursor/mcp.json</code>{" "}
+                    in your project, then enable BagUI from Cursor&apos;s MCP
+                    settings:
+                  </Prose>
+                  <CodeBlock mono lang="json" content={MCP_CURSOR_CONFIG} />
+                  <h3 className="mt-6 text-base font-semibold text-foreground">
+                    VS Code
+                  </h3>
+                  <Prose>
+                    Add this server to <code className={inlineCode}>.vscode/mcp.json</code>{" "}
+                    in your project. Open the MCP server controls and start
+                    BagUI:
+                  </Prose>
+                  <CodeBlock mono lang="json" content={MCP_REMOTE_VSCODE_CONFIG} />
+                  <h3 className="mt-6 text-base font-semibold text-foreground">
+                    Gemini CLI
+                  </h3>
+                  <Prose>
+                    Add this entry to the <code className={inlineCode}>mcpServers</code>{" "}
+                    object in your Gemini CLI <code className={inlineCode}>settings.json</code>,
+                    then restart the CLI:
+                  </Prose>
+                  <CodeBlock mono lang="json" content={MCP_GEMINI_CONFIG} />
+                </section>
+
+                <section id="mcp-build">
+                  <SectionHeading id="mcp-build">
+                    Run the server locally
+                  </SectionHeading>
+                  <Prose>
+                    Prefer to run BagUI MCP on your own computer? You need
                     Node.js 18 or newer. Clone the BagUI repository, install
                     the MCP package dependencies, and build its server bundle:
                   </Prose>
@@ -1150,20 +1259,19 @@ export default function DocsPage() {
 
                 <section id="mcp-connect">
                   <SectionHeading id="mcp-connect">
-                    Connect to VS Code
+                    Connect locally to VS Code
                   </SectionHeading>
                   <Prose>
-                    Open the BagUI repository as a workspace in VS Code and
-                    create <code className={inlineCode}>.vscode/mcp.json</code>{" "}
-                    in the repository root. Replace the example path with the
-                    absolute path to the cloned repository on your computer.
+                    Open the cloned BagUI repository as a workspace in VS Code
+                    and create <code className={inlineCode}>.vscode/mcp.json</code>{" "}
+                    in its root. Replace the example path with the absolute
+                    path to your local clone:
                   </Prose>
                   <CodeBlock mono lang="json" content={MCP_VSCODE_CONFIG} />
                   <Prose>
-                    Save the file, then start the BagUI server from the MCP
-                    server controls in VS Code. The server entry uses{" "}
-                    <code className={inlineCode}>stdio</code>, so no hosted
-                    endpoint or API key is required.
+                    Save the file, then start BagUI from VS Code&apos;s MCP
+                    server controls. This local <code className={inlineCode}>stdio</code>{" "}
+                    setup does not use the hosted URL.
                   </Prose>
                 </section>
 
