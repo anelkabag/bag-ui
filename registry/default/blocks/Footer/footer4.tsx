@@ -60,7 +60,7 @@ const focusRing =
 
 /* ---------------------------- Composant ---------------------------- */
 
-export default function Footer() {
+export default function Footer4() {
   return (
     // Marge extérieure -> effet "flottant" (jamais collé aux bords de la fenêtre)
     <div className="w-full px-[clamp(12px,2vw,28px)] pb-[clamp(12px,2vw,28px)] font-sans antialiased">
