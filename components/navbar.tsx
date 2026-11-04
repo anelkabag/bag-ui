@@ -107,6 +107,15 @@ function ResourcesMenu() {
           </span>
         </Link>
         <Link
+          href="/docs#extension"
+          className="block rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+        >
+          <span className="block">VS Code extension</span>
+          <span className="mt-1 block text-xs font-normal text-muted-foreground">
+            Browse and install components in your editor
+          </span>
+        </Link>
+        <Link
           href={VS_CODE_MARKETPLACE_URL}
           target="_blank"
           rel="noopener noreferrer"
@@ -191,6 +200,13 @@ export default function Navbar() {
               className="block py-2 text-lg font-semibold text-foreground"
             >
               BagUI MCP
+            </Link>
+            <Link
+              href="/docs#extension"
+              onClick={() => setMobileOpen(false)}
+              className="block py-2 text-lg font-semibold text-foreground"
+            >
+              VS Code extension
             </Link>
             <Link
               href={VS_CODE_MARKETPLACE_URL}

@@ -17,7 +17,7 @@ type Framework =
   | "react-router"
   | "astro";
 type Section = { id: string; label: string };
-type DocsPage = "installation" | "contributing" | "mcp";
+type DocsPage = "installation" | "contributing" | "mcp" | "extension";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const NAV_LINKS = [
@@ -58,6 +58,13 @@ const MCP_SECTIONS: Section[] = [
   { id: "mcp-use", label: "Use the tools" },
 ];
 
+const EXTENSION_SECTIONS: Section[] = [
+  { id: "extension-overview", label: "What is the extension?" },
+  { id: "extension-install", label: "Install the extension" },
+  { id: "extension-use", label: "Browse and install components" },
+  { id: "extension-requirements", label: "Requirements" },
+];
+
 // ─── Sidebar nav ─────────────────────────────────────────────────────────────
 const SIDEBAR_NAV: {
   group: string;
@@ -72,7 +79,10 @@ const SIDEBAR_NAV: {
   },
   {
     group: "Resources",
-    pages: [{ label: "MCP", page: "mcp" }],
+    pages: [
+      { label: "MCP", page: "mcp" },
+      { label: "VS Code extension", page: "extension" },
+    ],
   },
 ];
 
@@ -551,7 +561,9 @@ export default function DocsPage() {
       ? INSTALLATION_SECTIONS
       : activePage === "contributing"
         ? CONTRIBUTING_SECTIONS
-        : MCP_SECTIONS;
+        : activePage === "mcp"
+          ? MCP_SECTIONS
+          : EXTENSION_SECTIONS;
 
   const handleSelectPage = (page: DocsPage) => {
     setActivePage(page);
@@ -560,27 +572,37 @@ export default function DocsPage() {
         ? "introduction"
         : page === "contributing"
           ? "contributing-overview"
-          : "mcp-overview",
+          : page === "mcp"
+            ? "mcp-overview"
+            : "extension-overview",
     );
-    if (window.location.hash === "#mcp" && page !== "mcp") {
+    const hash =
+      page === "mcp" ? "#mcp" : page === "extension" ? "#extension" : "";
+    if (hash) {
+      window.history.replaceState(null, "", hash);
+    } else if (
+      window.location.hash === "#mcp" ||
+      window.location.hash === "#extension"
+    ) {
       window.history.replaceState(null, "", window.location.pathname);
-    } else if (page === "mcp" && window.location.hash !== "#mcp") {
-      window.history.replaceState(null, "", "#mcp");
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   useEffect(() => {
-    const selectMcpFromHash = () => {
+    const selectPageFromHash = () => {
       if (window.location.hash === "#mcp") {
         setActivePage("mcp");
         setActiveSection("mcp-overview");
+      } else if (window.location.hash === "#extension") {
+        setActivePage("extension");
+        setActiveSection("extension-overview");
       }
     };
 
-    selectMcpFromHash();
-    window.addEventListener("hashchange", selectMcpFromHash);
-    return () => window.removeEventListener("hashchange", selectMcpFromHash);
+    selectPageFromHash();
+    window.addEventListener("hashchange", selectPageFromHash);
+    return () => window.removeEventListener("hashchange", selectPageFromHash);
   }, []);
 
   useEffect(() => {
@@ -624,7 +646,9 @@ export default function DocsPage() {
               ? "Installations"
               : activePage === "contributing"
                 ? "Contribution"
-                : "MCP"}
+                : activePage === "mcp"
+                  ? "MCP"
+                  : "VS Code extension"}
           </span>
         </div>
 
@@ -652,7 +676,7 @@ export default function DocsPage() {
                 component and get it merged.
               </p>
             </>
-          ) : (
+          ) : activePage === "mcp" ? (
             <>
               <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-3 leading-tight">
                 BagUI MCP.{" "}
@@ -663,6 +687,19 @@ export default function DocsPage() {
               <p className="text-muted-foreground text-base leading-relaxed">
                 Discover BagUI components, inspect their source, and get
                 installation commands directly from an MCP-compatible client.
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-3 leading-tight">
+                BagUI for VS Code.{" "}
+                <span className="text-muted-foreground">
+                  Components, right in your editor.
+                </span>
+              </h1>
+              <p className="text-muted-foreground text-base leading-relaxed">
+                Browse, search, preview, and install BagUI components without
+                leaving Visual Studio Code.
               </p>
             </>
           )}
@@ -1149,6 +1186,90 @@ export default function DocsPage() {
                       className={textLink}
                     >
                       BagUI MCP README ↗
+                    </a>
+                    .
+                  </p>
+                </section>
+              </>
+            )}
+
+            {activePage === "extension" && (
+              <>
+                <section id="extension-overview">
+                  <SectionHeading id="extension-overview">
+                    What is the BagUI VS Code extension?
+                  </SectionHeading>
+                  <Prose>
+                    BagUI for VS Code brings the BagUI component catalog into
+                    your editor. Browse components by category, search the
+                    registry, preview a component, and install it into your
+                    current workspace.
+                  </Prose>
+                  <div className="mt-5 rounded-xl border border-border bg-muted/50 p-5">
+                    <ul className="space-y-2 text-sm leading-6 text-muted-foreground">
+                      <li>Browse components from the BagUI Activity Bar view.</li>
+                      <li>Search, preview, and install components from the editor.</li>
+                      <li>Save favorites and refresh the component registry.</li>
+                      <li>Use a cached registry snapshot when working offline.</li>
+                    </ul>
+                  </div>
+                </section>
+
+                <section id="extension-install">
+                  <SectionHeading id="extension-install">
+                    Install the extension
+                  </SectionHeading>
+                  <Prose>
+                    The extension is available on the Visual Studio Code
+                    Marketplace. Open its listing and select Install; VS Code
+                    will add it to your editor.
+                  </Prose>
+                  <a
+                    href="https://marketplace.visualstudio.com/items?itemName=bagui.bagui-vscode"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-5 inline-flex items-center gap-2 rounded-lg bg-foreground px-4 py-2.5 text-sm font-semibold text-background transition-opacity hover:opacity-85"
+                  >
+                    Install BagUI for VS Code <span aria-hidden="true">↗</span>
+                  </a>
+                </section>
+
+                <section id="extension-use">
+                  <SectionHeading id="extension-use">
+                    Browse and install components
+                  </SectionHeading>
+                  <Prose>
+                    After installation, select the BagUI icon in the VS Code
+                    Activity Bar to open the component list. Choose a category
+                    or search for a component, open its preview, then select
+                    Install to add it to your workspace. You can also run
+                    commands such as{" "}
+                    <code className={inlineCode}>
+                      BagUI: Search Component
+                    </code>{" "}
+                    from the Command Palette.
+                  </Prose>
+                </section>
+
+                <section id="extension-requirements">
+                  <SectionHeading id="extension-requirements">
+                    Requirements
+                  </SectionHeading>
+                  <Prose>
+                    The extension requires VS Code 1.95 or newer. To install
+                    components, open a project configured with shadcn/ui
+                    (<code className={inlineCode}>components.json</code>) and
+                    Node.js. Some Pro components require a BagUI account.
+                  </Prose>
+                  <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                    For the complete feature and settings list, see the{" "}
+                    <a
+                      href="https://github.com/anelkabag/bag-ui/tree/main/vscode"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={textLink}
+                    >
+                      VS Code extension README ↗
                     </a>
                     .
                   </p>

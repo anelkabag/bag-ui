@@ -45,6 +45,7 @@ const releases: Release[] = [
         items: [
           "Added the BagUI MCP server for searching the registry, inspecting components, and retrieving install commands.",
           "Added an MCP guide covering setup and connection from VS Code.",
+          "Added a VS Code extension guide with Marketplace installation instructions and feature details.",
         ],
       },
       {
