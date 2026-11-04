@@ -1,4 +1,6 @@
 import * as React from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 /* ----------------------------- Données ----------------------------- */
 
@@ -69,14 +71,13 @@ export default function Footer4() {
         <div className="flex flex-col gap-8 rounded-3xl bg-white px-[clamp(24px,4vw,44px)] pb-[34px] pt-9 shadow-[0_2px_10px_rgba(20,20,40,0.10),0_0_0_1px_rgba(20,20,40,0.03)] min-[680px]:flex-row min-[680px]:justify-between min-[680px]:gap-10">
           {/* Marque */}
           <div className="max-w-[205px]">
-            <a
+            <Link
               href="/"
               aria-label="BagUi"
               className={`flex items-center gap-[7px] ${focusRing}`}
             >
-              {/* Astuce Next.js : remplace <img> par <Image /> de next/image si besoin */}
-              <img
-                src="https://www.bagui.pro/logo.png"
+              <Image
+                src="/logo.png"
                 alt=""
                 width={28}
                 height={28}
@@ -85,10 +86,10 @@ export default function Footer4() {
               <span className="text-[25px] font-semibold leading-none tracking-[-0.5px] text-[#17171c]">
                 BagUi
               </span>
-            </a>
+            </Link>
 
             <p className="mt-[22px] text-[13px] leading-[1.34] text-[#3d3d44]">
-              Spend less time building UI from scratch. Ship faster with Bag/UI.
+              Spend less time building UI from scratch. Ship faster with BagUI.
             </p>
 
             <div className="mt-6 flex gap-[7px]">
