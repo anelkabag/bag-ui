@@ -5,14 +5,14 @@ import type { RegistryService } from "../services/RegistryService";
 import { createNonce, escapeHtml, isSafeImageSource } from "../utils/html";
 import { categoryLabel } from "../utils/registry";
 
-type PreviewMessage = "install" | "copy-cli" | "docs";
+type PreviewMessage = "install" | "copy-cli" | "docs" | "open-preview";
 
 function isPreviewMessage(value: unknown): value is { type: PreviewMessage } {
   if (typeof value !== "object" || value === null) {
     return false;
   }
   const type = (value as { type?: unknown }).type;
-  return type === "install" || type === "copy-cli" || type === "docs";
+  return type === "install" || type === "copy-cli" || type === "docs" || type === "open-preview";
 }
 
 const LIGHT_PALETTE = `
@@ -54,7 +54,7 @@ export class ComponentPreviewWebview implements vscode.Disposable {
       this.panel = this.createPanel();
     }
     this.panel.title = component.title;
-    this.panel.webview.html = this.render(this.panel.webview, component, command);
+    this.panel.webview.html = this.render(this.panel.webview, component, command, homepage);
     this.panel.reveal(vscode.ViewColumn.Beside, true);
   }
 
@@ -79,41 +79,68 @@ export class ComponentPreviewWebview implements vscode.Disposable {
       if (!component || !isPreviewMessage(message)) {
         return;
       }
-      switch (message.type) {
-        case "install":
-          await vscode.commands.executeCommand("bagui.installComponent", component.name);
-          break;
-        case "copy-cli":
-          await vscode.env.clipboard.writeText(
-            await this.installer.getCommand(component, await this.registry.getHomepage()),
-          );
-          void vscode.window.showInformationMessage(`CLI command copied for ${component.title}`);
-          break;
-        case "docs":
-          await vscode.commands.executeCommand("bagui.openDocumentation", component.name);
-          break;
+      try {
+        switch (message.type) {
+          case "install":
+            await vscode.commands.executeCommand("bagui.installComponent", component.name);
+            break;
+          case "copy-cli":
+            await vscode.env.clipboard.writeText(
+              await this.installer.getCommand(component, await this.registry.getHomepage()),
+            );
+            void vscode.window.showInformationMessage(`CLI command copied for ${component.title}`);
+            break;
+          case "docs":
+            await vscode.commands.executeCommand("bagui.openDocumentation", component.name);
+            break;
+          case "open-preview": {
+            const homepage = await this.registry.getHomepage();
+            const target = this.getLivePreviewUrl(component, homepage);
+            if (!target) {
+              throw new Error("A live preview URL is not available for this registry.");
+            }
+            const opened = await vscode.env.openExternal(vscode.Uri.parse(target));
+            if (!opened) {
+              throw new Error(`Unable to open ${target}`);
+            }
+            break;
+          }
+        }
+      } catch (error) {
+        void vscode.window.showErrorMessage(
+          error instanceof Error ? error.message : "Unable to perform this BagUI action.",
+        );
       }
     });
 
     return panel;
   }
 
-  private render(webview: vscode.Webview, component: Component, command: string): string {
+  private render(
+    webview: vscode.Webview,
+    component: Component,
+    command: string,
+    homepage: string,
+  ): string {
     const nonce = createNonce();
     const theme = vscode.workspace.getConfiguration("bagui").get<string>("theme", "system");
     const palette = theme === "dark" ? DARK_PALETTE : theme === "light" ? LIGHT_PALETTE : SYSTEM_PALETTE;
     const scheme = theme === "dark" ? "dark" : theme === "light" ? "light" : "light dark";
     const isPro = component.tier === "pro";
     const title = escapeHtml(component.title);
+    const livePreviewUrl = this.getLivePreviewUrl(component, homepage);
+    const livePreviewOrigin = livePreviewUrl ? new URL(livePreviewUrl).origin : "";
     const csp = [
       "default-src 'none'",
       `img-src ${webview.cspSource} https: data:`,
+      `frame-src ${livePreviewOrigin || "'none'"}`,
       `style-src 'nonce-${nonce}'`,
       `script-src 'nonce-${nonce}'`,
     ].join("; ");
 
-    const image =
-      component.image && isSafeImageSource(component.image)
+    const image = livePreviewUrl
+      ? `<iframe class="live-preview" src="${escapeHtml(livePreviewUrl)}" title="Live preview of ${title}" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>`
+      : component.image && isSafeImageSource(component.image)
         ? `<img src="${escapeHtml(component.image)}" alt="${title}" />`
         : `<div class="placeholder" role="img" aria-label="${title}"><span>${title}</span></div>`;
 
@@ -185,6 +212,10 @@ export class ComponentPreviewWebview implements vscode.Disposable {
       display: block; width: 100%; border-radius: 16px; max-height: 280px; object-fit: cover; overflow: hidden;
       border: 1px solid var(--border); background: var(--surface-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
     }
+    .live-preview {
+      display: block; width: 100%; height: 360px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface-strong);
+    }
+    .preview-link { margin-top: 12px; }
     .placeholder {
       height: 220px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 18px;
       font-weight: 700; font-size: 18px; color: #fff; background: linear-gradient(135deg, #4f46e5, #8b5cf6);
@@ -222,7 +253,11 @@ export class ComponentPreviewWebview implements vscode.Disposable {
       </div>
     </section>
     <section class="grid">
-      <div class="card"><h2>Preview</h2>${image}</div>
+      <div class="card">
+        <h2>Live preview</h2>
+        ${image}
+        ${livePreviewUrl ? `<button class="preview-link" data-action="open-preview">Open full preview in browser</button>` : ""}
+      </div>
       <div class="card">
         <h2>Details</h2>
         <dl>
@@ -243,5 +278,20 @@ export class ComponentPreviewWebview implements vscode.Disposable {
   </script>
 </body>
 </html>`;
+  }
+
+  private getLivePreviewUrl(component: Component, homepage: string): string | undefined {
+    try {
+      const base = new URL(homepage);
+      if (base.protocol !== "https:" || !/^[a-z0-9][a-z0-9._-]*$/i.test(component.name)) {
+        return undefined;
+      }
+      if (base.hostname === "bagui.pro") {
+        base.hostname = "www.bagui.pro";
+      }
+      return new URL(`/fullscreen/${encodeURIComponent(component.name)}`, base).toString();
+    } catch {
+      return undefined;
+    }
   }
 }

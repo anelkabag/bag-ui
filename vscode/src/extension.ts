@@ -5,6 +5,7 @@ import { CacheService } from "./services/CacheService";
 import { FavoritesService } from "./services/FavoritesService";
 import { InstallService } from "./services/InstallService";
 import { RegistryService } from "./services/RegistryService";
+import { ComponentGalleryWebview } from "./webviews/ComponentGallery";
 import { ComponentPreviewWebview } from "./webviews/ComponentPreview";
 
 export function activate(context: vscode.ExtensionContext): void {
@@ -13,6 +14,7 @@ export function activate(context: vscode.ExtensionContext): void {
   const favorites = new FavoritesService(context);
   const installer = new InstallService();
   const preview = new ComponentPreviewWebview(context, registry, installer);
+  const gallery = new ComponentGalleryWebview(context, registry, installer, preview);
   const tree = new ComponentTreeProvider(registry, favorites);
 
   const treeView = vscode.window.createTreeView("bagui.components", {
@@ -23,10 +25,11 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     registry,
     favorites,
+    gallery,
     preview,
     tree,
     treeView,
-    ...registerCommands({ registry, installer, favorites, preview }),
+    ...registerCommands({ registry, installer, favorites, preview, gallery }),
     // A changed source (path / API URL) must reload the registry.
     vscode.workspace.onDidChangeConfiguration((event) => {
       if (event.affectsConfiguration("bagui.registryPath") || event.affectsConfiguration("bagui.apiUrl")) {

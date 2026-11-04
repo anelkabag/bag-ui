@@ -12,6 +12,7 @@ export function registerCommands(ctx: CommandContext): vscode.Disposable[] {
 
   return [
     register("bagui.open", () => openCommand()),
+    register("bagui.browseComponents", () => ctx.gallery.open()),
     register("bagui.searchComponent", () => searchCommand(ctx)),
     register("bagui.refreshRegistry", () => refreshCommand(ctx)),
     register("bagui.installComponent", (arg) => installCommand(ctx, arg)),

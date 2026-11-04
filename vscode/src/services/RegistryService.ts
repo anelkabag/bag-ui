@@ -2,7 +2,7 @@ import * as path from "node:path";
 import * as vscode from "vscode";
 import type { Component, NormalizedRegistry } from "../types";
 import { toErrorMessage } from "../utils/errors";
-import { compareCategories } from "../utils/registry";
+import { compareCategories, DEFAULT_HOMEPAGE } from "../utils/registry";
 import { CacheService } from "./CacheService";
 import {
   BundledRegistrySource,
@@ -173,6 +173,6 @@ export class RegistryService implements vscode.Disposable {
       return new HttpRegistrySource(apiUrl);
     }
 
-    return new BundledRegistrySource(this.context);
+    return new HttpRegistrySource(`${DEFAULT_HOMEPAGE}/r/registry.json`);
   }
 }

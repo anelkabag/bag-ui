@@ -46,6 +46,12 @@
         "icon": "$(layout)"
       },
       {
+        "command": "bagui.browseComponents",
+        "title": "Browse Components",
+        "category": "BagUI",
+        "icon": "$(list-unordered)"
+      },
+      {
         "command": "bagui.searchComponent",
         "title": "Search Component",
         "category": "BagUI",
@@ -121,6 +127,11 @@
         }
       ],
       "view/title": [
+        {
+          "command": "bagui.browseComponents",
+          "when": "view == bagui.components",
+          "group": "navigation@0"
+        },
         {
           "command": "bagui.searchComponent",
           "when": "view == bagui.components",
