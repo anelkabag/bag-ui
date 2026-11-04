@@ -65,8 +65,8 @@ const focusRing =
 export default function Footer4() {
   return (
     // Marge extérieure -> effet "flottant" (jamais collé aux bords de la fenêtre)
-    <div className="flex min-h-screen w-full flex-col justify-end px-[clamp(12px,2vw,28px)] pb-[clamp(12px,2vw,28px)] font-sans antialiased">
-      <footer className="mx-auto max-w-[960px] overflow-hidden rounded-[30px] border border-[#dcdce3] bg-gradient-to-b from-[#eeeef2] to-[#e3e3e9] px-1.5 pt-1.5">
+    <div className="flex min-h-screen w-full flex-col justify-end px-[clamp(6px,1vw,14px)] pb-[clamp(12px,2vw,28px)] font-sans antialiased">
+      <footer className="mx-auto w-[60vw] overflow-hidden rounded-[30px] border border-[#dcdce3] bg-gradient-to-b from-[#eeeef2] to-[#e3e3e9] px-1.5 pt-1.5">
         {/* Carte blanche */}
         <div className="flex flex-col gap-8 rounded-3xl bg-white px-[clamp(24px,4vw,44px)] pb-[34px] pt-9 shadow-[0_2px_10px_rgba(20,20,40,0.10),0_0_0_1px_rgba(20,20,40,0.03)] min-[680px]:flex-row min-[680px]:justify-between min-[680px]:gap-10">
           {/* Marque */}
