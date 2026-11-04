@@ -14,7 +14,9 @@ function getAllowedHosts(): string[] | undefined {
   if (configuredHosts && configuredHosts.length > 0) {
     return configuredHosts;
   }
-  return process.env["VERCEL_ENV"] === "production" ? ["bagui.pro", "www.bagui.pro"] : undefined;
+  return process.env["VERCEL_ENV"] === "production"
+    ? ["bagui.pro", "www.bagui.pro", "mcp.bagui.pro"]
+    : undefined;
 }
 
 function isAuthorized(request: Request): boolean {

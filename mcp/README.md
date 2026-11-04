@@ -59,27 +59,25 @@ claude mcp add bagui -- node /absolute/path/to/bag-ui/mcp/dist/index.js
 
 ### Remote connection (Streamable HTTP)
 
-#### Vercel production (`www.bagui.pro`)
+#### Vercel production (`mcp.bagui.pro`)
 
 The Next.js app exposes a stateless Streamable HTTP endpoint at
-`https://www.bagui.pro/mcp`, compatible with Vercel serverless functions.
-Currently, `https://bagui.pro/mcp` redirects to the canonical `www` domain, so
-use the `www` URL in MCP clients.
+`https://mcp.bagui.pro/mcp`, compatible with Vercel serverless functions.
 
-1. Deploy this app to the Vercel project connected to `www.bagui.pro`; no
-   separate subdomain or DNS record is needed.
+1. Add `mcp.bagui.pro` to the Vercel project serving this app and configure its
+   DNS record to point to Vercel.
 2. Connect Claude Code:
 
    ```bash
-   claude mcp add --transport http bagui https://www.bagui.pro/mcp
+   claude mcp add --transport http bagui https://mcp.bagui.pro/mcp
    ```
 
 The root `registry.json` is bundled into the Vercel function, so no MCP
 standalone build or registry file setup is needed for this endpoint. To protect
 it with a bearer token, set `MCP_AUTH_TOKEN` in Vercel and configure the same
 token in the MCP client's HTTP authentication settings. Vercel production
-restricts MCP requests to `bagui.pro` and `www.bagui.pro`; set
-`MCP_ALLOWED_HOSTS` only if you need to allow different hostnames.
+allows MCP requests to `bagui.pro`, `www.bagui.pro`, and `mcp.bagui.pro`; set
+`MCP_ALLOWED_HOSTS` only if you need a different host allowlist.
 
 #### Standalone Node.js server
 

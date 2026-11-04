@@ -267,7 +267,7 @@ const MCP_VSCODE_CONFIG = `{
   }
 }`;
 
-const MCP_REMOTE_URL = "https://www.bagui.pro/mcp";
+const MCP_REMOTE_URL = "https://mcp.bagui.pro/mcp";
 
 const MCP_CLAUDE_CODE_CMD = `claude mcp add --transport http bagui ${MCP_REMOTE_URL}
 claude mcp list`;
