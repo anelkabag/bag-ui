@@ -83,13 +83,12 @@ export default function Footer4() {
                 className="block h-7 w-auto"
               />
               <span className="text-[25px] font-semibold leading-none tracking-[-0.5px] text-[#17171c]">
-                Bag\Ui
+                BagUi
               </span>
             </a>
 
             <p className="mt-[22px] text-[13px] leading-[1.34] text-[#3d3d44]">
-              Next-gen Performance Marketing for your company Next-gen
-              Performance Marketing for your company
+              Spend less time building UI from scratch. Ship faster with Bag/UI.
             </p>
 
             <div className="mt-6 flex gap-[7px]">
