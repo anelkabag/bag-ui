@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Moon, Sun } from "lucide-react";
+import { ChevronDown, Moon, Sun } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import UserMenu from "@/components/auth/UserMenu";
 import UnauthNav from "@/components/auth/UnauthNav";
@@ -16,6 +16,9 @@ const NAV_LINKS = [
   { label: "Pricing", href: "/pricing" },
   { label: "Docs", href: "/docs" },
 ] as const;
+
+const VS_CODE_MARKETPLACE_URL =
+  "https://marketplace.visualstudio.com/items?itemName=bagui.bagui-vscode";
 
 const Logo = () => (
   <div className="flex items-center gap-2 shrink-0">
@@ -82,6 +85,40 @@ const NavLink = ({
   </Link>
 );
 
+function ResourcesMenu() {
+  return (
+    <details className="group relative">
+      <summary className="flex cursor-pointer list-none items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground [&::-webkit-details-marker]:hidden">
+        Resources
+        <ChevronDown
+          size={14}
+          className="transition-transform group-open:rotate-180"
+          aria-hidden="true"
+        />
+      </summary>
+      <div className="absolute right-0 top-full z-50 mt-3 w-64 rounded-xl border border-border bg-background p-2 shadow-lg">
+        <Link
+          href="/docs#mcp"
+          className="block rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+        >
+          <span className="block">BagUI MCP</span>
+          <span className="mt-1 block text-xs font-normal text-muted-foreground">
+            Connect BagUI to your AI assistant
+          </span>
+        </Link>
+        <Link
+          href={VS_CODE_MARKETPLACE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-1 block rounded-lg bg-foreground px-3 py-2.5 text-sm font-semibold text-background transition-opacity hover:opacity-85"
+        >
+          Download for VS Code <span aria-hidden="true">↗</span>
+        </Link>
+      </div>
+    </details>
+  );
+}
+
 function getInitialTheme(): "dark" | "light" {
   if (typeof window === "undefined") {
     return "dark";
@@ -107,6 +144,7 @@ export default function Navbar() {
             {NAV_LINKS.map((item) => (
               <NavLink key={item.href} {...item} />
             ))}
+            <ResourcesMenu />
           </div>
 
           <div className="flex items-center gap-2">
@@ -129,7 +167,7 @@ export default function Navbar() {
       <div
         className={`md:hidden fixed inset-0 z-40 ${
           mobileOpen ? "flex" : "hidden"
-        } flex-col bg-background px-6 pt-24 pb-10`}
+        } flex-col overflow-y-auto bg-background px-6 pt-24 pb-10`}
       >
         <nav className="flex flex-col gap-1 flex-1">
           {NAV_LINKS.map((item) => (
@@ -143,6 +181,27 @@ export default function Navbar() {
               </Link>
             </div>
           ))}
+          <div className="mt-5 border-t border-border pt-5">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              Resources
+            </p>
+            <Link
+              href="/docs#mcp"
+              onClick={() => setMobileOpen(false)}
+              className="block py-2 text-lg font-semibold text-foreground"
+            >
+              BagUI MCP
+            </Link>
+            <Link
+              href={VS_CODE_MARKETPLACE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMobileOpen(false)}
+              className="block py-2 text-lg font-semibold text-foreground"
+            >
+              Download for VS Code ↗
+            </Link>
+          </div>
         </nav>
         <div className="flex flex-col gap-3">
           {user ? (

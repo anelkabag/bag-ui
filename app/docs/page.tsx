@@ -17,7 +17,7 @@ type Framework =
   | "react-router"
   | "astro";
 type Section = { id: string; label: string };
-type DocsPage = "installation" | "contributing";
+type DocsPage = "installation" | "contributing" | "mcp";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const NAV_LINKS = [
@@ -50,6 +50,14 @@ const CONTRIBUTING_SECTIONS: Section[] = [
   { id: "verify-build", label: "Verify & build" },
 ];
 
+const MCP_SECTIONS: Section[] = [
+  { id: "mcp-overview", label: "What is MCP?" },
+  { id: "mcp-features", label: "What BagUI MCP can do" },
+  { id: "mcp-build", label: "Build the server" },
+  { id: "mcp-connect", label: "Connect to VS Code" },
+  { id: "mcp-use", label: "Use the tools" },
+];
+
 // ─── Sidebar nav ─────────────────────────────────────────────────────────────
 const SIDEBAR_NAV: {
   group: string;
@@ -61,6 +69,10 @@ const SIDEBAR_NAV: {
       { label: "Installations", page: "installation" },
       { label: "Contribution", page: "contributing" },
     ],
+  },
+  {
+    group: "Resources",
+    pages: [{ label: "MCP", page: "mcp" }],
   },
 ];
 
@@ -227,6 +239,21 @@ const CONTRIB_REGISTRY_JSON = `{
 
 const CONTRIB_BUILD_CMD = `npm run build
 npm run registry:build`;
+
+const MCP_BUILD_CMD = `git clone https://github.com/anelkabag/bag-ui.git
+cd bag-ui/mcp
+npm install
+npm run build`;
+
+const MCP_VSCODE_CONFIG = `{
+  "servers": {
+    "bagui": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/absolute/path/to/bag-ui/mcp/dist/index.js"]
+    }
+  }
+}`;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // NAVBAR
@@ -522,15 +549,39 @@ export default function DocsPage() {
   const sections =
     activePage === "installation"
       ? INSTALLATION_SECTIONS
-      : CONTRIBUTING_SECTIONS;
+      : activePage === "contributing"
+        ? CONTRIBUTING_SECTIONS
+        : MCP_SECTIONS;
 
   const handleSelectPage = (page: DocsPage) => {
     setActivePage(page);
     setActiveSection(
-      page === "installation" ? "introduction" : "contributing-overview",
+      page === "installation"
+        ? "introduction"
+        : page === "contributing"
+          ? "contributing-overview"
+          : "mcp-overview",
     );
+    if (window.location.hash === "#mcp" && page !== "mcp") {
+      window.history.replaceState(null, "", window.location.pathname);
+    } else if (page === "mcp" && window.location.hash !== "#mcp") {
+      window.history.replaceState(null, "", "#mcp");
+    }
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  useEffect(() => {
+    const selectMcpFromHash = () => {
+      if (window.location.hash === "#mcp") {
+        setActivePage("mcp");
+        setActiveSection("mcp-overview");
+      }
+    };
+
+    selectMcpFromHash();
+    window.addEventListener("hashchange", selectMcpFromHash);
+    return () => window.removeEventListener("hashchange", selectMcpFromHash);
+  }, []);
 
   useEffect(() => {
     let lastUpdate = 0;
@@ -569,7 +620,11 @@ export default function DocsPage() {
           <span className="text-foreground">Documentation</span>
           <span>/</span>
           <span className="text-foreground">
-            {activePage === "installation" ? "Installations" : "Contribution"}
+            {activePage === "installation"
+              ? "Installations"
+              : activePage === "contributing"
+                ? "Contribution"
+                : "MCP"}
           </span>
         </div>
 
@@ -586,7 +641,7 @@ export default function DocsPage() {
                 project with a single CLI command.
               </p>
             </>
-          ) : (
+          ) : activePage === "contributing" ? (
             <>
               <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-3 leading-tight">
                 Build with us.{" "}
@@ -595,6 +650,19 @@ export default function DocsPage() {
               <p className="text-muted-foreground text-base leading-relaxed">
                 Bag/UI is open source. Here&apos;s everything you need to add a
                 component and get it merged.
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-3 leading-tight">
+                BagUI MCP.{" "}
+                <span className="text-muted-foreground">
+                  Your AI assistant, connected.
+                </span>
+              </h1>
+              <p className="text-muted-foreground text-base leading-relaxed">
+                Discover BagUI components, inspect their source, and get
+                installation commands directly from an MCP-compatible client.
               </p>
             </>
           )}
@@ -969,6 +1037,122 @@ export default function DocsPage() {
                     </span>
                   </Link>
                 </div>
+              </>
+            )}
+
+            {activePage === "mcp" && (
+              <>
+                <section id="mcp-overview">
+                  <SectionHeading id="mcp-overview">What is MCP?</SectionHeading>
+                  <Prose>
+                    The Model Context Protocol (MCP) is an open standard that
+                    lets AI applications connect to external tools and data.
+                    The BagUI MCP server gives compatible assistants access to
+                    the BagUI component registry, so they can find components
+                    and prepare install commands while you work.
+                  </Prose>
+                  <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                    Learn more in the{" "}
+                    <a
+                      href="https://modelcontextprotocol.io/introduction"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={textLink}
+                    >
+                      MCP introduction ↗
+                    </a>
+                    .
+                  </p>
+                </section>
+
+                <section id="mcp-features">
+                  <SectionHeading id="mcp-features">
+                    What BagUI MCP can do
+                  </SectionHeading>
+                  <Prose>
+                    The server exposes read-only tools for listing categories,
+                    searching components, retrieving component details and
+                    source code, and getting install commands. It also exposes
+                    registry data through the{" "}
+                    <code className={inlineCode}>bagui://registry</code> and{" "}
+                    <code className={inlineCode}>
+                      bagui://component/&lbrace;slug&rbrace;
+                    </code>{" "}
+                    resources. The server returns commands for you to review;
+                    it does not run installation commands on your behalf.
+                  </Prose>
+                  <div className="mt-5 rounded-xl border border-border bg-muted/50 p-5">
+                    <ul className="space-y-2 text-sm leading-6 text-muted-foreground">
+                      <li>
+                        <code className={inlineCode}>list_categories</code> and{" "}
+                        <code className={inlineCode}>list_components</code>{" "}
+                        browse the registry.
+                      </li>
+                      <li>
+                        <code className={inlineCode}>search_components</code>{" "}
+                        finds components by keywords, category, or plan.
+                      </li>
+                      <li>
+                        <code className={inlineCode}>get_component</code> and{" "}
+                        <code className={inlineCode}>get_install_command</code>{" "}
+                        provide details, optional source, and install commands.
+                      </li>
+                    </ul>
+                  </div>
+                </section>
+
+                <section id="mcp-build">
+                  <SectionHeading id="mcp-build">Build the server</SectionHeading>
+                  <Prose>
+                    BagUI MCP currently runs locally over stdio. You need
+                    Node.js 18 or newer. Clone the BagUI repository, install
+                    the MCP package dependencies, and build its server bundle:
+                  </Prose>
+                  <CodeBlock mono lang="bash" content={MCP_BUILD_CMD} />
+                </section>
+
+                <section id="mcp-connect">
+                  <SectionHeading id="mcp-connect">
+                    Connect to VS Code
+                  </SectionHeading>
+                  <Prose>
+                    Open the BagUI repository as a workspace in VS Code and
+                    create <code className={inlineCode}>.vscode/mcp.json</code>{" "}
+                    in the repository root. Replace the example path with the
+                    absolute path to the cloned repository on your computer.
+                  </Prose>
+                  <CodeBlock mono lang="json" content={MCP_VSCODE_CONFIG} />
+                  <Prose>
+                    Save the file, then start the BagUI server from the MCP
+                    server controls in VS Code. The server entry uses{" "}
+                    <code className={inlineCode}>stdio</code>, so no hosted
+                    endpoint or API key is required.
+                  </Prose>
+                </section>
+
+                <section id="mcp-use">
+                  <SectionHeading id="mcp-use">Use the tools</SectionHeading>
+                  <Prose>
+                    Once the server is running, enable its BagUI tools in your
+                    assistant&apos;s tool picker and ask questions such as
+                    &ldquo;Find a free dashboard component for analytics&rdquo;
+                    or &ldquo;Show me the install command for footer1&rdquo;.
+                    Review the returned component details or command, then
+                    choose whether to use it in your project.
+                  </Prose>
+                  <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                    For setup examples for other clients, see the{" "}
+                    <a
+                      href="https://github.com/anelkabag/bag-ui/tree/main/mcp"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={textLink}
+                    >
+                      BagUI MCP README ↗
+                    </a>
+                    .
+                  </p>
+                </section>
               </>
             )}
           </main>

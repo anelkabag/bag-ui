@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import {
   ArrowUpRight,
+  Blocks,
   Bug,
   Check,
   PackagePlus,
@@ -31,6 +32,31 @@ type Release = {
 };
 
 const releases: Release[] = [
+  {
+    version: "0.6.0",
+    date: "November 2026",
+    title: "BagUI connects to your AI workflow",
+    summary:
+      "Discover and use BagUI components directly from MCP-compatible assistants and Visual Studio Code.",
+    changes: [
+      {
+        label: "AI tools",
+        icon: Blocks,
+        items: [
+          "Added the BagUI MCP server for searching the registry, inspecting components, and retrieving install commands.",
+          "Added an MCP guide covering setup and connection from VS Code.",
+        ],
+      },
+      {
+        label: "Resources",
+        icon: Sparkles,
+        items: [
+          "Added a Resources menu with BagUI MCP documentation and a VS Code extension link.",
+          "Added responsive resource links to the mobile navigation.",
+        ],
+      },
+    ],
+  },
   {
     version: "0.5.0",
     date: "September 2026",
@@ -189,7 +215,7 @@ export default function ChangelogPage() {
 
           <div className="mt-14 grid max-w-2xl grid-cols-2 gap-px border border-border bg-border sm:grid-cols-3">
             {[
-              ["4", "releases"],
+              ["5", "releases"],
               ["40+", "components"],
               ["Open", "source"],
             ].map(([value, label]) => (
