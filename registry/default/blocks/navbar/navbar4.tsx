@@ -204,7 +204,7 @@ export default function Navbar({ defaultOpen = true }: NavbarProps) {
     <MotionConfig reducedMotion="user">
       <div
         ref={rootRef}
-        className="relative mx-auto mt-6 w-[min(max(45vw,620px),100%)] font-sans text-[13px] text-[#1c2033] antialiased"
+        className="relative mx-auto mt-6 w-[min(max(45vw,620px),100%)] rounded-3xl bg-gray-200 p-2 font-sans text-[13px] text-[#1c2033] antialiased"
       >
         {/* Barre */}
         <nav
