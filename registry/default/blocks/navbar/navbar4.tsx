@@ -130,7 +130,7 @@ const blockVariants: Variants = {
 /* -------------------------------------------------------------------------- */
 
 const buttonBase =
-  "inline-flex h-8 shrink-0 items-center justify-center whitespace-nowrap rounded-lg border px-3 text-[13px] font-medium leading-none outline-none focus-visible:ring-2 focus-visible:ring-[#1f5bff] focus-visible:ring-offset-2";
+  "inline-flex h-8 shrink-0 cursor-pointer items-center justify-center whitespace-nowrap rounded-lg border px-3 text-[13px] font-medium leading-none outline-none focus-visible:ring-2 focus-visible:ring-[#1f5bff] focus-visible:ring-offset-2";
 
 function ColumnTitle({ children }: { children: ReactNode }) {
   return <h3 className="mb-[11px] h-3.5 text-xs font-medium leading-[14px] text-[#7b8195]">{children}</h3>;
@@ -197,14 +197,14 @@ export default function Navbar({ defaultOpen = true }: NavbarProps) {
   }, [open]);
 
   const navLink =
-    "inline-flex h-8 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 text-[13px] font-medium leading-none text-[#1c2033] outline-none transition-colors hover:bg-[#eef0f6] focus-visible:ring-2 focus-visible:ring-[#1f5bff]";
+    "inline-flex h-8 shrink-0 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 text-[13px] font-medium leading-none text-[#1c2033] outline-none transition-colors hover:bg-[#eef0f6] focus-visible:ring-2 focus-visible:ring-[#1f5bff]";
 
   return (
     // reducedMotion="user" : respecte la préférence « réduire les animations »
     <MotionConfig reducedMotion="user">
       <div
         ref={rootRef}
-        className="relative mx-auto w-[min(max(45vw,620px),100%)] font-sans text-[13px] text-[#1c2033] antialiased"
+        className="relative mx-auto mt-6 w-[min(max(45vw,620px),100%)] font-sans text-[13px] text-[#1c2033] antialiased"
       >
         {/* Barre */}
         <nav
