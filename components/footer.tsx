@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 import React from "react";
 import { useTheme } from "next-themes";
 import { Sun, Moon } from "lucide-react";
+import { setThemeWithTransition } from "@/lib/theme-transition";
 import {
   FaXTwitter, // X
   FaInstagram, // Instagram
@@ -135,7 +136,7 @@ export function Footer() {
               {THEME_OPTIONS.map(({ key, icon, label }) => (
                 <button
                   key={key}
-                  onClick={() => setTheme(key)}
+                  onClick={() => setThemeWithTransition(key, setTheme)}
                   title={label}
                   className={[
                     "relative h-6 w-7 rounded-[7px] flex items-center justify-center cursor-pointer transition-colors duration-200",

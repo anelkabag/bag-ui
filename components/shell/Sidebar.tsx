@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
 import { cn } from "@/lib/utils";
+import { setThemeWithTransition } from "@/lib/theme-transition";
 
 const NAV: { label: string; href: string; icon: LucideIcon }[] = [
   { label: "Home", href: "/", icon: Home },
@@ -77,7 +78,10 @@ function DesktopSidebar({
   useEffect(() => setThemeMounted(true), []);
 
   const toggleTheme = () =>
-    setTheme(resolvedTheme === "dark" ? "light" : "dark");
+    setThemeWithTransition(
+      resolvedTheme === "dark" ? "light" : "dark",
+      setTheme,
+    );
   const themeActionLabel =
     !themeMounted || resolvedTheme !== "dark"
       ? "Switch to dark mode"
