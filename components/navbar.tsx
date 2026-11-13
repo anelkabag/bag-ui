@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronDown, Moon, Sun } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import UserMenu from "@/components/auth/UserMenu";
 import UnauthNav from "@/components/auth/UnauthNav";
@@ -128,20 +128,9 @@ function ResourcesMenu() {
   );
 }
 
-function getInitialTheme(): "dark" | "light" {
-  if (typeof window === "undefined") {
-    return "dark";
-  }
-
-  const savedTheme = window.localStorage.getItem("bagui-theme");
-  return savedTheme === "light" || savedTheme === "dark" ? savedTheme : "dark";
-}
-
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user } = useAuth();
-
-  useEffect(() => {});
 
   return (
     <>

@@ -166,15 +166,6 @@
         @apply border-border outline-ring/50;
     }
 
-    @media (prefers-reduced-motion: no-preference) {
-        * {
-            transition-property:
-                background-color, border-color, color, fill, stroke;
-            transition-timing-function: ease;
-            transition-duration: 200ms;
-        }
-    }
-
     html {
         font-family: var(--font-geist-sans);
         scroll-behavior: smooth;
