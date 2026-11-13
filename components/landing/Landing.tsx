@@ -9,19 +9,20 @@ type BentoItem = {
   title: string;
   description: string;
   span?: string;
+  fill?: boolean;
 };
 
-// Colonne de gauche : 2 blocs empilés qui remplissent la hauteur de « Dashboards »
+// Colonne de gauche : 2 blocs empilés (la hauteur de la ligne vient d'eux)
 const STACK: BentoItem[] = [
   {
     slug: "hero",
     title: "Hero sections",
-    description: "Open your page with a headline, a proof point and one clear action.",
+    description: "A headline, a proof point and one clear action.",
   },
   {
     slug: "navbar",
     title: "Navigation bars",
-    description: "Menus that stay clear on desktop and mobile.",
+    description: "Menus that stay clear on every screen.",
   },
 ];
 
@@ -31,6 +32,7 @@ const BENTO: BentoItem[] = [
     title: "Dashboards",
     description: "Metrics, tables and activity, ready to plug into your data.",
     span: "lg:col-span-2",
+    fill: true,
   },
   {
     slug: "pricing",
@@ -126,14 +128,14 @@ function BentoCard({
   description,
   span = "",
   fill = false,
-}: BentoItem & { fill?: boolean }) {
+}: BentoItem) {
   return (
     <Link
       href={`/blocks/${slug}`}
       className={`group flex min-h-0 flex-col rounded-3xl border border-border bg-card p-6 ${span}`}
     >
       <h3 className="text-[15px] font-semibold text-foreground">{title}</h3>
-      <p className="mt-2 max-w-xs text-[15px] leading-6 text-muted-foreground">
+      <p className="mt-2 max-w-sm text-[15px] leading-6 text-muted-foreground">
         {description}
       </p>
       {/* fill = l'aperçu occupe tout l'espace restant (desktop) */}
@@ -157,16 +159,14 @@ function PreviewFrame() {
     <section className="px-4 pb-16 md:px-6">
       <div className="overflow-hidden rounded-3xl border border-border bg-muted/30">
         <div className="grid gap-4 p-4 md:p-6 lg:grid-cols-3">
-          {/* Colonne 1 : deux blocs empilés, hauteur imposée par « Dashboards » */}
-          <div className="lg:relative lg:col-span-1">
-            <div className="grid gap-4 lg:absolute lg:inset-0 lg:grid-rows-2">
-              {STACK.map((item) => (
-                <BentoCard key={item.slug} {...item} fill />
-              ))}
-            </div>
+          {/* Colonne 1 : deux blocs empilés, chacun garde son aperçu 16/9 complet */}
+          <div className="flex flex-col gap-4 lg:col-span-1">
+            {STACK.map((item) => (
+              <BentoCard key={item.slug} {...item} />
+            ))}
           </div>
 
-          {/* Le reste de la grille, même structure qu'avant */}
+          {/* Le reste de la grille */}
           {BENTO.map((item) => (
             <BentoCard key={item.slug} {...item} />
           ))}
