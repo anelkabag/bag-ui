@@ -1,11 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
-import Image from "next/image";
-import { Footer } from "@/components/footer";
-import Navbar from "@/components/navbar";
+import AppShell from "@/components/shell/AppShell";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Tab = "pnpm" | "npm" | "bun" | "yarn";
@@ -20,13 +18,6 @@ type Section = { id: string; label: string };
 type DocsPage = "installation" | "contributing" | "mcp" | "extension";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
-const NAV_LINKS = [
-  { label: "Blocks", href: "/blocks" },
-  { label: "Templates", href: "/templates" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "Docs", href: "/docs" },
-] as const;
-
 // "On this page" pour la page Installation — ne contient PAS Contributing.
 const INSTALLATION_SECTIONS: Section[] = [
   { id: "introduction", label: "Introduction" },
@@ -301,70 +292,6 @@ const MCP_GEMINI_CONFIG = `{
 }`;
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// NAVBAR
-// ═══════════════════════════════════════════════════════════════════════════════
-
-const Logo = () => (
-  <div className="flex items-center gap-2 shrink-0">
-    <Link href="/" className="flex items-center gap-2">
-      <Image
-        src="/logo.png"
-        alt="BagUI Logo"
-        width={20}
-        height={20}
-        className="shrink-0"
-        priority
-      />
-      <span className="text-[15px] font-semibold tracking-tight text-foreground">
-        Bag\Ui
-      </span>
-    </Link>
-    <Link
-      href="https://x.com/anelkabag"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-[13px] text-muted-foreground hover:text-foreground transition-colors"
-    >
-      by Anelka Bag
-    </Link>
-  </div>
-);
-
-const NavLink = ({
-  href,
-  label,
-  external,
-  size = "sm",
-  onClick,
-}: {
-  href: string;
-  label: string;
-  external?: boolean;
-  size?: "sm" | "xs";
-  onClick?: () => void;
-}) => (
-  <Link
-    href={href}
-    onClick={onClick}
-    className={`relative ${size === "xs" ? "text-[13px]" : "text-sm"} ${
-      href === "/docs"
-        ? "text-foreground font-semibold"
-        : "text-muted-foreground font-medium"
-    } hover:text-foreground transition-colors duration-150 group inline-flex items-baseline gap-0.5`}
-  >
-    {label}
-    {external && (
-      <sup className="text-[10px] text-muted-foreground leading-none">↗</sup>
-    )}
-    <span className="absolute left-0 -bottom-[2px] h-[1.5px] w-0 group-hover:w-full transition-all duration-300 bg-foreground" />
-  </Link>
-);
-
-const Sep = () => (
-  <div className="hidden sm:block w-px h-5 self-center shrink-0 bg-border" />
-);
-
-// ═══════════════════════════════════════════════════════════════════════════════
 // DOCS COMPONENTS
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -621,7 +548,7 @@ export default function DocsPage() {
     ) {
       window.history.replaceState(null, "", window.location.pathname);
     }
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    document.getElementById("main")?.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -658,16 +585,16 @@ export default function DocsPage() {
       }
     };
 
-    window.addEventListener("scroll", updateActive, { passive: true });
-    return () => window.removeEventListener("scroll", updateActive);
+    const scrollContainer = document.getElementById("main");
+    if (!scrollContainer) return;
+
+    scrollContainer.addEventListener("scroll", updateActive, { passive: true });
+    return () => scrollContainer.removeEventListener("scroll", updateActive);
   }, [sections]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* ── Navbar ── */}
-      <Navbar />
-
-      <div className="max-w-7xl mx-auto px-6 pt-10 pb-10 border-x border-border">
+    <AppShell>
+      <div className="min-h-full mx-auto max-w-[1440px] bg-background px-5 pb-12 text-foreground md:px-10">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs text-muted-foreground mb-8">
           <Link href="/" className="hover:text-foreground transition-colors">
@@ -749,7 +676,7 @@ export default function DocsPage() {
           />
 
           {/* Main content */}
-          <main className="min-w-0">
+          <div className="min-w-0">
             {activePage === "installation" && (
               <>
                 {/* Introduction */}
@@ -1384,14 +1311,12 @@ export default function DocsPage() {
                 </section>
               </>
             )}
-          </main>
+          </div>
 
           {/* Right TOC */}
           <TOC sections={sections} active={activeSection} />
         </div>
       </div>
-
-      <Footer />
-    </div>
+    </AppShell>
   );
 }

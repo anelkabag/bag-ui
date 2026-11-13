@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
-import Navbar from "@/components/navbar";
-import { Footer } from "@/components/footer";
+import AppShell from "@/components/shell/AppShell";
 
 const licenseText = `MIT License
 
@@ -27,10 +26,8 @@ SOFTWARE.`;
 
 export default function LicensePage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <Navbar />
-
-      <main className="mx-auto max-w-7xl border-x border-border px-6">
+    <AppShell>
+      <div className="min-h-full mx-auto max-w-[1440px] bg-background px-5 text-foreground md:px-10">
         <div className="border-b border-border py-8 md:py-10">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 text-sm text-muted-foreground">
@@ -103,9 +100,7 @@ export default function LicensePage() {
             </aside>
           </div>
         </section>
-      </main>
-
-      <Footer />
-    </div>
+      </div>
+    </AppShell>
   );
 }

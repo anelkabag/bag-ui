@@ -14,8 +14,8 @@ import {
   Wrench,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import Navbar from "@/components/navbar";
-import { Footer } from "@/components/footer";
+import AppShell from "@/components/shell/AppShell";
+import PageHero from "@/components/shell/PageHero";
 
 type Change = {
   label: string;
@@ -190,45 +190,35 @@ const featuredComponents = [
 
 export default function ChangelogPage() {
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-
-      <main className="mx-auto max-w-7xl border-x border-border px-6">
-        <section className="border-b border-border py-20 md:py-28">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35 }}
-            className="max-w-3xl"
-          >
-            <div className="mb-7 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">
-              <span className="h-px w-8 bg-foreground" />
-              Product updates
-            </div>
-            <h1 className="max-w-2xl text-5xl font-bold tracking-tight text-foreground md:text-7xl">
-              What&apos;s new in BagUI
-            </h1>
-            <p className="mt-6 max-w-xl text-base leading-7 text-muted-foreground md:text-lg">
+    <AppShell>
+      <div className="min-h-full bg-background">
+        <PageHero
+          firstLine="Product updates"
+          secondLine="What's new in"
+          emphasis="BagUI."
+        >
+          <div className="max-w-xl">
+            <p className="text-sm leading-6 text-muted-foreground md:text-base">
               Major releases, meaningful improvements, and the newest building
               blocks for your next interface.
             </p>
-          </motion.div>
-
-          <div className="mt-14 grid max-w-2xl grid-cols-2 gap-px border border-border bg-border sm:grid-cols-3">
+            <div className="mt-6 grid grid-cols-3 gap-3">
             {[
               ["5", "releases"],
               ["40+", "components"],
               ["Open", "source"],
             ].map(([value, label]) => (
-              <div key={label} className="bg-background p-5">
+              <div key={label} className="rounded-xl border border-border bg-card p-3 sm:p-4">
                 <p className="text-2xl font-semibold tracking-tight text-foreground">{value}</p>
                 <p className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">{label}</p>
               </div>
             ))}
           </div>
-        </section>
+          </div>
+        </PageHero>
 
-        <section className="grid gap-12 py-16 md:grid-cols-[180px_1fr] md:gap-20 md:py-24">
+        <div className="mx-auto max-w-[1440px] px-5 md:px-10">
+        <section className="grid gap-12 border-t border-border py-12 md:grid-cols-[180px_1fr] md:gap-20 md:py-16">
           <div className="md:sticky md:top-24 md:self-start">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
               Release notes
@@ -279,7 +269,7 @@ export default function ChangelogPage() {
           </div>
         </section>
 
-        <section className="border-t border-border py-16 md:py-24">
+        <section className="border-t border-border py-12 md:py-16">
           <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">New in the catalog</p>
@@ -304,9 +294,8 @@ export default function ChangelogPage() {
             ))}
           </div>
         </section>
-      </main>
-
-      <Footer />
-    </div>
+        </div>
+      </div>
+    </AppShell>
   );
 }

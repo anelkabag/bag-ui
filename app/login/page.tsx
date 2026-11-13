@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/hooks/useAuth";
+import AppShell from "@/components/shell/AppShell";
 
 export default function LoginPage() {
   const { signIn, signInWithGoogle, loading } = useAuth();
@@ -39,7 +40,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden">
+    <AppShell>
+      <div className="relative flex min-h-full items-center justify-center overflow-hidden bg-background p-4">
       {/* Radial glow background — foreground-based donc visible (subtilement)
           en light comme en dark, au lieu d'un blanc fixe invisible sur fond clair */}
       <div className="absolute inset-0 pointer-events-none">
@@ -262,6 +264,7 @@ export default function LoginPage() {
           </motion.p>
         </div>
       </motion.div>
-    </div>
+      </div>
+    </AppShell>
   );
 }

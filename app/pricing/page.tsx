@@ -5,8 +5,8 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { Heart, Sparkles, Server, Globe, Wrench } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
-import Navbar from "@/components/navbar";
-import { Footer } from "@/components/footer";
+import AppShell from "@/components/shell/AppShell";
+import PageHero from "@/components/shell/PageHero";
 
 const perks = [
   "Your name (or logo) featured on the sponsors page",
@@ -38,32 +38,20 @@ const costs = [
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-
-      <div className="max-w-7xl mx-auto px-6 pt-10 pb-4 border-x border-border">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="mb-14 text-center m-6"
+    <AppShell>
+      <div className="min-h-full mx-auto max-w-[1440px] bg-background px-5 pb-12 md:px-10">
+        <PageHero
+          firstLine="The entire catalog"
+          secondLine="Free."
+          emphasis="Forever."
         >
-          <p className="text-sm tracking-[0.25em] text-muted-foreground mb-4">
-            Open Source
-          </p>
-
-          <h1 className="text-6xl font-bold tracking-tight text-foreground mb-4">
-            Free. Forever.
-          </h1>
-
-          <p className="text-muted-foreground text-sm max-w-xl leading-relaxed mx-auto">
+          <p className="max-w-xl text-sm leading-6 text-muted-foreground md:text-base">
             Every block, every template, the full source code &mdash; free to
             use, no account required, no limits. But &ldquo;free&rdquo; still
             has a real bill behind it: hosting, domains, and the hours spent
             maintaining it. That bill is covered entirely by people like you.
           </p>
-        </motion.div>
+        </PageHero>
 
         {/* Where the money goes */}
         <motion.div
@@ -171,8 +159,6 @@ export default function PricingPage() {
           or open an issue on the GitHub repo.
         </p>
       </div>
-
-      <Footer />
-    </div>
+    </AppShell>
   );
 }

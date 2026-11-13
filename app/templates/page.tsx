@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
-import Navbar from "@/components/navbar";
-import { Footer } from "@/components/footer";
+import AppShell from "@/components/shell/AppShell";
+import PageHero from "@/components/shell/PageHero";
 import registryJson from "@/registry.json";
 import { RegistryItem } from "@/lib/block-categories";
 import { getInstallAccessState } from "@/lib/access";
@@ -432,48 +432,42 @@ function TemplateCard({
 
 export default function TemplatesPage() {
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 pt-6 sm:pt-10 pb-16 sm:pb-20 border-x border-border">
-        <div className="flex items-center gap-2 text-xs text-muted-foreground mb-6 sm:mb-10">
-          <Link href="/" className="hover:text-foreground transition-colors">
-            Home
-          </Link>
-          <span>/</span>
-          <span className="text-foreground">Templates</span>
+    <AppShell>
+      <div className="min-h-full bg-background">
+        <div className="mx-auto max-w-[1440px] pb-20">
+          <PageHero
+            firstLine="Complete templates"
+            secondLine="for your next"
+            emphasis="project."
+          >
+            <div className="max-w-xl">
+              <p className="text-sm leading-6 text-muted-foreground md:text-base">
+                Explore complete, production-ready website templates built with
+                shadcn/ui, Tailwind CSS, and React. Launch modern landing pages,
+                dashboards, SaaS apps, and more in minutes.
+              </p>
+              <p className="mt-4 text-sm font-medium text-foreground">
+                {templates.length}{" "}
+                {templates.length === 1 ? "template" : "templates"} available
+              </p>
+            </div>
+          </PageHero>
+
+          <div className="px-5 md:px-10">
+            {templates.length > 0 ? (
+              <TemplatePreview templates={templates}>
+                {templates.map((template, i) => (
+                  <TemplateCard key={template.name} template={template} index={i} />
+                ))}
+              </TemplatePreview>
+            ) : (
+              <div className="py-12 text-center">
+                <p className="text-muted-foreground">No templates available yet.</p>
+              </div>
+            )}
+          </div>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="mb-6 sm:mb-10"
-        >
-          <div>
-            <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-2 sm:mb-3 leading-tight">
-              Templates
-            </h1>
-            <p className="text-muted-foreground text-sm sm:text-base leading-relaxed max-w-2xl">
-              Explore complete, production-ready website templates built with
-              shadcn/ui, Tailwind CSS, and React. Launch modern landing pages,
-              dashboards, SaaS apps, and more in minutes.
-            </p>
-          </div>
-        </motion.div>
-
-        {templates.length > 0 ? (
-          <TemplatePreview templates={templates}>
-            {templates.map((template, i) => (
-              <TemplateCard key={template.name} template={template} index={i} />
-            ))}
-          </TemplatePreview>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">No templates available yet.</p>
-          </div>
-        )}
       </div>
-      <Footer />
-    </div>
+    </AppShell>
   );
 }
