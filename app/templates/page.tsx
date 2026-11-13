@@ -46,7 +46,7 @@ export default function TemplatesPage() {
             </div>
           </PageHero>
 
-          <div className="px-5 md:px-10">
+          <div>
             {templates.length > 0 ? (
               <TemplatePreview templates={templates} />
             ) : (

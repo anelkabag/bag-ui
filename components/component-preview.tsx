@@ -8,8 +8,10 @@ interface ComponentPreviewProps {
     name: string;
     files: { path: string; target?: string; type: string }[];
   };
-  /** Hauteur de la zone de preview en px. Défaut = 500 (comportement existant, page de détail). */
-  height?: number;
+  /** Hauteur de l'aperçu en px ou en unité CSS. Défaut = 500px. */
+  height?: React.CSSProperties["height"];
+  /** Aligne le contenu en haut au lieu de le centrer dans l'aperçu. */
+  alignStart?: boolean;
   /** Classes additionnelles sur le conteneur (ex: pour retirer la bordure dans une carte). */
   className?: string;
 }
@@ -83,6 +85,7 @@ function useContainFixed(ref: React.RefObject<HTMLDivElement | null>) {
 export function ComponentPreview({
   item,
   height = 500,
+  alignStart = false,
   className = "",
 }: ComponentPreviewProps) {
   const file = item.files?.[0];
@@ -200,7 +203,7 @@ export function ComponentPreview({
     <div
       ref={containerRef}
       data-lenis-prevent
-      className={`flex w-full items-center justify-center overflow-auto rounded-xl border border-border bg-card ${className}`}
+      className={`flex w-full ${alignStart ? "items-start justify-start" : "items-center justify-center"} overflow-auto rounded-xl border border-border bg-card ${className}`}
       style={{
         height,
         position: "relative",
