@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useAuth } from "@/hooks/useAuth";
 import BlockPreview from "@/components/BlockPreview";
+import PageHero from "@/components/shell/PageHero";
+import PageTopBar from "@/components/shell/PageTopBar";
 
 type BentoItem = {
   slug: string;
@@ -53,66 +54,6 @@ const BENTO: BentoItem[] = [
     span: "lg:col-span-1",
   },
 ];
-
-function TopBar() {
-  const { user } = useAuth();
-  const link =
-    "text-[15px] text-muted-foreground transition-colors hover:text-foreground";
-  return (
-    <div className="flex h-14 items-center justify-end gap-6 px-6">
-      <a
-        href="https://github.com/anelkabag/bag-ui"
-        target="_blank"
-        rel="noopener noreferrer"
-        className={link}
-      >
-        Star on GitHub
-      </a>
-      {user ? (
-        <Link href="/account" className={link}>
-          Account
-        </Link>
-      ) : (
-        <>
-          <Link href="/login" className={link}>
-            Log in
-          </Link>
-          <Link href="/register" className="text-[15px] font-medium text-foreground">
-            Sign up
-          </Link>
-        </>
-      )}
-    </div>
-  );
-}
-
-function Hero() {
-  return (
-    <section className="grid items-end gap-8 px-6 pb-10 pt-10 md:px-10 lg:grid-cols-[auto_auto_1fr] lg:gap-10 lg:pt-16">
-      <h1 className="max-w-xl text-[clamp(30px,4vw,44px)] font-medium leading-[1.1] tracking-[-0.035em] text-muted-foreground">
-        The building blocks
-        <br />
-        for beautiful{" "}
-        <span className="font-semibold text-foreground">SaaS interfaces.</span>
-      </h1>
-
-      <div className="flex items-center gap-4">
-        <Link
-          href="/docs"
-          className="inline-flex h-10 items-center rounded-full bg-foreground px-5 text-sm font-semibold text-background transition-opacity hover:opacity-85"
-        >
-          Get started
-        </Link>
-        <Link
-          href="/blocks"
-          className="text-[15px] text-muted-foreground transition-colors hover:text-foreground"
-        >
-          Explore blocks
-        </Link>
-      </div>
-    </section>
-  );
-}
 
 function BentoCard({
   slug,
@@ -171,8 +112,27 @@ function PreviewFrame() {
 export default function Landing() {
   return (
     <>
-      <TopBar />
-      <Hero />
+      <PageTopBar />
+      <PageHero
+        firstLine="The building blocks"
+        secondLine="for beautiful"
+        emphasis="SaaS interfaces."
+      >
+        <div className="flex items-center gap-4">
+          <Link
+            href="/docs"
+            className="inline-flex h-10 items-center rounded-full bg-foreground px-5 text-sm font-semibold text-background transition-opacity hover:opacity-85"
+          >
+            Get started
+          </Link>
+          <Link
+            href="/blocks"
+            className="text-[15px] text-muted-foreground transition-colors hover:text-foreground"
+          >
+            Explore blocks
+          </Link>
+        </div>
+      </PageHero>
       <PreviewFrame />
     </>
   );

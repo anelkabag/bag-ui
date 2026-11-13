@@ -53,10 +53,15 @@ function Logo({ size = 22 }: { size?: number }) {
 function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
   const pathname = usePathname();
   const { resolvedTheme, setTheme } = useTheme();
+  const [themeMounted, setThemeMounted] = useState(false);
+  useEffect(() => setThemeMounted(true), []);
   const toggleTheme = () => setTheme(resolvedTheme === "dark" ? "light" : "dark");
   const themeActionLabel =
-    resolvedTheme === "dark" ? "Switch to light mode" : "Switch to dark mode";
-  const ThemeIcon = resolvedTheme === "dark" ? Sun : Moon;
+    !themeMounted || resolvedTheme !== "dark"
+      ? "Switch to dark mode"
+      : "Switch to light mode";
+  const ThemeIcon =
+    themeMounted && resolvedTheme === "light" ? Moon : Sun;
 
   return (
     <aside
