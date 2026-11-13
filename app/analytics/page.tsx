@@ -92,20 +92,19 @@ async function getSummary(): Promise<AnalyticsSummary> {
           b.downloads - a.downloads || a.component.localeCompare(b.component),
       );
 
+    const dailyCounts = new Map<string, number>();
+    const typedDailyRows = (dailyRows ?? []) as Array<{ created_at: string }>;
+    for (const row of typedDailyRows) {
+      const date = new Date(row.created_at).toISOString().slice(0, 10);
+      dailyCounts.set(date, (dailyCounts.get(date) ?? 0) + 1);
+    }
+
     const dailySeries = Array.from({ length: 30 }, (_, index) => {
       const date = new Date();
       date.setDate(date.getDate() - (29 - index));
-      return { date: date.toISOString().slice(0, 10), downloads: 0 };
+      const key = date.toISOString().slice(0, 10);
+      return { date: key, downloads: dailyCounts.get(key) ?? 0 };
     });
-
-    const typedDailyRows = (dailyRows ?? []) as Array<{ created_at: string }>;
-    for (const row of typedDailyRows) {
-      const bucketDate = new Date(row.created_at).toISOString().slice(0, 10);
-      const match = dailySeries.find((item) => item.date === bucketDate);
-      if (match) {
-        match.downloads += 1;
-      }
-    }
 
     return {
       totalDownloads: totalDownloads ?? 0,

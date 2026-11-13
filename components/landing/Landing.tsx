@@ -90,9 +90,9 @@ function Hero() {
   return (
     <section className="grid items-end gap-8 px-6 pb-10 pt-10 md:px-10 lg:grid-cols-[auto_auto_1fr] lg:gap-10 lg:pt-16">
       <h1 className="max-w-xl text-[clamp(30px,4vw,44px)] font-medium leading-[1.1] tracking-[-0.035em] text-muted-foreground">
-        Shadcn registry for
+        The building blocks
         <br />
-        building{" "}
+        for beautiful{" "}
         <span className="font-semibold text-foreground">SaaS interfaces.</span>
       </h1>
 
@@ -110,14 +110,6 @@ function Hero() {
           Explore blocks
         </Link>
       </div>
-
-      <Link
-        href="/changelog"
-        className="mb-2.5 text-[15px] text-muted-foreground transition-colors hover:text-foreground lg:text-right"
-      >
-        <span className="font-semibold text-foreground">November 2026:</span>{" "}
-        BagUI MCP and the VS Code extension are live
-      </Link>
     </section>
   );
 }
