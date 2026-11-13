@@ -117,8 +117,7 @@ function PreviewFrame() {
   return (
     <section className="px-4 pb-16 md:px-6">
       <div className="overflow-hidden rounded-3xl border border-border bg-muted/30">
-
-        <div className="mx-auto grid max-w-5xl gap-4 px-4 py-10 md:px-8 lg:grid-cols-3">
+        <div className="grid gap-4 p-4 md:p-6 lg:grid-cols-3">
           {BENTO.map(({ slug, title, description, span }) => (
             <Link
               key={slug}
@@ -129,9 +128,11 @@ function PreviewFrame() {
               <p className="mt-2 max-w-xs text-[15px] leading-6 text-muted-foreground">
                 {description}
               </p>
-              <div className="relative mt-6 aspect-[16/9] overflow-hidden rounded-xl border border-border bg-background">
-                <div className="absolute inset-0">
-                  <BlockPreview blockType={slug} />
+              <div className="mt-auto pt-6">
+                <div className="relative aspect-[16/9] overflow-hidden rounded-xl border border-border bg-background">
+                  <div className="absolute inset-0">
+                    <BlockPreview blockType={slug} />
+                  </div>
                 </div>
               </div>
             </Link>
