@@ -205,7 +205,7 @@ export default function ComponentsPage() {
         {/* ── Hero ── */}
         <div className="mb-6 sm:mb-10">
           <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-2 sm:mb-3 leading-tight">
-            Bag/UI Components —{" "}
+            BagUI Components —{" "}
             <span className="text-muted-foreground">
               {UI_COMPONENTS.length}+ Free &amp; Pro
             </span>

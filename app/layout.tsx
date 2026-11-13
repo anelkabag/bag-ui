@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     "BagUI is an open-source shadcn/ui registry with production-ready components, blocks, templates, and animations for React, Next.js, and Tailwind CSS. Copy, customize, and build faster.",
   keywords: [
     "bagui",
-    "bag/ui",
+    "BagUI",
     "shadcn",
     "shadcn/ui",
     "shadcn registry",

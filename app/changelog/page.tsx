@@ -114,7 +114,7 @@ const releases: Release[] = [
     date: "August 2026",
     title: "Templates, docs, and a more complete workflow",
     summary:
-      "Bag/UI grew from a collection of blocks into a practical place to discover, install, and customize UI.",
+      "BagUI grew from a collection of blocks into a practical place to discover, install, and customize UI.",
     changes: [
       {
         label: "New",
@@ -140,7 +140,7 @@ const releases: Release[] = [
     date: "July 2026",
     title: "The registry goes public",
     summary:
-      "The first public release made Bag/UI blocks available through a shadcn-compatible registry.",
+      "The first public release made BagUI blocks available through a shadcn-compatible registry.",
     changes: [
       {
         label: "Released",
@@ -206,7 +206,7 @@ export default function ChangelogPage() {
               Product updates
             </div>
             <h1 className="max-w-2xl text-5xl font-bold tracking-tight text-foreground md:text-7xl">
-              What&apos;s new in Bag/UI
+              What&apos;s new in BagUI
             </h1>
             <p className="mt-6 max-w-xl text-base leading-7 text-muted-foreground md:text-lg">
               Major releases, meaningful improvements, and the newest building

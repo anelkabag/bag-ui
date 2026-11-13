@@ -126,7 +126,7 @@ const FRAMEWORKS: {
     key: "next",
     label: "Next.js",
     blurb: "A React framework with file-system routing and server rendering.",
-    note: "Choose the recommended defaults when prompted — TypeScript, Tailwind CSS and the App Router are all Bag/UI needs.",
+    note: "Choose the recommended defaults when prompted — TypeScript, Tailwind CSS and the App Router are all BagUI needs.",
     docsHref: "https://nextjs.org/docs/app/getting-started/installation",
     docsLabel: "Next.js",
   },
@@ -696,7 +696,7 @@ export default function DocsPage() {
                 <span className="text-muted-foreground">Zero wasted time.</span>
               </h1>
               <p className="text-muted-foreground text-base leading-relaxed">
-                Register Bag/UI once and pull any block directly into your
+                Register BagUI once and pull any block directly into your
                 project with a single CLI command.
               </p>
             </>
@@ -707,7 +707,7 @@ export default function DocsPage() {
                 <span className="text-muted-foreground">Ship a block.</span>
               </h1>
               <p className="text-muted-foreground text-base leading-relaxed">
-                Bag/UI is open source. Here&apos;s everything you need to add a
+                BagUI is open source. Here&apos;s everything you need to add a
                 component and get it merged.
               </p>
             </>
@@ -758,11 +758,11 @@ export default function DocsPage() {
                     Introduction
                   </SectionHeading>
                   <Prose>
-                    Bag/UI is a growing library of carefully crafted React
+                    BagUI is a growing library of carefully crafted React
                     blocks built on shadcn/ui and Tailwind CSS. Interactive
                     sections may include Framer Motion or GSAP animations, while
                     every block remains fully customizable and installable
-                    through the Bag/UI registry with a single CLI command.
+                    through the BagUI registry with a single CLI command.
                   </Prose>
                 </section>
 
@@ -859,7 +859,7 @@ export default function DocsPage() {
                     Register the namespace
                   </SectionHeading>
                   <Prose>
-                    Add the Bag/UI registry to your project&apos;s{" "}
+                    Add the BagUI registry to your project&apos;s{" "}
                     <code className={inlineCode}>components.json</code> so the
                     shadcn CLI knows where to fetch the blocks from. You only do
                     this once per project — no API key needed for free blocks.
@@ -998,7 +998,7 @@ export default function DocsPage() {
                     Overview
                   </SectionHeading>
                   <Prose>
-                    Bag/UI is open source, and contributions are welcome — new
+                    BagUI is open source, and contributions are welcome — new
                     blocks, bug fixes, or documentation improvements. Clone the
                     repo, install dependencies, then create a branch and follow
                     the steps below.

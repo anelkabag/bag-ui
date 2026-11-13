@@ -49,7 +49,7 @@ export default function PrivacyPage() {
             </div>
 
             <p className="max-w-2xl text-sm leading-7 text-muted-foreground md:text-base">
-              This Privacy Policy explains how Bag/UI collects, uses, and protects
+              This Privacy Policy explains how BagUI collects, uses, and protects
               the information you share while using our website and services.
             </p>
           </div>
@@ -83,7 +83,7 @@ export default function PrivacyPage() {
                   <p className="mt-4 text-sm leading-7 text-muted-foreground md:text-base">
                     We respect your privacy and aim to collect only the data needed to
                     provide a smooth, secure, and useful experience. This policy covers
-                    information collected on Bag/UI, including account, product, and
+                    information collected on BagUI, including account, product, and
                     browsing interactions.
                   </p>
                 </section>

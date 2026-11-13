@@ -62,7 +62,7 @@ export default function LicensePage() {
             </div>
 
             <p className="max-w-2xl text-sm leading-7 text-muted-foreground md:text-base">
-              Bag/UI is distributed under the MIT License, a permissive open-source
+              BagUI is distributed under the MIT License, a permissive open-source
               license that allows commercial and personal use, modification, and
               redistribution with the required attribution.
             </p>
@@ -97,7 +97,7 @@ export default function LicensePage() {
                 <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
                   Project
                 </p>
-                <p className="mt-3 text-sm text-foreground">Bag/UI</p>
+                <p className="mt-3 text-sm text-foreground">BagUI</p>
                 <p className="mt-1 text-sm text-muted-foreground">Open-source UI blocks and templates.</p>
               </div>
             </aside>

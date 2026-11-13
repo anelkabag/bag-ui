@@ -138,7 +138,7 @@ export default function CTASection1() {
 
             <FadeUp delay={0.35}>
               <span className="inline-flex items-center border-2 border-black rounded-full px-5 py-1 leading-none text-black">
-                Bag/UI
+                BagUI
               </span>
             </FadeUp>
 

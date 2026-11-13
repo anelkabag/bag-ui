@@ -241,7 +241,7 @@ export default function BlocksPage() {
         {/* ── Hero ── */}
         <div className="mb-6 sm:mb-10">
           <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-2 sm:mb-3 leading-tight ">
-            Bag/UI Blocks —{" "}
+            BagUI Blocks —{" "}
             <span className="text-muted-foreground">
               {totalAll}+ Free &amp; Pro
             </span>

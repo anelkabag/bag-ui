@@ -122,7 +122,7 @@ export function Footer() {
               </span>
             </div>
             <p className="max-w-[180px] text-xs leading-relaxed text-muted-foreground mb-3">
-              Spend less time building UI from scratch. Ship faster with Bag/UI.
+              Spend less time building UI from scratch. Ship faster with BagUI.
             </p>
             <motion.div
               initial={{ opacity: 0 }}
