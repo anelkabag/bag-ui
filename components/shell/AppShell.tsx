@@ -13,8 +13,10 @@ import {
   LayoutGrid,
   LayoutTemplate,
   Menu,
+  Moon,
   PanelLeft,
   Search,
+  Sun,
   Tag,
   X,
   type LucideIcon,
@@ -157,10 +159,12 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
             <button
               type="button"
               onClick={toggleTheme}
-              title="Switch theme"
-              aria-label="Switch theme"
-              className="mt-1 size-7 cursor-pointer rounded-full bg-[conic-gradient(from_200deg,#f97316,#ec4899,#38bdf8,#34d399,#f97316)] ring-2 ring-white/20 transition-transform hover:scale-110"
-            />
+              title={resolvedTheme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              aria-label={resolvedTheme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              className="mt-1 flex size-9 cursor-pointer items-center justify-center rounded-full text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+            >
+              {resolvedTheme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
           </>
         ) : (
           <>
