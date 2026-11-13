@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import {
   BookOpen,
-  Contrast,
   History,
   Home,
   LayoutGrid,
@@ -55,6 +54,9 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
   const pathname = usePathname();
   const { resolvedTheme, setTheme } = useTheme();
   const toggleTheme = () => setTheme(resolvedTheme === "dark" ? "light" : "dark");
+  const themeActionLabel =
+    resolvedTheme === "dark" ? "Switch to light mode" : "Switch to dark mode";
+  const ThemeIcon = resolvedTheme === "dark" ? Sun : Moon;
 
   return (
     <aside
@@ -159,11 +161,11 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
             <button
               type="button"
               onClick={toggleTheme}
-              title={resolvedTheme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-              aria-label={resolvedTheme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              title={themeActionLabel}
+              aria-label={themeActionLabel}
               className="mt-1 flex size-9 cursor-pointer items-center justify-center rounded-full text-white/70 transition-colors hover:bg-white/10 hover:text-white"
             >
-              {resolvedTheme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+              <ThemeIcon size={18} />
             </button>
           </>
         ) : (
@@ -183,11 +185,11 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
               <button
                 type="button"
                 onClick={toggleTheme}
-                aria-label="Switch theme"
-                title="Switch theme"
+                aria-label={themeActionLabel}
+                title={themeActionLabel}
                 className="flex size-8 cursor-pointer items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-foreground"
               >
-                <Contrast size={17} />
+                <ThemeIcon size={17} />
               </button>
             </div>
           </>
