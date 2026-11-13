@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "lenis/dist/lenis.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -168,7 +169,7 @@
 
     html {
         font-family: var(--font-geist-sans);
-        scroll-behavior: smooth;
+        scroll-behavior: auto;
     }
 
     body {

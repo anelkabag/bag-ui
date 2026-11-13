@@ -199,6 +199,7 @@ export function ComponentPreview({
      */
     <div
       ref={containerRef}
+      data-lenis-prevent
       className={`flex w-full items-center justify-center overflow-auto rounded-xl border border-border bg-card ${className}`}
       style={{
         height,

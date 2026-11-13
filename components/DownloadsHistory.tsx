@@ -53,7 +53,10 @@ export function DownloadsHistory({
         </div>
       </div>
 
-      <div className="mt-6 space-y-3 max-h-96 overflow-y-auto">
+      <div
+        data-lenis-prevent
+        className="mt-6 space-y-3 max-h-96 overflow-y-auto"
+      >
         {downloads.map((download) => {
           const lastDownloadDate = new Date(download.lastDownloaded);
           const formattedDate = lastDownloadDate.toLocaleDateString("en-US", {

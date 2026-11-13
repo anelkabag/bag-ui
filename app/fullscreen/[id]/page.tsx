@@ -133,7 +133,7 @@ export default function FullscreenPreviewPage() {
   }
 
   return (
-    <div className="w-full h-screen bg-white overflow-auto">
+    <div data-lenis-prevent className="w-full h-screen bg-white overflow-auto">
       {fromTemplates && (
         <Link
           href="/templates"

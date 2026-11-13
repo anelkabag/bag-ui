@@ -163,6 +163,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       <div
+        data-lenis-prevent
         className={`md:hidden fixed inset-0 z-40 ${
           mobileOpen ? "flex" : "hidden"
         } flex-col overflow-y-auto bg-background px-6 pt-24 pb-10`}
