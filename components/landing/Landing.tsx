@@ -3,22 +3,29 @@
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import BlockPreview from "@/components/BlockPreview";
-import BlocksCatalog from "@/components/Blockscatalog";
-import CTASection from "@/components/Ctasection";
-import { Footer } from "@/components/footer";
 
-const BENTO: {
+type BentoItem = {
   slug: string;
   title: string;
   description: string;
-  span: string;
-}[] = [
+  span?: string;
+};
+
+// Colonne de gauche : 2 blocs empilés qui remplissent la hauteur de « Dashboards »
+const STACK: BentoItem[] = [
   {
     slug: "hero",
     title: "Hero sections",
     description: "Open your page with a headline, a proof point and one clear action.",
-    span: "lg:col-span-1",
   },
+  {
+    slug: "navbar",
+    title: "Navigation bars",
+    description: "Menus that stay clear on desktop and mobile.",
+  },
+];
+
+const BENTO: BentoItem[] = [
   {
     slug: "dashboard",
     title: "Dashboards",
@@ -104,7 +111,7 @@ function Hero() {
 
       <Link
         href="/changelog"
-        className="text-[15px] text-muted-foreground transition-colors hover:text-foreground lg:text-right mb-2.5"
+        className="mb-2.5 text-[15px] text-muted-foreground transition-colors hover:text-foreground lg:text-right"
       >
         <span className="font-semibold text-foreground">November 2026:</span>{" "}
         BagUI MCP and the VS Code extension are live
@@ -113,29 +120,55 @@ function Hero() {
   );
 }
 
+function BentoCard({
+  slug,
+  title,
+  description,
+  span = "",
+  fill = false,
+}: BentoItem & { fill?: boolean }) {
+  return (
+    <Link
+      href={`/blocks/${slug}`}
+      className={`group flex min-h-0 flex-col rounded-3xl border border-border bg-card p-6 ${span}`}
+    >
+      <h3 className="text-[15px] font-semibold text-foreground">{title}</h3>
+      <p className="mt-2 max-w-xs text-[15px] leading-6 text-muted-foreground">
+        {description}
+      </p>
+      {/* fill = l'aperçu occupe tout l'espace restant (desktop) */}
+      <div className={`pt-6 ${fill ? "mt-auto lg:flex lg:min-h-0 lg:flex-1" : "mt-auto"}`}>
+        <div
+          className={`relative overflow-hidden rounded-xl border border-border bg-background ${
+            fill ? "aspect-[16/9] lg:aspect-auto lg:min-h-0 lg:flex-1" : "aspect-[16/9]"
+          }`}
+        >
+          <div className="absolute inset-0">
+            <BlockPreview blockType={slug} />
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
 function PreviewFrame() {
   return (
     <section className="px-4 pb-16 md:px-6">
       <div className="overflow-hidden rounded-3xl border border-border bg-muted/30">
         <div className="grid gap-4 p-4 md:p-6 lg:grid-cols-3">
-          {BENTO.map(({ slug, title, description, span }) => (
-            <Link
-              key={slug}
-              href={`/blocks/${slug}`}
-              className={`group flex flex-col rounded-3xl border border-border bg-card p-6 ${span}`}
-            >
-              <h3 className="text-[15px] font-semibold text-foreground">{title}</h3>
-              <p className="mt-2 max-w-xs text-[15px] leading-6 text-muted-foreground">
-                {description}
-              </p>
-              <div className="mt-auto pt-6">
-                <div className="relative aspect-[16/9] overflow-hidden rounded-xl border border-border bg-background">
-                  <div className="absolute inset-0">
-                    <BlockPreview blockType={slug} />
-                  </div>
-                </div>
-              </div>
-            </Link>
+          {/* Colonne 1 : deux blocs empilés, hauteur imposée par « Dashboards » */}
+          <div className="lg:relative lg:col-span-1">
+            <div className="grid gap-4 lg:absolute lg:inset-0 lg:grid-rows-2">
+              {STACK.map((item) => (
+                <BentoCard key={item.slug} {...item} fill />
+              ))}
+            </div>
+          </div>
+
+          {/* Le reste de la grille, même structure qu'avant */}
+          {BENTO.map((item) => (
+            <BentoCard key={item.slug} {...item} />
           ))}
         </div>
       </div>
