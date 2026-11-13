@@ -193,3 +193,16 @@ html.dark {
 html:not(.dark) {
     color-scheme: light;
 }
+
+.shell-backdrop {
+  background:
+    radial-gradient(circle, rgb(0 0 0 / 0.16) 1px, transparent 1.6px) 0 0 / 6px 6px,
+    linear-gradient(160deg, #9db3b8 0%, #d3c9a6 52%, #7f989e 100%);
+  /* background-image: url("/shell-bg.webp"); background-size: cover; */
+}
+ 
+.dark .shell-backdrop {
+  background:
+    radial-gradient(circle, rgb(255 255 255 / 0.07) 1px, transparent 1.6px) 0 0 / 6px 6px,
+    linear-gradient(160deg, #1d2a30 0%, #3a3626 52%, #18242a 100%);
+}
