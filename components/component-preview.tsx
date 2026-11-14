@@ -110,9 +110,32 @@ export function ComponentPreview({
   const [loadError, setLoadError] = useState(() =>
     Boolean(filePath && !loader && !cachedComponent),
   );
+  const [scrollChainActive, setScrollChainActive] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   useContainFixed(containerRef);
+
+  useEffect(() => {
+    if (!allowScrollChain || !PreviewComponent) return;
+
+    const container = containerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setScrollChainActive(
+          entry.isIntersecting && entry.intersectionRatio >= 0.7,
+        );
+      },
+      {
+        root: document.getElementById("main"),
+        threshold: [0, 0.7],
+      },
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [allowScrollChain, PreviewComponent]);
 
   useEffect(() => {
     if (!filePath) return;
@@ -205,8 +228,8 @@ export function ComponentPreview({
      */
     <div
       ref={containerRef}
-      data-lenis-prevent={allowScrollChain ? undefined : ""}
-      className={`flex w-full ${alignStart ? "items-start justify-start" : "items-center justify-center"} overflow-auto rounded-xl border border-border bg-card ${className}`}
+      data-lenis-prevent={!allowScrollChain || !scrollChainActive ? "" : undefined}
+      className={`flex w-full ${alignStart ? "items-start justify-start" : "items-center justify-center"} ${allowScrollChain && !scrollChainActive ? "overflow-hidden" : "overflow-auto"} rounded-xl border border-border bg-card ${className}`}
       style={{
         height,
         position: "relative",
