@@ -24,7 +24,7 @@ export default function PageTopBar() {
         rel="noopener noreferrer"
         className={link}
       >
-        Become a sponsor
+        Become a Sponsor
       </a>
       {user ? (
         <Link href="/account" className={link}>
