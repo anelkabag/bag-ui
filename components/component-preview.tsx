@@ -12,6 +12,8 @@ interface ComponentPreviewProps {
   height?: React.CSSProperties["height"];
   /** Aligne le contenu en haut au lieu de le centrer dans l'aperçu. */
   alignStart?: boolean;
+  /** Permet au scroll interne de se chaîner vers le scroll Lenis parent. */
+  allowScrollChain?: boolean;
   /** Classes additionnelles sur le conteneur (ex: pour retirer la bordure dans une carte). */
   className?: string;
 }
@@ -86,6 +88,7 @@ export function ComponentPreview({
   item,
   height = 500,
   alignStart = false,
+  allowScrollChain = false,
   className = "",
 }: ComponentPreviewProps) {
   const file = item.files?.[0];
@@ -202,7 +205,7 @@ export function ComponentPreview({
      */
     <div
       ref={containerRef}
-      data-lenis-prevent
+      data-lenis-prevent={allowScrollChain ? undefined : ""}
       className={`flex w-full ${alignStart ? "items-start justify-start" : "items-center justify-center"} overflow-auto rounded-xl border border-border bg-card ${className}`}
       style={{
         height,

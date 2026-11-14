@@ -22,7 +22,7 @@ export default function TemplatesPage() {
             firstLine="Ready-to-use"
             secondLine="website"
             emphasis="templates."
-            className="pb-6"
+            className="pb-6 lg:grid-cols-[1fr_auto]"
           >
             <div className="flex items-center justify-between gap-5 sm:justify-end sm:gap-7">
               <div>

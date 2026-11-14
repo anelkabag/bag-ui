@@ -29,6 +29,7 @@ export default function SmoothScrollProvider({
         wheelMultiplier: 0.9,
         smoothWheel: true,
         syncTouch: false,
+        allowNestedScroll: true,
         anchors: true,
         stopInertiaOnNavigate: true,
         respectReducedMotion: true,

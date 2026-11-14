@@ -31,6 +31,7 @@ function TemplateCard({
             item={template}
             height="100vh"
             alignStart
+            allowScrollChain
             className="!rounded-none !border-0"
           />
         </div>
