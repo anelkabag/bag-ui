@@ -67,8 +67,8 @@ function useContainFixed(ref: React.RefObject<HTMLDivElement | null>) {
     const container = ref.current;
     if (!container) return;
 
-    const fix = () => {
-      container.querySelectorAll<HTMLElement>("*").forEach((el) => {
+    const fixSubtree = (root: HTMLElement) => {
+      [root, ...root.querySelectorAll<HTMLElement>("*")].forEach((el) => {
         const computed = window.getComputedStyle(el);
         if (computed.position === "fixed") {
           el.style.position = "absolute";
@@ -76,8 +76,16 @@ function useContainFixed(ref: React.RefObject<HTMLDivElement | null>) {
       });
     };
 
-    fix();
-    const observer = new MutationObserver(fix);
+    fixSubtree(container);
+    const observer = new MutationObserver((records) => {
+      for (const record of records) {
+        for (const node of record.addedNodes) {
+          if (node instanceof HTMLElement) {
+            fixSubtree(node);
+          }
+        }
+      }
+    });
     observer.observe(container, { childList: true, subtree: true });
 
     return () => observer.disconnect();
@@ -123,13 +131,15 @@ export function ComponentPreview({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setScrollChainActive(
-          entry.isIntersecting && entry.intersectionRatio >= 0.7,
+        setScrollChainActive((active) =>
+          active
+            ? entry.isIntersecting && entry.intersectionRatio > 0.3
+            : entry.isIntersecting && entry.intersectionRatio >= 0.7,
         );
       },
       {
         root: document.getElementById("main"),
-        threshold: [0, 0.7],
+        threshold: [0, 0.3, 0.7],
       },
     );
 
