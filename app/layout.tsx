@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.bagui.pro"),
-  title: "BagUI (Bag UI) – Open-Source shadcn/ui Components & Blocks",
+  title: "BagUI – Open-Source shadcn/ui Components & Blocks",
   description:
-    "Discover BagUI (also searched as Bag UI), an open-source shadcn/ui registry with production-ready React components, blocks, templates, and animations for Next.js and Tailwind CSS.",
+    "Discover BagUI, an open-source shadcn/ui registry with production-ready React components, blocks, templates, and animations for Next.js and Tailwind CSS.",
   keywords: [
     "bagui",
     "bag ui",
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
   creator: "Anelka Bagalane <anelka.bag@gmail.com>",
   publisher: "BagUI",
   openGraph: {
-    title: "BagUI (Bag UI) – Open-Source shadcn/ui Components & Blocks",
+    title: "BagUI – Open-Source shadcn/ui Components & Blocks",
     description:
       "Discover BagUI (also searched as Bag UI), an open-source shadcn/ui registry with production-ready React components, blocks, templates, and animations for Next.js and Tailwind CSS.",
     url: "https://www.bagui.pro",
@@ -81,13 +81,13 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "BagUI (Bag UI) – Open-Source shadcn/ui Components & Blocks",
+        alt: "BagUI – Open-Source shadcn/ui Components & Blocks",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "BagUI (Bag UI) – Open-Source shadcn/ui Components & Blocks",
+    title: "BagUI – Open-Source shadcn/ui Components & Blocks",
     description:
       "Discover BagUI (also searched as Bag UI), an open-source shadcn/ui registry with production-ready React components, blocks, templates, and animations for Next.js and Tailwind CSS.",
     images: ["/og-image.png"],
