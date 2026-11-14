@@ -18,6 +18,14 @@ export default function PageTopBar() {
       >
         Star on GitHub
       </a>
+      <a
+        href={process.env.NEXT_PUBLIC_CHECKOUT_URL || "#"}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={link}
+      >
+        Become a sponsor
+      </a>
       {user ? (
         <Link href="/account" className={link}>
           Account
