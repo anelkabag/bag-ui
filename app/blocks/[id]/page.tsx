@@ -661,7 +661,7 @@ export default function BlockDetailPage() {
         <div className="mx-auto max-w-[1440px] pb-20">
           <nav
             aria-label="Breadcrumb"
-            className="flex items-center gap-2 px-6 pt-6 text-sm text-muted-foreground md:px-10"
+            className="flex items-center gap-2 px-4 pt-6 text-sm text-muted-foreground"
           >
             <Link
               href="/blocks"
@@ -677,7 +677,7 @@ export default function BlockDetailPage() {
             firstLine="Ready-to-use"
             secondLine={block.label}
             emphasis="blocks."
-            className="pb-8 pt-8 lg:grid-cols-[1fr_auto]"
+            className="px-4 pb-8 pt-8 md:px-4 lg:grid-cols-[1fr_auto]"
           >
             <div className="flex items-center justify-between gap-5 sm:justify-end sm:gap-7">
               <div>
@@ -703,7 +703,7 @@ export default function BlockDetailPage() {
             </div>
           </PageHero>
 
-          <p className="mx-6 mb-8 max-w-2xl text-sm leading-relaxed text-muted-foreground md:mx-10">
+          <p className="mx-4 mb-8 max-w-2xl text-sm leading-relaxed text-muted-foreground">
             {block.description ||
               `${block.label} sections, ready to add to your project.`}
             {block.new && (
@@ -713,7 +713,7 @@ export default function BlockDetailPage() {
             )}
           </p>
 
-          <div className="flex flex-col gap-5 px-6 md:px-10">
+          <div className="flex flex-col gap-5 px-4">
             {variants.map((variant, i) => (
               <VariantCard key={variant.id} variant={variant} index={i} />
             ))}
