@@ -80,6 +80,32 @@ function Logo({ size = 22 }: { size?: number }) {
   );
 }
 
+/**
+ * Tooltip 100 % CSS (zéro JS, zéro state). Le parent doit avoir
+ * `relative group/tip`. Remplace l'attribut `title` natif.
+ */
+function SideTip({
+  label,
+  side = "right",
+}: {
+  label: string;
+  side?: "right" | "bottom";
+}) {
+  return (
+    <span
+      role="tooltip"
+      className={cn(
+        "pointer-events-none absolute z-50 whitespace-nowrap rounded-xl bg-white px-4 py-2.5 text-[15px] font-medium leading-none text-neutral-900 opacity-0 shadow-lg ring-1 ring-black/5 transition duration-150 group-hover/tip:opacity-100 group-focus-visible/tip:opacity-100",
+        side === "right"
+          ? "left-full top-1/2 ml-3 -translate-y-1/2 -translate-x-1 group-hover/tip:translate-x-0 group-focus-visible/tip:translate-x-0"
+          : "left-1/2 top-full mt-2 -translate-x-1/2 translate-y-1 group-hover/tip:translate-y-0 group-focus-visible/tip:translate-y-0",
+      )}
+    >
+      {label}
+    </span>
+  );
+}
+
 function DesktopSidebar({
   collapsed,
   onToggle,
@@ -107,7 +133,7 @@ function DesktopSidebar({
   return (
     <aside
       className={cn(
-        "hidden shrink-0 flex-col transition-[width] duration-300 ease-out md:flex",
+        "relative z-30 hidden shrink-0 flex-col transition-[width] duration-300 ease-out md:flex",
         collapsed ? "w-14 items-center py-3.5" : "w-52 px-3 py-3.5",
       )}
     >
@@ -116,8 +142,7 @@ function DesktopSidebar({
           type="button"
           onClick={onToggle}
           aria-label="Open sidebar"
-          title="Open sidebar (Ctrl+B)"
-          className="mb-5 flex size-9 items-center justify-center rounded-full transition-colors hover:bg-white/10"
+          className="group/tip relative mb-5 flex size-9 items-center justify-center rounded-full transition-colors hover:bg-white/10"
         >
           <Image
             src="/logoW.png"
@@ -126,6 +151,7 @@ function DesktopSidebar({
             height={20}
             className="object-contain"
           />
+          <SideTip label="Open sidebar" />
         </button>
       ) : (
         <div className="mb-6 flex items-center justify-between px-1">
@@ -136,19 +162,19 @@ function DesktopSidebar({
             <Link
               href="/blocks"
               aria-label="Browse blocks"
-              title="Browse blocks"
-              className="flex size-8 items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-foreground"
+              className="group/tip relative flex size-8 items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-foreground"
             >
               <Search size={16} />
+              <SideTip label="Browse blocks" side="bottom" />
             </Link>
             <button
               type="button"
               onClick={onToggle}
               aria-label="Collapse sidebar"
-              title="Collapse sidebar (Ctrl+B)"
-              className="flex size-8 cursor-pointer items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-foreground"
+              className="group/tip relative flex size-8 cursor-pointer items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-foreground"
             >
               <PanelLeft size={16} />
+              <SideTip label="Collapse sidebar" side="bottom" />
             </button>
           </div>
         </div>
@@ -167,11 +193,10 @@ function DesktopSidebar({
               <Link
                 key={href}
                 href={href}
-                title={label}
                 aria-label={label}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative isolate flex items-center transition-colors",
+                  "group/tip relative isolate flex items-center transition-colors",
                   collapsed
                     ? "size-9 justify-center rounded-full"
                     : "gap-3 rounded-lg px-2.5 py-1.5 text-[15px]",
@@ -208,6 +233,7 @@ function DesktopSidebar({
                   strokeWidth={1.75}
                 />
                 {!collapsed && <span className="relative z-10">{label}</span>}
+                {collapsed && <SideTip label={label} />}
               </Link>
             );
           })}
@@ -224,41 +250,41 @@ function DesktopSidebar({
           <>
             <Link
               href="/docs"
-              title="Docs"
               aria-label="Docs"
-              className="flex size-9 items-center justify-center rounded-full text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+              className="group/tip relative flex size-9 items-center justify-center rounded-full text-white/60 transition-colors hover:bg-white/10 hover:text-white"
             >
               <BookOpen size={18} strokeWidth={1.75} />
+              <SideTip label="Docs" />
             </Link>
             {DOC_RESOURCES.map(({ label, href, icon: Icon }) => (
               <Link
                 key={href}
                 href={href}
-                title={label}
                 aria-label={label}
-                className="flex size-9 items-center justify-center rounded-full text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+                className="group/tip relative flex size-9 items-center justify-center rounded-full text-white/60 transition-colors hover:bg-white/10 hover:text-white"
               >
                 <Icon size={18} strokeWidth={1.75} />
+                <SideTip label={label} />
               </Link>
             ))}
             <a
               href="https://github.com/anelkabag/bag-ui"
               target="_blank"
               rel="noopener noreferrer"
-              title="GitHub"
               aria-label="GitHub"
-              className="flex size-9 items-center justify-center rounded-full text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+              className="group/tip relative flex size-9 items-center justify-center rounded-full text-white/60 transition-colors hover:bg-white/10 hover:text-white"
             >
               <FaGithub size={17} />
+              <SideTip label="GitHub" />
             </a>
             <button
               type="button"
               onClick={toggleTheme}
-              title={themeActionLabel}
               aria-label={themeActionLabel}
-              className="mt-1 flex size-9 cursor-pointer items-center justify-center rounded-full text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+              className="group/tip relative mt-1 flex size-9 cursor-pointer items-center justify-center rounded-full text-white/70 transition-colors hover:bg-white/10 hover:text-white"
             >
               <ThemeIcon size={18} />
+              <SideTip label={themeActionLabel} />
             </button>
           </>
         ) : (
@@ -294,10 +320,10 @@ function DesktopSidebar({
                 type="button"
                 onClick={toggleTheme}
                 aria-label={themeActionLabel}
-                title={themeActionLabel}
-                className="flex size-8 cursor-pointer items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-foreground"
+                className="group/tip relative flex size-8 cursor-pointer items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-foreground"
               >
                 <ThemeIcon size={17} />
+                <SideTip label={themeActionLabel} />
               </button>
             </div>
           </>
