@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
+import NumberFlow from "@number-flow/react";
 import { FaGithub } from "react-icons/fa6";
 import { Star } from "lucide-react";
 
@@ -23,6 +24,20 @@ export default function PageTopBar() {
       .catch(() => setStars(null));
   }, []);
 
+  const [animatedStars, setAnimatedStars] = useState(0);
+
+  useEffect(() => {
+    if (stars !== null) {
+      setAnimatedStars(0);
+
+      const timeout = setTimeout(() => {
+        setAnimatedStars(stars);
+      }, 150);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [stars]);
+
   return (
     <div className="mx-auto flex h-14 max-w-[1440px] items-center justify-end gap-6 px-6">
       <a
@@ -36,16 +51,32 @@ export default function PageTopBar() {
         {stars !== null ? (
           <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[12px] font-medium text-foreground transition-colors hover:bg-white/[0.08]">
             <Star size={13} className="fill-yellow-400 text-yellow-400" />
-            <span>{stars.toLocaleString("en-US")}</span>
+
+            <NumberFlow
+              value={animatedStars}
+              format={{
+                notation: "compact",
+                maximumFractionDigits: 1,
+              }}
+              transformTiming={{
+                duration: 1200,
+                easing: "ease-out",
+              }}
+              spinTiming={{
+                duration: 1200,
+                easing: "ease-out",
+              }}
+            />
+
             <span className="text-muted-foreground">Stars</span>
           </span>
         ) : (
-          <span>GitHub</span>
+          <span></span>
         )}
       </a>
 
       <a
-        href={"/pricing"}
+        href={"/sponsor"}
         target="_blank"
         rel="noopener noreferrer"
         className={link}
