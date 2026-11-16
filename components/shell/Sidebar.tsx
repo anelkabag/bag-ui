@@ -37,7 +37,7 @@ const NAV: { label: string; href: string; icon: LucideIcon }[] = [
 ];
 
 const EXTERNAL = [
-  { label: "X", href: "https://x.com/BagUi_pro" },
+  { label: "X", href: "https://x.com/anelkabag" },
   { label: "GitHub", href: "https://github.com/anelkabag/bag-ui" },
 ];
 
