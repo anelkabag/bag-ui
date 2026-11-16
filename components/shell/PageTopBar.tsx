@@ -75,14 +75,9 @@ export default function PageTopBar() {
         )}
       </a>
 
-      <a
-        href={"/sponsor"}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={link}
-      >
+      <Link href="/sponsor" className={link}>
         Become a Sponsor
-      </a>
+      </Link>
 
       {user ? (
         <Link href="/account" className={link}>
