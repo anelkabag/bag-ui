@@ -15,10 +15,12 @@ import {
   Menu,
   Moon,
   PanelLeft,
+  Puzzle,
   Search,
   Sun,
   Tag,
   X,
+  Network,
   type LucideIcon,
 } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
@@ -37,8 +39,22 @@ const NAV: { label: string; href: string; icon: LucideIcon }[] = [
 const EXTERNAL = [
   { label: "X", href: "https://x.com/BagUi_pro" },
   { label: "GitHub", href: "https://github.com/anelkabag/bag-ui" },
-  { label: "Support", href: "mailto:anelka.bag@gmail.com" },
 ];
+
+const DOC_RESOURCES: {
+  label: string;
+  href: string;
+  icon: LucideIcon;
+}[] = [
+  { label: "MCP", href: "/docs#mcp", icon: Network },
+  {
+    label: "VS Code extension",
+    href: "/docs#extension",
+    icon: Puzzle,
+  },
+];
+
+const SUPPORT = { label: "Support", href: "mailto:anelka.bag@gmail.com" };
 
 function Logo({ size = 22 }: { size?: number }) {
   return (
@@ -214,6 +230,17 @@ function DesktopSidebar({
             >
               <BookOpen size={18} strokeWidth={1.75} />
             </Link>
+            {DOC_RESOURCES.map(({ label, href, icon: Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                title={label}
+                aria-label={label}
+                className="flex size-9 items-center justify-center rounded-full text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+              >
+                <Icon size={18} strokeWidth={1.75} />
+              </Link>
+            ))}
             <a
               href="https://github.com/anelkabag/bag-ui"
               target="_blank"
@@ -247,6 +274,21 @@ function DesktopSidebar({
                 {label}
               </a>
             ))}
+            {DOC_RESOURCES.map(({ label, href }) => (
+              <Link
+                key={href}
+                href={href}
+                className="rounded-lg px-2.5 py-1.5 text-[15px] text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {label}
+              </Link>
+            ))}
+            <a
+              href={SUPPORT.href}
+              className="rounded-lg px-2.5 py-1.5 text-[15px] text-muted-foreground transition-colors hover:text-foreground"
+            >
+              {SUPPORT.label}
+            </a>
             <div className="mt-3 flex items-center gap-1 px-1 text-muted-foreground">
               <button
                 type="button"
@@ -330,6 +372,17 @@ function MobileSidebar() {
                 </Link>
               );
             })}
+            {DOC_RESOURCES.map(({ label, href, icon: Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setOpen(false)}
+                className="relative isolate flex items-center gap-3 rounded-lg px-3 py-2.5 text-[15px] text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <Icon className="size-[18px]" strokeWidth={1.75} />
+                <span>{label}</span>
+              </Link>
+            ))}
           </nav>
         </MotionConfig>
       )}
