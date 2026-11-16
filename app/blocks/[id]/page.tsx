@@ -1,6 +1,13 @@
 "use client";
 
-import React, { memo, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import Image from "next/image";
@@ -23,6 +30,8 @@ import {
   IconChevronDown,
   IconCopy,
   IconCheck,
+  IconDeviceMobile,
+  IconDeviceDesktop,
 } from "@tabler/icons-react";
 import { useAuth } from "@/hooks/useAuth";
 import { trackComponentDownload } from "@/lib/analytics";
@@ -30,6 +39,7 @@ import { trackComponentDownload } from "@/lib/analytics";
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type ViewMode = "preview" | "code";
+type DeviceMode = "desktop" | "mobile";
 type PkgManager = "pnpm" | "npm" | "yarn" | "bun";
 
 interface Variant {
@@ -392,11 +402,15 @@ const VariantToolbarHeader = memo(function VariantToolbarHeader({
   variantId,
   mode,
   setMode,
+  device,
+  toggleDevice,
   accessTier,
 }: {
   variantId: string;
   mode: ViewMode;
   setMode: (m: ViewMode) => void;
+  device: DeviceMode;
+  toggleDevice: () => void;
   accessTier: Variant["access"];
 }) {
   const [pkg, setPkg] = useState<PkgManager>("npm");
@@ -465,6 +479,22 @@ const VariantToolbarHeader = memo(function VariantToolbarHeader({
         >
           <IconRefresh size={16} className="text-muted-foreground" />
         </button>
+
+        {/* Mobile / Desktop toggle - desktop screens only, preview mode only */}
+        {mode === "preview" && (
+          <button
+            onClick={toggleDevice}
+            className="hidden sm:flex p-2 hover:bg-accent rounded-md transition-colors cursor-pointer items-center justify-center"
+            title={device === "mobile" ? "Desktop view" : "Mobile view"}
+            aria-label={device === "mobile" ? "Desktop view" : "Mobile view"}
+          >
+            {device === "mobile" ? (
+              <IconDeviceDesktop size={16} className="text-muted-foreground" />
+            ) : (
+              <IconDeviceMobile size={16} className="text-muted-foreground" />
+            )}
+          </button>
+        )}
       </div>
 
       {/* Right: CLI Command + Dropdown + Copy */}
@@ -551,18 +581,18 @@ const VariantToolbarHeader = memo(function VariantToolbarHeader({
             </button>
           </>
         ) : (
-          <div className="flex-1 rounded-xl border border-border bg-muted px-3 py-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between min-w-0">
+          <div className="flex h-[38px] flex-1 min-w-0 items-center justify-between gap-3 rounded-lg border border-border bg-muted pl-3 pr-1">
             <div className="min-w-0">
-              <p className="text-[11px] font-semibold text-foreground">
+              <p className="truncate text-[11px] font-semibold leading-tight text-foreground">
                 {installState.label}
               </p>
-              <p className="text-[11px] text-muted-foreground leading-relaxed">
+              <p className="hidden truncate text-[11px] leading-tight text-muted-foreground sm:block">
                 {installState.description}
               </p>
             </div>
             <Link
               href={installState.href}
-              className="inline-flex shrink-0 items-center justify-center rounded-full bg-foreground px-3 py-1.5 text-[11px] font-medium text-background transition-colors hover:bg-foreground/90"
+              className="inline-flex h-7 shrink-0 items-center justify-center rounded-full bg-foreground px-3 text-[11px] font-medium text-background transition-colors hover:bg-foreground/90"
             >
               {installState.label}
             </Link>
@@ -583,6 +613,11 @@ const VariantCard = memo(function VariantCard({
   index: number;
 }) {
   const [mode, setMode] = useState<ViewMode>("preview");
+  const [device, setDevice] = useState<DeviceMode>("desktop");
+  const toggleDevice = useCallback(
+    () => setDevice((d) => (d === "mobile" ? "desktop" : "mobile")),
+    [],
+  );
   const code = useMemo(
     () => (mode === "code" ? getCodeSnippet(variant.id) : ""),
     [mode, variant.id],
@@ -618,6 +653,8 @@ const VariantCard = memo(function VariantCard({
         variantId={variant.id}
         mode={mode}
         setMode={setMode}
+        device={device}
+        toggleDevice={toggleDevice}
         accessTier={variant.access}
       />
 
@@ -634,7 +671,11 @@ const VariantCard = memo(function VariantCard({
             className="px-1"
             style={inView ? undefined : { minHeight: 500 }}
           >
-            {!inView ? null : variant.item ? (
+            {!inView ? null : device === "mobile" ? (
+              <div className="mx-auto" style={{ width: 390, maxWidth: "100%" }}>
+                <IframePreview variantId={variant.id} />
+              </div>
+            ) : variant.item ? (
               <ComponentPreview item={variant.item} />
             ) : (
               <div className="w-full h-80 flex items-center justify-center rounded-xl border border-border bg-muted text-sm text-muted-foreground">
