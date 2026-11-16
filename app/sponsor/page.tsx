@@ -51,7 +51,7 @@ const gridPattern = {
     "radial-gradient(ellipse at top right, black 25%, transparent 75%)",
 } as const;
 
-export default function PricingPage() {
+export default function SponsorPage() {
   const reduce = useReducedMotion();
 
   return (
