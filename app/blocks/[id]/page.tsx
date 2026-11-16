@@ -11,10 +11,10 @@ import { categoryMatchesItem, RegistryItem } from "@/lib/block-categories";
 import { getComponentAccessTier, getInstallAccessState } from "@/lib/access";
 import { ComponentPreview } from "@/components/ComponentPreview";
 import { MARKETING_BLOCKS, APP_BLOCKS, ECOMMERCE_BLOCKS } from "../page";
-import Navbar from "@/components/navbar";
 import PnpmLogo from "@/public/assets/pnpm.svg";
 import YarnLogo from "@/public/assets/yarn.svg";
-import { Footer } from "@/components/footer";
+import AppShell from "@/components/shell/AppShell";
+import PageHero from "@/components/shell/PageHero";
 import {
   IconEye,
   IconCode,
@@ -397,7 +397,7 @@ function VariantToolbarHeader({
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.05 }}
-      className="flex items-center gap-2 sm:gap-3 mb-4 pb-3 border-b border-border -mx-6 px-6 py-3"
+      className="mb-4 flex items-center gap-2 border-b border-border pb-4 sm:gap-3"
     >
       {/* Left: Tabs + Icons */}
       <div className="flex items-center gap-2 shrink-0">
@@ -547,11 +547,9 @@ function VariantToolbarHeader({
 // ─── Individual variant card ──────────────────────────────────────────────────
 
 function VariantCard({
-  blockId,
   variant,
   index,
 }: {
-  blockId: string;
   variant: Variant;
   index: number;
 }) {
@@ -564,7 +562,7 @@ function VariantCard({
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.3 }}
-      className="mb-12 scroll-mt-20"
+      className="scroll-mt-20 rounded-3xl border border-border bg-card p-4 sm:p-6"
     >
       {/* Title + Badge above toolbar */}
       <div className="flex items-center gap-2 mb-2">
@@ -637,17 +635,19 @@ export default function BlockDetailPage() {
 
   if (!block) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center space-y-3">
-          <p className="text-muted-foreground text-sm">Block not found.</p>
-          <Link
-            href="/blocks"
-            className="text-sm font-medium text-foreground underline underline-offset-2"
-          >
-            ← Back to blocks
-          </Link>
+      <AppShell>
+        <div className="flex min-h-full items-center justify-center bg-background px-6">
+          <div className="space-y-3 text-center">
+            <p className="text-sm text-muted-foreground">Block not found.</p>
+            <Link
+              href="/blocks"
+              className="text-sm font-medium text-foreground underline underline-offset-2"
+            >
+              ← Back to blocks
+            </Link>
+          </div>
         </div>
-      </div>
+      </AppShell>
     );
   }
 
@@ -656,82 +656,70 @@ export default function BlockDetailPage() {
   const proCount = variants.filter((v) => v.access === "pro").length;
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-
-      <div className="max-w-7xl mx-auto px-6 pt-10 pb-20 border-x border-border">
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-8">
-          <Link
-            href="/blocks"
-            className="hover:text-foreground transition-colors"
+    <AppShell>
+      <div className="min-h-full bg-background">
+        <div className="mx-auto max-w-[1440px] pb-20">
+          <nav
+            aria-label="Breadcrumb"
+            className="flex items-center gap-2 px-6 pt-6 text-sm text-muted-foreground md:px-10"
           >
-            All blocks
-          </Link>
-          <span>/</span>
-          <span className="text-foreground capitalize">{block.label}</span>
-        </div>
+            <Link
+              href="/blocks"
+              className="transition-colors hover:text-foreground"
+            >
+              All blocks
+            </Link>
+            <span aria-hidden="true">/</span>
+            <span className="text-foreground">{block.label}</span>
+          </nav>
 
-        {/* Page header */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="mb-12"
-        >
-          <div className="flex items-start justify-between gap-6 flex-wrap">
-            <div>
-              <div className="flex items-center gap-2.5 mb-2">
-                <h1 className="text-3xl font-bold tracking-tight text-foreground">
-                  {block.label}
-                </h1>
-                {block.new && (
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-foreground text-background">
-                    New
-                  </span>
-                )}
+          <PageHero
+            firstLine="Ready-to-use"
+            secondLine={block.label}
+            emphasis="blocks."
+            className="pb-8 pt-8 lg:grid-cols-[1fr_auto]"
+          >
+            <div className="flex items-center justify-between gap-5 sm:justify-end sm:gap-7">
+              <div>
+                <p className="text-lg font-semibold leading-none tracking-tight text-foreground">
+                  {variants.length}
+                </p>
+                <p className="mt-1.5 text-xs text-muted-foreground">
+                  Variants
+                </p>
               </div>
-              <p className="text-muted-foreground text-sm max-w-xl leading-relaxed">
-                {block.description ||
-                  `${block.label.toLowerCase()} sections. Ready to paste into your project.`}
-              </p>
-              <div className="flex items-center gap-3 mt-4 text-sm">
-                <span className="text-muted-foreground">
-                  <strong className="text-foreground">{freeCount}</strong> free
-                </span>
-                {proCount > 0 && (
-                  <>
-                    <span className="text-muted-foreground/50">·</span>
-                    <span className="text-muted-foreground">
-                      <strong className="text-amber-600 dark:text-amber-400">
-                        {proCount}
-                      </strong>{" "}
-                      pro
-                    </span>
-                  </>
-                )}
-                <span className="text-muted-foreground/50">·</span>
-                <span className="text-muted-foreground text-xs">
-                  React · TypeScript · Tailwind · Gsap
-                </span>
+              <div>
+                <p className="text-lg font-semibold leading-none tracking-tight text-foreground">
+                  {freeCount}
+                </p>
+                <p className="mt-1.5 text-xs text-muted-foreground">Free</p>
+              </div>
+              <div>
+                <p className="text-lg font-semibold leading-none tracking-tight text-foreground">
+                  {proCount}
+                </p>
+                <p className="mt-1.5 text-xs text-muted-foreground">Pro</p>
               </div>
             </div>
+          </PageHero>
+
+          <p className="mx-6 mb-8 max-w-2xl text-sm leading-relaxed text-muted-foreground md:mx-10">
+            {block.description ||
+              `${block.label} sections, ready to add to your project.`}
+            {block.new && (
+              <span className="ml-2 inline-flex items-center rounded-full border border-border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-foreground">
+                New
+              </span>
+            )}
+          </p>
+
+          <div className="flex flex-col gap-5 px-6 md:px-10">
+            {variants.map((variant, i) => (
+              <VariantCard key={variant.id} variant={variant} index={i} />
+            ))}
           </div>
-        </motion.div>
-
-        <div className="border-t border-border mb-10" />
-
-        {/* Variant list */}
-        {variants.map((variant, i) => (
-          <VariantCard
-            key={variant.id}
-            blockId={id}
-            variant={variant}
-            index={i}
-          />
-        ))}
+        </div>
       </div>
-      <Footer />
-    </div>
+    </AppShell>
   );
 }
