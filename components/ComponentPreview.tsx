@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { componentLoaders } from "@/lib/registry-loaders";
 
 interface ComponentPreviewProps {
@@ -50,35 +50,6 @@ function Skeleton() {
   );
 }
 
-/**
- * Converts `position: fixed` elements inside the container to
- * `position: absolute` so they stay within the preview div instead
- * of escaping to the viewport.
- */
-function useContainFixed(ref: React.RefObject<HTMLDivElement | null>) {
-  useEffect(() => {
-    const container = ref.current;
-    if (!container) return;
-
-    // Re-run whenever the DOM inside the container changes
-    const fix = () => {
-      container.querySelectorAll<HTMLElement>("*").forEach((el) => {
-        const computed = window.getComputedStyle(el);
-        if (computed.position === "fixed") {
-          el.style.position = "absolute";
-        }
-      });
-    };
-
-    // Run once after mount and whenever children change
-    fix();
-    const observer = new MutationObserver(fix);
-    observer.observe(container, { childList: true, subtree: true });
-
-    return () => observer.disconnect();
-  }, [ref]);
-}
-
 export function ComponentPreview({ item }: ComponentPreviewProps) {
   const file = item.files?.[0];
   const filePath = file?.path;
@@ -99,9 +70,6 @@ export function ComponentPreview({ item }: ComponentPreviewProps) {
   const [loadError, setLoadError] = useState(() =>
     Boolean(filePath && !loader && !cachedComponent),
   );
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  useContainFixed(containerRef);
 
   useEffect(() => {
     if (!filePath) return;
@@ -144,7 +112,8 @@ export function ComponentPreview({ item }: ComponentPreviewProps) {
     return () => {
       active = false;
     };
-  }, [filePath, exportName, loader]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filePath, exportName, loader, cacheKey]);
 
   if (!filePath) {
     return (
@@ -180,18 +149,19 @@ export function ComponentPreview({ item }: ComponentPreviewProps) {
 
   return (
     /*
-     * `isolation: isolate` + `overflow: hidden` + `position: relative`
-     * create a new stacking context that traps `position: fixed` children,
-     * keeping the navbar (and any other fixed elements) inside the preview box.
+     * `transform: translateZ(0)` makes this div the containing block of
+     * every `position: fixed` descendant (navbars, drawers…), so they stay
+     * inside the preview box. Pure CSS: no MutationObserver, no per-node
+     * getComputedStyle scan.
      */
     <div
-      ref={containerRef}
       data-lenis-prevent
       className="w-full overflow-auto rounded-xl border border-border bg-card"
       style={{
         minHeight: 500,
         position: "relative",
         isolation: "isolate",
+        transform: "translateZ(0)",
       }}
     >
       <PreviewComponent />
