@@ -1,10 +1,10 @@
-
 "use client";
 
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
 import { FaGithub } from "react-icons/fa6";
+import { Star } from "lucide-react";
 
 export default function PageTopBar() {
   const { user } = useAuth();
@@ -32,11 +32,20 @@ export default function PageTopBar() {
         className={`inline-flex items-center gap-2 ${link}`}
       >
         <FaGithub size={17} />
-        <span>{stars !== null ? stars.toLocaleString("en-US") : "GitHub"}</span>
+
+        {stars !== null ? (
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[12px] font-medium text-foreground transition-colors hover:bg-white/[0.08]">
+            <Star size={13} className="fill-yellow-400 text-yellow-400" />
+            <span>{stars.toLocaleString("en-US")}</span>
+            <span className="text-muted-foreground">Stars</span>
+          </span>
+        ) : (
+          <span>GitHub</span>
+        )}
       </a>
 
       <a
-        href={process.env.NEXT_PUBLIC_CHECKOUT_URL || "#"}
+        href={"/pricing"}
         target="_blank"
         rel="noopener noreferrer"
         className={link}
