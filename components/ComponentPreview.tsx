@@ -155,7 +155,6 @@ export function ComponentPreview({ item }: ComponentPreviewProps) {
      * getComputedStyle scan.
      */
     <div
-      data-lenis-prevent
       className="w-full overflow-auto rounded-xl border border-border bg-card"
       style={{
         minHeight: 500,
