@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { memo, useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import Image from "next/image";
@@ -115,6 +115,35 @@ export default function Page() {
     </main>
   );
 }`;
+}
+
+// ─── useInView hook (montage différé des previews hors écran) ────────────────
+
+function useInView<T extends Element>(rootMargin = "400px") {
+  const ref = useRef<T | null>(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || inView) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [inView, rootMargin]);
+
+  return { ref, inView };
 }
 
 // ─── useCopy hook ─────────────────────────────────────────────────────────────
@@ -359,7 +388,7 @@ const PKG_ICONS: Record<PkgManager, React.ReactNode> = {
 
 // ─── Variant toolbar header (Preview / Code + CLI) ────────────────────────────
 
-function VariantToolbarHeader({
+const VariantToolbarHeader = memo(function VariantToolbarHeader({
   variantId,
   mode,
   setMode,
@@ -397,7 +426,7 @@ function VariantToolbarHeader({
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.05 }}
-      className="mb-4 flex items-center gap-2 border-b border-border pb-4 sm:gap-3"
+      className="flex items-center gap-2 px-5 py-3 sm:gap-3"
     >
       {/* Left: Tabs + Icons */}
       <div className="flex items-center gap-2 shrink-0">
@@ -542,11 +571,11 @@ function VariantToolbarHeader({
       </div>
     </motion.div>
   );
-}
+});
 
 // ─── Individual variant card ──────────────────────────────────────────────────
 
-function VariantCard({
+const VariantCard = memo(function VariantCard({
   variant,
   index,
 }: {
@@ -554,18 +583,22 @@ function VariantCard({
   index: number;
 }) {
   const [mode, setMode] = useState<ViewMode>("preview");
-  const code = getCodeSnippet(variant.id);
+  const code = useMemo(
+    () => (mode === "code" ? getCodeSnippet(variant.id) : ""),
+    [mode, variant.id],
+  );
+  const { ref: previewRef, inView } = useInView<HTMLDivElement>();
 
   return (
     <motion.div
       id={variant.id}
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05, duration: 0.3 }}
-      className="scroll-mt-20 rounded-3xl border border-border bg-card p-4 sm:p-6"
+      transition={{ delay: Math.min(index, 5) * 0.05, duration: 0.3 }}
+      className="scroll-mt-20"
     >
       {/* Title + Badge above toolbar */}
-      <div className="flex items-center gap-2 mb-2">
+      <div className="flex items-center gap-2 px-5 pt-2">
         <h3 className="text-sm font-semibold text-foreground">
           {variant.label}
         </h3>
@@ -593,12 +626,15 @@ function VariantCard({
         {mode === "preview" ? (
           <motion.div
             key="preview"
+            ref={previewRef}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
+            className="px-1"
+            style={inView ? undefined : { minHeight: 500 }}
           >
-            {variant.item ? (
+            {!inView ? null : variant.item ? (
               <ComponentPreview item={variant.item} />
             ) : (
               <div className="w-full h-80 flex items-center justify-center rounded-xl border border-border bg-muted text-sm text-muted-foreground">
@@ -613,6 +649,7 @@ function VariantCard({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
+            className="px-1"
           >
             <CodeBlock code={code} isPro={variant.pro} />
           </motion.div>
@@ -620,18 +657,28 @@ function VariantCard({
       </AnimatePresence>
     </motion.div>
   );
-}
+});
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // PAGE
 // ═══════════════════════════════════════════════════════════════════════════════
 
+const ALL_BLOCKS = [...MARKETING_BLOCKS, ...APP_BLOCKS, ...ECOMMERCE_BLOCKS];
+
 export default function BlockDetailPage() {
   const params = useParams();
   const id = typeof params?.id === "string" ? params.id : "";
 
-  const allBlocks = [...MARKETING_BLOCKS, ...APP_BLOCKS, ...ECOMMERCE_BLOCKS];
-  const block = allBlocks.find((b) => b.id === id);
+  const block = useMemo(() => ALL_BLOCKS.find((b) => b.id === id), [id]);
+  const variants = useMemo(
+    () => (block ? getVariants(id, block.count) : []),
+    [id, block],
+  );
+  const { freeCount, proCount } = useMemo(() => {
+    let free = 0;
+    for (const v of variants) if (v.access === "free") free++;
+    return { freeCount: free, proCount: variants.length - free };
+  }, [variants]);
 
   if (!block) {
     return (
@@ -650,10 +697,6 @@ export default function BlockDetailPage() {
       </AppShell>
     );
   }
-
-  const variants = getVariants(id, block.count);
-  const freeCount = variants.filter((v) => v.access === "free").length;
-  const proCount = variants.filter((v) => v.access === "pro").length;
 
   return (
     <AppShell>
@@ -713,7 +756,7 @@ export default function BlockDetailPage() {
             )}
           </p>
 
-          <div className="flex flex-col gap-5 px-4">
+          <div className="flex flex-col gap-10">
             {variants.map((variant, i) => (
               <VariantCard key={variant.id} variant={variant} index={i} />
             ))}
