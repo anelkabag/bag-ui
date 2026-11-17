@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, useReducedMotion, type Variants } from "motion/react";
+import Image from "next/image";
 import { Terminal } from "lucide-react";
 
 /* ---------------------------------------------------------------------- */
@@ -10,9 +11,11 @@ import { Terminal } from "lucide-react";
 
 function LogoMark({ className = "", theme = "dark" }: { className?: string; theme?: "dark" | "light" }) {
   return (
-    <img
+    <Image
       src={theme === "dark" ? "/logoW.png" : "/logo.png"}
       alt="Logo"
+      width={32}
+      height={32}
       className={className}
     />
   );

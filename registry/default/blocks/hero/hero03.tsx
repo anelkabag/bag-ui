@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion, Variants } from "motion/react";
+import Image from "next/image";
 import {
   ChevronDown,
   ArrowUpRight,
@@ -20,8 +21,6 @@ import {
   CreditCard,
   UserPlus,
   HardDrive,
-  Sun,
-  Moon,
 } from "lucide-react";
 import {
   Area,
@@ -254,7 +253,7 @@ function ChartTooltip({
 export default function Hero1() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [announceIndex, setAnnounceIndex] = useState(0);
-  const [isDark, setIsDark] = useState(true);
+  const isDark = true;
   const [activeDashNav, setActiveDashNav] = useState("Dashboard");
   const [activeSubTab, setActiveSubTab] = useState("Overview");
   const [range, setRange] = useState<RangeKey>("12M");
@@ -302,9 +301,11 @@ export default function Hero1() {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
           <div className="flex items-center gap-9">
             <a href="#" className="flex items-center gap-2">
-              <img
+              <Image
                 src={isDark ? "/logoW.png" : "/logo.png"}
                 alt="BagUI logo"
+                width={30}
+                height={30}
                 className="h-7 w-auto object-contain"
               />
             </a>
@@ -498,9 +499,11 @@ export default function Hero1() {
               <div className="flex items-center gap-6">
                 <span className="flex items-center gap-2 text-xs font-semibold text-zinc-900">
                   <span className="flex h-5 w-5 items-center justify-center rounded bg-zinc-900 overflow-hidden">
-                    <img
+                    <Image
                       src="/logoR.png"
                       alt="Logo"
+                      width={20}
+                      height={20}
                       className="h-full w-full object-contain"
                     />
                   </span>
@@ -526,9 +529,11 @@ export default function Hero1() {
                   <Zap className="h-3 w-3 text-amber-500" />
                   200 credits
                 </span>
-                  <img
+                  <Image
                     src="/avatar.png"
                     alt="Avatar"
+                    width={24}
+                    height={24}
                     className="h-6 w-6 rounded-full object-cover"
                   />
               </div>

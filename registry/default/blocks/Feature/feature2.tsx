@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, Variants } from "motion/react";
-import Image from "next/image";
 
 /* ─── Animation ─── */
 const fadeUp: Variants = {

@@ -101,7 +101,7 @@ const featureVariants: Variants = {
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
-function PricingCard({ plan, index }: { plan: PricingPlan; index: number }) {
+function PricingCard({ plan }: { plan: PricingPlan }) {
   return (
       <motion.div
           variants={cardVariants}
@@ -245,8 +245,8 @@ export default function PricingSection() {
                   viewport={{ once: true, margin: "-60px" }}
                   className="grid grid-cols-1 md:grid-cols-2 gap-5"
               >
-                {plans.slice(0, 2).map((plan, i) => (
-                    <PricingCard key={plan.title} plan={plan} index={i} />
+                {plans.slice(0, 2).map((plan) => (
+                    <PricingCard key={plan.title} plan={plan} />
                 ))}
               </motion.div>
 
@@ -290,7 +290,7 @@ export default function PricingSection() {
                 viewport={{ once: true, margin: "-60px" }}
                 className="h-full"
             >
-              <PricingCard key={plans[2].title} plan={plans[2]} index={2} />
+              <PricingCard key={plans[2].title} plan={plans[2]} />
             </motion.div>
           </div>
         </div>

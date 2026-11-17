@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import Image from "next/image";
 import {
   ChevronDown,
   Search,
@@ -43,11 +44,11 @@ const otherVacancies = [
 function HireteamLogo({ size = 22, textClassName = "text-[17px]" }: { size?: number; textClassName?: string }) {
   return (
     <div className="flex items-center gap-2">
-      <img
+      <Image
         src="/logo.png"
         alt="Logo"
         width={size}
-        height={size * 0.7}
+        height={Math.round(size * 0.7)}
       />
 
       <span className={`font-semibold tracking-tight text-neutral-900 ${textClassName}`}>BagUi</span>
@@ -211,9 +212,12 @@ function VacancyRow({ item }: { item: (typeof otherVacancies)[number] }) {
   return (
     <div className="flex items-center justify-between gap-3 border-t border-neutral-200/70 px-5 py-3.5">
       <div className="flex min-w-0 items-center gap-3">
-        <img
+        <Image
           src={`https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(item.name)}&backgroundColor=f4f1ec`}
           alt={item.name}
+          width={32}
+          height={32}
+          unoptimized
           className="h-8 w-8 shrink-0 rounded-full border border-neutral-200 bg-neutral-50 object-cover"
         />
         <div className="min-w-0">
@@ -280,9 +284,12 @@ function AppPreview() {
                 </div>
                 <div className="flex items-center justify-between gap-3 px-4 py-3.5">
                   <div className="flex min-w-0 items-center gap-3">
-                    <img
+                    <Image
                       src="https://api.dicebear.com/9.x/notionists/svg?seed=Anelka-Bag&backgroundColor=f4f1ec"
                       alt="Anelka Bag"
+                      width={36}
+                      height={36}
+                      unoptimized
                       className="h-9 w-9 shrink-0 rounded-full border border-neutral-950 bg-neutral-50 object-cover"
                     />
                     <div className="min-w-0">

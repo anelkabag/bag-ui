@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import { ChevronRight, CodeXml, Sun, Moon } from 'lucide-react';
 import Link from "next/link";
+import Image from "next/image";
 
 const fadeInUp = {
     initial: { opacity: 0, y: 20 },
@@ -52,7 +53,7 @@ export default function OpenAgents() {
                 <div className={`max-w-7xl mx-auto px-6 h-16 flex items-center justify-between border-x ${border}`}>
                     <div className="flex items-center gap-3 shrink-0">
                         <Link href="/" className="flex items-center gap-2">
-                            <img src={logoSrc} alt="BagUI Logo" width={30} height={30} />
+                            <Image src={logoSrc} alt="BagUI Logo" width={30} height={30} />
                             <span className={`text-sm font-semibold tracking-tight ${text}`}>Bag\Ui</span>
                         </Link>
                         <Link
@@ -302,7 +303,7 @@ export default function OpenAgents() {
 
                     <div className={`border-t ${border} pt-12 pb-10 flex items-center justify-between`}>
                         <Link href="/">
-                            <img src={logoSrc} width={30} height={30} />
+                            <Image src={logoSrc} alt="BagUI Logo" width={30} height={30} />
                         </Link>
                         <button
                             onClick={toggle}

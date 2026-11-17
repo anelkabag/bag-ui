@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
+import { motion, AnimatePresence } from "motion/react";
 
 type Theme = "dark" | "light" | "system";
 
@@ -172,7 +172,7 @@ export default function Navbar1() {
             >
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2.5 mr-8 shrink-0">
-                    <img
+                    <Image
                         src="https://bagui.vercel.app/logoR.png"
                         alt="Debisol icon"
                         width={36}

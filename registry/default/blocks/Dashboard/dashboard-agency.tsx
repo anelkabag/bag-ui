@@ -27,7 +27,6 @@ import {
   MoreHorizontal,
   Plus,
   ArrowUpRight,
-  Pencil,
   RotateCcw,
   Trash2,
   Mail,
@@ -1024,7 +1023,8 @@ function ProductsPage({ isDark = false }: { isDark?: boolean }) {
 
   function toggle(name: string) {
     const next = new Set(selected);
-    next.has(name) ? next.delete(name) : next.add(name);
+    if (next.has(name)) next.delete(name);
+    else next.add(name);
     setSelected(next);
   }
 
@@ -1161,6 +1161,7 @@ function MessagesPage({ isDark = false }: { isDark?: boolean }) {
                 m.id === selectedId ? "bg-neutral-100" : "hover:bg-neutral-50"
               }`}
             >
+              {/* eslint-disable-next-line @next/next/no-img-element -- Dicebear returns generated SVG avatars. */}
               <img
                 src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(m.name)}`}
                 alt=""
@@ -1195,6 +1196,7 @@ function MessagesPage({ isDark = false }: { isDark?: boolean }) {
           className="md:col-span-3 bg-white border border-neutral-200 rounded-2xl p-4 flex flex-col"
         >
           <div className="flex items-center gap-2.5 pb-3 border-b border-neutral-100">
+            {/* eslint-disable-next-line @next/next/no-img-element -- Dicebear returns generated SVG avatars. */}
             <img
               src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(selected.name)}`}
               alt=""
@@ -1272,6 +1274,7 @@ function TeamPage({ isDark = false }: { isDark?: boolean }) {
       <div className="bg-white border border-neutral-200 rounded-2xl p-4 space-y-4">
         {sorted.map((m, i) => (
           <div key={m.name} className="flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element -- Dicebear returns generated SVG avatars. */}
             <img
               src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(m.name)}`}
               alt=""
@@ -1381,7 +1384,8 @@ function GenericPage({
 
   function toggle(label: string) {
     const next = new Set(checked);
-    next.has(label) ? next.delete(label) : next.add(label);
+    if (next.has(label)) next.delete(label);
+    else next.add(label);
     setChecked(next);
   }
 
@@ -1672,9 +1676,11 @@ export default function Dashboard() {
                   : "border-gray-100 hover:bg-gray-50"
               }`}
             >
-              <img
+              <Image
                 src="/avatar.png"
                 alt="avatar"
+                width={32}
+                height={32}
                 className="w-8 h-8 rounded-full bg-white"
               />
               <div className="leading-tight text-left">
@@ -1826,9 +1832,11 @@ export default function Dashboard() {
               <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-neutral-100">
                 <Settings size={16} className="text-neutral-500" />
               </button>
-              <img
+              <Image
                 src="/avatar.png"
                 alt="avatar"
+                width={32}
+                height={32}
                 className="w-8 h-8 rounded-full"
               />
             </div>

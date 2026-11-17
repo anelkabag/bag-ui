@@ -1267,14 +1267,14 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 function Sidebar({
   active,
-  setActive,
+  onActiveChange,
   search,
   setSearch,
   onUpgrade,
   onLearnMore,
 }: {
   active: string;
-  setActive: (v: string) => void;
+  onActiveChange: (v: string) => void;
   search: string;
   setSearch: (v: string) => void;
   onUpgrade: () => void;
@@ -1349,7 +1349,7 @@ function Sidebar({
               key={item.label}
               item={item}
               active={active === item.label}
-              onClick={() => handleActiveChange(item.label)}
+              onClick={() => onActiveChange(item.label)}
             />
           ))}
         </div>
@@ -1361,7 +1361,7 @@ function Sidebar({
               key={item.label}
               item={item}
               active={active === item.label}
-              onClick={() => handleActiveChange(item.label)}
+              onClick={() => onActiveChange(item.label)}
             />
           ))}
         </div>
@@ -1390,7 +1390,7 @@ function Sidebar({
             key={item.label}
             item={item}
             active={active === item.label}
-            onClick={() => handleActiveChange(item.label)}
+            onClick={() => onActiveChange(item.label)}
           />
         ))}
 
@@ -1430,6 +1430,7 @@ function Sidebar({
 
 // ─── Top bar ────────────────────────────────────────────────────────────────
 function AvatarStack() {
+  /* eslint-disable @next/next/no-img-element -- These avatars are generated SVGs. */
   return (
     <div className="flex items-center -space-x-2">
       {AVATARS.map((a) => (
@@ -1442,6 +1443,7 @@ function AvatarStack() {
       ))}
     </div>
   );
+  /* eslint-enable @next/next/no-img-element */
 }
 
 function ThemeToggle({
@@ -2161,9 +2163,6 @@ export default function Dashboard2() {
   const [selected, setSelected] = useState<Set<string>>(new Set(["p2", "p4"]));
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [visibleStats, setVisibleStats] = useState<Record<string, boolean[]>>(
-    {},
-  );
   const [visibleCols, setVisibleCols] = useState<Record<string, boolean>>({});
   const [customizeOpen, setCustomizeOpen] = useState(false);
   const [focusedStat, setFocusedStat] = useState<string | null>(null);
@@ -2179,7 +2178,6 @@ export default function Dashboard2() {
   const dataset = datasets[active] ?? Object.values(datasets)[0];
 
   if (!datasets[active] && process.env.NODE_ENV !== "production") {
-    // eslint-disable-next-line no-console
     console.warn(
       `[Dashboard2] No dataset found for nav item "${active}" — falling back to "${dataset.key}". Add a matching entry in buildDatasets().`,
     );
@@ -2204,7 +2202,7 @@ export default function Dashboard2() {
     () => ["All", ...Array.from(new Set(dataset.rows.map((r) => r.status)))],
     [dataset],
   );
-  const statsVisibility = visibleStats[active] ?? dataset.stats.map(() => true);
+  const statsVisibility = dataset.stats.map(() => true);
 
   const filteredRows = useMemo(() => {
     let rows = dataset.rows;
@@ -2259,7 +2257,8 @@ export default function Dashboard2() {
   const toggleRow = (id: string) =>
     setSelected((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       return next;
     });
 
@@ -2393,7 +2392,7 @@ export default function Dashboard2() {
       >
         <Sidebar
           active={active}
-          setActive={setActive}
+          onActiveChange={handleActiveChange}
           search={search}
           setSearch={setSearch}
           onUpgrade={() => push("Redirecting to billing…")}

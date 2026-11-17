@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 
 const splitTextIntoChars = (element: HTMLElement) => {
@@ -371,10 +372,12 @@ const TeamSection = () => {
           <div className="profile-images">
             {TEAM_MEMBERS.map((member) => (
                 <div key={member} className="img">
-                  <img
-                      src={getAvatarUrl(member)}
-                      alt={member}
-                      loading="lazy"
+                  <Image
+                    src={getAvatarUrl(member)}
+                    alt={member}
+                    width={100}
+                    height={100}
+                    unoptimized
                   />
                 </div>
             ))}

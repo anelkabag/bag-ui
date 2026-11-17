@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
+import Image from "next/image";
 import { useState, useRef } from "react";
 
 // ─── Avatars ──────────────────────────────────────────────────────────────────
@@ -60,9 +61,11 @@ function HoverImage() {
       className="inline-block w-11 h-11 md:w-13 md:h-13 rounded-xl overflow-hidden align-middle relative -top-1 cursor-pointer shadow-lg"
       whileHover={{ boxShadow: "0 0 24px 6px rgba(255,255,255,0.15)" }}
     >
-      <img
+      <Image
         src="https://bagui.vercel.app/faviconblack.png"
         alt=""
+        fill
+        sizes="(min-width: 768px) 52px, 44px"
         className="w-full h-full object-cover pointer-events-none"
       />
     </motion.span>
@@ -204,10 +207,12 @@ export default function CTASection1() {
         >
           <div className="flex -space-x-2.5">
             {avatars.map((src, i) => (
-              <img
+              <Image
                 key={i}
                 src={src}
                 alt=""
+                width={28}
+                height={28}
                 className="w-7 h-7 rounded-full border-2 border-white object-cover shadow-sm"
               />
             ))}

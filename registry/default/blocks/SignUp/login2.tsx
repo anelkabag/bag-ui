@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import Image from "next/image";
 import { Loader2, Mail, Eye, EyeOff, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -43,7 +44,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function BrandMark() {
   return (
-    <img src="/logo.png" alt="" width={34} height={34} className="object-contain" aria-hidden="true" />
+    <Image src="/logo.png" alt="" width={34} height={34} className="object-contain" aria-hidden="true" />
   );
 }
 
@@ -396,9 +397,12 @@ export default function SignUpCard() {
                       {failedLogos.has(brand.slug) ? (
                         <span className="text-[14px] font-semibold tracking-tight text-neutral-300">{brand.name}</span>
                       ) : (
-                        <img
+                        <Image
                           src={`https://cdn.simpleicons.org/${brand.slug}`}
                           alt={brand.name}
+                          width={20}
+                          height={20}
+                          unoptimized
                           className="h-5 w-auto grayscale opacity-60 transition-all duration-200 hover:grayscale-0 hover:opacity-100 cursor-pointer"
                           onError={() =>
                             setFailedLogos((prev) => {

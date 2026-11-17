@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import Image from "next/image";
 import {
   Search,
   ChevronsLeft,
@@ -115,7 +116,7 @@ function nextId(prefix: string) {
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 function formatShortDate(iso: string) {
-  const [y, m, d] = iso.split("-").map(Number);
+  const [, m, d] = iso.split("-").map(Number);
   return `${MONTHS[(m ?? 1) - 1]} ${d}`;
 }
 function isOverdue(iso: string) {
@@ -240,10 +241,12 @@ const INITIAL_PROJECTS: Project[] = [
 
 function Avatar({ name, className }: { name: string; className?: string }) {
   return (
-    <img
+    <Image
       src={"/avatar.png"}
       alt={name}
       title={name}
+      width={32}
+      height={32}
       className={cn("shrink-0 rounded-full border-2 border-[#0B0B0D] bg-neutral-800 object-cover", className)}
     />
   );
@@ -429,9 +432,11 @@ function Sidebar({
     >
       <div className={cn("flex items-center gap-2.5 px-3 pb-4", collapsed && "justify-center px-0")}>
         <div className="h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-            <img
+            <Image
                 src="/faviconblack.png"
                 alt="Logo BagUi"
+                width={32}
+                height={32}
                 className="h-full w-full object-cover"
             />
         </div>

@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import Image from "next/image";
 import { Search, MoreVertical, Send, Plus, Smile, ChevronLeft, Image as ImageIcon, Bell, Edit3, CheckCheck } from "lucide-react";
 
 // Type definitions
@@ -237,7 +238,7 @@ function ArtworkGallery() {
                     whileHover={{ scale: 1.05, zIndex: 10, transition: { duration: 0.2 } }}
                     className="w-36 h-28 rounded-xl overflow-hidden shadow-lg border-2 border-white cursor-pointer"
                 >
-                    <img src={src} alt={`Artwork ${i + 1}`} className="w-full h-full object-cover" />
+                    <Image src={src} alt={`Artwork ${i + 1}`} fill unoptimized sizes="144px" className="w-full h-full object-cover" />
                 </motion.div>
             ))}
         </div>
@@ -295,9 +296,11 @@ function Sidebar({ selectedContact, onSelectContact, isMobileOpen, onMobileClose
                 {/* Header */}
                 <div className="p-4 flex items-center justify-between">
                     <div className="w-10 h-10 rounded-md overflow-hidden">
-                        <img
+                        <Image
                             src="https://bagui.vercel.app/logoR.png"
                             alt="Me"
+                            width={40}
+                            height={40}
                             className="w-full h-full object-cover"
                         />
                     </div>
@@ -372,9 +375,12 @@ function Sidebar({ selectedContact, onSelectContact, isMobileOpen, onMobileClose
                                 {/* Avatar */}
                                 <div className="relative flex-shrink-0">
                                     {avatars[contact.avatar] ? (
-                                        <img
+                                        <Image
                                             src={avatars[contact.avatar]}
                                             alt={contact.name}
+                                            width={48}
+                                            height={48}
+                                            unoptimized
                                             className="w-12 h-12 rounded-full object-cover"
                                         />
                                     ) : (
@@ -509,9 +515,12 @@ function ChatWindow({ contact, onBack }: { contact: ContactData | null; onBack: 
 
                 <div className="relative flex-shrink-0">
                     {avatars[contact.avatar] ? (
-                        <img
+                        <Image
                             src={avatars[contact.avatar]}
                             alt={contact.name}
+                            width={40}
+                            height={40}
+                            unoptimized
                             className="w-10 h-10 rounded-full object-cover"
                         />
                     ) : (

@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import Image from "next/image";
 import NumberFlow from "@number-flow/react";
 import { Check, Star, Workflow, Sparkles, Phone, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -253,9 +254,12 @@ function ConsultationBanner({ onBook }: { onBook: () => void }) {
       }}
     >
       <div className="relative mx-auto flex w-fit items-center justify-center">
-        <img
+        <Image
           src="https://api.dicebear.com/9.x/notionists/svg?seed=Amelia-Rhodes&backgroundColor=ffd5dc"
           alt=""
+          width={56}
+          height={56}
+          unoptimized
           className="h-14 w-14 rounded-full border-2 border-white object-cover shadow-sm"
         />
         <span className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-neutral-900 ring-2 ring-white">

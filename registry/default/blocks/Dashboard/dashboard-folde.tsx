@@ -9,6 +9,7 @@ import React, {
   useContext,
 } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import Image from "next/image";
 import {
   Home,
   Folder as FolderIcon,
@@ -570,15 +571,18 @@ const CURRENT_USER = "Anelka Bag";
 function AppLogo() {
   const isDark = useIsDark();
   return (
-    <img
+    <Image
       src={isDark ? "/logoW.png" : "/logo.png"}
       alt="BagUi"
+      width={24}
+      height={24}
       className="h-6 w-6 shrink-0 object-contain"
     />
   );
 }
 
 function Avatar({ seed, src, className }: { seed: string; src?: string; className?: string }) {
+  /* eslint-disable @next/next/no-img-element -- Avatar sources include generated SVGs and caller-provided URLs. */
   return (
     <img
       src={src ?? `https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(seed)}&backgroundColor=b6e3f4`}
@@ -586,6 +590,7 @@ function Avatar({ seed, src, className }: { seed: string; src?: string; classNam
       className={cn("shrink-0 rounded-full bg-neutral-100 object-cover dark:bg-neutral-800 dark:ring-1 dark:ring-neutral-800", className)}
     />
   );
+  /* eslint-enable @next/next/no-img-element */
 }
 
 function Switch({ checked, onChange, label }: { checked: boolean; onChange: () => void; label?: string }) {
@@ -1199,104 +1204,6 @@ const FolderTile = React.memo(function FolderTile({
 });
 
 /* ================================================================== */
-/*  File row / card                                                    */
-/* ================================================================== */
-
-const FileRow = React.memo(function FileRow({
-  file,
-  selected,
-  onSelect,
-  onDelete,
-  onRename,
-  onDownload,
-}: {
-  file: FileItem;
-  selected: boolean;
-  onSelect: (file: FileItem) => void;
-  onDelete: (id: string) => void;
-  onRename: (file: FileItem) => void;
-  onDownload: (file: FileItem) => void;
-}) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const meta = KIND_META[file.kind];
-  const Icon = meta.icon;
-  return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 6 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.15 } }}
-      transition={{ duration: 0.18 }}
-      onClick={() => onSelect(file)}
-      className={cn(
-        "group flex cursor-pointer items-center gap-3 rounded-xl border px-3.5 py-2.5 transition-colors",
-        selected
-          ? "border-neutral-900/15 bg-neutral-50 dark:border-neutral-100/15 dark:bg-neutral-900"
-          : "border-transparent hover:bg-neutral-50 dark:hover:bg-neutral-900/70"
-      )}
-    >
-      <span className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-lg", meta.bg)}>
-        <Icon className={cn("h-4 w-4", meta.color)} />
-      </span>
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-[13.5px] font-medium text-neutral-900 dark:text-neutral-50">{file.name}</p>
-        <p className="mt-0.5 truncate text-[12px] text-neutral-400 dark:text-neutral-600">
-          {meta.label} · {formatSize(file.sizeKb)} · {formatDate(file.modified)}
-        </p>
-      </div>
-      <Avatar seed={file.owner} className="h-6 w-6" />
-      <div className="relative">
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setMenuOpen((v) => !v);
-          }}
-          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-neutral-400 opacity-0 hover:bg-neutral-200/60 hover:text-neutral-700 group-hover:opacity-100 dark:text-neutral-600 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
-        >
-          <MoreVertical className="h-4 w-4" />
-        </button>
-        <AnimatePresence>
-          {menuOpen && (
-            <Dropdown open onClose={() => setMenuOpen(false)} anchorClassName="right-0 top-[calc(100%+4px)] w-[170px] py-1.5">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onRename(file);
-                  setMenuOpen(false);
-                }}
-                className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-neutral-600 hover:bg-neutral-50 dark:text-neutral-400 dark:hover:bg-neutral-800"
-              >
-                <Pencil className="h-3.5 w-3.5" /> Rename
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDownload(file);
-                  setMenuOpen(false);
-                }}
-                className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-neutral-600 hover:bg-neutral-50 dark:text-neutral-400 dark:hover:bg-neutral-800"
-              >
-                <Download className="h-3.5 w-3.5" /> Download
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDelete(file.id);
-                  setMenuOpen(false);
-                }}
-                className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-[13px] text-rose-500 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10"
-              >
-                <Trash2 className="h-3.5 w-3.5" /> Delete
-              </button>
-            </Dropdown>
-          )}
-        </AnimatePresence>
-      </div>
-    </motion.div>
-  );
-});
-
-/* ================================================================== */
 /*  Search + sort toolbar (shared)                                     */
 /* ================================================================== */
 
@@ -1458,9 +1365,6 @@ function FolderDetailView({
   onSortChange,
   selectedFileId,
   onSelectFile,
-  onDeleteFile,
-  onRenameFile,
-  onDownloadFile,
   onNewDraft,
 }: {
   folder: Folder;
@@ -1470,9 +1374,6 @@ function FolderDetailView({
   onSortChange: (v: SortKey) => void;
   selectedFileId: string | null;
   onSelectFile: (file: FileItem) => void;
-  onDeleteFile: (id: string) => void;
-  onRenameFile: (file: FileItem) => void;
-  onDownloadFile: (file: FileItem) => void;
   onNewDraft: () => void;
 }) {
   const isDark = useIsDark();
@@ -2046,28 +1947,6 @@ export default function BaguiDashboard() {
 
   /* ---- file / folder mutations ---- */
 
-  const deleteFile = useCallback(
-    (folderId: string, fileId: string) => {
-      updateFolders(activeProjectId, (folders) =>
-        folders.map((fl) =>
-          fl.id === folderId
-            ? { ...fl, files: fl.files.filter((file) => file.id !== fileId), notesCount: Math.max(0, fl.notesCount - 1) }
-            : fl
-        )
-      );
-      setSelectedItem((prev) => (prev?.type === "file" && prev.file.id === fileId ? null : prev));
-      pushToast("File deleted");
-    },
-    [activeProjectId, updateFolders, pushToast]
-  );
-
-  const renameFile = useCallback(
-    (_file: FileItem) => {
-      pushToast("Renaming is a demo action — hook this up to your API");
-    },
-    [pushToast]
-  );
-
   const downloadFile = useCallback(
     (file: FileItem) => {
       pushToast(`Downloading "${file.name}"`);
@@ -2231,9 +2110,6 @@ export default function BaguiDashboard() {
                       onSortChange={setSortBy}
                       selectedFileId={selectedItem?.type === "file" ? selectedItem.file.id : null}
                       onSelectFile={(file) => selectFile(file, openFolder.title, openFolder.tag)}
-                      onDeleteFile={(id) => deleteFile(openFolder.id, id)}
-                      onRenameFile={renameFile}
-                      onDownloadFile={downloadFile}
                       onNewDraft={addDraft}
                     />
                   ) : activeNav === "home" ? (

@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   motion,
   useInView,
@@ -70,9 +71,11 @@ export default function Hero1() {
               transition={{ delay: 0.15, duration: 0.5 }}
             >
               <Link href="/" className="flex items-center gap-3 group">
-                <img
+                <Image
                   src="https://bagui.vercel.app/logoR.png"
                   alt="BagUi logo"
+                  width={32}
+                  height={32}
                   className="w-8 h-8 object-contain rounded-lg"
                 />
                 <span className="font-semibold text-[15px] text-zinc-950 dark:text-white tracking-[-0.01em]">
@@ -482,10 +485,13 @@ export default function Hero1() {
                 "https://www.amazon.com/favicon.ico",
                 "https://www.apple.com/favicon.ico",
               ].map((logo, i) => (
-                <img
+                <Image
                   key={i}
                   src={logo}
                   alt={`Partner logo ${i + 1}`}
+                  width={32}
+                  height={32}
+                  unoptimized
                   className="h-8 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity"
                 />
               ))}
