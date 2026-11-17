@@ -66,6 +66,7 @@ function Logo({ size = 22 }: { size?: number }) {
         src="/logo.png"
         alt="BagUI"
         fill
+        sizes={`${size}px`}
         priority
         className="object-contain dark:hidden"
       />
@@ -73,6 +74,7 @@ function Logo({ size = 22 }: { size?: number }) {
         src="/logoW.png"
         alt="BagUI"
         fill
+        sizes={`${size}px`}
         priority
         className="hidden object-contain dark:block"
       />

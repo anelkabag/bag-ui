@@ -29,6 +29,7 @@ const Logo = () => (
           src="/logo.png"
           alt="BagUi Logo"
           fill
+          sizes="20px"
           priority
           className="object-contain dark:hidden"
         />
@@ -38,6 +39,7 @@ const Logo = () => (
           src="/logoW.png"
           alt="BagUi Logo"
           fill
+          sizes="20px"
           priority
           className="hidden object-contain dark:block"
         />

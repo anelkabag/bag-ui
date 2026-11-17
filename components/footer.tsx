@@ -108,6 +108,7 @@ export function Footer() {
                   src="/logo.png"
                   alt="BagUI"
                   fill
+                  sizes="16px"
                   className="object-contain dark:hidden"
                 />
 
@@ -115,6 +116,7 @@ export function Footer() {
                   src="/logoW.png"
                   alt="BagUI"
                   fill
+                  sizes="16px"
                   className="hidden object-contain dark:block"
                 />
               </div>
