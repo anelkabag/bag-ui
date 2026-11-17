@@ -312,7 +312,7 @@ export default function Pricing4() {
         </motion.h1>
 
         <motion.p {...fadeUp(0.1)} className="mx-auto mt-2.5 max-w-[320px] text-[13.5px] leading-relaxed text-neutral-500">
-          Whether you're starting small or scaling fast, we have an automation plan that fits.
+          Whether you&apos;re starting small or scaling fast, we have an automation plan that fits.
         </motion.p>
 
         <motion.div {...fadeUp(0.15)} className="mt-6 flex justify-center">

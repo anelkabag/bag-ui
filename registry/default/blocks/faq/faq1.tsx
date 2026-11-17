@@ -187,7 +187,7 @@ export default function FAQ() {
                 FAQ.
               </h1>
               <p className="font-sans text-xs sm:text-sm md:text-base font-normal leading-relaxed text-black/70">
-                Everything you need to know about BagUI. Can't find what you're
+                Everything you need to know about BagUI. Can&apos;t find what you&apos;re
                 looking for? Reach out to our support team.
               </p>
             </div>

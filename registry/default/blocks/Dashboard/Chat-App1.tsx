@@ -438,10 +438,6 @@ function ChatWindow({ contact, onBack }: { contact: ContactData | null; onBack: 
     const bottomRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        setMessages(contact?.messages || []);
-    }, [contact]);
-
-    useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
@@ -663,7 +659,7 @@ export default function ChatApp() {
                 onMobileClose={() => setIsMobileOpen(false)}
             />
             {selectedContact ? (
-                <ChatWindow contact={selectedContact} onBack={() => setSelectedContact(null)} />
+                <ChatWindow key={selectedContact?.id ?? "empty"} contact={selectedContact} onBack={() => setSelectedContact(null)} />
             ) : (
                 <ChatWindow contact={null} onBack={() => {}} />
             )}

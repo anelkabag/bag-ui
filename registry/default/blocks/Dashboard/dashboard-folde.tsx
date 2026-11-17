@@ -1890,7 +1890,7 @@ function InfoPanel({
             <TagChip key={tag} tag={tag} active={activeTagFilter === tag} onClick={() => onToggleTag(tag)} />
           ))}
         </div>
-        {activeTagFilter && <p className="mt-2 text-[11.5px] text-neutral-400 dark:text-neutral-600">Filtering Home by "{activeTagFilter}"</p>}
+        {activeTagFilter && <p className="mt-2 text-[11.5px] text-neutral-400 dark:text-neutral-600">Filtering Home by &quot;{activeTagFilter}&quot;</p>}
       </div>
 
       <div className="mt-6">
@@ -1925,7 +1925,7 @@ function InfoPanel({
 /*  Root                                                                */
 /* ================================================================== */
 
-export default function baguiDashboard() {
+export default function BaguiDashboard() {
   const [projects, setProjects] = useState<Project[]>(INITIAL_PROJECTS);
   const [activeProjectId, setActiveProjectId] = useState("bagui");
   const [projectsExpanded, setProjectsExpanded] = useState(true);

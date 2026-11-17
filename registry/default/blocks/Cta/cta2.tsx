@@ -51,7 +51,7 @@ export default function CTASection() {
                         variants={itemVariants}
                         className="text-xl sm:text-xl text-gray-300 mb-10 max-w-2xl leading-relaxed"
                     >
-                        Stop losing leads to 'Get in touch' buttons and boring contact forms.
+                        Stop losing leads to &apos;Get in touch&apos; buttons and boring contact forms.
                     </motion.p>
 
                     {/* Buttons */}

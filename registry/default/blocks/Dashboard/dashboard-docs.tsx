@@ -855,7 +855,7 @@ function DetailPanel({
                 </motion.div>
               ))}
             </AnimatePresence>
-            {visibleFiles.length === 0 && <p className="py-4 text-center text-[12px] text-neutral-500">No files match "{query}".</p>}
+            {visibleFiles.length === 0 && <p className="py-4 text-center text-[12px] text-neutral-500">No files match &quot;{query}&quot;.</p>}
           </div>
 
           <button

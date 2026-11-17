@@ -1349,7 +1349,7 @@ function Sidebar({
               key={item.label}
               item={item}
               active={active === item.label}
-              onClick={() => setActive(item.label)}
+              onClick={() => handleActiveChange(item.label)}
             />
           ))}
         </div>
@@ -1361,7 +1361,7 @@ function Sidebar({
               key={item.label}
               item={item}
               active={active === item.label}
-              onClick={() => setActive(item.label)}
+              onClick={() => handleActiveChange(item.label)}
             />
           ))}
         </div>
@@ -1390,7 +1390,7 @@ function Sidebar({
             key={item.label}
             item={item}
             active={active === item.label}
-            onClick={() => setActive(item.label)}
+            onClick={() => handleActiveChange(item.label)}
           />
         ))}
 
@@ -2185,8 +2185,10 @@ export default function Dashboard2() {
     );
   }
 
-  // reset per-view transient state whenever the nav switches
-  useEffect(() => {
+  const handleActiveChange = (nextActive: string) => {
+    if (nextActive === active) return;
+
+    setActive(nextActive);
     setSearch("");
     setStatusFilter("All");
     setSortOption("Default");
@@ -2196,7 +2198,7 @@ export default function Dashboard2() {
     setFocusedStat(null);
     setCustomizeOpen(false);
     setVisibleCols({});
-  }, [active]);
+  };
 
   const statusOptions = useMemo(
     () => ["All", ...Array.from(new Set(dataset.rows.map((r) => r.status)))],

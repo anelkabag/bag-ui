@@ -8,7 +8,8 @@
       "name": "team-section",
       "type": "registry:block",
       "title": "Team Section",
-      "description": "Interactive team preview section with hover reveal animation.",
+      "description": "Animated team grid with member portraits, roles, and profile details revealed on hover.",
+      "dependencies": ["gsap"],
       "files": [
         {
           "path": "registry/default/blocks/teams/team-section.tsx",
@@ -24,8 +25,8 @@
       "name": "hero1",
       "type": "registry:block",
       "title": "Hero Exemple 1",
-      "description": "Hero section with navbar and animated event dashboard preview.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "SaaS landing hero with responsive navigation and an interactive analytics dashboard featuring charts and filters.",
+      "dependencies": ["motion", "lucide-react", "recharts"],
       "files": [
         {
           "path": "registry/default/blocks/hero/hero01.tsx",
@@ -41,8 +42,8 @@
       "name": "hero2",
       "type": "registry:block",
       "title": "Hero Exemple 2",
-      "description": "Hero section with navbar and animated event dashboard preview.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Animated developer-product hero with an interactive code editor preview and product navigation.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/hero/hero02.tsx",
@@ -58,8 +59,8 @@
       "name": "hero3",
       "type": "registry:block",
       "title": "Hero Exemple 3",
-      "description": "Hero section with navbar and animated event dashboard preview.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Analytics-focused hero with a live dashboard preview, responsive navigation, and animated charts.",
+      "dependencies": ["motion", "lucide-react", "recharts"],
       "files": [
         {
           "path": "registry/default/blocks/hero/hero03.tsx",
@@ -75,8 +76,8 @@
       "name": "hero5",
       "type": "registry:block",
       "title": "Hero Exemple 5",
-      "description": "Hero section with navbar and animated event dashboard preview.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Recruiting landing hero with job-search controls, featured vacancies, and candidate interview details.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/hero/hero05.tsx",
@@ -92,8 +93,8 @@
       "name": "hero6",
       "type": "registry:block",
       "title": "Hero Exemple 6",
-      "description": "Hero section with navbar and animated event dashboard preview.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "AI browser-automation hero with workflow previews, product metrics, and responsive navigation.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/hero/hero06.tsx",
@@ -109,8 +110,8 @@
       "name": "hero4",
       "type": "registry:block",
       "title": "Hero Exemple 4",
-      "description": "Hero section with navbar and animated event dashboard preview.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Product landing hero with a responsive menu, theme switcher, parallax artwork, and analytics preview.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/hero/hero04.tsx",
@@ -126,8 +127,8 @@
       "name": "navbar-ex-3",
       "type": "registry:block",
       "title": "Gooey navbar",
-      "description": "Modern responsive navigation bar with animated interactions, customizable links, and mobile menu support.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Compact animated navigation bar with a mobile menu and product links.",
+      "dependencies": ["motion"],
       "files": [
         {
           "path": "registry/default/blocks/navbar/navbar3.tsx",
@@ -143,8 +144,8 @@
       "name": "navbar-ex-4",
       "type": "registry:block",
       "title": "Mega Navbar",
-      "description": "Modern responsive navigation bar with animated interactions, customizable links, and mobile menu support.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Responsive mega menu with grouped feature links, sales solutions, and animated dropdown panels.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/navbar/navbar4.tsx",
@@ -160,8 +161,8 @@
       "name": "navbar1",
       "type": "registry:block",
       "title": "Navbar Exemple 1",
-      "description": "Modern responsive navigation bar with animated interactions, customizable links, and mobile menu support.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Responsive marketing navigation with mobile controls, theme switching, and sign-in and sign-up actions.",
+      "dependencies": ["motion"],
       "files": [
         {
           "path": "registry/default/blocks/navbar/navbar1.tsx",
@@ -177,8 +178,8 @@
       "name": "navbar2",
       "type": "registry:block",
       "title": "Navbar Exemple 2",
-      "description": "Modern responsive navigation bar with animated interactions, customizable links, and mobile menu support.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Responsive navigation bar with animated menus, icon links, and a compact mobile layout.",
+      "dependencies": ["motion", "lucide-react", "react-icons"],
       "files": [
         {
           "path": "registry/default/blocks/navbar/navbar2.tsx",
@@ -194,8 +195,8 @@
       "name": "faq1",
       "type": "registry:block",
       "title": "FAQ Exemple 1",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Animated FAQ section with expandable answers and scroll-triggered entrance effects.",
+      "dependencies": ["gsap", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/faq/faq1.tsx",
@@ -211,8 +212,8 @@
       "name": "cta-1",
       "type": "registry:block",
       "title": "CTA Exemple 1",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "High-contrast BagUI call-to-action banner with an animated product message and primary action.",
+      "dependencies": ["motion"],
       "files": [
         {
           "path": "registry/default/blocks/Cta/cta1.tsx",
@@ -228,8 +229,8 @@
       "name": "cta-2",
       "type": "registry:block",
       "title": "CTA Exemple 2",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Lead-generation call-to-action with trial and demo actions over a dark gradient panel.",
+      "dependencies": ["motion"],
       "files": [
         {
           "path": "registry/default/blocks/Cta/cta2.tsx",
@@ -245,8 +246,8 @@
       "name": "testimonial-ex-2",
       "type": "registry:block",
       "title": "Testimonial Exemple 2",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Developer testimonial section with customer quotes and a BagUI-focused heading.",
+      "dependencies": [],
       "files": [
         {
           "path": "registry/default/blocks/Testimonial/testimonial2.tsx",
@@ -262,8 +263,8 @@
       "name": "testimonial-1",
       "type": "registry:block",
       "title": "Testimonial Exemple 1",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Animated testimonial layout with customer quotes and portrait imagery.",
+      "dependencies": ["motion"],
       "files": [
         {
           "path": "registry/default/blocks/Testimonial/testimonial1.tsx",
@@ -279,8 +280,8 @@
       "name": "contact-1",
       "type": "registry:block",
       "title": "Contact Exemple 1",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Appointment-booking form with a meeting summary, attendee details, and message input.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Contact/contact1.tsx",
@@ -296,8 +297,8 @@
       "name": "contact-2",
       "type": "registry:block",
       "title": "Contact Exemple 2",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Contact form with name, email, phone, and message fields plus an animated success state.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Contact/contact2.tsx",
@@ -313,8 +314,8 @@
       "name": "feature-ex-5",
       "type": "registry:block",
       "title": "Feature Exemple 5",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Feature section that highlights copying BagUI blocks into a project with a single registry command.",
+      "dependencies": [],
       "files": [
         {
           "path": "registry/default/blocks/Feature/feature5.tsx",
@@ -330,8 +331,8 @@
       "name": "feature-ex-4",
       "type": "registry:block",
       "title": "Feature Exemple 4",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Open-source component-registry feature section with product highlights and animated metrics.",
+      "dependencies": ["@number-flow/react"],
       "files": [
         {
           "path": "registry/default/blocks/Feature/feature4.tsx",
@@ -347,8 +348,8 @@
       "name": "feature-ex-6",
       "type": "registry:block",
       "title": "Feature Exemple 6",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Screenshot-editing feature grid for hiding interface elements and preparing cleaner captures.",
+      "dependencies": [],
       "files": [
         {
           "path": "registry/default/blocks/Feature/feature6.tsx",
@@ -364,8 +365,8 @@
       "name": "feature-1",
       "type": "registry:block",
       "title": "Feature Exemple 1",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Animated feature showcase with illustrated cards and concise product benefits.",
+      "dependencies": ["motion"],
       "files": [
         {
           "path": "registry/default/blocks/Feature/feature1.tsx",
@@ -381,8 +382,8 @@
       "name": "feature-2",
       "type": "registry:block",
       "title": "Feature Exemple 2",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Tax and finance product feature section with custom illustrations and supporting copy.",
+      "dependencies": ["motion"],
       "files": [
         {
           "path": "registry/default/blocks/Feature/feature2.tsx",
@@ -398,8 +399,8 @@
       "name": "feature-3",
       "type": "registry:block",
       "title": "Feature Exemple 3",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Invoice-creation feature layout with data-visualization previews and animated content.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Feature/feature3.tsx",
@@ -415,8 +416,8 @@
       "name": "pricing-1",
       "type": "registry:block",
       "title": "Pricing Exemple 1",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Investor-focused pricing cards with monthly and annual billing options and plan comparisons.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Pricing/pricing1.tsx",
@@ -432,8 +433,8 @@
       "name": "pricing-2",
       "type": "registry:block",
       "title": "Pricing Exemple 2",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Tiered pricing comparison with plan features and contact links for custom requirements.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Pricing/pricing2.tsx",
@@ -449,8 +450,8 @@
       "name": "pricing-3",
       "type": "registry:block",
       "title": "Pricing Exemple 3",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Value-focused pricing section that presents measurable savings across service plans.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Pricing/pricing3.tsx",
@@ -466,8 +467,8 @@
       "name": "pricing-4",
       "type": "registry:block",
       "title": "Pricing Exemple 4",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Automation plan selector with animated prices, plan comparisons, and a help prompt.",
+      "dependencies": ["motion", "@number-flow/react", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Pricing/pricing4.tsx",
@@ -483,8 +484,8 @@
       "name": "login3",
       "type": "registry:block",
       "title": "Login Exemple 3",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Minimal sign-in form with branded styling, email and password fields, and a password-recovery link.",
+      "dependencies": [],
       "files": [
         {
           "path": "registry/default/blocks/SignUp/login3.tsx",
@@ -500,8 +501,8 @@
       "name": "login1",
       "type": "registry:block",
       "title": "Login Exemple 1",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Sign-in form with password visibility controls, social-provider buttons, and account links.",
+      "dependencies": [],
       "files": [
         {
           "path": "registry/default/blocks/SignUp/login1.tsx",
@@ -516,9 +517,9 @@
     {
       "name": "login2",
       "type": "registry:block",
-      "title": "Login Exemple 1",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "title": "Login / Signup Exemple",
+      "description": "Animated login and signup card with email validation, password controls, social proof, and confirmation states.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/SignUp/login2.tsx",
@@ -534,8 +535,8 @@
       "name": "sidebar1",
       "type": "registry:block",
       "title": "Sidebar Exemple 1",
-      "description": "Frequently asked questions section with collapsible items.",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Animated application sidebar with grouped navigation links and a collapsible layout.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Sidebar/sidebar1.tsx",
@@ -551,8 +552,8 @@
       "name": "dashboard-store",
       "type": "registry:block",
       "title": "Modern Store Dashboard",
-      "description": "",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Store-operations dashboard with performance summaries, revenue charts, customer data, and sortable tables.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard-finance.tsx",
@@ -568,8 +569,8 @@
       "name": "dashboard-agency",
       "type": "registry:block",
       "title": "Modern Agency Dashboard",
-      "description": "",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Agency workspace dashboard for tracking clients, projects, team activity, and performance.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard-agency.tsx",
@@ -585,8 +586,8 @@
       "name": "dashboard-folder",
       "type": "registry:block",
       "title": "Modern Folder Dashboard",
-      "description": "",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "File-management workspace with searchable folders, tags, pinned items, email, and automation views.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard-folde.tsx",
@@ -602,8 +603,8 @@
       "name": "dashboard-wallet",
       "type": "registry:block",
       "title": "Modern Wallet Dashboard",
-      "description": "",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Personal-finance dashboard with savings plans, earnings, transaction history, and activity filters.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard-wallet.tsx",
@@ -619,8 +620,8 @@
       "name": "dashboard-ads",
       "type": "registry:block",
       "title": "Modern Ads Dashboard",
-      "description": "",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Advertising campaign dashboard with spend, reach, conversion metrics, and campaign performance views.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard-ads.tsx",
@@ -636,8 +637,8 @@
       "name": "dashboard-analytics",
       "type": "registry:block",
       "title": "Modern Analytics Dashboard",
-      "description": "",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Analytics workspace with interactive revenue and lead-source charts, filters, and reporting controls.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard-analytic.tsx",
@@ -653,8 +654,8 @@
       "name": "dashboard-llm",
       "type": "registry:block",
       "title": "Modern LLM Dashboard",
-      "description": "",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "LLM usage dashboard for monitoring model requests, token consumption, costs, and activity.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard-llm.tsx",
@@ -670,8 +671,8 @@
       "name": "dashboard-task",
       "type": "registry:block",
       "title": "Modern Task Dashboard",
-      "description": "",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Project task manager with Kanban, list, and calendar views, filtering, sorting, and task details.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard-task.tsx",
@@ -687,8 +688,8 @@
       "name": "dashboard-docs",
       "type": "registry:block",
       "title": "Modern Docs Dashboard",
-      "description": "",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Document workspace with folders, file search, sharing details, and contextual file actions.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/dashboard-docs.tsx",
@@ -704,8 +705,8 @@
       "name": "chat-app1",
       "type": "registry:block",
       "title": "Dashboard Chat App",
-      "description": "",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Messaging dashboard with searchable contacts, conversation history, and a responsive chat window.",
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/Dashboard/Chat-App1.tsx",
@@ -721,8 +722,8 @@
       "name": "footer-ex-4",
       "type": "registry:block",
       "title": "Footer Exemple 4",
-      "description": "",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Floating BagUI footer with brand copy, social links, and grouped navigation columns.",
+      "dependencies": [],
       "files": [
         {
           "path": "registry/default/blocks/Footer/footer4.tsx",
@@ -738,8 +739,8 @@
       "name": "footer1",
       "type": "registry:block",
       "title": "Footer Exemple 1",
-      "description": "",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Branded site footer with internal navigation and social-media icon links.",
+      "dependencies": ["react-icons"],
       "files": [
         {
           "path": "registry/default/blocks/Footer/footer1.tsx",
@@ -755,8 +756,8 @@
       "name": "footer2",
       "type": "registry:block",
       "title": "Footer Exemple 2",
-      "description": "",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "Agency-style footer with a project inquiry prompt, booking action, and responsive navigation.",
+      "dependencies": ["motion"],
       "files": [
         {
           "path": "registry/default/blocks/Footer/footer2.tsx",
@@ -772,8 +773,8 @@
       "name": "footer-3",
       "type": "registry:block",
       "title": "Footer Exemple 3",
-      "description": "",
-      "dependencies": ["motion/react", "lucide-react"],
+      "description": "AI customer-support footer with product links, brand details, and social actions.",
+      "dependencies": ["motion", "lucide-react", "react-icons"],
       "files": [
         {
           "path": "registry/default/blocks/Footer/footer3.tsx",
@@ -789,9 +790,9 @@
       "name": "template-ex-3",
       "type": "registry:block",
       "title": "Template BagUi WebSite",
-      "description": "",
+      "description": "Complete BagUI landing page template with a hero, block categories, supporting sections, and open-source messaging.",
       "cover": "/assets/templates/template1.svg",
-      "dependencies": ["motion/react", "lucide-react"],
+      "dependencies": [],
       "files": [
         {
           "path": "registry/default/blocks/templates/template3.tsx",
@@ -807,9 +808,9 @@
       "name": "template1",
       "type": "registry:block",
       "title": "Template Open Agents.",
-      "description": "",
+      "description": "AI-agent platform landing page with sandbox messaging, product benefits, navigation, and conversion actions.",
       "cover": "/assets/templates/template1.svg",
-      "dependencies": ["motion/react", "lucide-react"],
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/templates/template1.tsx",
@@ -825,9 +826,9 @@
       "name": "template2",
       "type": "registry:block",
       "title": "Template Example 2",
-      "description": "",
+      "description": "Identity-platform landing page with product navigation, security feature previews, and a light visual theme.",
       "cover": "/assets/templates/template2.svg",
-      "dependencies": ["motion/react", "lucide-react"],
+      "dependencies": ["motion", "lucide-react"],
       "files": [
         {
           "path": "registry/default/blocks/templates/template2.tsx",

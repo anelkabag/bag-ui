@@ -259,7 +259,7 @@ export default function PricingSection() {
                   className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white border border-zinc-200 rounded-2xl px-7 py-5"
               >
                 <p className="text-sm font-semibold text-zinc-900">
-                  Didn't find the answer?
+                  Didn&apos;t find the answer?
                 </p>
                 <div className="flex items-center gap-6">
                   <motion.a

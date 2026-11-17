@@ -105,13 +105,11 @@ export default function SignUpCard() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
-  const [toast, setToast] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ id: number; message: string } | null>(null);
   const [failedLogos, setFailedLogos] = useState<Set<string>>(new Set());
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
   const copy = COPY[mode];
 
   useEffect(() => {
@@ -125,10 +123,15 @@ export default function SignUpCard() {
     }
   }, [mode]);
 
+  useEffect(() => {
+    if (!toast) return;
+
+    const timer = setTimeout(() => setToast(null), 2400);
+    return () => clearTimeout(timer);
+  }, [toast]);
+
   const pushToast = (message: string) => {
-    setToast(message);
-    if (toastTimer.current) clearTimeout(toastTimer.current);
-    toastTimer.current = setTimeout(() => setToast(null), 2400);
+    setToast((current) => ({ id: (current?.id ?? 0) + 1, message }));
   };
 
   const triggerShake = () => setShake(true);
@@ -415,7 +418,7 @@ export default function SignUpCard() {
         </AnimatePresence>
       </div>
 
-      <Toast message={toast} />
+      {toast && <Toast message={toast.message} />}
     </div>
   );
 }

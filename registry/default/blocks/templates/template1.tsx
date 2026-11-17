@@ -133,7 +133,7 @@ export default function OpenAgents() {
                     <div>
                         <h2 className="text-4xl font-bold mb-6 leading-tight">Agents that ship real code.</h2>
                         <p className={`${muted} mb-6 leading-relaxed`}>
-                            Each agent gets a full sandbox environment with filesystem, networks, and runtime access. Describe what to build and let the agent work autonomously until it's done.
+                            Each agent gets a full sandbox environment with filesystem, networks, and runtime access. Describe what to build and let the agent work autonomously until it&apos;s done.
                         </p>
                         <ul className={`space-y-3 ${subtle}`}>
                             <li className="flex gap-3"><span>•</span><span>File ops, search, shell, and task delegation built in</span></li>

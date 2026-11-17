@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
 import {
   ArrowRight,
@@ -53,6 +52,7 @@ const gridPattern = {
 
 export default function SponsorPage() {
   const reduce = useReducedMotion();
+  const checkoutUrl = process.env.NEXT_PUBLIC_CHECKOUT_URL;
 
   return (
     <AppShell>
@@ -140,19 +140,32 @@ export default function SponsorPage() {
                     developer who needs it.
                   </p>
 
-                  <Link
-                    href={process.env.NEXT_PUBLIC_CHECKOUT_URL || "#"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white py-3 text-center text-sm font-semibold text-black shadow-[0_8px_30px_-10px_rgba(255,255,255,0.45)] transition-all hover:bg-zinc-100 hover:shadow-[0_8px_36px_-8px_rgba(255,255,255,0.6)] sm:w-auto sm:px-7"
-                  >
-                    <FaGithub size={16} />
-                    Sponsor BagUI on GitHub
-                    <ArrowUpRight
-                      size={16}
-                      className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                    />
-                  </Link>
+                  {checkoutUrl ? (
+                    <a
+                      href={checkoutUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white py-3 text-center text-sm font-semibold text-black shadow-[0_8px_30px_-10px_rgba(255,255,255,0.45)] transition-all hover:bg-zinc-100 hover:shadow-[0_8px_36px_-8px_rgba(255,255,255,0.6)] sm:w-auto sm:px-7"
+                    >
+                      <FaGithub size={16} />
+                      Sponsor BagUI on GitHub
+                      <ArrowUpRight
+                        size={16}
+                        className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                      />
+                    </a>
+                  ) : (
+                    <p className="mt-7 text-sm text-zinc-300">
+                      Sponsorship checkout is unavailable.{" "}
+                      <a
+                        href="mailto:anelka.bag@gmail.com"
+                        className="underline underline-offset-2 hover:text-white"
+                      >
+                        Contact us
+                      </a>
+                      .
+                    </p>
+                  )}
 
                   <p className="mt-3 text-xs text-zinc-400">
                     Any amount helps &middot; Takes a minute &middot; Cancel
