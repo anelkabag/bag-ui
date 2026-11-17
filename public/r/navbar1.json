@@ -4,7 +4,8 @@
   "title": "Navbar Exemple 1",
   "description": "Responsive marketing navigation with mobile controls, theme switching, and sign-in and sign-up actions.",
   "dependencies": [
-    "motion"
+    "motion",
+    "next-themes"
   ],
   "files": [
     {

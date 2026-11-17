@@ -26,7 +26,7 @@
       "type": "registry:block",
       "title": "Hero Exemple 1",
       "description": "SaaS landing hero with responsive navigation and an interactive analytics dashboard featuring charts and filters.",
-      "dependencies": ["motion", "lucide-react", "recharts"],
+      "dependencies": ["motion", "lucide-react", "recharts", "next-themes"],
       "files": [
         {
           "path": "registry/default/blocks/hero/hero01.tsx",
@@ -60,7 +60,7 @@
       "type": "registry:block",
       "title": "Hero Exemple 3",
       "description": "Analytics-focused hero with a live dashboard preview, responsive navigation, and animated charts.",
-      "dependencies": ["motion", "lucide-react", "recharts"],
+      "dependencies": ["motion", "lucide-react", "recharts", "next-themes"],
       "files": [
         {
           "path": "registry/default/blocks/hero/hero03.tsx",
@@ -111,7 +111,7 @@
       "type": "registry:block",
       "title": "Hero Exemple 4",
       "description": "Product landing hero with a responsive menu, theme switcher, parallax artwork, and analytics preview.",
-      "dependencies": ["motion", "lucide-react"],
+      "dependencies": ["motion", "lucide-react", "next-themes"],
       "files": [
         {
           "path": "registry/default/blocks/hero/hero04.tsx",
@@ -162,7 +162,7 @@
       "type": "registry:block",
       "title": "Navbar Exemple 1",
       "description": "Responsive marketing navigation with mobile controls, theme switching, and sign-in and sign-up actions.",
-      "dependencies": ["motion"],
+      "dependencies": ["motion", "next-themes"],
       "files": [
         {
           "path": "registry/default/blocks/navbar/navbar1.tsx",
@@ -810,7 +810,7 @@
       "title": "Template Open Agents.",
       "description": "AI-agent platform landing page with sandbox messaging, product benefits, navigation, and conversion actions.",
       "cover": "/assets/templates/template1.svg",
-      "dependencies": ["motion", "lucide-react"],
+      "dependencies": ["motion", "lucide-react", "next-themes"],
       "files": [
         {
           "path": "registry/default/blocks/templates/template1.tsx",

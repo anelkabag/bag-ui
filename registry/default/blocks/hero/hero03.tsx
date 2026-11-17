@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion, Variants } from "motion/react";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 import {
   ChevronDown,
@@ -253,7 +254,9 @@ function ChartTooltip({
 export default function Hero1() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [announceIndex, setAnnounceIndex] = useState(0);
-  const isDark = true;
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const isDark = mounted && resolvedTheme === "dark";
   const [activeDashNav, setActiveDashNav] = useState("Dashboard");
   const [activeSubTab, setActiveSubTab] = useState("Overview");
   const [range, setRange] = useState<RangeKey>("12M");
@@ -265,6 +268,10 @@ export default function Hero1() {
   ]);
   const [search, setSearch] = useState("");
   const [live, setLive] = useState({ allRevenue: 8746.22, pageViews: 12440, activeNow: 96 });
+
+  useEffect(() => {
+    Promise.resolve().then(() => setMounted(true));
+  }, []);
 
   useEffect(() => {
     const id = setInterval(() => {

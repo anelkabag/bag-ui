@@ -6,7 +6,8 @@
   "dependencies": [
     "motion",
     "lucide-react",
-    "recharts"
+    "recharts",
+    "next-themes"
   ],
   "files": [
     {

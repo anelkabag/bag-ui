@@ -5,7 +5,8 @@
   "description": "AI-agent platform landing page with sandbox messaging, product benefits, navigation, and conversion actions.",
   "dependencies": [
     "motion",
-    "lucide-react"
+    "lucide-react",
+    "next-themes"
   ],
   "files": [
     {

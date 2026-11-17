@@ -5,7 +5,8 @@
   "description": "Product landing hero with a responsive menu, theme switcher, parallax artwork, and analytics preview.",
   "dependencies": [
     "motion",
-    "lucide-react"
+    "lucide-react",
+    "next-themes"
   ],
   "files": [
     {
