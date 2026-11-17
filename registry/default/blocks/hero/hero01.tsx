@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, Variants } from "motion/react";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 import {
   ChevronDown,
@@ -119,7 +120,8 @@ const monthVariants: Variants = {
 
 export default function Hero2() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [isDark, setIsDark] = useState(true);
+  const { resolvedTheme, setTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
   const [viewDate, setViewDate] = useState({
     year: TODAY.year,
@@ -256,8 +258,8 @@ export default function Hero2() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.9 }}
-            onClick={() => setIsDark((v) => !v)}
-            aria-label="Toggle theme"
+            onClick={() => setTheme(isDark ? "light" : "dark")}
+            aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
             className={`relative grid h-9 w-9 place-items-center overflow-hidden transition-colors duration-500 cursor-pointer ${
               isDark
                 ? "border-neutral-700 text-neutral-300 "

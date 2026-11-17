@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -15,7 +16,8 @@ import { ArrowRight, Calendar, Moon, Sun, Menu, X } from "lucide-react";
 export default function Hero1() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [dark, setDark] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
+  const dark = resolvedTheme === "dark";
   const heroRef = useRef<HTMLDivElement>(null);
   const heroInView = useInView(heroRef, { once: true, margin: "-80px 0px" });
 
@@ -31,10 +33,6 @@ export default function Hero1() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark);
-  }, [dark]);
 
   const navLinks = [
     { href: "/features", label: "Features" },
@@ -103,7 +101,7 @@ export default function Hero1() {
               transition={{ delay: 0.15, duration: 0.5 }}
             >
               <button
-                onClick={() => setDark(!dark)}
+                onClick={() => setTheme(dark ? "light" : "dark")}
                 className="p-2 rounded-md text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
                 aria-label="Toggle theme"
               >
@@ -134,7 +132,7 @@ export default function Hero1() {
 
             <div className="flex items-center gap-1 md:hidden">
               <button
-                onClick={() => setDark(!dark)}
+                onClick={() => setTheme(dark ? "light" : "dark")}
                 className="p-2 rounded-md text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
               >
                 {dark ? (

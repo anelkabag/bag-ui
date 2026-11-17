@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useTheme } from 'next-themes';
 import { motion } from 'motion/react';
 import { ChevronRight, CodeXml, Sun, Moon } from 'lucide-react';
 import Link from "next/link";
@@ -27,12 +27,9 @@ const staggerItem = {
 };
 
 export default function OpenAgents() {
-    const [dark, setDark] = useState(true);
-
-    const toggle = () => {
-        setDark(!dark);
-        document.documentElement.classList.toggle('dark', !dark);
-    };
+    const { resolvedTheme, setTheme } = useTheme();
+    const dark = resolvedTheme === 'dark';
+    const toggle = () => setTheme(dark ? 'light' : 'dark');
 
     const bg = dark ? 'bg-black' : 'bg-white';
     const text = dark ? 'text-white' : 'text-black';
