@@ -2,9 +2,9 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "pricing-1",
   "title": "Pricing Exemple 1",
-  "description": "Frequently asked questions section with collapsible items.",
+  "description": "Investor-focused pricing cards with monthly and annual billing options and plan comparisons.",
   "dependencies": [
-    "motion/react",
+    "motion",
     "lucide-react"
   ],
   "files": [

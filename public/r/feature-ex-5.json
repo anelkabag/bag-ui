@@ -2,11 +2,8 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "feature-ex-5",
   "title": "Feature Exemple 5",
-  "description": "Frequently asked questions section with collapsible items.",
-  "dependencies": [
-    "motion/react",
-    "lucide-react"
-  ],
+  "description": "Feature section that highlights copying BagUI blocks into a project with a single registry command.",
+  "dependencies": [],
   "files": [
     {
       "path": "registry/default/blocks/Feature/feature5.tsx",

@@ -2,10 +2,11 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "hero1",
   "title": "Hero Exemple 1",
-  "description": "Hero section with navbar and animated event dashboard preview.",
+  "description": "SaaS landing hero with responsive navigation and an interactive analytics dashboard featuring charts and filters.",
   "dependencies": [
-    "motion/react",
-    "lucide-react"
+    "motion",
+    "lucide-react",
+    "recharts"
   ],
   "files": [
     {

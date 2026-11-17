@@ -2,10 +2,9 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "navbar-ex-3",
   "title": "Gooey navbar",
-  "description": "Modern responsive navigation bar with animated interactions, customizable links, and mobile menu support.",
+  "description": "Compact animated navigation bar with a mobile menu and product links.",
   "dependencies": [
-    "motion/react",
-    "lucide-react"
+    "motion"
   ],
   "files": [
     {

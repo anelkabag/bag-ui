@@ -2,9 +2,9 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "pricing-3",
   "title": "Pricing Exemple 3",
-  "description": "Frequently asked questions section with collapsible items.",
+  "description": "Value-focused pricing section that presents measurable savings across service plans.",
   "dependencies": [
-    "motion/react",
+    "motion",
     "lucide-react"
   ],
   "files": [

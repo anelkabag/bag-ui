@@ -2,9 +2,9 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "contact-1",
   "title": "Contact Exemple 1",
-  "description": "Frequently asked questions section with collapsible items.",
+  "description": "Appointment-booking form with a meeting summary, attendee details, and message input.",
   "dependencies": [
-    "motion/react",
+    "motion",
     "lucide-react"
   ],
   "files": [

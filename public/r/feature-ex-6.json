@@ -2,11 +2,8 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "feature-ex-6",
   "title": "Feature Exemple 6",
-  "description": "Frequently asked questions section with collapsible items.",
-  "dependencies": [
-    "motion/react",
-    "lucide-react"
-  ],
+  "description": "Screenshot-editing feature grid for hiding interface elements and preparing cleaner captures.",
+  "dependencies": [],
   "files": [
     {
       "path": "registry/default/blocks/Feature/feature6.tsx",

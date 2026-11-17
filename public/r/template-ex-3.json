@@ -2,11 +2,8 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "template-ex-3",
   "title": "Template BagUi WebSite",
-  "description": "",
-  "dependencies": [
-    "motion/react",
-    "lucide-react"
-  ],
+  "description": "Complete BagUI landing page template with a hero, block categories, supporting sections, and open-source messaging.",
+  "dependencies": [],
   "files": [
     {
       "path": "registry/default/blocks/templates/template3.tsx",

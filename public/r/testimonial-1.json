@@ -2,10 +2,9 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "testimonial-1",
   "title": "Testimonial Exemple 1",
-  "description": "Frequently asked questions section with collapsible items.",
+  "description": "Animated testimonial layout with customer quotes and portrait imagery.",
   "dependencies": [
-    "motion/react",
-    "lucide-react"
+    "motion"
   ],
   "files": [
     {

@@ -2,10 +2,9 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "footer1",
   "title": "Footer Exemple 1",
-  "description": "",
+  "description": "Branded site footer with internal navigation and social-media icon links.",
   "dependencies": [
-    "motion/react",
-    "lucide-react"
+    "react-icons"
   ],
   "files": [
     {

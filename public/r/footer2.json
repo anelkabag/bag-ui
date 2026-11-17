@@ -2,10 +2,9 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "footer2",
   "title": "Footer Exemple 2",
-  "description": "",
+  "description": "Agency-style footer with a project inquiry prompt, booking action, and responsive navigation.",
   "dependencies": [
-    "motion/react",
-    "lucide-react"
+    "motion"
   ],
   "files": [
     {
