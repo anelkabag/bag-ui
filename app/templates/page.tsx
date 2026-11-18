@@ -23,6 +23,7 @@ import {
 import Image from "next/image";
 import PnpmLogo from "@/public/assets/pnpm.svg";
 import YarnLogo from "@/public/assets/yarn.svg";
+import posthog from "posthog-js";
 
 const registry = registryJson as { items: RegistryItem[] };
 
@@ -131,8 +132,8 @@ export default function Page() {
 
 function useCopy(timeout = 1500) {
   const [copied, setCopied] = useState(false);
-  const copy = (text: string) => {
-    navigator.clipboard.writeText(text);
+  const copy = async (text: string) => {
+    await navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), timeout);
   };
@@ -179,7 +180,7 @@ function CodeBlock({ code }: { code: string }) {
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/10 gap-2 sm:gap-0">
         <span className="text-xs text-gray-500 font-mono">page.tsx</span>
         <button
-          onClick={() => copy(code)}
+          onClick={() => void copy(code)}
           aria-label={copied ? "Copied" : "Copy code"}
           className="text-xs text-gray-400 hover:text-white transition-colors flex items-center gap-1.5"
         >
@@ -221,11 +222,16 @@ function TemplateToolbarHeader({
   );
   const PKG_MANAGERS: PkgManager[] = ["pnpm", "npm", "yarn", "bun"];
 
-  const handleCopy = (text: string) => {
+  const handleCopy = async (text: string) => {
     if (installState.action !== "install") {
       return;
     }
-    copy(text);
+    await copy(text);
+    posthog.capture("template_install_command_copied", {
+      template_name: templateName,
+      access_tier: accessTier,
+      package_manager: pkg,
+    });
   };
 
   return (

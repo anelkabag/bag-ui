@@ -7,6 +7,7 @@ import { Heart, Sparkles, Server, Globe, Wrench } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
 import Navbar from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import posthog from "posthog-js";
 
 const perks = [
   "Your name (or logo) featured on the sponsors page",
@@ -131,6 +132,7 @@ export default function PricingPage() {
               href={process.env.NEXT_PUBLIC_CHECKOUT_URL || "#"}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => posthog.capture("sponsorship_checkout_started", { provider: "github" })}
               className="w-full flex items-center justify-center gap-2 text-center text-sm font-medium py-2.5 rounded-lg transition-all bg-white text-black hover:bg-gray-100"
             >
               <FaGithub size={16} />

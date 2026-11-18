@@ -1,4 +1,8 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
+import {
+  flushPosthogLogs,
+  logPosthogInfo,
+} from "@/instrumentation";
 import {
   createSupabaseRouteHandlerClient,
   createSupabaseServiceRoleClient,
@@ -79,6 +83,12 @@ export async function PUT(request: Request) {
       { status: 500 },
     );
   }
+
+  logPosthogInfo("Notification preference updated", {
+    operation: "notification_preference_update",
+    product_updates_enabled: body.productUpdatesEnabled,
+  });
+  after(flushPosthogLogs);
 
   return NextResponse.json(
     { productUpdatesEnabled: body.productUpdatesEnabled },

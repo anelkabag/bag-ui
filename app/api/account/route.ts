@@ -1,4 +1,8 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { after, NextResponse, type NextRequest } from "next/server";
+import {
+  flushPosthogLogs,
+  logPosthogInfo,
+} from "@/instrumentation";
 import {
   createSupabaseRouteHandlerClient,
   createSupabaseServiceRoleClient,
@@ -176,6 +180,9 @@ export async function PUT(request: NextRequest) {
       );
     }
 
+    logPosthogInfo("Account profile updated", { operation: "profile_update" });
+    after(flushPosthogLogs);
+
     return NextResponse.json({ profile: data?.[0] });
   } catch (error) {
     console.error("Error:", error);
@@ -255,6 +262,9 @@ export async function DELETE(request: NextRequest) {
         { status: 500 },
       );
     }
+
+    logPosthogInfo("Account deleted", { operation: "account_delete" });
+    after(flushPosthogLogs);
 
     return NextResponse.json({ success: true });
   } catch (error) {
