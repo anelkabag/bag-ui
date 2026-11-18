@@ -5,6 +5,7 @@ import "./globals.css";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import SmoothScrollProvider from "@/components/shell/SmoothScrollProvider";
+import ScrollEdgeIndicator from "@/components/shell/ScrollEdgeIndicator";
 const geistSans = Geist({
   subsets: ["latin"],
   variable: "--font-geist-sans",
@@ -127,6 +128,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             <SmoothScrollProvider>{children}</SmoothScrollProvider>
+            <ScrollEdgeIndicator />
           </AuthProvider>
         </ThemeProvider>
         {process.env.NODE_ENV === "production" && <Analytics />}
