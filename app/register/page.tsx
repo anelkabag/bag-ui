@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import AppShell from "@/components/shell/AppShell";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -32,11 +35,16 @@ export default function RegisterPage() {
     setIsVerificationModalOpen(true);
   };
 
+  const handleGoogle = async () => {
+    setError(null);
+    await signInWithGoogle();
+  };
+
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <AppShell>
       {isVerificationModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm px-4">
-          <div className="w-full max-w-[420px] rounded-[28px] bg-card border border-border p-8 text-center shadow-2xl shadow-black/10 dark:shadow-black/30">
+          <div className="w-full max-w-[420px] rounded-2xl bg-card border border-border p-8 text-center shadow-2xl shadow-black/10 dark:shadow-black/30">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-foreground">
               <svg
                 className="h-6 w-6 text-background"
@@ -66,7 +74,7 @@ export default function RegisterPage() {
                 setIsVerificationModalOpen(false);
                 router.replace("/");
               }}
-              className="mt-6 w-full rounded-2xl bg-foreground py-3 text-sm font-semibold text-background transition hover:bg-foreground/90"
+              className="mt-6 w-full rounded-lg bg-foreground py-3 text-sm font-semibold text-background transition hover:bg-foreground/90 cursor-pointer"
             >
               Got it
             </button>
@@ -74,84 +82,222 @@ export default function RegisterPage() {
         </div>
       )}
 
-      <div className="w-full max-w-[480px] rounded-[32px] border border-border bg-card/95 p-8 shadow-2xl shadow-black/10 dark:shadow-black/30">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-semibold text-foreground">
-            Create your account
-          </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Register with email and password or continue with Google.
-          </p>
+      <div className="relative flex min-h-full items-center justify-center overflow-hidden bg-background p-4">
+        {/* Radial glow background */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-foreground/[0.03] blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-foreground/[0.02] blur-3xl" />
+          <div className="absolute top-0 right-0 w-[300px] h-[300px] rounded-full bg-foreground/[0.02] blur-3xl" />
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="text-sm text-muted-foreground">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-2 w-full rounded-2xl border border-border bg-muted px-4 py-3 text-foreground outline-none focus:border-ring"
-            />
+        {/* Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 24, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="relative w-full max-w-[480px] bg-card border border-border rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/60 overflow-hidden"
+        >
+          {/* Back button */}
+          <div className="absolute top-5 left-5">
+            <Link href="/">
+              <motion.button
+                whileHover={{ x: -2 }}
+                className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground text-sm transition-colors cursor-pointer"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M10 12L6 8L10 4"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                Back
+              </motion.button>
+            </Link>
           </div>
 
-          <div>
-            <label className="text-sm text-muted-foreground">Username</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="mt-2 w-full rounded-2xl border border-border bg-muted px-4 py-3 text-foreground outline-none focus:border-ring"
-            />
+          <div className="px-10 pt-16 pb-10">
+            {/* Logo */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.15, duration: 0.4 }}
+              className="flex justify-center mb-8"
+            >
+              <div className="items-center justify-center">
+                <Image
+                  src="/faviconwhite.png"
+                  alt="BagUI Logo"
+                  width={50}
+                  height={50}
+                  className="object-contain invert dark:invert-0"
+                />
+              </div>
+            </motion.div>
+
+            {/* Heading */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.4 }}
+              className="text-center mb-8"
+            >
+              <h1 className="text-foreground text-[1.65rem] font-semibold tracking-tight mb-1.5">
+                Create your account
+              </h1>
+              <p className="text-muted-foreground text-sm">
+                Already have an account?{" "}
+                <Link
+                  href="/login"
+                  className="text-foreground/80 hover:text-foreground underline underline-offset-2 transition-colors"
+                >
+                  Login
+                </Link>
+              </p>
+            </motion.div>
+
+            {/* Form */}
+            <motion.form
+              onSubmit={handleSubmit}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.28, duration: 0.4 }}
+              className="space-y-3"
+            >
+              <div>
+                <input
+                  type="email"
+                  placeholder="Your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full bg-muted border border-border rounded-lg px-4 py-3 text-foreground/90 placeholder:text-muted-foreground/60 text-sm outline-none focus:border-ring focus:bg-accent/50 transition-all"
+                />
+              </div>
+
+              <div>
+                <input
+                  type="text"
+                  placeholder="Your username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full bg-muted border border-border rounded-lg px-4 py-3 text-foreground/90 placeholder:text-muted-foreground/60 text-sm outline-none focus:border-ring focus:bg-accent/50 transition-all"
+                />
+              </div>
+
+              <div>
+                <input
+                  type="password"
+                  placeholder="Your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-muted border border-border rounded-lg px-4 py-3 text-foreground/90 placeholder:text-muted-foreground/60 text-sm outline-none focus:border-ring focus:bg-accent/50 transition-all"
+                />
+              </div>
+
+              <motion.button
+                type="submit"
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+                disabled={loading}
+                className="w-full bg-foreground text-background font-semibold text-sm rounded-lg py-3 flex items-center justify-center gap-2 hover:bg-foreground/90 transition-colors disabled:opacity-70 mt-1 cursor-pointer"
+              >
+                <AnimatePresence mode="wait">
+                  {loading ? (
+                    <motion.span
+                      key="loading"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-center gap-2"
+                    >
+                      <svg
+                        className="animate-spin h-4 w-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8v8H4z"
+                        />
+                      </svg>
+                      Creating account…
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="idle"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      Create account
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </motion.button>
+            </motion.form>
+
+            {error && (
+              <p className="text-sm text-rose-500 dark:text-rose-400">
+                {error}
+              </p>
+            )}
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.35, duration: 0.4 }}
+              className="text-center mt-4"
+            >
+              <button
+                onClick={handleGoogle}
+                className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm transition-colors cursor-pointer"
+              >
+                <img
+                  src="https://api.iconify.design/logos/google-icon.svg"
+                  alt="Google"
+                  className="h-4 w-4"
+                />
+                Continue with Google
+              </button>
+            </motion.div>
+
+            {/* Terms */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.4 }}
+              className="text-center text-muted-foreground/60 text-xs mt-7 leading-relaxed"
+            >
+              By creating an account, you acknowledge that you read, and agree,
+              to our{" "}
+              <Link
+                href="/terms"
+                className="text-muted-foreground hover:text-foreground/80 underline underline-offset-2 transition-colors cursor-pointer"
+              >
+                Terms of Service
+              </Link>{" "}
+              and our{" "}
+              <Link
+                href="/privacy"
+                className="text-muted-foreground hover:text-foreground/80 underline underline-offset-2 transition-colors cursor-pointer"
+              >
+                Privacy Policy
+              </Link>
+            </motion.p>
           </div>
-
-          <div>
-            <label className="text-sm text-muted-foreground">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-2 w-full rounded-2xl border border-border bg-muted px-4 py-3 text-foreground outline-none focus:border-ring"
-            />
-          </div>
-
-          {error && (
-            <p className="text-sm text-rose-500 dark:text-rose-400">{error}</p>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-2xl bg-foreground py-3 text-sm font-semibold text-background transition hover:bg-foreground/90 disabled:opacity-60 cursor-pointer"
-          >
-            {loading ? "Creating account…" : "Create account"}
-          </button>
-        </form>
-
-        <div className="mt-6">
-          <button
-            onClick={signInWithGoogle}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-border bg-transparent py-3 text-sm font-semibold text-foreground transition hover:border-ring cursor-pointer"
-          >
-            <img
-              src="https://api.iconify.design/logos/google-icon.svg"
-              alt="Google"
-              className="h-4 w-4"
-            />
-            Continue with Google
-          </button>
-        </div>
-
-        <p className="mt-4 text-center text-sm text-muted-foreground">
-          Already have an account?{" "}
-          <Link
-            href="/login"
-            className="text-foreground underline underline-offset-2"
-          >
-            Login
-          </Link>
-        </p>
+        </motion.div>
       </div>
-    </div>
+    </AppShell>
   );
 }
