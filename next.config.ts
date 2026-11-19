@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withPostHogConfig } from "@posthog/nextjs-config";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -79,4 +80,20 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const posthogApiKey = process.env.POSTHOG_API_KEY;
+const posthogProjectId = process.env.POSTHOG_PROJECT_ID;
+const posthogIngestHost =
+  process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://us.i.posthog.com";
+
+export default posthogApiKey && posthogProjectId
+  ? withPostHogConfig(nextConfig, {
+      personalApiKey: posthogApiKey,
+      projectId: posthogProjectId,
+      host: posthogIngestHost.replace(".i.posthog.com", ".posthog.com"),
+      sourcemaps: {
+        enabled: true,
+        releaseName: "bag-ui",
+        deleteAfterUpload: true,
+      },
+    })
+  : nextConfig;
