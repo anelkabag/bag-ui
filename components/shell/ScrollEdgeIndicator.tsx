@@ -1,75 +1,60 @@
 "use client";
 
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
-import {
-  motion,
-  useMotionValue,
-  useSpring,
-  useTransform,
-  type MotionValue,
-} from "framer-motion";
-import { Aperture, Asterisk, Settings, Sparkles, type LucideIcon } from "lucide-react";
+import Link from "next/link";
+import { motion, useMotionValue } from "framer-motion";
+import { Wifi, WifiOff } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
-const HEIGHT = 378;
-const RINGS: { color: string; Icon: LucideIcon }[] = [
-  { color: "#ff4d1a", Icon: Asterisk },
-  { color: "#22c55e", Icon: Aperture },
-  { color: "#facc15", Icon: Sparkles },
-];
+const HEIGHT = 136;
+const TOP_INSET = 76;
+const BOTTOM_INSET = 20;
 
-function Ring({
-  progress,
-  index,
-  color,
-  Icon,
-}: {
-  progress: MotionValue<number>;
-  index: number;
-  color: string;
-  Icon: LucideIcon;
-}) {
-  const v = useTransform(progress, (p) => Math.min(1, Math.max(0, p * 3 - index)));
-  const visible = useTransform(v, (x) => (x > 0.001 ? 1 : 0));
-  const label = useTransform(v, (x) => `${Math.round(x * 100)}%`);
-
-  return (
-    <div
-      className="absolute left-2 flex w-12 flex-col items-center gap-1"
-      style={{ top: 82 + index * 80 }}
-    >
-      <div className="relative size-11">
-        <svg viewBox="0 0 44 44" className="size-11 -rotate-90">
-          <circle cx="22" cy="22" r="19" fill="none" stroke="#2a2a2a" strokeWidth="3.5" />
-          <motion.circle
-            cx="22"
-            cy="22"
-            r="19"
-            fill="none"
-            stroke={color}
-            strokeWidth="3.5"
-            strokeLinecap="round"
-            style={{ pathLength: v, opacity: visible }}
-          />
-        </svg>
-        <Icon className="absolute inset-0 m-auto size-[18px] text-white" strokeWidth={1.75} />
-      </div>
-      <motion.span className="text-[11px] font-medium leading-none tabular-nums text-white">
-        {label}
-      </motion.span>
-    </div>
-  );
+function formatTime(date: Date) {
+  const hours = date.getHours() % 12 || 12;
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${hours}:${minutes}`;
 }
 
 export default function ScrollEdgeIndicator() {
-  const raw = useMotionValue(0);
-  const progress = useSpring(raw, { stiffness: 140, damping: 26, mass: 0.3 });
-  const y = useMotionValue(0);
+  const { user, profile } = useAuth();
+  const y = useMotionValue(TOP_INSET);
   const scale = useMotionValue(1);
   const rootRef = useRef<HTMLElement>(null);
   const drag = useRef<{ pointer: number; scroll: number; travel: number; max: number } | null>(
     null,
   );
-  const [active, setActive] = useState(false);
+  const [time, setTime] = useState("--:--");
+  const [online, setOnline] = useState(true);
+
+  const avatar =
+    profile?.avatar_url ||
+    (typeof user?.user_metadata?.avatar_url === "string" ? user.user_metadata.avatar_url : "") ||
+    (typeof user?.user_metadata?.picture === "string" ? user.user_metadata.picture : "");
+  const label =
+    profile?.username ||
+    (typeof user?.user_metadata?.username === "string" ? user.user_metadata.username : "") ||
+    user?.email ||
+    "";
+  const initial = label.trim().charAt(0).toUpperCase();
+
+  useEffect(() => {
+    const tick = () => setTime(formatTime(new Date()));
+    tick();
+    const id = window.setInterval(tick, 15_000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    const update = () => setOnline(navigator.onLine);
+    update();
+    window.addEventListener("online", update);
+    window.addEventListener("offline", update);
+    return () => {
+      window.removeEventListener("online", update);
+      window.removeEventListener("offline", update);
+    };
+  }, []);
 
   useEffect(() => {
     const scroller = document.getElementById("main");
@@ -81,12 +66,11 @@ export default function ScrollEdgeIndicator() {
       const parentH = root.parentElement?.clientHeight ?? scroller.clientHeight;
       const max = scroller.scrollHeight - scroller.clientHeight;
       const p = max > 1 ? Math.min(1, Math.max(0, scroller.scrollTop / max)) : 0;
-      const nextScale = Math.min(1, Math.max(0.62, (parentH - 12) / HEIGHT));
-      const travel = Math.max(0, parentH - HEIGHT * nextScale);
-      raw.set(p);
+      const available = Math.max(HEIGHT * 0.72, parentH - TOP_INSET - BOTTOM_INSET);
+      const nextScale = Math.min(1, available / HEIGHT);
+      const travel = Math.max(0, parentH - TOP_INSET - BOTTOM_INSET - HEIGHT * nextScale);
       scale.set(nextScale);
-      if (!drag.current) y.set(p * travel);
-      setActive(max > 1);
+      if (!drag.current) y.set(TOP_INSET + p * travel);
     };
 
     const onScroll = () => {
@@ -107,16 +91,16 @@ export default function ScrollEdgeIndicator() {
       window.removeEventListener("resize", onScroll);
       ro.disconnect();
     };
-  }, [raw, scale, y]);
+  }, [scale, y]);
 
   const onPointerDown = (event: ReactPointerEvent<HTMLElement>) => {
-    if ((event.target as HTMLElement).closest("button")) return;
+    if ((event.target as HTMLElement).closest("a, button")) return;
     const scroller = document.getElementById("main");
     const root = rootRef.current;
     if (!scroller || !root) return;
     const parentH = root.parentElement?.clientHeight ?? scroller.clientHeight;
     const nextScale = scale.get();
-    const travel = Math.max(1, parentH - HEIGHT * nextScale);
+    const travel = Math.max(1, parentH - TOP_INSET - BOTTOM_INSET - HEIGHT * nextScale);
     const max = scroller.scrollHeight - scroller.clientHeight;
     if (max <= 1) return;
     drag.current = { pointer: event.clientY, scroll: scroller.scrollTop, travel, max };
@@ -138,41 +122,55 @@ export default function ScrollEdgeIndicator() {
   return (
     <motion.aside
       ref={rootRef}
-      aria-label="Scroll progress"
-      aria-hidden={!active}
+      aria-label={`${time}, ${online ? "online" : "offline"}`}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={endDrag}
       onPointerCancel={endDrag}
-      className="absolute top-0 right-0 z-40 h-[378px] w-14 origin-top-right cursor-grab touch-none active:cursor-grabbing"
-      style={{
-        y,
-        scale,
-        visibility: active ? "visible" : "hidden",
-        pointerEvents: active ? "auto" : "none",
-      }}
+      className="absolute top-0 right-3 z-30 w-[52px] origin-top cursor-grab touch-none text-foreground active:cursor-grabbing"
+      style={{ y, scale, height: HEIGHT }}
     >
-      <svg viewBox="0 0 56 378" className="absolute inset-0 size-full" aria-hidden>
-        <path
-          d="M56 0C56 22 44 28 30 32C16 36 8 44 8 66V318C8 330 2 336 2 354A24 24 0 0 0 26 378H56Z"
-          fill="#000"
-          stroke="#fff"
-          strokeOpacity=".14"
-        />
-      </svg>
+      <div className="flex h-full flex-col items-center">
+        <Link
+          href={user ? "/account" : "/login"}
+          aria-label={user ? "Account" : "Sign in"}
+          className="relative size-11 shrink-0 rounded-full bg-foreground p-[3px]"
+        >
+          <span className="flex size-full items-center justify-center overflow-hidden rounded-full bg-neutral-950 text-[13px] font-semibold text-white">
+            {avatar ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={avatar} alt="" className="size-full object-cover" />
+            ) : (
+              initial || <span className="size-3.5 rounded-full bg-sky-400" />
+            )}
+          </span>
+        </Link>
 
-      {RINGS.map((r, i) => (
-        <Ring key={i} progress={progress} index={i} {...r} />
-      ))}
+        <time
+          dateTime={time}
+          className="mt-2.5 text-center text-[15px] font-semibold leading-none tracking-[-0.04em] tabular-nums"
+        >
+          {time}
+        </time>
 
-      <button
-        type="button"
-        aria-label="Back to top"
-        onClick={() => document.getElementById("main")?.scrollTo({ top: 0, behavior: "smooth" })}
-        className="absolute top-[336px] left-2 flex size-9 items-center justify-center rounded-full bg-white/[0.08] text-white transition-colors hover:bg-white/15"
-      >
-        <Settings className="size-[18px]" strokeWidth={1.75} />
-      </button>
+        <div
+          className={`mt-2.5 flex size-11 shrink-0 flex-col items-center justify-center rounded-full border-[1.75px] border-current ${
+            online ? "" : "opacity-45"
+          }`}
+          title={online ? "Connected" : "No connection"}
+        >
+          {online ? (
+            <Wifi className="size-[15px]" strokeWidth={2.4} />
+          ) : (
+            <WifiOff className="size-[15px]" strokeWidth={2.4} />
+          )}
+          <span className="mt-[3px] flex items-center gap-[3px]" aria-hidden>
+            <span className="size-[3px] rounded-full bg-current" />
+            <span className="size-[3px] rounded-full bg-current" />
+            <span className="size-[3px] rounded-full bg-current" />
+          </span>
+        </div>
+      </div>
     </motion.aside>
   );
 }
