@@ -6,10 +6,10 @@ import { motion, useMotionValue } from "framer-motion";
 import { Wifi, WifiOff } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
-const PAD = 16;
-const ITEM = 44;
-const GAP = 14;
-const TIME = 20;
+const PAD = 14;
+const ITEM = 40;
+const GAP = 12;
+const TIME = 18;
 const WIDTH = ITEM + PAD * 2;
 const HEIGHT = PAD + ITEM + GAP + TIME + GAP + ITEM + PAD;
 const RADIUS = WIDTH / 2;
@@ -151,7 +151,7 @@ export default function ScrollEdgeIndicator() {
           className="relative shrink-0 rounded-full bg-neutral-100 ring-1 ring-black/10 dark:bg-black dark:ring-white/15"
           style={{ width: ITEM, height: ITEM }}
         >
-          <span className="flex size-full items-center justify-center overflow-hidden rounded-full bg-neutral-100 text-[13px] font-semibold text-neutral-950 dark:bg-black dark:text-white">
+          <span className="flex size-full items-center justify-center overflow-hidden rounded-full bg-neutral-100 text-[12px] font-semibold text-neutral-950 dark:bg-black dark:text-white">
             {avatar ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={avatar} alt="" className="size-full object-cover" />
@@ -163,7 +163,7 @@ export default function ScrollEdgeIndicator() {
 
         <time
           dateTime={time}
-          className="flex items-center justify-center text-[15px] font-semibold leading-none tracking-[-0.04em] text-neutral-950 tabular-nums dark:text-white"
+          className="flex items-center justify-center text-[14px] font-semibold leading-none tracking-[-0.04em] text-neutral-950 tabular-nums dark:text-white"
           style={{ height: TIME }}
         >
           {time}
@@ -177,9 +177,9 @@ export default function ScrollEdgeIndicator() {
           title={online ? "Connected" : "No connection"}
         >
           {online ? (
-            <Wifi className="size-[15px]" strokeWidth={2.4} />
+            <Wifi className="size-[14px]" strokeWidth={2.4} />
           ) : (
-            <WifiOff className="size-[15px]" strokeWidth={2.4} />
+            <WifiOff className="size-[14px]" strokeWidth={2.4} />
           )}
           <span className="mt-[3px] flex items-center gap-[3px]" aria-hidden>
             <span className="size-[3px] rounded-full bg-current" />
