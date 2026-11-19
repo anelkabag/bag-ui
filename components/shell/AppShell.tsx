@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import Sidebar from "@/components/shell/Sidebar";
+import ScrollEdgeIndicator from "@/components/shell/ScrollEdgeIndicator";
 
 const STORAGE_KEY = "bagui-sidebar-collapsed";
 
@@ -56,17 +57,27 @@ export default function AppShell({ children }: { children: ReactNode }) {
       >
         <Sidebar collapsed={collapsed} onToggle={toggle} />
 
-        <main
-          id="main"
+        <div
           className={cn(
-            "relative min-w-0 flex-1 overflow-y-auto overscroll-contain bg-background transition-[margin,border-radius] duration-300 ease-out",
+            "relative min-h-0 min-w-0 flex-1 overflow-hidden transition-[margin,border-radius] duration-300 ease-out",
             collapsed
               ? "md:my-1.5 md:mr-1.5 md:rounded-[22px]"
-              : "md:mt-1.5 md:rounded-tl-2xl md:border-l md:border-t md:border-border",
+              : "md:mt-1.5 md:rounded-tl-2xl",
           )}
         >
-          {children}
-        </main>
+          <main
+            id="main"
+            className={cn(
+              "h-full overflow-y-auto overscroll-contain bg-background [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
+              collapsed
+                ? ""
+                : "md:border-l md:border-t md:border-border",
+            )}
+          >
+            {children}
+          </main>
+          <ScrollEdgeIndicator />
+        </div>
       </div>
     </div>
   );

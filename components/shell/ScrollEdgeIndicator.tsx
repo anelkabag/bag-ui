@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import {
   motion,
   useMotionValue,
@@ -10,6 +10,7 @@ import {
 } from "framer-motion";
 import { Aperture, Asterisk, Settings, Sparkles, type LucideIcon } from "lucide-react";
 
+const HEIGHT = 378;
 const RINGS: { color: string; Icon: LucideIcon }[] = [
   { color: "#ff4d1a", Icon: Asterisk },
   { color: "#22c55e", Icon: Aperture },
@@ -62,29 +63,94 @@ function Ring({
 export default function ScrollEdgeIndicator() {
   const raw = useMotionValue(0);
   const progress = useSpring(raw, { stiffness: 140, damping: 26, mass: 0.3 });
+  const y = useMotionValue(0);
+  const scale = useMotionValue(1);
+  const rootRef = useRef<HTMLElement>(null);
+  const drag = useRef<{ pointer: number; scroll: number; travel: number; max: number } | null>(
+    null,
+  );
+  const [active, setActive] = useState(false);
 
   useEffect(() => {
+    const scroller = document.getElementById("main");
+    const root = rootRef.current;
+    if (!scroller || !root) return;
+
+    let frame = 0;
     const update = () => {
-      const el = document.documentElement;
-      const max = el.scrollHeight - el.clientHeight;
-      raw.set(max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0);
+      const parentH = root.parentElement?.clientHeight ?? scroller.clientHeight;
+      const max = scroller.scrollHeight - scroller.clientHeight;
+      const p = max > 1 ? Math.min(1, Math.max(0, scroller.scrollTop / max)) : 0;
+      const nextScale = Math.min(1, Math.max(0.62, (parentH - 12) / HEIGHT));
+      const travel = Math.max(0, parentH - HEIGHT * nextScale);
+      raw.set(p);
+      scale.set(nextScale);
+      if (!drag.current) y.set(p * travel);
+      setActive(max > 1);
     };
+
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(update);
+    };
+
     update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    const ro = new ResizeObserver(update);
-    ro.observe(document.body);
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    const ro = new ResizeObserver(onScroll);
+    ro.observe(scroller);
+    if (scroller.firstElementChild) ro.observe(scroller.firstElementChild);
+
     return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
+      cancelAnimationFrame(frame);
+      scroller.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
       ro.disconnect();
     };
-  }, [raw]);
+  }, [raw, scale, y]);
+
+  const onPointerDown = (event: ReactPointerEvent<HTMLElement>) => {
+    if ((event.target as HTMLElement).closest("button")) return;
+    const scroller = document.getElementById("main");
+    const root = rootRef.current;
+    if (!scroller || !root) return;
+    const parentH = root.parentElement?.clientHeight ?? scroller.clientHeight;
+    const nextScale = scale.get();
+    const travel = Math.max(1, parentH - HEIGHT * nextScale);
+    const max = scroller.scrollHeight - scroller.clientHeight;
+    if (max <= 1) return;
+    drag.current = { pointer: event.clientY, scroll: scroller.scrollTop, travel, max };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const onPointerMove = (event: ReactPointerEvent<HTMLElement>) => {
+    const state = drag.current;
+    const scroller = document.getElementById("main");
+    if (!state || !scroller) return;
+    const dy = event.clientY - state.pointer;
+    scroller.scrollTop = state.scroll + (dy / state.travel) * state.max;
+  };
+
+  const endDrag = () => {
+    drag.current = null;
+  };
 
   return (
-    <aside
+    <motion.aside
+      ref={rootRef}
       aria-label="Scroll progress"
-      className="pointer-events-none fixed right-0 top-1/2 z-50 h-[378px] w-14 -translate-y-1/2"
+      aria-hidden={!active}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={endDrag}
+      onPointerCancel={endDrag}
+      className="absolute top-0 right-0 z-40 h-[378px] w-14 origin-top-right cursor-grab touch-none active:cursor-grabbing"
+      style={{
+        y,
+        scale,
+        visibility: active ? "visible" : "hidden",
+        pointerEvents: active ? "auto" : "none",
+      }}
     >
       <svg viewBox="0 0 56 378" className="absolute inset-0 size-full" aria-hidden>
         <path
@@ -102,11 +168,11 @@ export default function ScrollEdgeIndicator() {
       <button
         type="button"
         aria-label="Back to top"
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className="pointer-events-auto absolute left-2 top-[336px] flex size-9 items-center justify-center rounded-full bg-white/[0.08] text-white transition-colors hover:bg-white/15"
+        onClick={() => document.getElementById("main")?.scrollTo({ top: 0, behavior: "smooth" })}
+        className="absolute top-[336px] left-2 flex size-9 items-center justify-center rounded-full bg-white/[0.08] text-white transition-colors hover:bg-white/15"
       >
         <Settings className="size-[18px]" strokeWidth={1.75} />
       </button>
-    </aside>
+    </motion.aside>
   );
 }
