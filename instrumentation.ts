@@ -3,8 +3,11 @@ import { OTLPLogExporter } from "@opentelemetry/exporter-logs-otlp-http";
 import { resourceFromAttributes } from "@opentelemetry/resources";
 import { BatchLogRecordProcessor, LoggerProvider } from "@opentelemetry/sdk-logs";
 
-const posthogHost = process.env.NEXT_PUBLIC_POSTHOG_HOST;
-const posthogToken = process.env.NEXT_PUBLIC_POSTHOG_KEY;
+const posthogHost =
+  process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://us.i.posthog.com";
+const posthogToken =
+  process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN ??
+  process.env.NEXT_PUBLIC_POSTHOG_KEY;
 
 const loggerProvider =
   posthogHost && posthogToken
@@ -25,9 +28,7 @@ const loggerProvider =
     : null;
 
 if (!loggerProvider && process.env.NODE_ENV !== "production") {
-  const missingVariable = posthogToken
-    ? "NEXT_PUBLIC_POSTHOG_HOST"
-    : "NEXT_PUBLIC_POSTHOG_KEY";
+  const missingVariable = "NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN";
 
   console.warn(
     new Error(
