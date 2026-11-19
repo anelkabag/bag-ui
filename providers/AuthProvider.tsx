@@ -132,7 +132,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       password,
       options: {
         data: { username },
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=/blocks`,
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=/blocks&welcome=1`,
       },
     });
 
@@ -144,6 +144,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     if (data.user && data.user.identities?.length === 0) {
       return "An account with this email already exists.";
+    }
+
+    if (data.session?.user?.email_confirmed_at) {
+      await fetch("/api/auth/welcome", { method: "POST" });
     }
 
     posthog.capture("account_registered", {

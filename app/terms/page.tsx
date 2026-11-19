@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, FileText } from "lucide-react";
-import Navbar from "@/components/navbar";
-import { Footer } from "@/components/footer";
+import AppShell from "@/components/shell/AppShell";
 
 const sections = [
   { id: "overview", label: "Overview" },
@@ -16,10 +15,8 @@ const sections = [
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <Navbar />
-
-      <main className="mx-auto max-w-7xl border-x border-border px-6">
+    <AppShell>
+      <div className="min-h-full mx-auto max-w-[1440px] bg-background px-5 text-foreground md:px-10">
         <div className="border-b border-border py-8 md:py-10">
           <div className="flex items-center justify-between gap-4">
             <Link
@@ -49,7 +46,7 @@ export default function TermsPage() {
             </div>
 
             <p className="max-w-2xl text-sm leading-7 text-muted-foreground md:text-base">
-              These Terms of Service govern your access to and use of Bag/UI and the
+              These Terms of Service govern your access to and use of BagUI and the
               services made available through the website.
             </p>
           </div>
@@ -81,7 +78,7 @@ export default function TermsPage() {
                     1. Overview
                   </h2>
                   <p className="mt-4 text-sm leading-7 text-muted-foreground md:text-base">
-                    By accessing Bag/UI, you agree to use the platform in compliance with
+                    By accessing BagUI, you agree to use the platform in compliance with
                     these Terms and all applicable laws. If you do not agree, you should
                     not continue using the website or the services.
                   </p>
@@ -93,7 +90,7 @@ export default function TermsPage() {
                   </h2>
                   <div className="mt-4 space-y-3 text-sm leading-7 text-muted-foreground md:text-base">
                     <p>
-                      You may use Bag/UI for lawful personal or commercial purposes, as
+                      You may use BagUI for lawful personal or commercial purposes, as
                       long as you do not misuse the service, interfere with its operation,
                       or violate the rights of others.
                     </p>
@@ -133,7 +130,7 @@ export default function TermsPage() {
                     5. Intellectual property
                   </h2>
                   <p className="mt-4 text-sm leading-7 text-muted-foreground md:text-base">
-                    Bag/UI and its content, design, UI blocks, templates, and branding are
+                    BagUI and its content, design, UI blocks, templates, and branding are
                     protected by intellectual property rights. You may use the platform in
                     accordance with the applicable license terms, but you may not copy,
                     resell, or redistribute the product in a way that violates those terms.
@@ -183,9 +180,7 @@ export default function TermsPage() {
             </div>
           </div>
         </section>
-      </main>
-
-      <Footer />
-    </div>
+      </div>
+    </AppShell>
   );
 }

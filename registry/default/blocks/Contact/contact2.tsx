@@ -166,7 +166,7 @@ export default function ContactSection() {
                                 <Check size={24} strokeWidth={2.2} className="text-white" />
                             </div>
                             <h3 className="text-[20px] font-bold text-gray-900 mb-2">Message sent!</h3>
-                            <p className="text-[14px] text-gray-400">We'll get back to you as soon as possible.</p>
+                            <p className="text-[14px] text-gray-400">We&apos;ll get back to you as soon as possible.</p>
                             <button
                                 onClick={() => setSent(false)}
                                 className="mt-8 text-[13px] font-medium text-gray-500 underline underline-offset-2 hover:text-gray-800 transition-colors"

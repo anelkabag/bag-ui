@@ -2,11 +2,8 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "login1",
   "title": "Login Exemple 1",
-  "description": "Frequently asked questions section with collapsible items.",
-  "dependencies": [
-    "motion/react",
-    "lucide-react"
-  ],
+  "description": "Sign-in form with password visibility controls, social-provider buttons, and account links.",
+  "dependencies": [],
   "files": [
     {
       "path": "registry/default/blocks/SignUp/login1.tsx",

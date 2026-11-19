@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import Image from "next/image";
 import {
   Share2,
   Rows3,
@@ -308,9 +309,11 @@ function RailIcon({ icon: Icon, label, active, onClick }: { icon: IconType; labe
 function Sidebar({ activeNav, onSelect }: { activeNav: NavKey; onSelect: (key: NavKey) => void }) {
   return (
     <aside className="flex h-full w-[56px] shrink-0 flex-col items-center gap-1 border-r border-white/[0.06] bg-[#0C0D0B] py-4">
-      <img
+      <Image
         src="/logoW.png"
         alt="Logo"
+        width={24}
+        height={24}
         className="h-6 w-6 object-contain mb-4"
       />
 

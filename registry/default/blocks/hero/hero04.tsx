@@ -1,7 +1,9 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import Link from "next/link";
+import Image from "next/image";
 import {
   motion,
   useInView,
@@ -14,7 +16,8 @@ import { ArrowRight, Calendar, Moon, Sun, Menu, X } from "lucide-react";
 export default function Hero1() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [dark, setDark] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
+  const dark = resolvedTheme === "dark";
   const heroRef = useRef<HTMLDivElement>(null);
   const heroInView = useInView(heroRef, { once: true, margin: "-80px 0px" });
 
@@ -30,10 +33,6 @@ export default function Hero1() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark);
-  }, [dark]);
 
   const navLinks = [
     { href: "/features", label: "Features" },
@@ -70,9 +69,11 @@ export default function Hero1() {
               transition={{ delay: 0.15, duration: 0.5 }}
             >
               <Link href="/" className="flex items-center gap-3 group">
-                <img
+                <Image
                   src="https://bagui.vercel.app/logoR.png"
                   alt="BagUi logo"
+                  width={32}
+                  height={32}
                   className="w-8 h-8 object-contain rounded-lg"
                 />
                 <span className="font-semibold text-[15px] text-zinc-950 dark:text-white tracking-[-0.01em]">
@@ -100,7 +101,7 @@ export default function Hero1() {
               transition={{ delay: 0.15, duration: 0.5 }}
             >
               <button
-                onClick={() => setDark(!dark)}
+                onClick={() => setTheme(dark ? "light" : "dark")}
                 className="p-2 rounded-md text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
                 aria-label="Toggle theme"
               >
@@ -131,7 +132,7 @@ export default function Hero1() {
 
             <div className="flex items-center gap-1 md:hidden">
               <button
-                onClick={() => setDark(!dark)}
+                onClick={() => setTheme(dark ? "light" : "dark")}
                 className="p-2 rounded-md text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
               >
                 {dark ? (
@@ -482,10 +483,13 @@ export default function Hero1() {
                 "https://www.amazon.com/favicon.ico",
                 "https://www.apple.com/favicon.ico",
               ].map((logo, i) => (
-                <img
+                <Image
                   key={i}
                   src={logo}
                   alt={`Partner logo ${i + 1}`}
+                  width={32}
+                  height={32}
+                  unoptimized
                   className="h-8 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity"
                 />
               ))}

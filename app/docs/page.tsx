@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import Image from "next/image";
-import { Footer } from "@/components/footer";
-import Navbar from "@/components/navbar";
+import AppShell from "@/components/shell/AppShell";
+import PageHero from "@/components/shell/PageHero";
+import { Check, Copy } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Tab = "pnpm" | "npm" | "bun" | "yarn";
@@ -20,13 +21,6 @@ type Section = { id: string; label: string };
 type DocsPage = "installation" | "contributing" | "mcp" | "extension";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
-const NAV_LINKS = [
-  { label: "Blocks", href: "/blocks" },
-  { label: "Templates", href: "/templates" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "Docs", href: "/docs" },
-] as const;
-
 // "On this page" pour la page Installation — ne contient PAS Contributing.
 const INSTALLATION_SECTIONS: Section[] = [
   { id: "introduction", label: "Introduction" },
@@ -88,6 +82,45 @@ const SIDEBAR_NAV: {
   },
 ];
 
+const DOCS_PAGE_CONTENT: Record<
+  DocsPage,
+  {
+    firstLine: string;
+    secondLine: string;
+    emphasis: string;
+    description: string;
+  }
+> = {
+  installation: {
+    firstLine: "Ready-made blocks.",
+    secondLine: "Zero wasted",
+    emphasis: "time.",
+    description:
+      "Register BagUI once and pull any block directly into your project with a single CLI command.",
+  },
+  contributing: {
+    firstLine: "Build with us.",
+    secondLine: "Ship a",
+    emphasis: "block.",
+    description:
+      "BagUI is open source. Here's everything you need to add a component and get it merged.",
+  },
+  mcp: {
+    firstLine: "BagUI MCP.",
+    secondLine: "Your AI assistant,",
+    emphasis: "connected.",
+    description:
+      "Discover BagUI components, inspect their source, and get installation commands directly from an MCP-compatible client.",
+  },
+  extension: {
+    firstLine: "BagUI for VS Code.",
+    secondLine: "Components, right in",
+    emphasis: "your editor.",
+    description:
+      "Browse, search, preview, and install BagUI components without leaving Visual Studio Code.",
+  },
+};
+
 // ─── Code snippets ────────────────────────────────────────────────────────────
 const INIT_CMDS: Record<Tab, string> = {
   pnpm: "pnpm dlx shadcn@latest init",
@@ -126,7 +159,7 @@ const FRAMEWORKS: {
     key: "next",
     label: "Next.js",
     blurb: "A React framework with file-system routing and server rendering.",
-    note: "Choose the recommended defaults when prompted — TypeScript, Tailwind CSS and the App Router are all Bag/UI needs.",
+    note: "Choose the recommended defaults when prompted — TypeScript, Tailwind CSS and the App Router are all BagUI needs.",
     docsHref: "https://nextjs.org/docs/app/getting-started/installation",
     docsLabel: "Next.js",
   },
@@ -300,69 +333,48 @@ const MCP_GEMINI_CONFIG = `{
   }
 }`;
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// NAVBAR
-// ═══════════════════════════════════════════════════════════════════════════════
+const PACKAGE_MANAGER_LOGOS: Record<Exclude<Tab, "bun">, string> = {
+  pnpm: "/assets/pnpm.svg",
+  npm: "/assets/npm.svg",
+  yarn: "/assets/yarn.svg",
+};
 
-const Logo = () => (
-  <div className="flex items-center gap-2 shrink-0">
-    <Link href="/" className="flex items-center gap-2">
-      <Image
-        src="/logo.png"
-        alt="BagUI Logo"
-        width={20}
-        height={20}
-        className="shrink-0"
-        priority
-      />
-      <span className="text-[15px] font-semibold tracking-tight text-foreground">
-        Bag\Ui
-      </span>
-    </Link>
-    <Link
-      href="https://x.com/anelkabag"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-[13px] text-muted-foreground hover:text-foreground transition-colors"
-    >
-      by Anelka Bag
-    </Link>
-  </div>
-);
+function CodeContent({ code }: { code: string }) {
+  const tokenPattern =
+    /("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`|\/\/[^\n]*|#[^\n]*|\b(?:const|let|var|function|return|export|default|import|from|as|async|await|true|false|null|undefined|new|if|else)\b|\b\d+\b)/g;
+  const tokens: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
 
-const NavLink = ({
-  href,
-  label,
-  external,
-  size = "sm",
-  onClick,
-}: {
-  href: string;
-  label: string;
-  external?: boolean;
-  size?: "sm" | "xs";
-  onClick?: () => void;
-}) => (
-  <Link
-    href={href}
-    onClick={onClick}
-    className={`relative ${size === "xs" ? "text-[13px]" : "text-sm"} ${
-      href === "/docs"
-        ? "text-foreground font-semibold"
-        : "text-muted-foreground font-medium"
-    } hover:text-foreground transition-colors duration-150 group inline-flex items-baseline gap-0.5`}
-  >
-    {label}
-    {external && (
-      <sup className="text-[10px] text-muted-foreground leading-none">↗</sup>
-    )}
-    <span className="absolute left-0 -bottom-[2px] h-[1.5px] w-0 group-hover:w-full transition-all duration-300 bg-foreground" />
-  </Link>
-);
+  while ((match = tokenPattern.exec(code)) !== null) {
+    if (match.index > lastIndex) {
+      tokens.push(code.slice(lastIndex, match.index));
+    }
 
-const Sep = () => (
-  <div className="hidden sm:block w-px h-5 self-center shrink-0 bg-border" />
-);
+    const token = match[0];
+    const className =
+      token.startsWith("//") || token.startsWith("#")
+        ? "text-zinc-500"
+        : /^["'`]/.test(token)
+          ? "text-emerald-300"
+          : /^\d/.test(token) || /^(true|false|null|undefined)$/.test(token)
+            ? "text-amber-300"
+            : "text-violet-300";
+
+    tokens.push(
+      <span key={match.index} className={className}>
+        {token}
+      </span>,
+    );
+    lastIndex = tokenPattern.lastIndex;
+  }
+
+  if (lastIndex < code.length) {
+    tokens.push(code.slice(lastIndex));
+  }
+
+  return <>{tokens}</>;
+}
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // DOCS COMPONENTS
@@ -383,68 +395,80 @@ function CodeBlock({
 }) {
   const [active, setActive] = useState<Tab>("pnpm");
   const [copied, setCopied] = useState(false);
+  const [copyFailed, setCopyFailed] = useState(false);
   const code = content ?? cmds?.[active] ?? "";
 
-  const copy = () => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1800);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopyFailed(false);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch (error) {
+      console.error("Failed to copy documentation snippet:", error);
+      setCopied(false);
+      setCopyFailed(true);
+      window.setTimeout(() => setCopyFailed(false), 1800);
+    }
   };
 
   return (
-    <div className="rounded-xl border border-border bg-muted overflow-hidden my-5 shadow-sm">
+    <div className="group my-5 overflow-hidden rounded-xl border border-border bg-[#18181b] shadow-sm">
       {tabs && (
-        <div className="flex items-center gap-0 border-b border-border px-1 pt-1 bg-background">
+        <div className="flex items-center gap-1 border-b border-white/10 bg-[#202023] px-2 py-2">
           {tabs.map((t) => (
             <button
               key={t}
               onClick={() => setActive(t)}
-              className={`px-3 py-1.5 text-xs font-medium rounded-t transition-colors cursor-pointer ${
+              className={`flex items-center gap-2 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors cursor-pointer ${
                 active === t
-                  ? "text-foreground bg-accent"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "bg-white/10 text-white"
+                  : "text-zinc-400 hover:bg-white/5 hover:text-zinc-100"
               }`}
             >
+              {t === "bun" ? (
+                <span className="flex size-4 items-center justify-center rounded-full bg-[#f9f1e1] text-[10px] font-bold text-[#141414]">
+                  B
+                </span>
+              ) : (
+                <Image
+                  src={PACKAGE_MANAGER_LOGOS[t]}
+                  alt=""
+                  width={16}
+                  height={16}
+                  className="size-4 object-contain"
+                />
+              )}
               {t}
             </button>
           ))}
         </div>
       )}
       {!tabs && mono && (
-        <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-background">
-          <span className="text-xs text-muted-foreground font-mono">{lang}</span>
+        <div className="flex items-center justify-between border-b border-white/10 bg-[#202023] px-4 py-2.5">
+          <span className="text-xs font-mono text-zinc-400">{lang}</span>
         </div>
       )}
-      <div className="relative group">
-        <pre className="p-4 text-sm text-foreground/90 font-mono leading-relaxed overflow-x-auto whitespace-pre">
-          {code}
+      <div className="relative">
+        <pre className="overflow-x-auto whitespace-pre p-4 pr-24 font-mono text-sm leading-relaxed text-zinc-200">
+          <code>
+            <CodeContent code={code} />
+          </code>
         </pre>
         <button
-          onClick={copy}
-          className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity bg-background hover:bg-muted border border-border rounded-md px-2 py-1 text-xs text-muted-foreground hover:text-foreground flex items-center gap-1.5 shadow-sm cursor-pointer"
+          type="button"
+          onClick={() => void copy()}
+          aria-label={copied ? "Copied" : copyFailed ? "Copy failed" : "Copy code"}
+          className={`absolute right-3 top-3 flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs shadow-sm transition-colors ${
+            copied
+              ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-300"
+              : copyFailed
+                ? "border-rose-500/40 bg-rose-500/15 text-rose-300"
+                : "border-white/10 bg-[#27272a] text-zinc-400 hover:text-white"
+          }`}
         >
-          <AnimatePresence mode="wait">
-            {copied ? (
-              <motion.span
-                key="check"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                className="text-emerald-600 dark:text-emerald-400"
-              >
-                ✓ Copied
-              </motion.span>
-            ) : (
-              <motion.span
-                key="copy"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                Copy
-              </motion.span>
-            )}
-          </AnimatePresence>
+          {copied ? <Check size={13} /> : <Copy size={13} />}
+          {copied ? "Copied" : copyFailed ? "Failed" : "Copy"}
         </button>
       </div>
     </div>
@@ -516,8 +540,8 @@ const inlineCode =
 const textLink =
   "text-foreground underline underline-offset-2 hover:opacity-70 transition-opacity";
 
-// ─── Left sidebar ─────────────────────────────────────────────────────────────
-function LeftSidebar({
+// ─── Guide navigation ─────────────────────────────────────────────────────────
+function DocsGuideNavigation({
   activePage,
   onSelectPage,
 }: {
@@ -525,31 +549,52 @@ function LeftSidebar({
   onSelectPage: (page: DocsPage) => void;
 }) {
   return (
-    <aside className="hidden xl:block sticky top-20 self-start">
+    <nav
+      aria-label="Documentation guides"
+      className="flex w-fit max-w-full items-center gap-1 overflow-x-auto rounded-full border border-border bg-muted/40 p-1 xl:sticky xl:top-8 xl:w-full xl:flex-col xl:items-stretch xl:gap-5 xl:self-start xl:overflow-visible xl:rounded-none xl:border-0 xl:bg-transparent xl:p-0"
+    >
       {SIDEBAR_NAV.map((group) => (
-        <div key={group.group} className="mb-6">
-          <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest mb-3 px-3">
+        <div
+          key={group.group}
+          className="flex shrink-0 items-center gap-1 xl:block"
+        >
+          <p className="mb-2 hidden px-3 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground xl:block">
             {group.group}
           </p>
-          <ul className="space-y-0.5">
+          <ul className="flex items-center gap-1 xl:block xl:space-y-0.5">
             {group.pages.map((page) => (
               <li key={page.page}>
                 <button
+                  type="button"
                   onClick={() => onSelectPage(page.page)}
-                  className={`w-full text-left block text-sm rounded-lg px-3 py-1.5 transition-colors cursor-pointer ${
+                  aria-pressed={activePage === page.page}
+                  className={`relative isolate w-full shrink-0 rounded-full px-3.5 py-2 text-left text-sm font-medium transition-colors xl:rounded-lg xl:px-3 ${
                     activePage === page.page
-                      ? "text-foreground bg-accent font-medium"
-                      : "text-muted-foreground hover:text-foreground hover:bg-accent/60"
+                      ? "text-background xl:text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  {page.label}
+                  {activePage === page.page && (
+                    <motion.span
+                      layoutId="docs-page-indicator"
+                      className="absolute inset-0 z-0 rounded-full bg-foreground xl:rounded-lg xl:bg-accent"
+                      transition={{
+                        type: "spring",
+                        stiffness: 420,
+                        damping: 34,
+                        mass: 0.7,
+                      }}
+                      aria-hidden="true"
+                    />
+                  )}
+                  <span className="relative z-10">{page.label}</span>
                 </button>
               </li>
             ))}
           </ul>
         </div>
       ))}
-    </aside>
+    </nav>
   );
 }
 
@@ -599,6 +644,7 @@ export default function DocsPage() {
         : activePage === "mcp"
           ? MCP_SECTIONS
           : EXTENSION_SECTIONS;
+  const heroContent = DOCS_PAGE_CONTENT[activePage];
 
   const handleSelectPage = (page: DocsPage) => {
     setActivePage(page);
@@ -621,7 +667,7 @@ export default function DocsPage() {
     ) {
       window.history.replaceState(null, "", window.location.pathname);
     }
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    document.getElementById("main")?.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -658,98 +704,34 @@ export default function DocsPage() {
       }
     };
 
-    window.addEventListener("scroll", updateActive, { passive: true });
-    return () => window.removeEventListener("scroll", updateActive);
+    const scrollContainer = document.getElementById("main");
+    if (!scrollContainer) return;
+
+    scrollContainer.addEventListener("scroll", updateActive, { passive: true });
+    return () => scrollContainer.removeEventListener("scroll", updateActive);
   }, [sections]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* ── Navbar ── */}
-      <Navbar />
+    <AppShell>
+      <div className="mx-auto min-h-full max-w-[1440px] bg-background pb-12 text-foreground">
+        <PageHero
+          firstLine={heroContent.firstLine}
+          secondLine={heroContent.secondLine}
+          emphasis={heroContent.emphasis}
+          className="pb-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.8fr)]"
+        >
+          <p className="max-w-xl text-sm leading-6 text-muted-foreground md:text-base">
+            {heroContent.description}
+          </p>
+        </PageHero>
 
-      <div className="max-w-7xl mx-auto px-6 pt-10 pb-10 border-x border-border">
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-xs text-muted-foreground mb-8">
-          <Link href="/" className="hover:text-foreground transition-colors">
-            Home
-          </Link>
-          <span>/</span>
-          <span className="text-foreground">Documentation</span>
-          <span>/</span>
-          <span className="text-foreground">
-            {activePage === "installation"
-              ? "Installations"
-              : activePage === "contributing"
-                ? "Contribution"
-                : activePage === "mcp"
-                  ? "MCP"
-                  : "VS Code extension"}
-          </span>
-        </div>
-
-        {/* Hero */}
-        <div className="mb-14 max-w-2xl">
-          {activePage === "installation" ? (
-            <>
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-3 leading-tight">
-                Ready-made blocks.{" "}
-                <span className="text-muted-foreground">Zero wasted time.</span>
-              </h1>
-              <p className="text-muted-foreground text-base leading-relaxed">
-                Register Bag/UI once and pull any block directly into your
-                project with a single CLI command.
-              </p>
-            </>
-          ) : activePage === "contributing" ? (
-            <>
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-3 leading-tight">
-                Build with us.{" "}
-                <span className="text-muted-foreground">Ship a block.</span>
-              </h1>
-              <p className="text-muted-foreground text-base leading-relaxed">
-                Bag/UI is open source. Here&apos;s everything you need to add a
-                component and get it merged.
-              </p>
-            </>
-          ) : activePage === "mcp" ? (
-            <>
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-3 leading-tight">
-                BagUI MCP.{" "}
-                <span className="text-muted-foreground">
-                  Your AI assistant, connected.
-                </span>
-              </h1>
-              <p className="text-muted-foreground text-base leading-relaxed">
-                Discover BagUI components, inspect their source, and get
-                installation commands directly from an MCP-compatible client.
-              </p>
-            </>
-          ) : (
-            <>
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-3 leading-tight">
-                BagUI for VS Code.{" "}
-                <span className="text-muted-foreground">
-                  Components, right in your editor.
-                </span>
-              </h1>
-              <p className="text-muted-foreground text-base leading-relaxed">
-                Browse, search, preview, and install BagUI components without
-                leaving Visual Studio Code.
-              </p>
-            </>
-          )}
-        </div>
-
-        {/* 3-col layout */}
-        <div className="grid grid-cols-1 xl:grid-cols-[200px_1fr_180px] gap-12">
-          {/* Left sidebar */}
-          <LeftSidebar
+        <div className="mx-5 mt-8 grid grid-cols-1 gap-8 md:mx-10 xl:grid-cols-[180px_minmax(0,760px)_180px] xl:justify-center xl:gap-10">
+          <DocsGuideNavigation
             activePage={activePage}
             onSelectPage={handleSelectPage}
           />
 
-          {/* Main content */}
-          <main className="min-w-0">
+          <div className="mx-auto w-full min-w-0 max-w-[760px]">
             {activePage === "installation" && (
               <>
                 {/* Introduction */}
@@ -758,11 +740,11 @@ export default function DocsPage() {
                     Introduction
                   </SectionHeading>
                   <Prose>
-                    Bag/UI is a growing library of carefully crafted React
+                    BagUI is a growing library of carefully crafted React
                     blocks built on shadcn/ui and Tailwind CSS. Interactive
                     sections may include Framer Motion or GSAP animations, while
                     every block remains fully customizable and installable
-                    through the Bag/UI registry with a single CLI command.
+                    through the BagUI registry with a single CLI command.
                   </Prose>
                 </section>
 
@@ -859,7 +841,7 @@ export default function DocsPage() {
                     Register the namespace
                   </SectionHeading>
                   <Prose>
-                    Add the Bag/UI registry to your project&apos;s{" "}
+                    Add the BagUI registry to your project&apos;s{" "}
                     <code className={inlineCode}>components.json</code> so the
                     shadcn CLI knows where to fetch the blocks from. You only do
                     this once per project — no API key needed for free blocks.
@@ -998,7 +980,7 @@ export default function DocsPage() {
                     Overview
                   </SectionHeading>
                   <Prose>
-                    Bag/UI is open source, and contributions are welcome — new
+                    BagUI is open source, and contributions are welcome — new
                     blocks, bug fixes, or documentation improvements. Clone the
                     repo, install dependencies, then create a branch and follow
                     the steps below.
@@ -1384,14 +1366,12 @@ export default function DocsPage() {
                 </section>
               </>
             )}
-          </main>
+          </div>
 
           {/* Right TOC */}
           <TOC sections={sections} active={activeSection} />
         </div>
       </div>
-
-      <Footer />
-    </div>
+    </AppShell>
   );
 }

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "lenis/dist/lenis.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -166,18 +167,9 @@
         @apply border-border outline-ring/50;
     }
 
-    @media (prefers-reduced-motion: no-preference) {
-        * {
-            transition-property:
-                background-color, border-color, color, fill, stroke;
-            transition-timing-function: ease;
-            transition-duration: 200ms;
-        }
-    }
-
     html {
         font-family: var(--font-geist-sans);
-        scroll-behavior: smooth;
+        scroll-behavior: auto;
     }
 
     body {
@@ -192,4 +184,52 @@ html.dark {
 
 html:not(.dark) {
     color-scheme: light;
+}
+
+@keyframes theme-switch-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes theme-switch-fade-out {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+::view-transition-old(root) {
+    animation: 180ms ease-out both theme-switch-fade-out;
+}
+
+::view-transition-new(root) {
+    animation: 220ms cubic-bezier(0.22, 1, 0.36, 1) both theme-switch-fade-in;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation: none;
+    }
+}
+
+.shell-backdrop {
+  background:
+    radial-gradient(circle, rgb(0 0 0 / 0.16) 1px, transparent 1.6px) 0 0 / 6px 6px,
+    linear-gradient(160deg, #9db3b8 0%, #d3c9a6 52%, #7f989e 100%);
+  /* background-image: url("/shell-bg.webp"); background-size: cover; */
+}
+ 
+.dark .shell-backdrop {
+  background:
+    radial-gradient(circle, rgb(255 255 255 / 0.07) 1px, transparent 1.6px) 0 0 / 6px 6px,
+    linear-gradient(160deg, #1d2a30 0%, #3a3626 52%, #18242a 100%);
 }

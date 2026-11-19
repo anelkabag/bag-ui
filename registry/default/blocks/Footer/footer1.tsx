@@ -82,7 +82,7 @@ export function Footer1() {
                             <span className="text-sm font-semibold text-foreground">Bag\Ui</span>
                         </div>
                         <p className="max-w-[180px] text-xs leading-relaxed text-muted-foreground">
-                            Spend less time building UI from scratch. Ship faster with Bag/UI.
+                            Spend less time building UI from scratch. Ship faster with BagUI.
                         </p>
                     </div>
                     <div>
@@ -124,7 +124,7 @@ export function Footer1() {
                 </div>
                 <div className="flex flex-col items-start justify-between gap-6 border-t border-border pt-8 md:flex-row md:items-center">
                     <p className="text-xs text-muted-foreground">
-                        © {new Date().getFullYear()} Bag/UI - is not officially affiliated with shadcn/ui or Tailwind CSS. Built by{" "}
+                        © {new Date().getFullYear()} BagUI - is not officially affiliated with shadcn/ui or Tailwind CSS. Built by{" "}
                         <a
                             href="https://www.anelka.life/"
                             target="_blank"

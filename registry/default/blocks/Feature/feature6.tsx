@@ -9,11 +9,10 @@ import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"], weight: ["400", "500"], display: "swap" });
 
-/* Variables de couleur (clair + sombre automatique), embarquées dans le fichier */
+/* Couleurs isolées au composant et alignées sur la classe de thème du site. */
 const THEME_CSS = `
-:root{--bg:#fff;--card:#fff;--line:#e8e8e8;--ink:#111;--mute:#8c8c8c;--panel:#f6f6f6;--dot:#d6d6d6;--stroke:#1a1a1a;--paper:#fff;--soft:#e4e4e4;--btn:#000;--btnink:#fff}
-@media (prefers-color-scheme:dark){:root{--bg:#0e0e0e;--card:#151515;--line:#2a2a2a;--ink:#f2f2f2;--mute:#8a8a8a;--panel:#1c1c1c;--dot:#333;--stroke:#e6e6e6;--paper:#151515;--soft:#333;--btn:#f2f2f2;--btnink:#000}}
-body{background:var(--bg)}
+.feature-six{--bg:#fff;--card:#fff;--line:#e8e8e8;--ink:#111;--mute:#8c8c8c;--panel:#f6f6f6;--dot:#d6d6d6;--stroke:#1a1a1a;--paper:#fff;--soft:#e4e4e4;--btn:#000;--btnink:#fff}
+.dark .feature-six{--bg:#0e0e0e;--card:#151515;--line:#2a2a2a;--ink:#f2f2f2;--mute:#8a8a8a;--panel:#1c1c1c;--dot:#333;--stroke:#e6e6e6;--paper:#151515;--soft:#333;--btn:#f2f2f2;--btnink:#000}
 `;
 
 /* ---------- Cartes ---------- */
@@ -168,7 +167,7 @@ function DarkModeIllustration() {
 
 export default function Page() {
   return (
-    <div className={`${inter.className} min-h-screen bg-[var(--bg)] text-[var(--ink)] antialiased`}>
+    <div className={`${inter.className} feature-six min-h-screen bg-[var(--bg)] text-[var(--ink)] antialiased`}>
     <style dangerouslySetInnerHTML={{ __html: THEME_CSS }} />
     <main className="mx-auto max-w-[920px] px-5 pt-[72px] pb-20">
       <h1 className="text-center text-[clamp(26px,4vw,36px)] font-normal tracking-[-0.025em]">

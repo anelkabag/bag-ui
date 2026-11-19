@@ -2,9 +2,9 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "feature-3",
   "title": "Feature Exemple 3",
-  "description": "Frequently asked questions section with collapsible items.",
+  "description": "Invoice-creation feature layout with data-visualization previews and animated content.",
   "dependencies": [
-    "motion/react",
+    "motion",
     "lucide-react"
   ],
   "files": [

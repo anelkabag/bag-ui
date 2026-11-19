@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
-import Navbar from "@/components/navbar";
-import { Footer } from "@/components/footer";
+import AppShell from "@/components/shell/AppShell";
 
 const sections = [
   { id: "overview", label: "Overview" },
@@ -16,10 +15,8 @@ const sections = [
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <Navbar />
-
-      <main className="mx-auto max-w-7xl border-x border-border px-6">
+    <AppShell>
+      <div className="min-h-full mx-auto max-w-[1440px] bg-background px-5 text-foreground md:px-10">
         <div className="border-b border-border py-8 md:py-10">
           <div className="flex items-center justify-between gap-4">
             <Link
@@ -49,7 +46,7 @@ export default function PrivacyPage() {
             </div>
 
             <p className="max-w-2xl text-sm leading-7 text-muted-foreground md:text-base">
-              This Privacy Policy explains how Bag/UI collects, uses, and protects
+              This Privacy Policy explains how BagUI collects, uses, and protects
               the information you share while using our website and services.
             </p>
           </div>
@@ -83,7 +80,7 @@ export default function PrivacyPage() {
                   <p className="mt-4 text-sm leading-7 text-muted-foreground md:text-base">
                     We respect your privacy and aim to collect only the data needed to
                     provide a smooth, secure, and useful experience. This policy covers
-                    information collected on Bag/UI, including account, product, and
+                    information collected on BagUI, including account, product, and
                     browsing interactions.
                   </p>
                 </section>
@@ -188,9 +185,7 @@ export default function PrivacyPage() {
             </div>
           </div>
         </section>
-      </main>
-
-      <Footer />
-    </div>
+      </div>
+    </AppShell>
   );
 }

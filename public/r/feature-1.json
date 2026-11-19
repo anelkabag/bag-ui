@@ -2,10 +2,9 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "feature-1",
   "title": "Feature Exemple 1",
-  "description": "Frequently asked questions section with collapsible items.",
+  "description": "Animated feature showcase with illustrated cards and concise product benefits.",
   "dependencies": [
-    "motion/react",
-    "lucide-react"
+    "motion"
   ],
   "files": [
     {

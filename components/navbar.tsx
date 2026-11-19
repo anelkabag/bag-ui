@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronDown, Moon, Sun } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import UserMenu from "@/components/auth/UserMenu";
 import UnauthNav from "@/components/auth/UnauthNav";
@@ -29,6 +29,7 @@ const Logo = () => (
           src="/logo.png"
           alt="BagUi Logo"
           fill
+          sizes="20px"
           priority
           className="object-contain dark:hidden"
         />
@@ -38,6 +39,7 @@ const Logo = () => (
           src="/logoW.png"
           alt="BagUi Logo"
           fill
+          sizes="20px"
           priority
           className="hidden object-contain dark:block"
         />
@@ -128,20 +130,9 @@ function ResourcesMenu() {
   );
 }
 
-function getInitialTheme(): "dark" | "light" {
-  if (typeof window === "undefined") {
-    return "dark";
-  }
-
-  const savedTheme = window.localStorage.getItem("bagui-theme");
-  return savedTheme === "light" || savedTheme === "dark" ? savedTheme : "dark";
-}
-
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user } = useAuth();
-
-  useEffect(() => {});
 
   return (
     <>
@@ -174,6 +165,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       <div
+        data-lenis-prevent
         className={`md:hidden fixed inset-0 z-40 ${
           mobileOpen ? "flex" : "hidden"
         } flex-col overflow-y-auto bg-background px-6 pt-24 pb-10`}

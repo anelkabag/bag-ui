@@ -1,4 +1,4 @@
-// components/bagui/feature-bento.tsx  —  Bag/UI · Feature block (bento)
+// components/bagui/feature-bento.tsx  —  BagUI · Feature block (bento)
 // Next.js (App Router) + Tailwind CSS (v3.4+ ou v4). Composant serveur : pas de "use client".
 //
 // Polices (app/layout.tsx) :

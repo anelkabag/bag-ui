@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import Link from "next/link";
-import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
+import { motion, AnimatePresence } from "motion/react";
 
 type Theme = "dark" | "light" | "system";
 
@@ -95,27 +96,17 @@ const PlusIcon = () => (
 
 export default function Navbar1() {
     const [activeLink, setActiveLink] = useState("Services");
-    const [theme, setTheme] = useState<Theme>(() => {
-        if (typeof window === "undefined") return "system";
-        const storedTheme = window.localStorage.getItem("theme") as Theme | null;
-        return storedTheme === "dark" ||
-        storedTheme === "light" ||
-        storedTheme === "system"
-            ? storedTheme
-            : "system";
-    });
+    const { theme, resolvedTheme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
 
-    const prefersDark =
-        typeof window !== "undefined" &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-    const visibleTheme = mounted ? theme : "system";
-    const isDark =
+    const visibleTheme: Theme =
         mounted &&
-        (visibleTheme === "dark" || (visibleTheme === "system" && prefersDark));
+        (theme === "dark" || theme === "light" || theme === "system")
+            ? theme
+            : "system";
+    const isDark = mounted && resolvedTheme === "dark";
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 12);
@@ -126,29 +117,6 @@ export default function Navbar1() {
     useEffect(() => {
         Promise.resolve().then(() => setMounted(true));
     }, []);
-
-    useEffect(() => {
-        if (!mounted) return;
-
-        const root = window.document.documentElement;
-        const shouldUseDark =
-            theme === "dark" ||
-            (theme === "system" &&
-                window.matchMedia("(prefers-color-scheme: dark)").matches);
-
-        root.classList.toggle("dark", shouldUseDark);
-        window.localStorage.setItem("theme", theme);
-    }, [mounted, theme]);
-
-    useEffect(() => {
-        if (theme !== "system") return;
-        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-        const handleChange = (event: MediaQueryListEvent) => {
-            window.document.documentElement.classList.toggle("dark", event.matches);
-        };
-        mediaQuery.addEventListener("change", handleChange);
-        return () => mediaQuery.removeEventListener("change", handleChange);
-    }, [theme]);
 
     const themeButtons: { key: Theme; icon: React.ReactNode; label: string }[] = [
         { key: "dark", icon: <MoonIcon />, label: "Dark mode" },
@@ -172,7 +140,7 @@ export default function Navbar1() {
             >
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2.5 mr-8 shrink-0">
-                    <img
+                    <Image
                         src="https://bagui.vercel.app/logoR.png"
                         alt="Debisol icon"
                         width={36}

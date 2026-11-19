@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useTheme } from 'next-themes';
 import { motion } from 'motion/react';
 import { ChevronRight, CodeXml, Sun, Moon } from 'lucide-react';
 import Link from "next/link";
+import Image from "next/image";
 
 const fadeInUp = {
     initial: { opacity: 0, y: 20 },
@@ -26,12 +27,9 @@ const staggerItem = {
 };
 
 export default function OpenAgents() {
-    const [dark, setDark] = useState(true);
-
-    const toggle = () => {
-        setDark(!dark);
-        document.documentElement.classList.toggle('dark', !dark);
-    };
+    const { resolvedTheme, setTheme } = useTheme();
+    const dark = resolvedTheme === 'dark';
+    const toggle = () => setTheme(dark ? 'light' : 'dark');
 
     const bg = dark ? 'bg-black' : 'bg-white';
     const text = dark ? 'text-white' : 'text-black';
@@ -52,7 +50,7 @@ export default function OpenAgents() {
                 <div className={`max-w-7xl mx-auto px-6 h-16 flex items-center justify-between border-x ${border}`}>
                     <div className="flex items-center gap-3 shrink-0">
                         <Link href="/" className="flex items-center gap-2">
-                            <img src={logoSrc} alt="BagUI Logo" width={30} height={30} />
+                            <Image src={logoSrc} alt="BagUI Logo" width={30} height={30} />
                             <span className={`text-sm font-semibold tracking-tight ${text}`}>Bag\Ui</span>
                         </Link>
                         <Link
@@ -133,7 +131,7 @@ export default function OpenAgents() {
                     <div>
                         <h2 className="text-4xl font-bold mb-6 leading-tight">Agents that ship real code.</h2>
                         <p className={`${muted} mb-6 leading-relaxed`}>
-                            Each agent gets a full sandbox environment with filesystem, networks, and runtime access. Describe what to build and let the agent work autonomously until it's done.
+                            Each agent gets a full sandbox environment with filesystem, networks, and runtime access. Describe what to build and let the agent work autonomously until it&apos;s done.
                         </p>
                         <ul className={`space-y-3 ${subtle}`}>
                             <li className="flex gap-3"><span>•</span><span>File ops, search, shell, and task delegation built in</span></li>
@@ -302,7 +300,7 @@ export default function OpenAgents() {
 
                     <div className={`border-t ${border} pt-12 pb-10 flex items-center justify-between`}>
                         <Link href="/">
-                            <img src={logoSrc} width={30} height={30} />
+                            <Image src={logoSrc} alt="BagUI Logo" width={30} height={30} />
                         </Link>
                         <button
                             onClick={toggle}

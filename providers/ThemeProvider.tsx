@@ -10,6 +10,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       storageKey="bagui-theme"
       enableSystem
       defaultTheme="system"
+      disableTransitionOnChange
     >
       {children}
     </NextThemeProvider>

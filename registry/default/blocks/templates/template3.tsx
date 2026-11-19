@@ -231,7 +231,7 @@ export default function Template3() {
           <div className="mt-[50px] flex flex-wrap items-end justify-between gap-5">
             <div>
               <div className="text-[15px] font-semibold">Bag\Ui</div>
-              <small className="mt-3.5 block text-[10px] text-[#ddd]">Spend less time building UI from scratch. Ship faster with Bag/UI.</small>
+              <small className="mt-3.5 block text-[10px] text-[#ddd]">Spend less time building UI from scratch. Ship faster with BagUI.</small>
             </div>
             <div className="flex flex-wrap gap-2">
               {["Open Source", "React", "Next.js", "Tailwind CSS"].map((b) => (
