@@ -6,7 +6,13 @@ import { motion, useMotionValue } from "framer-motion";
 import { Wifi, WifiOff } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
-const HEIGHT = 200;
+const PAD = 16;
+const ITEM = 44;
+const GAP = 14;
+const TIME = 20;
+const WIDTH = ITEM + PAD * 2;
+const HEIGHT = PAD + ITEM + GAP + TIME + GAP + ITEM + PAD;
+const RADIUS = WIDTH / 2;
 const TOP_INSET = 76;
 const BOTTOM_INSET = 20;
 
@@ -127,23 +133,23 @@ export default function ScrollEdgeIndicator() {
       onPointerMove={onPointerMove}
       onPointerUp={endDrag}
       onPointerCancel={endDrag}
-      className="absolute top-0 right-0 z-30 w-14 origin-top cursor-grab touch-none text-white active:cursor-grabbing"
-      style={{ y, scale, height: HEIGHT }}
+      className="absolute top-0 right-0 z-30 origin-top cursor-grab touch-none text-white active:cursor-grabbing"
+      style={{ y, scale, height: HEIGHT, width: WIDTH }}
     >
-      <svg viewBox="0 0 56 200" className="absolute inset-0 size-full" aria-hidden>
-        <path
-          d="M56 0C56 16 46 20 36 22C22 26 10 34 10 52V124C10 134 4 140 4 156A22 22 0 0 0 26 200H56Z"
-          fill="#000"
-          stroke="#fff"
-          strokeOpacity=".14"
-        />
-      </svg>
-
-      <div className="relative flex h-full flex-col items-center pl-1.5 pt-12">
+      <div
+        className="flex h-full flex-col items-center bg-black ring-1 ring-inset ring-white/10"
+        style={{
+          padding: PAD,
+          gap: GAP,
+          borderTopLeftRadius: RADIUS,
+          borderBottomLeftRadius: RADIUS,
+        }}
+      >
         <Link
           href={user ? "/account" : "/login"}
           aria-label={user ? "Account" : "Sign in"}
-          className="relative size-11 shrink-0 rounded-full bg-black p-[3px] ring-1 ring-white/15"
+          className="relative shrink-0 rounded-full bg-black ring-1 ring-white/15"
+          style={{ width: ITEM, height: ITEM }}
         >
           <span className="flex size-full items-center justify-center overflow-hidden rounded-full bg-black text-[13px] font-semibold text-white">
             {avatar ? (
@@ -157,15 +163,17 @@ export default function ScrollEdgeIndicator() {
 
         <time
           dateTime={time}
-          className="mt-2.5 text-center text-[15px] font-semibold leading-none tracking-[-0.04em] text-white tabular-nums"
+          className="flex items-center justify-center text-[15px] font-semibold leading-none tracking-[-0.04em] text-white tabular-nums"
+          style={{ height: TIME }}
         >
           {time}
         </time>
 
         <div
-          className={`mt-2.5 flex size-11 shrink-0 flex-col items-center justify-center rounded-full border-[1.75px] ${
+          className={`flex shrink-0 flex-col items-center justify-center rounded-full border-[1.75px] ${
             online ? "border-emerald-400 text-emerald-400" : "border-red-500 text-red-500"
           }`}
+          style={{ width: ITEM, height: ITEM }}
           title={online ? "Connected" : "No connection"}
         >
           {online ? (
