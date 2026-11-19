@@ -4,6 +4,8 @@ import { ProfileHeader } from "@/components/ProfileHeader";
 import { DownloadsHistory } from "@/components/DownloadsHistory";
 import { AccountActions } from "@/components/AccountActions";
 import { NotificationPreferences } from "@/components/NotificationPreferences";
+import AppShell from "@/components/shell/AppShell";
+import PageHero from "@/components/shell/PageHero";
 
 export default async function AccountPage() {
   const supabase = await createSupabaseServerClient();
@@ -143,51 +145,54 @@ export default async function AccountPage() {
   );
 
   return (
-    <main className="min-h-screen bg-background px-6 py-10 text-foreground">
-      <div className="mx-auto max-w-4xl space-y-6">
-        {/* Profile header */}
-        <div className="overflow-hidden rounded-[32px] border border-border bg-card/90 shadow-2xl shadow-black/20">
-          {/* Cover */}
-          <div
-            className="relative h-36 overflow-hidden sm:h-44"
-            style={{
-              background:
-                "linear-gradient(135deg, rgb(15, 23, 42) 0%, rgb(148, 163, 184) 35%, rgb(255, 255, 255) 50%, rgb(148, 163, 184) 65%, rgb(15, 23, 42) 100%)",
-            }}
-          >
-            <span className="absolute right-6 top-6 text-xs font-semibold uppercase tracking-[0.35em] text-slate-900/40 dark:text-white/30">
-              Bag\Ui
-            </span>
-          </div>
-
-          <div className="px-6 pb-8 sm:px-10">
-            <ProfileHeader
-              profile={profile}
-              email={user.email || ""}
-              isProPlan={isProPlan}
-              joinedShort={joinedShort}
-            />
-          </div>
-        </div>
-
-        {/* Downloads history */}
-        <DownloadsHistory
-          downloads={downloadsData.downloads}
-          total={downloadsData.total}
-        />
-
-        <NotificationPreferences />
-
-        {/* Account actions */}
-        <div className="rounded-[32px] border border-border bg-card/90 p-10 shadow-2xl shadow-black/20">
-          <p className="text-sm uppercase tracking-[0.35em] text-muted-foreground">
-            Account Actions
+    <AppShell>
+      <div className="mx-auto min-h-full max-w-[1440px] bg-background pb-16 text-foreground">
+        <PageHero
+          firstLine="Your workspace."
+          secondLine="Manage your"
+          emphasis="account."
+          className="pb-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.8fr)]"
+        >
+          <p className="max-w-xl text-sm leading-6 text-muted-foreground md:text-base">
+            Profile, downloads, and email preferences for your BagUI account.
+            {isProPlan ? " Pro access is active on this profile." : " You are on the free plan."}
           </p>
-          <div className="mt-6">
-            <AccountActions />
+        </PageHero>
+
+        <div className="mx-5 mt-2 grid gap-4 md:mx-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-start">
+          <section className="overflow-hidden rounded-2xl border border-border bg-card">
+            <div className="border-b border-border px-6 py-5 md:px-8">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+                Profile
+              </p>
+            </div>
+            <div className="px-6 py-6 md:px-8 md:py-8">
+              <ProfileHeader
+                profile={profile}
+                email={user.email || ""}
+                isProPlan={isProPlan}
+                joinedShort={joinedShort}
+              />
+            </div>
+          </section>
+
+          <div className="space-y-4">
+            <DownloadsHistory
+              downloads={downloadsData.downloads}
+              total={downloadsData.total}
+            />
+            <NotificationPreferences />
+            <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+                Account actions
+              </p>
+              <div className="mt-5">
+                <AccountActions />
+              </div>
+            </section>
           </div>
         </div>
       </div>
-    </main>
+    </AppShell>
   );
 }
