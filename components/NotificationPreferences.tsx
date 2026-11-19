@@ -57,9 +57,9 @@ export function NotificationPreferences() {
   return (
     <section
       id="notifications"
-      className="rounded-[32px] border border-border bg-card/90 p-8 shadow-2xl shadow-black/20 sm:p-10"
+      className="rounded-2xl border border-border bg-card p-6 md:p-8"
     >
-      <p className="text-sm uppercase tracking-[0.35em] text-muted-foreground">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
         Email preferences
       </p>
       <div className="mt-5 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">

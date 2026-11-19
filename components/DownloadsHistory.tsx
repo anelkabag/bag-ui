@@ -19,9 +19,9 @@ export function DownloadsHistory({
 }: DownloadsHistoryProps) {
   if (!downloads || downloads.length === 0) {
     return (
-      <div className="rounded-[32px] border border-border bg-card/90 p-10 shadow-2xl shadow-black/20">
-        <p className="text-sm uppercase tracking-[0.35em] text-muted-foreground">
-          Download History
+      <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+          Download history
         </p>
         <div className="mt-6 flex flex-col items-center justify-center py-8 text-center">
           <Download size={32} className="mb-4 text-muted-foreground/70" />
@@ -37,13 +37,13 @@ export function DownloadsHistory({
   }
 
   return (
-    <div className="rounded-[32px] border border-border bg-card/90 p-10 shadow-2xl shadow-black/20">
-      <div className="flex items-center justify-between">
+    <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
+      <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="text-sm uppercase tracking-[0.35em] text-muted-foreground">
-            Download History
+          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+            Download history
           </p>
-          <h2 className="mt-4 text-2xl font-semibold text-foreground">
+          <h2 className="mt-3 text-xl font-semibold tracking-tight text-foreground">
             Your downloaded components
           </h2>
         </div>

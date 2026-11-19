@@ -177,8 +177,8 @@ export function ProfileHeader({
   return (
     <>
       {/* Avatar + top-right actions */}
-      <div className="relative flex flex-col items-center gap-4 -mt-14 sm:-mt-16 sm:flex-row sm:items-start sm:justify-between">
-        <div className="relative z-20 h-28 w-28 shrink-0 overflow-hidden rounded-3xl border-4 border-border bg-muted shadow-xl sm:h-32 sm:w-32">
+      <div className="relative flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="relative z-20 h-24 w-24 shrink-0 overflow-hidden rounded-2xl border border-border bg-muted sm:h-28 sm:w-28">
           <Image
             src={profile.avatar_url ?? "/faviconblack.png"}
             alt="Avatar"
@@ -188,11 +188,11 @@ export function ProfileHeader({
           />
         </div>
 
-        <div className="flex items-center gap-2 sm:mt-16 sm:flex-col sm:items-end mt-3">
+        <div className="flex items-center gap-2 sm:flex-col sm:items-end">
           <button
             type="button"
             onClick={() => setIsEditOpen(true)}
-            className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-full border border-border bg-muted px-4 text-xs font-medium text-foreground transition hover:bg-accent hover:text-foreground mt-3 cursor-pointer"
+            className="inline-flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full border border-border bg-background px-4 text-xs font-medium text-foreground transition hover:bg-accent"
           >
             <Pencil size={14} />
             Edit Profile
@@ -397,10 +397,10 @@ export function ProfileHeader({
               setIsEditOpen(false);
             }}
           />
-          <div data-lenis-prevent className="relative z-10 max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-[32px] border border-border bg-card/95 p-8 shadow-2xl shadow-black/20">
+          <div data-lenis-prevent className="relative z-10 max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-2xl shadow-black/10 md:p-8 dark:shadow-black/40">
             <div className="flex items-center justify-between">
-              <p className="text-sm uppercase tracking-[0.35em] text-muted-foreground">
-                Edit Profile
+              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+                Edit profile
               </p>
               <button
                 type="button"

@@ -133,11 +133,11 @@ export default function ScrollEdgeIndicator() {
       onPointerMove={onPointerMove}
       onPointerUp={endDrag}
       onPointerCancel={endDrag}
-      className="absolute top-0 right-0 z-30 origin-top cursor-grab touch-none text-white active:cursor-grabbing"
+      className="absolute top-0 right-0 z-30 origin-top cursor-grab touch-none text-neutral-950 active:cursor-grabbing dark:text-white"
       style={{ y, scale, height: HEIGHT, width: WIDTH }}
     >
       <div
-        className="flex h-full flex-col items-center bg-black ring-1 ring-inset ring-white/10"
+        className="flex h-full flex-col items-center bg-white text-neutral-950 shadow-[0_10px_28px_rgba(0,0,0,0.08)] ring-1 ring-inset ring-black/10 dark:bg-neutral-950 dark:text-white dark:shadow-none dark:ring-white/15"
         style={{
           padding: PAD,
           gap: GAP,
@@ -148,10 +148,10 @@ export default function ScrollEdgeIndicator() {
         <Link
           href={user ? "/account" : "/login"}
           aria-label={user ? "Account" : "Sign in"}
-          className="relative shrink-0 rounded-full bg-black ring-1 ring-white/15"
+          className="relative shrink-0 rounded-full bg-neutral-100 ring-1 ring-black/10 dark:bg-black dark:ring-white/15"
           style={{ width: ITEM, height: ITEM }}
         >
-          <span className="flex size-full items-center justify-center overflow-hidden rounded-full bg-black text-[13px] font-semibold text-white">
+          <span className="flex size-full items-center justify-center overflow-hidden rounded-full bg-neutral-100 text-[13px] font-semibold text-neutral-950 dark:bg-black dark:text-white">
             {avatar ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={avatar} alt="" className="size-full object-cover" />
@@ -163,7 +163,7 @@ export default function ScrollEdgeIndicator() {
 
         <time
           dateTime={time}
-          className="flex items-center justify-center text-[15px] font-semibold leading-none tracking-[-0.04em] text-white tabular-nums"
+          className="flex items-center justify-center text-[15px] font-semibold leading-none tracking-[-0.04em] text-neutral-950 tabular-nums dark:text-white"
           style={{ height: TIME }}
         >
           {time}
