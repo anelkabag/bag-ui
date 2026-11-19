@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { sendWelcomeEmailOnce } from "@/lib/welcome-email";
 import { createSupabaseRouteHandlerClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
@@ -8,8 +9,11 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createSupabaseRouteHandlerClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
+      if (searchParams.get("welcome") === "1") {
+        await sendWelcomeEmailOnce(data.session?.user);
+      }
       return NextResponse.redirect(`${origin}${next}`);
     }
   }
