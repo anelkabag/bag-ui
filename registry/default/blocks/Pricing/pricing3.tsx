@@ -100,13 +100,13 @@ const plans: PricingPlan[] = [
 function PriceBlock({ amount, period }: { amount: string; period: string }) {
   return (
     <div className="flex items-start">
-      <span className="text-[36px] font-medium tracking-[-0.04em] text-zinc-950 leading-none">
+      <span className="text-[36px] font-medium leading-none tracking-[-0.04em] text-zinc-950 dark:text-white">
         {amount}
       </span>
 
       <div className="flex flex-col ml-1 mt-[2px]">
-        <span className="text-[12px] leading-[1.1] text-zinc-500">per</span>
-        <span className="text-[12px] leading-[1.1] text-zinc-500">
+        <span className="text-[12px] leading-[1.1] text-zinc-500 dark:text-zinc-400">per</span>
+        <span className="text-[12px] leading-[1.1] text-zinc-500 dark:text-zinc-400">
           {period}
         </span>
       </div>
@@ -120,25 +120,24 @@ function PricingCard({ plan, isLast }: { plan: PricingPlan; isLast: boolean }) {
   return (
     <div
       className={`
-        flex flex-col bg-white p-6
-        border-t border-b border-l border-zinc-200
-        ${isLast ? "border-r border-zinc-200" : ""}
+        flex flex-col border-t border-b border-l border-zinc-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-900
+        ${isLast ? "border-r border-zinc-200 dark:border-r-zinc-700" : ""}
       `}
     >
       {/* Title + badge */}
       <div className="flex items-center gap-2 mb-1">
-        <h3 className="text-[15px] font-semibold text-zinc-900">
+        <h3 className="text-[15px] font-semibold text-zinc-900 dark:text-white">
           {plan.title}
         </h3>
         {plan.badge && (
-          <span className="text-[10px] font-medium text-zinc-500 border border-zinc-300 rounded-full px-2 py-0.5 leading-none">
+          <span className="rounded-full border border-zinc-300 px-2 py-0.5 text-[10px] font-medium leading-none text-zinc-500 dark:border-zinc-600 dark:text-zinc-400">
             {plan.badge}
           </span>
         )}
       </div>
 
       {/* Description */}
-      <p className="text-[13px] text-zinc-500 leading-snug mb-5 min-h-[40px]">
+      <p className="mb-5 min-h-[40px] text-[13px] leading-snug text-zinc-500 dark:text-zinc-400">
         {plan.description}
       </p>
 
@@ -147,7 +146,7 @@ function PricingCard({ plan, isLast }: { plan: PricingPlan; isLast: boolean }) {
         <PriceBlock amount={plan.basePrice} period="month" />
         {plan.extraPrice && (
           <>
-            <span className="text-zinc-300 text-xl font-light leading-none mt-1">
+            <span className="mt-1 text-xl font-light leading-none text-zinc-300 dark:text-zinc-600">
               +
             </span>
             <PriceBlock amount={plan.extraPrice} period="CPU" />
@@ -175,7 +174,7 @@ function PricingCard({ plan, isLast }: { plan: PricingPlan; isLast: boolean }) {
           <Server size={13} className="text-zinc-400 shrink-0" />
           <span>
             Up to{" "}
-            <span className="font-bold text-zinc-900">{plan.cpuBold}</span>{" "}
+            <span className="font-bold text-zinc-900 dark:text-white">{plan.cpuBold}</span>{" "}
             {plan.cpuLabel}
           </span>
         </div>
@@ -184,13 +183,13 @@ function PricingCard({ plan, isLast }: { plan: PricingPlan; isLast: boolean }) {
           <span>
             {plan.clusterBold === "Unlimited" ? (
               <>
-                <span className="font-bold text-zinc-900">Unlimited</span>{" "}
+                <span className="font-bold text-zinc-900 dark:text-white">Unlimited</span>{" "}
                 {plan.clusterLabel}
               </>
             ) : (
               <>
                 Up to{" "}
-                <span className="font-bold text-zinc-900">
+                <span className="font-bold text-zinc-900 dark:text-white">
                   {plan.clusterBold}
                 </span>{" "}
                 {plan.clusterLabel}
@@ -201,10 +200,10 @@ function PricingCard({ plan, isLast }: { plan: PricingPlan; isLast: boolean }) {
       </div>
 
       {/* Divider */}
-      <div className="h-px bg-zinc-100 mb-4" />
+      <div className="mb-4 h-px bg-zinc-100 dark:bg-zinc-700" />
 
       {/* Features */}
-      <p className="text-[12px] font-bold text-zinc-900 mb-3">
+      <p className="mb-3 text-[12px] font-bold text-zinc-900 dark:text-white">
         {plan.featuresLabel}
       </p>
       <ul className="flex flex-col gap-2">
@@ -215,7 +214,7 @@ function PricingCard({ plan, isLast }: { plan: PricingPlan; isLast: boolean }) {
               className="text-emerald-500 mt-0.5 shrink-0"
               strokeWidth={3}
             />
-            <span className="text-[13px] text-zinc-600">{feat}</span>
+            <span className="text-[13px] text-zinc-600 dark:text-zinc-300">{feat}</span>
           </li>
         ))}
       </ul>
@@ -227,7 +226,7 @@ function PricingCard({ plan, isLast }: { plan: PricingPlan; isLast: boolean }) {
 
 export default function PricingSection2() {
   return (
-    <section className="w-full py-20 px-4 font-sans">
+    <section className="w-full bg-white px-4 py-20 font-sans dark:bg-zinc-950">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
@@ -235,13 +234,13 @@ export default function PricingSection2() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-12"
+          className="mb-12 text-center"
         >
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-zinc-950 mb-3">
+          <h2 className="mb-3 text-4xl font-bold tracking-tight text-zinc-950 dark:text-white md:text-5xl">
             Measurable <span className="text-emerald-500">savings</span> from
             day one
           </h2>
-          <p className="text-[15px] text-zinc-500">
+          <p className="text-[15px] text-zinc-500 dark:text-zinc-400">
             Find new efficiencies and cut your cloud bill with all CAST AI
             plans.
           </p>
@@ -272,7 +271,7 @@ export default function PricingSection2() {
           transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
           className="flex justify-center mt-8"
         >
-          <button className="border border-zinc-300 bg-white text-zinc-700 text-[13px] font-medium px-6 py-2.5 rounded-full hover:border-zinc-400 hover:text-zinc-900 transition-colors duration-200 cursor-pointer">
+          <button className="cursor-pointer rounded-full border border-zinc-300 bg-white px-6 py-2.5 text-[13px] font-medium text-zinc-700 transition-colors duration-200 hover:border-zinc-400 hover:text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-white">
             Compare all features
           </button>
         </motion.div>

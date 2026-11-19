@@ -2,11 +2,8 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "footer-ex-4",
   "title": "Footer Exemple 4",
-  "description": "",
-  "dependencies": [
-    "motion/react",
-    "lucide-react"
-  ],
+  "description": "Floating BagUI footer with brand copy, social links, and grouped navigation columns.",
+  "dependencies": [],
   "files": [
     {
       "path": "registry/default/blocks/Footer/footer4.tsx",

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
-import Navbar from "@/components/navbar";
-import { Footer } from "@/components/footer";
+import AppShell from "@/components/shell/AppShell";
 
 const licenseText = `MIT License
 
@@ -27,10 +26,8 @@ SOFTWARE.`;
 
 export default function LicensePage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <Navbar />
-
-      <main className="mx-auto max-w-7xl border-x border-border px-6">
+    <AppShell>
+      <div className="min-h-full mx-auto max-w-[1440px] bg-background px-5 text-foreground md:px-10">
         <div className="border-b border-border py-8 md:py-10">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 text-sm text-muted-foreground">
@@ -62,7 +59,7 @@ export default function LicensePage() {
             </div>
 
             <p className="max-w-2xl text-sm leading-7 text-muted-foreground md:text-base">
-              Bag/UI is distributed under the MIT License, a permissive open-source
+              BagUI is distributed under the MIT License, a permissive open-source
               license that allows commercial and personal use, modification, and
               redistribution with the required attribution.
             </p>
@@ -97,15 +94,13 @@ export default function LicensePage() {
                 <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
                   Project
                 </p>
-                <p className="mt-3 text-sm text-foreground">Bag/UI</p>
+                <p className="mt-3 text-sm text-foreground">BagUI</p>
                 <p className="mt-1 text-sm text-muted-foreground">Open-source UI blocks and templates.</p>
               </div>
             </aside>
           </div>
         </section>
-      </main>
-
-      <Footer />
-    </div>
+      </div>
+    </AppShell>
   );
 }

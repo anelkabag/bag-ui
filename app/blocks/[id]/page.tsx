@@ -1,6 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,10 +18,10 @@ import { categoryMatchesItem, RegistryItem } from "@/lib/block-categories";
 import { getComponentAccessTier, getInstallAccessState } from "@/lib/access";
 import { ComponentPreview } from "@/components/ComponentPreview";
 import { MARKETING_BLOCKS, APP_BLOCKS, ECOMMERCE_BLOCKS } from "../page";
-import Navbar from "@/components/navbar";
 import PnpmLogo from "@/public/assets/pnpm.svg";
 import YarnLogo from "@/public/assets/yarn.svg";
-import { Footer } from "@/components/footer";
+import AppShell from "@/components/shell/AppShell";
+import PageHero from "@/components/shell/PageHero";
 import {
   IconEye,
   IconCode,
@@ -23,6 +30,8 @@ import {
   IconChevronDown,
   IconCopy,
   IconCheck,
+  IconDeviceMobile,
+  IconDeviceDesktop,
 } from "@tabler/icons-react";
 import { useAuth } from "@/hooks/useAuth";
 import { trackComponentDownload } from "@/lib/analytics";
@@ -30,6 +39,7 @@ import { trackComponentDownload } from "@/lib/analytics";
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type ViewMode = "preview" | "code";
+type DeviceMode = "desktop" | "mobile";
 type PkgManager = "pnpm" | "npm" | "yarn" | "bun";
 
 interface Variant {
@@ -115,6 +125,35 @@ export default function Page() {
     </main>
   );
 }`;
+}
+
+// ─── useInView hook (montage différé des previews hors écran) ────────────────
+
+function useInView<T extends Element>(rootMargin = "400px") {
+  const ref = useRef<T | null>(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || inView) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [inView, rootMargin]);
+
+  return { ref, inView };
 }
 
 // ─── useCopy hook ─────────────────────────────────────────────────────────────
@@ -359,15 +398,19 @@ const PKG_ICONS: Record<PkgManager, React.ReactNode> = {
 
 // ─── Variant toolbar header (Preview / Code + CLI) ────────────────────────────
 
-function VariantToolbarHeader({
+const VariantToolbarHeader = memo(function VariantToolbarHeader({
   variantId,
   mode,
   setMode,
+  device,
+  toggleDevice,
   accessTier,
 }: {
   variantId: string;
   mode: ViewMode;
   setMode: (m: ViewMode) => void;
+  device: DeviceMode;
+  toggleDevice: () => void;
   accessTier: Variant["access"];
 }) {
   const [pkg, setPkg] = useState<PkgManager>("npm");
@@ -397,7 +440,7 @@ function VariantToolbarHeader({
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.05 }}
-      className="flex items-center gap-2 sm:gap-3 mb-4 pb-3 border-b border-border -mx-6 px-6 py-3"
+      className="flex items-center gap-2 px-5 py-3 sm:gap-3"
     >
       {/* Left: Tabs + Icons */}
       <div className="flex items-center gap-2 shrink-0">
@@ -436,6 +479,22 @@ function VariantToolbarHeader({
         >
           <IconRefresh size={16} className="text-muted-foreground" />
         </button>
+
+        {/* Mobile / Desktop toggle - desktop screens only, preview mode only */}
+        {mode === "preview" && (
+          <button
+            onClick={toggleDevice}
+            className="hidden sm:flex p-2 hover:bg-accent rounded-md transition-colors cursor-pointer items-center justify-center"
+            title={device === "mobile" ? "Desktop view" : "Mobile view"}
+            aria-label={device === "mobile" ? "Desktop view" : "Mobile view"}
+          >
+            {device === "mobile" ? (
+              <IconDeviceDesktop size={16} className="text-muted-foreground" />
+            ) : (
+              <IconDeviceMobile size={16} className="text-muted-foreground" />
+            )}
+          </button>
+        )}
       </div>
 
       {/* Right: CLI Command + Dropdown + Copy */}
@@ -522,18 +581,18 @@ function VariantToolbarHeader({
             </button>
           </>
         ) : (
-          <div className="flex-1 rounded-xl border border-border bg-muted px-3 py-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between min-w-0">
+          <div className="flex h-[38px] flex-1 min-w-0 items-center justify-between gap-3 rounded-lg border border-border bg-muted pl-3 pr-1">
             <div className="min-w-0">
-              <p className="text-[11px] font-semibold text-foreground">
+              <p className="truncate text-[11px] font-semibold leading-tight text-foreground">
                 {installState.label}
               </p>
-              <p className="text-[11px] text-muted-foreground leading-relaxed">
+              <p className="hidden truncate text-[11px] leading-tight text-muted-foreground sm:block">
                 {installState.description}
               </p>
             </div>
             <Link
               href={installState.href}
-              className="inline-flex shrink-0 items-center justify-center rounded-full bg-foreground px-3 py-1.5 text-[11px] font-medium text-background transition-colors hover:bg-foreground/90"
+              className="inline-flex h-7 shrink-0 items-center justify-center rounded-full bg-foreground px-3 text-[11px] font-medium text-background transition-colors hover:bg-foreground/90"
             >
               {installState.label}
             </Link>
@@ -542,32 +601,39 @@ function VariantToolbarHeader({
       </div>
     </motion.div>
   );
-}
+});
 
 // ─── Individual variant card ──────────────────────────────────────────────────
 
-function VariantCard({
-  blockId,
+const VariantCard = memo(function VariantCard({
   variant,
   index,
 }: {
-  blockId: string;
   variant: Variant;
   index: number;
 }) {
   const [mode, setMode] = useState<ViewMode>("preview");
-  const code = getCodeSnippet(variant.id);
+  const [device, setDevice] = useState<DeviceMode>("desktop");
+  const toggleDevice = useCallback(
+    () => setDevice((d) => (d === "mobile" ? "desktop" : "mobile")),
+    [],
+  );
+  const code = useMemo(
+    () => (mode === "code" ? getCodeSnippet(variant.id) : ""),
+    [mode, variant.id],
+  );
+  const { ref: previewRef, inView } = useInView<HTMLDivElement>();
 
   return (
     <motion.div
       id={variant.id}
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05, duration: 0.3 }}
-      className="mb-12 scroll-mt-20"
+      transition={{ delay: Math.min(index, 5) * 0.05, duration: 0.3 }}
+      className="scroll-mt-20"
     >
       {/* Title + Badge above toolbar */}
-      <div className="flex items-center gap-2 mb-2">
+      <div className="flex items-center gap-2 px-5 pt-2">
         <h3 className="text-sm font-semibold text-foreground">
           {variant.label}
         </h3>
@@ -587,6 +653,8 @@ function VariantCard({
         variantId={variant.id}
         mode={mode}
         setMode={setMode}
+        device={device}
+        toggleDevice={toggleDevice}
         accessTier={variant.access}
       />
 
@@ -595,12 +663,19 @@ function VariantCard({
         {mode === "preview" ? (
           <motion.div
             key="preview"
+            ref={previewRef}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
+            className="px-1"
+            style={inView ? undefined : { minHeight: 500 }}
           >
-            {variant.item ? (
+            {!inView ? null : device === "mobile" ? (
+              <div className="mx-auto" style={{ width: 390, maxWidth: "100%" }}>
+                <IframePreview variantId={variant.id} />
+              </div>
+            ) : variant.item ? (
               <ComponentPreview item={variant.item} />
             ) : (
               <div className="w-full h-80 flex items-center justify-center rounded-xl border border-border bg-muted text-sm text-muted-foreground">
@@ -615,6 +690,7 @@ function VariantCard({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
+            className="px-1"
           >
             <CodeBlock code={code} isPro={variant.pro} />
           </motion.div>
@@ -622,116 +698,112 @@ function VariantCard({
       </AnimatePresence>
     </motion.div>
   );
-}
+});
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // PAGE
 // ═══════════════════════════════════════════════════════════════════════════════
 
+const ALL_BLOCKS = [...MARKETING_BLOCKS, ...APP_BLOCKS, ...ECOMMERCE_BLOCKS];
+
 export default function BlockDetailPage() {
   const params = useParams();
   const id = typeof params?.id === "string" ? params.id : "";
 
-  const allBlocks = [...MARKETING_BLOCKS, ...APP_BLOCKS, ...ECOMMERCE_BLOCKS];
-  const block = allBlocks.find((b) => b.id === id);
+  const block = useMemo(() => ALL_BLOCKS.find((b) => b.id === id), [id]);
+  const variants = useMemo(
+    () => (block ? getVariants(id, block.count) : []),
+    [id, block],
+  );
+  const { freeCount, proCount } = useMemo(() => {
+    let free = 0;
+    for (const v of variants) if (v.access === "free") free++;
+    return { freeCount: free, proCount: variants.length - free };
+  }, [variants]);
 
   if (!block) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center space-y-3">
-          <p className="text-muted-foreground text-sm">Block not found.</p>
-          <Link
-            href="/blocks"
-            className="text-sm font-medium text-foreground underline underline-offset-2"
-          >
-            ← Back to blocks
-          </Link>
+      <AppShell>
+        <div className="flex min-h-full items-center justify-center bg-background px-6">
+          <div className="space-y-3 text-center">
+            <p className="text-sm text-muted-foreground">Block not found.</p>
+            <Link
+              href="/blocks"
+              className="text-sm font-medium text-foreground underline underline-offset-2"
+            >
+              ← Back to blocks
+            </Link>
+          </div>
         </div>
-      </div>
+      </AppShell>
     );
   }
 
-  const variants = getVariants(id, block.count);
-  const freeCount = variants.filter((v) => v.access === "free").length;
-  const proCount = variants.filter((v) => v.access === "pro").length;
-
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-
-      <div className="max-w-7xl mx-auto px-6 pt-10 pb-20 border-x border-border">
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-8">
-          <Link
-            href="/blocks"
-            className="hover:text-foreground transition-colors"
+    <AppShell>
+      <div className="min-h-full bg-background">
+        <div className="mx-auto max-w-[1440px] pb-20">
+          <nav
+            aria-label="Breadcrumb"
+            className="flex items-center gap-2 px-4 pt-6 text-sm text-muted-foreground"
           >
-            All blocks
-          </Link>
-          <span>/</span>
-          <span className="text-foreground capitalize">{block.label}</span>
-        </div>
+            <Link
+              href="/blocks"
+              className="transition-colors hover:text-foreground"
+            >
+              All blocks
+            </Link>
+            <span aria-hidden="true">/</span>
+            <span className="text-foreground">{block.label}</span>
+          </nav>
 
-        {/* Page header */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="mb-12"
-        >
-          <div className="flex items-start justify-between gap-6 flex-wrap">
-            <div>
-              <div className="flex items-center gap-2.5 mb-2">
-                <h1 className="text-3xl font-bold tracking-tight text-foreground">
-                  {block.label}
-                </h1>
-                {block.new && (
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-foreground text-background">
-                    New
-                  </span>
-                )}
+          <PageHero
+            firstLine="Ready-to-use"
+            secondLine={block.label}
+            emphasis="blocks."
+            className="px-4 pb-8 pt-8 md:px-4 lg:grid-cols-[1fr_auto]"
+          >
+            <div className="flex items-center justify-between gap-5 sm:justify-end sm:gap-7">
+              <div>
+                <p className="text-lg font-semibold leading-none tracking-tight text-foreground">
+                  {variants.length}
+                </p>
+                <p className="mt-1.5 text-xs text-muted-foreground">
+                  Variants
+                </p>
               </div>
-              <p className="text-muted-foreground text-sm max-w-xl leading-relaxed">
-                {block.description ||
-                  `${block.label.toLowerCase()} sections. Ready to paste into your project.`}
-              </p>
-              <div className="flex items-center gap-3 mt-4 text-sm">
-                <span className="text-muted-foreground">
-                  <strong className="text-foreground">{freeCount}</strong> free
-                </span>
-                {proCount > 0 && (
-                  <>
-                    <span className="text-muted-foreground/50">·</span>
-                    <span className="text-muted-foreground">
-                      <strong className="text-amber-600 dark:text-amber-400">
-                        {proCount}
-                      </strong>{" "}
-                      pro
-                    </span>
-                  </>
-                )}
-                <span className="text-muted-foreground/50">·</span>
-                <span className="text-muted-foreground text-xs">
-                  React · TypeScript · Tailwind · Gsap
-                </span>
+              <div>
+                <p className="text-lg font-semibold leading-none tracking-tight text-foreground">
+                  {freeCount}
+                </p>
+                <p className="mt-1.5 text-xs text-muted-foreground">Free</p>
+              </div>
+              <div>
+                <p className="text-lg font-semibold leading-none tracking-tight text-foreground">
+                  {proCount}
+                </p>
+                <p className="mt-1.5 text-xs text-muted-foreground">Pro</p>
               </div>
             </div>
+          </PageHero>
+
+          <p className="mx-4 mb-8 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            {block.description ||
+              `${block.label} sections, ready to add to your project.`}
+            {block.new && (
+              <span className="ml-2 inline-flex items-center rounded-full border border-border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-foreground">
+                New
+              </span>
+            )}
+          </p>
+
+          <div className="flex flex-col gap-10">
+            {variants.map((variant, i) => (
+              <VariantCard key={variant.id} variant={variant} index={i} />
+            ))}
           </div>
-        </motion.div>
-
-        <div className="border-t border-border mb-10" />
-
-        {/* Variant list */}
-        {variants.map((variant, i) => (
-          <VariantCard
-            key={variant.id}
-            blockId={id}
-            variant={variant}
-            index={i}
-          />
-        ))}
+        </div>
       </div>
-      <Footer />
-    </div>
+    </AppShell>
   );
 }

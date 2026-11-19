@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import Image from "next/image";
 import {
   Search,
   ChevronsLeft,
@@ -36,6 +37,7 @@ import { cn } from "@/lib/utils";
 
 type TaskStatus = "todo" | "in-progress" | "in-review" | "done";
 type Priority = "High" | "Medium" | "Low";
+type ListSortKey = "title" | "status" | "priority" | "due";
 type TabKey = "overview" | "lists" | "board" | "timeline" | "files";
 
 type TaskNote = { id: string; author: string; text: string };
@@ -114,7 +116,7 @@ function nextId(prefix: string) {
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 function formatShortDate(iso: string) {
-  const [y, m, d] = iso.split("-").map(Number);
+  const [, m, d] = iso.split("-").map(Number);
   return `${MONTHS[(m ?? 1) - 1]} ${d}`;
 }
 function isOverdue(iso: string) {
@@ -239,10 +241,12 @@ const INITIAL_PROJECTS: Project[] = [
 
 function Avatar({ name, className }: { name: string; className?: string }) {
   return (
-    <img
+    <Image
       src={"/avatar.png"}
       alt={name}
       title={name}
+      width={32}
+      height={32}
       className={cn("shrink-0 rounded-full border-2 border-[#0B0B0D] bg-neutral-800 object-cover", className)}
     />
   );
@@ -428,9 +432,11 @@ function Sidebar({
     >
       <div className={cn("flex items-center gap-2.5 px-3 pb-4", collapsed && "justify-center px-0")}>
         <div className="h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-            <img
+            <Image
                 src="/faviconblack.png"
                 alt="Logo BagUi"
+                width={32}
+                height={32}
                 className="h-full w-full object-cover"
             />
         </div>
@@ -1064,6 +1070,30 @@ function BoardView({
 /*  Lists view                                                         */
 /* ================================================================== */
 
+function SortableHeader({
+  label,
+  columnKey,
+  sortKey,
+  onSort,
+}: {
+  label: string;
+  columnKey: ListSortKey;
+  sortKey: ListSortKey;
+  onSort: (key: ListSortKey) => void;
+}) {
+  return (
+    <th
+      className="cursor-pointer select-none px-4 py-2.5 text-left text-[11.5px] font-medium uppercase tracking-wide text-neutral-500 hover:text-neutral-300"
+      onClick={() => onSort(columnKey)}
+    >
+      <span className="inline-flex items-center gap-1">
+        {label}
+        {sortKey === columnKey && <ArrowUpDown className="h-3 w-3" />}
+      </span>
+    </th>
+  );
+}
+
 function ListsView({
   tasks,
   onOpenTask,
@@ -1071,7 +1101,7 @@ function ListsView({
   tasks: Task[];
   onOpenTask: (task: Task) => void;
 }) {
-  const [sortKey, setSortKey] = useState<"title" | "status" | "priority" | "due">("due");
+  const [sortKey, setSortKey] = useState<ListSortKey>("due");
   const [sortDir, setSortDir] = useState<1 | -1>(1);
 
   const toggleSort = (key: typeof sortKey) => {
@@ -1099,25 +1129,16 @@ function ListsView({
 
   const statusLabel: Record<TaskStatus, string> = { todo: "To Do", "in-progress": "In Progress", "in-review": "In Review", done: "Done" };
 
-  const Header = ({ label, k }: { label: string; k: typeof sortKey }) => (
-    <th className="cursor-pointer select-none px-4 py-2.5 text-left text-[11.5px] font-medium uppercase tracking-wide text-neutral-500 hover:text-neutral-300" onClick={() => toggleSort(k)}>
-      <span className="inline-flex items-center gap-1">
-        {label}
-        {sortKey === k && <ArrowUpDown className="h-3 w-3" />}
-      </span>
-    </th>
-  );
-
   return (
     <div className="overflow-hidden rounded-xl border border-white/[0.06]">
       <table className="w-full border-collapse text-[13px]">
         <thead className="bg-white/[0.02]">
           <tr>
-            <Header label="Task" k="title" />
-            <Header label="Status" k="status" />
-            <Header label="Priority" k="priority" />
+            <SortableHeader label="Task" columnKey="title" sortKey={sortKey} onSort={toggleSort} />
+            <SortableHeader label="Status" columnKey="status" sortKey={sortKey} onSort={toggleSort} />
+            <SortableHeader label="Priority" columnKey="priority" sortKey={sortKey} onSort={toggleSort} />
             <th className="px-4 py-2.5 text-left text-[11.5px] font-medium uppercase tracking-wide text-neutral-500">Assignees</th>
-            <Header label="Due" k="due" />
+            <SortableHeader label="Due" columnKey="due" sortKey={sortKey} onSort={toggleSort} />
           </tr>
         </thead>
         <tbody>
@@ -1218,7 +1239,7 @@ function OverviewView({ tasks, onOpenTask }: { tasks: Task[]; onOpenTask: (task:
               </span>
             </button>
           ))}
-          {upcoming.length === 0 && <p className="px-2 py-2 text-[12.5px] text-neutral-500">Nothing due — you're all caught up.</p>}
+          {upcoming.length === 0 && <p className="px-2 py-2 text-[12.5px] text-neutral-500">Nothing due — you&apos;re all caught up.</p>}
         </div>
       </div>
     </div>
@@ -1266,8 +1287,6 @@ function TaskDrawer({
   const [titleDraft, setTitleDraft] = useState(task.title);
   const [assigneeMenuOpen, setAssigneeMenuOpen] = useState(false);
   const [noteDraft, setNoteDraft] = useState("");
-
-  useEffect(() => setTitleDraft(task.title), [task.id, task.title]);
 
   const saveTitle = () => {
     const trimmed = titleDraft.trim();
@@ -1709,7 +1728,7 @@ export default function TasksDashboard() {
   const [toasts, setToasts] = useState<{ id: number; message: string }[]>([]);
   const toastIdRef = useRef(0);
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const [pendingFocusSearch, setPendingFocusSearch] = useState(false);
+  const pendingFocusSearch = useRef(false);
 
   const pushToast = useCallback((message: string) => {
     const id = ++toastIdRef.current;
@@ -1718,21 +1737,21 @@ export default function TasksDashboard() {
   }, []);
 
   const focusSearch = useCallback(() => {
-    setActiveSection((prev) => {
-      if (prev !== "tasks") setPendingFocusSearch(true);
-      return "tasks";
-    });
-    // if we were already on the Tasks page, the input exists right now
-    searchInputRef.current?.focus();
-  }, []);
-
-  // once the Tasks page (re)mounts after a pending focus request, finish focusing it
-  useEffect(() => {
-    if (pendingFocusSearch && activeSection === "tasks") {
-      searchInputRef.current?.focus();
-      setPendingFocusSearch(false);
+    if (activeSection !== "tasks") {
+      pendingFocusSearch.current = true;
+      setActiveSection("tasks");
+      return;
     }
-  }, [pendingFocusSearch, activeSection]);
+
+    searchInputRef.current?.focus();
+  }, [activeSection]);
+
+  useEffect(() => {
+    if (pendingFocusSearch.current && activeSection === "tasks") {
+      searchInputRef.current?.focus();
+      pendingFocusSearch.current = false;
+    }
+  }, [activeSection]);
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -1893,7 +1912,7 @@ export default function TasksDashboard() {
       </div>
 
       <AnimatePresence>
-        {openTask && <TaskDrawer task={openTask} onClose={() => setOpenTaskId(null)} onUpdate={updateTask} onDelete={deleteTask} />}
+        {openTask && <TaskDrawer key={openTask.id} task={openTask} onClose={() => setOpenTaskId(null)} onUpdate={updateTask} onDelete={deleteTask} />}
       </AnimatePresence>
 
       <ToastStack toasts={toasts} />

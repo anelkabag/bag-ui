@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import Image from "next/image";
 import {
   LayoutDashboard,
   BarChart3,
@@ -297,9 +298,11 @@ function MoreHorizontalMenu() {
 function BaguiMark() {
   return (
     <div className="flex h-5 w-5 shrink-0 items-center justify-center overflow-hidden">
-      <img
+      <Image
         src="/logoW.png"
         alt="BagUi"
+        width={20}
+        height={20}
         className="h-full w-full object-contain"
       />
     </div>
@@ -533,9 +536,11 @@ function TopBar({
             onClick={() => setOpenMenu((m) => (m === "profile" ? null : "profile"))}
             className="flex items-center gap-1.5 cursor-pointer"
           >
-            <img
+            <Image
               src="/avatar.png"
               alt="Anelka Bag"
+              width={36}
+              height={36}
               className="h-9 w-9 rounded-full border border-white/10 bg-neutral-800 object-cover"
             />
             <ChevronDown className="h-3.5 w-3.5 text-neutral-500" />

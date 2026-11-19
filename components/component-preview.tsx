@@ -8,8 +8,12 @@ interface ComponentPreviewProps {
     name: string;
     files: { path: string; target?: string; type: string }[];
   };
-  /** Hauteur de la zone de preview en px. Défaut = 500 (comportement existant, page de détail). */
-  height?: number;
+  /** Hauteur de l'aperçu en px ou en unité CSS. Défaut = 500px. */
+  height?: React.CSSProperties["height"];
+  /** Aligne le contenu en haut au lieu de le centrer dans l'aperçu. */
+  alignStart?: boolean;
+  /** Permet au scroll interne de se chaîner vers le scroll Lenis parent. */
+  allowScrollChain?: boolean;
   /** Classes additionnelles sur le conteneur (ex: pour retirer la bordure dans une carte). */
   className?: string;
 }
@@ -63,8 +67,8 @@ function useContainFixed(ref: React.RefObject<HTMLDivElement | null>) {
     const container = ref.current;
     if (!container) return;
 
-    const fix = () => {
-      container.querySelectorAll<HTMLElement>("*").forEach((el) => {
+    const fixSubtree = (root: HTMLElement) => {
+      [root, ...root.querySelectorAll<HTMLElement>("*")].forEach((el) => {
         const computed = window.getComputedStyle(el);
         if (computed.position === "fixed") {
           el.style.position = "absolute";
@@ -72,8 +76,16 @@ function useContainFixed(ref: React.RefObject<HTMLDivElement | null>) {
       });
     };
 
-    fix();
-    const observer = new MutationObserver(fix);
+    fixSubtree(container);
+    const observer = new MutationObserver((records) => {
+      for (const record of records) {
+        for (const node of record.addedNodes) {
+          if (node instanceof HTMLElement) {
+            fixSubtree(node);
+          }
+        }
+      }
+    });
     observer.observe(container, { childList: true, subtree: true });
 
     return () => observer.disconnect();
@@ -83,6 +95,8 @@ function useContainFixed(ref: React.RefObject<HTMLDivElement | null>) {
 export function ComponentPreview({
   item,
   height = 500,
+  alignStart = false,
+  allowScrollChain = false,
   className = "",
 }: ComponentPreviewProps) {
   const file = item.files?.[0];
@@ -104,9 +118,34 @@ export function ComponentPreview({
   const [loadError, setLoadError] = useState(() =>
     Boolean(filePath && !loader && !cachedComponent),
   );
+  const [scrollChainActive, setScrollChainActive] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   useContainFixed(containerRef);
+
+  useEffect(() => {
+    if (!allowScrollChain || !PreviewComponent) return;
+
+    const container = containerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setScrollChainActive((active) =>
+          active
+            ? entry.isIntersecting && entry.intersectionRatio > 0.3
+            : entry.isIntersecting && entry.intersectionRatio >= 0.7,
+        );
+      },
+      {
+        root: document.getElementById("main"),
+        threshold: [0, 0.3, 0.7],
+      },
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [allowScrollChain, PreviewComponent]);
 
   useEffect(() => {
     if (!filePath) return;
@@ -199,7 +238,8 @@ export function ComponentPreview({
      */
     <div
       ref={containerRef}
-      className={`flex w-full items-center justify-center overflow-auto rounded-xl border border-border bg-card ${className}`}
+      data-lenis-prevent={!allowScrollChain || !scrollChainActive ? "" : undefined}
+      className={`flex w-full ${alignStart ? "items-start justify-start" : "items-center justify-center"} ${allowScrollChain && !scrollChainActive ? "overflow-hidden" : "overflow-auto"} rounded-xl border border-border bg-card ${className}`}
       style={{
         height,
         position: "relative",

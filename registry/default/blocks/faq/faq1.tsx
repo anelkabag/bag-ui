@@ -16,9 +16,9 @@ interface FAQItem {
 const faqItems: FAQItem[] = [
   {
     id: "001",
-    question: "What is included in Bag/UI?",
+    question: "What is included in BagUI?",
     answer:
-        "Bag/UI includes production-ready React components built with shadcn/ui and Tailwind CSS. Each block is fully customizable, responsive, and ready to integrate directly into your projects.",
+        "BagUI includes production-ready React components built with shadcn/ui and Tailwind CSS. Each block is fully customizable, responsive, and ready to integrate directly into your projects.",
   },
   {
     id: "002",
@@ -187,7 +187,7 @@ export default function FAQ() {
                 FAQ.
               </h1>
               <p className="font-sans text-xs sm:text-sm md:text-base font-normal leading-relaxed text-black/70">
-                Everything you need to know about Bag/UI. Can't find what you're
+                Everything you need to know about BagUI. Can&apos;t find what you&apos;re
                 looking for? Reach out to our support team.
               </p>
             </div>

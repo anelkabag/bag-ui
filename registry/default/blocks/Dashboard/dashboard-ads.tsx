@@ -2,6 +2,7 @@
 
 import React, { memo, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence, MotionConfig } from "motion/react";
+import Image from "next/image";
 import {
   Globe,
   Clock,
@@ -332,6 +333,7 @@ const platformLogos: Record<Platform, string> = {
 // -> Pour aller plus loin : héberger ces logos en local (bundle) supprimerait
 // complètement la dépendance réseau vers api.iconify.design.
 const PlatformIcon = memo(function PlatformIcon({ platform }: { platform: Platform }) {
+  /* eslint-disable @next/next/no-img-element -- Remote brand marks are SVGs and cannot be optimized. */
   return (
     <img
       src={platformLogos[platform]}
@@ -343,12 +345,13 @@ const PlatformIcon = memo(function PlatformIcon({ platform }: { platform: Platfo
       loading="lazy"
     />
   );
+  /* eslint-enable @next/next/no-img-element */
 });
 
 function BaguiLogo() {
   return (
     <div className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden">
-      <img src="/logoW.png" alt="BagUi" width={28} height={28} decoding="async" className="h-full w-full object-contain" />
+      <Image src="/logoW.png" alt="BagUi" width={28} height={28} className="h-full w-full object-contain" />
     </div>
   );
 }
@@ -547,7 +550,7 @@ const Sidebar = memo(function Sidebar({
       {!collapsed && (
         <div className="relative mt-3 border-t border-white/[0.06] pt-3">
           <button type="button" onClick={() => setProfileOpen((o) => !o)} className="flex w-full items-center gap-2.5 rounded-lg px-1 py-1 hover:bg-white/5">
-            <img
+            <Image
               src="/avatar.png"
               alt="Anelka Bag"
               width={32}

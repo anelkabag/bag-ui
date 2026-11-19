@@ -193,8 +193,6 @@ const panelActions: { icon: IconType; label: string }[] = [
   { icon: RefreshCw, label: "Sync" },
 ];
 
-const pillSpring = { type: "spring" as const, stiffness: 350, damping: 30 };
-
 function avatarUrl(seed: string) {
   return `https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(seed)}&backgroundColor=27272a`;
 }
@@ -325,6 +323,7 @@ function Sidebar({ activeNav, onSelect, activeProject, onSelectProject }: { acti
     <aside className="flex h-full w-[232px] shrink-0 flex-col gap-3 overflow-y-auto border-r border-white/[0.06] bg-[#0E0E10] p-3">
       <button className="flex items-center gap-2.5 rounded-xl bg-white/[0.05] p-2.5 hover:bg-white/[0.08]">
         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-sky-400 to-blue-600">
+          {/* eslint-disable-next-line @next/next/no-img-element -- Avatar sources are supplied as external SVGs. */}
           <img
                 src="/faviconblack.png"
                 alt="Logo BagUi"
@@ -743,6 +742,7 @@ function FileRow({ file }: { file: DocFile }) {
   return (
     <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
       <button onClick={() => setOpen((o) => !o)} className="flex w-full items-start gap-2.5 text-left">
+        {/* eslint-disable-next-line @next/next/no-img-element -- Dicebear returns generated SVG avatars. */}
         <img src={avatarUrl(file.sharedBy)} alt={file.sharedBy} className="mt-0.5 h-6 w-6 shrink-0 rounded-full border border-white/10 bg-neutral-800 object-cover" />
         <div className="min-w-0 flex-1">
           <p className="truncate text-[12.5px] font-medium text-neutral-200">{file.name}</p>
@@ -855,7 +855,7 @@ function DetailPanel({
                 </motion.div>
               ))}
             </AnimatePresence>
-            {visibleFiles.length === 0 && <p className="py-4 text-center text-[12px] text-neutral-500">No files match "{query}".</p>}
+            {visibleFiles.length === 0 && <p className="py-4 text-center text-[12px] text-neutral-500">No files match &quot;{query}&quot;.</p>}
           </div>
 
           <button

@@ -3,17 +3,17 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
-import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
 import registryJson from "@/registry.json";
 import {
   categoryMatchesItem,
   countRegistryItemsForCategory,
   RegistryItem,
 } from "@/lib/block-categories";
-import { Footer } from "@/components/footer";
-import Navbar from "@/components/navbar";
 import { getComponentAccessTier } from "@/lib/access";
 import BlockPreview from "@/components/BlockPreview";
+import AppShell from "@/components/shell/AppShell";
+import PageHero from "@/components/shell/PageHero";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type FilterType = "all" | "marketing" | "app" | "ecommerce";
@@ -45,14 +45,6 @@ function getBlockAccess(blockId: string): AccessTier {
     ? "pro"
     : "free";
 }
-
-// ─── Nav ──────────────────────────────────────────────────────────────────────
-const NAV_LINKS = [
-  { label: "Blocks", href: "/blocks" },
-  { label: "Templates", href: "/templates" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "Docs", href: "/docs" },
-] as const;
 
 // ─── Block catalog data ───────────────────────────────────────────────────────
 const MARKETING_BLOCKS_RAW: BlockItem[] = [
@@ -136,6 +128,22 @@ const ECOMMERCE_BLOCKS_RAW: BlockItem[] = [
   },
 ];
 
+const BLOCK_CATEGORY_IDS = [
+  ...MARKETING_BLOCKS_RAW,
+  ...APP_BLOCKS_RAW,
+  ...ECOMMERCE_BLOCKS_RAW,
+].map((block) => block.id);
+
+const availableComponents = registry.items.filter((item) =>
+  BLOCK_CATEGORY_IDS.some((id) => categoryMatchesItem(id, item)),
+);
+
+const totalAvailable = availableComponents.length;
+const totalPro = availableComponents.filter(
+  (item) => getComponentAccessTier(item) === "pro",
+).length;
+const totalFree = totalAvailable - totalPro;
+
 export const ECOMMERCE_BLOCKS = ECOMMERCE_BLOCKS_RAW.map((block) => ({
   ...block,
   count: getBlockCount(block.id),
@@ -155,24 +163,37 @@ function BlockCard({
   new: boolean;
 }) {
   return (
-    <Link href={`/blocks/${id}`} className="group block">
-      {/* Preview thumbnail */}
-      <div className="relative overflow-hidden rounded-xl border border-border bg-muted aspect-[16/9] mb-3 transition-all duration-200 group-hover:border-muted-foreground/60 group-hover:shadow-md">
-        {/* SVG preview — fills the full container, scales with it */}
-        <div className="absolute inset-0">
-          <BlockPreview blockType={id} />
+    <Link
+      href={`/blocks/${id}`}
+      className="group block rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+    >
+      <div className="rounded-3xl border border-border bg-card p-3 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:border-muted-foreground/40 group-hover:shadow-lg">
+        <div className="relative mb-4 aspect-[16/10] overflow-hidden rounded-2xl border border-border bg-background">
+          <div className="absolute inset-0">
+            <BlockPreview blockType={id} />
+          </div>
+          {isNew && (
+            <span className="absolute left-3 top-3 rounded-full border border-border bg-background/90 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-foreground backdrop-blur">
+              New
+            </span>
+          )}
         </div>
-        {/* overlay on hover */}
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/[0.03] transition-colors duration-200" />
-      </div>
-      {/* Label + count */}
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-foreground transition-colors group-hover:text-foreground">
-          {label}
-        </span>
-        <span className="text-xs text-muted-foreground tabular-nums">
-          {count} block{count > 1 ? "s" : ""}
-        </span>
+
+        <div className="flex items-center justify-between gap-3 px-1 pb-1">
+          <div className="min-w-0">
+            <h3 className="truncate text-[15px] font-semibold text-foreground">
+              {label}
+            </h3>
+            <p className="mt-1 text-xs tabular-nums text-muted-foreground">
+              {count} {count === 1 ? "block" : "blocks"}
+            </p>
+          </div>
+          <ArrowUpRight
+            size={16}
+            className="shrink-0 text-muted-foreground transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground"
+            aria-hidden="true"
+          />
+        </div>
       </div>
     </Link>
   );
@@ -181,24 +202,25 @@ function BlockCard({
 // ─── Section heading ──────────────────────────────────────────────────────────
 function SectionTitle({
   id,
+  count,
   children,
 }: {
   id: string;
+  count: number;
   children: React.ReactNode;
 }) {
   return (
-    <h2
-      id={id}
-      className="text-xl font-semibold text-foreground mb-6 mt-14 scroll-mt-20 flex items-center gap-2 group"
-    >
-      <a
-        href={`#${id}`}
-        className="opacity-0 group-hover:opacity-30 transition-opacity text-foreground text-base"
+    <div className="mb-6 mt-6 flex scroll-mt-8 items-center justify-between gap-4">
+      <h2
+        id={id}
+        className="scroll-mt-8 text-xl font-semibold tracking-tight text-foreground"
       >
-        #
-      </a>
-      {children}
-    </h2>
+        {children}
+      </h2>
+      <span className="rounded-full border border-border px-3 py-1 text-xs tabular-nums text-muted-foreground">
+        {count} {count === 1 ? "component" : "components"}
+      </span>
+    </div>
   );
 }
 
@@ -225,173 +247,170 @@ export default function BlocksPage() {
   const showEcommerce = activeFilter === "all" || activeFilter === "ecommerce";
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
+    <AppShell>
+      <div className="min-h-full bg-background">
+        <div className="mx-auto max-w-[1440px] pb-20">
+          <PageHero
+            firstLine="Build faster with"
+            secondLine="ready-to-use"
+            emphasis="blocks."
+            className="pb-6"
+          />
 
-      <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 pt-6 sm:pt-10 pb-16 sm:pb-20 border-x border-border">
-        {/* ── Breadcrumb ── */}
-        <div className="flex items-center gap-2 text-xs text-muted-foreground mb-6 sm:mb-10">
-          <Link href="/" className="hover:text-foreground transition-colors">
-            Home
-          </Link>
-          <span>/</span>
-          <span className="text-foreground">Blocks</span>
-        </div>
-
-        {/* ── Hero ── */}
-        <div className="mb-6 sm:mb-10">
-          <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-2 sm:mb-3 leading-tight ">
-            Bag/UI Blocks —{" "}
-            <span className="text-muted-foreground">
-              {totalAll}+ Free &amp; Pro
-            </span>
-          </h1>
-          <p className="text-muted-foreground text-sm sm:text-base leading-relaxed max-w-2xl">
-            Browse and install production-ready React sections built with
-            shadcn/ui and Tailwind CSS. Copy &amp; paste or install directly
-            with the Shadcn CLI.
-          </p>
-        </div>
-
-        {/* ── Filter tabs ── */}
-        <div className="flex items-center gap-0 mb-2 border-b border-border pb-0 overflow-x-auto scrollbar-none">
-          {filters.map((f) => (
-            <button
-              key={f.key}
-              onClick={() => setActiveFilter(f.key)}
-              className={`relative flex items-center gap-1 px-2.5 xs:px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-medium transition-colors cursor-pointer whitespace-nowrap flex-shrink-0 ${
-                activeFilter === f.key
-                  ? "text-foreground"
-                  : "text-muted-foreground hover:text-foreground/80"
-              }`}
+          <div className="mx-5 flex flex-col gap-4 py-0 sm:flex-row sm:items-center sm:justify-between md:mx-10">
+            <div
+              role="group"
+              className="flex w-fit max-w-full items-center gap-1 overflow-x-auto rounded-full border border-border bg-muted/40 p-1"
+              aria-label="Filter blocks by category"
             >
-              {f.label}
-              <span
-                className={`text-[10px] sm:text-xs tabular-nums ${
-                  activeFilter === f.key
-                    ? "text-muted-foreground"
-                    : "text-muted-foreground/60"
-                }`}
+              {filters.map((f) => (
+                <button
+                  key={f.key}
+                  type="button"
+                  onClick={() => setActiveFilter(f.key)}
+                  aria-pressed={activeFilter === f.key}
+                  className={`relative isolate flex shrink-0 items-center gap-2 rounded-full px-3.5 py-2 text-sm font-medium transition-colors ${
+                    activeFilter === f.key
+                      ? "text-background"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {activeFilter === f.key && (
+                    <motion.span
+                      layoutId="blocks-filter-indicator"
+                      className="absolute inset-0 z-0 rounded-full bg-foreground"
+                      transition={{
+                        type: "spring",
+                        stiffness: 420,
+                        damping: 34,
+                        mass: 0.7,
+                      }}
+                      aria-hidden="true"
+                    />
+                  )}
+                  <span className="relative z-10">{f.label}</span>
+                  <span
+                    className={`relative z-10 text-xs tabular-nums ${
+                      activeFilter === f.key
+                        ? "text-background/70"
+                        : "text-muted-foreground/70"
+                    }`}
+                  >{f.count}</span>
+                </button>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-between gap-5 sm:justify-end sm:gap-7">
+              <div>
+                <p className="text-lg font-semibold leading-none tracking-tight text-foreground">
+                  {totalAvailable}
+                </p>
+                <p className="mt-1.5 text-xs text-muted-foreground">
+                  Components
+                </p>
+              </div>
+              <div>
+                <p className="text-lg font-semibold leading-none tracking-tight text-foreground">
+                  {totalFree}
+                </p>
+                <p className="mt-1.5 text-xs text-muted-foreground">Free</p>
+              </div>
+              <div>
+                <p className="text-lg font-semibold leading-none tracking-tight text-foreground">
+                  {totalPro}
+                </p>
+                <p className="mt-1.5 text-xs text-muted-foreground">Pro</p>
+              </div>
+            </div>
+          </div>
+          {/* ── Sections (Marketing / App / Ecommerce) ── */}
+          <AnimatePresence mode="wait">
+            {showMarketing && (
+              <motion.section
+                id="marketing"
+                key="marketing"
+                className="px-6 md:px-10"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.2 }}
               >
-                {f.count}
-              </span>
-              {activeFilter === f.key && (
-                <motion.div
-                  layoutId="filter-underline"
-                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-foreground"
-                  transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
-                />
-              )}
-            </button>
-          ))}
+                <SectionTitle id="marketing" count={totalMarketing}>
+                  Marketing blocks
+                </SectionTitle>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4 sm:gap-5">
+                  {MARKETING_BLOCKS.map((b, i) => (
+                    <motion.div
+                      key={b.id}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.03 }}
+                    >
+                      <BlockCard {...b} />
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.section>
+            )}
+
+            {showApp && (
+              <motion.section
+                id="app"
+                key="app"
+                className="px-6 md:px-10"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.2 }}
+              >
+                <SectionTitle id="app" count={totalApp}>
+                  App blocks
+                </SectionTitle>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4 sm:gap-5">
+                  {APP_BLOCKS.map((b, i) => (
+                    <motion.div
+                      key={b.id}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.03 }}
+                    >
+                      <BlockCard {...b} />
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.section>
+            )}
+
+            {showEcommerce && (
+              <motion.section
+                id="ecommerce"
+                key="ecommerce"
+                className="px-6 md:px-10"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.2 }}
+              >
+                <SectionTitle id="ecommerce" count={totalEcommerce}>
+                  Ecommerce blocks
+                </SectionTitle>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4 sm:gap-5">
+                  {ECOMMERCE_BLOCKS.map((b, i) => (
+                    <motion.div
+                      key={b.id}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.03 }}
+                    >
+                      <BlockCard {...b} />
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.section>
+            )}
+          </AnimatePresence>
         </div>
-
-        {/* ── Anchor shortcuts ── */}
-        <div className="flex flex-wrap items-center gap-x-2 sm:gap-x-3 gap-y-1 py-3 sm:py-4 text-xs sm:text-sm text-muted-foreground">
-          {showMarketing && (
-            <a
-              href="#marketing"
-              className="hover:text-foreground transition-colors"
-            >
-              Marketing
-            </a>
-          )}
-          {showMarketing && (showApp || showEcommerce) && <span>/</span>}
-          {showApp && (
-            <a href="#app" className="hover:text-foreground transition-colors">
-              App
-            </a>
-          )}
-          {showApp && showEcommerce && <span>/</span>}
-          {showEcommerce && (
-            <a
-              href="#ecommerce"
-              className="hover:text-foreground transition-colors"
-            >
-              Ecommerce
-            </a>
-          )}
-        </div>
-
-        {/* ── Sections (Marketing / App / Ecommerce) ── */}
-        <AnimatePresence mode="wait">
-          {showMarketing && (
-            <motion.section
-              id="marketing"
-              key="marketing"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2 }}
-            >
-              <SectionTitle id="marketing">Marketing Blocks</SectionTitle>
-              <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
-                {MARKETING_BLOCKS.map((b, i) => (
-                  <motion.div
-                    key={b.id}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.03 }}
-                  >
-                    <BlockCard {...b} />
-                  </motion.div>
-                ))}
-              </div>
-            </motion.section>
-          )}
-
-          {showApp && (
-            <motion.section
-              id="app"
-              key="app"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2 }}
-            >
-              <SectionTitle id="app">App Blocks</SectionTitle>
-              <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
-                {APP_BLOCKS.map((b, i) => (
-                  <motion.div
-                    key={b.id}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.03 }}
-                  >
-                    <BlockCard {...b} />
-                  </motion.div>
-                ))}
-              </div>
-            </motion.section>
-          )}
-
-          {showEcommerce && (
-            <motion.section
-              id="ecommerce"
-              key="ecommerce"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2 }}
-            >
-              <SectionTitle id="ecommerce">Ecommerce Blocks</SectionTitle>
-              <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
-                {ECOMMERCE_BLOCKS.map((b, i) => (
-                  <motion.div
-                    key={b.id}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.03 }}
-                  >
-                    <BlockCard {...b} />
-                  </motion.div>
-                ))}
-              </div>
-            </motion.section>
-          )}
-        </AnimatePresence>
       </div>
-      <Footer />
-    </div>
+    </AppShell>
   );
 }

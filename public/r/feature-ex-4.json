@@ -2,10 +2,9 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "feature-ex-4",
   "title": "Feature Exemple 4",
-  "description": "Frequently asked questions section with collapsible items.",
+  "description": "Open-source component-registry feature section with product highlights and animated metrics.",
   "dependencies": [
-    "motion/react",
-    "lucide-react"
+    "@number-flow/react"
   ],
   "files": [
     {

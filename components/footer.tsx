@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 import React from "react";
 import { useTheme } from "next-themes";
 import { Sun, Moon } from "lucide-react";
+import { setThemeWithTransition } from "@/lib/theme-transition";
 import {
   FaXTwitter, // X
   FaInstagram, // Instagram
@@ -107,6 +108,7 @@ export function Footer() {
                   src="/logo.png"
                   alt="BagUI"
                   fill
+                  sizes="16px"
                   className="object-contain dark:hidden"
                 />
 
@@ -114,6 +116,7 @@ export function Footer() {
                   src="/logoW.png"
                   alt="BagUI"
                   fill
+                  sizes="16px"
                   className="hidden object-contain dark:block"
                 />
               </div>
@@ -122,7 +125,7 @@ export function Footer() {
               </span>
             </div>
             <p className="max-w-[180px] text-xs leading-relaxed text-muted-foreground mb-3">
-              Spend less time building UI from scratch. Ship faster with Bag/UI.
+              Spend less time building UI from scratch. Ship faster with BagUI.
             </p>
             <motion.div
               initial={{ opacity: 0 }}
@@ -135,7 +138,7 @@ export function Footer() {
               {THEME_OPTIONS.map(({ key, icon, label }) => (
                 <button
                   key={key}
-                  onClick={() => setTheme(key)}
+                  onClick={() => setThemeWithTransition(key, setTheme)}
                   title={label}
                   className={[
                     "relative h-6 w-7 rounded-[7px] flex items-center justify-center cursor-pointer transition-colors duration-200",

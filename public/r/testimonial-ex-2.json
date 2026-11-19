@@ -2,11 +2,8 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "testimonial-ex-2",
   "title": "Testimonial Exemple 2",
-  "description": "Frequently asked questions section with collapsible items.",
-  "dependencies": [
-    "motion/react",
-    "lucide-react"
-  ],
+  "description": "Developer testimonial section with customer quotes and a BagUI-focused heading.",
+  "dependencies": [],
   "files": [
     {
       "path": "registry/default/blocks/Testimonial/testimonial2.tsx",

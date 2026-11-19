@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, type Variants } from "framer-motion";
+import { motion, type Variants } from "motion/react";
 import {
   ArrowRight,
   ChevronDown,
@@ -12,6 +12,7 @@ import {
   Bot,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 /* ────────────────────────────────────────────────────────────────────────
    Template2 — "Identity platform" landing page
@@ -100,9 +101,9 @@ function Navbar() {
   return (
     <header style={{ backgroundColor: paper }} className="relative z-30 w-full">
       <div className="mx-auto flex h-[68px] max-w-6xl items-center justify-between px-6 sm:px-10">
-        <a href="/" className="text-[21px] font-extrabold tracking-tight" style={{ color: ink }}>
+        <Link href="/" className="text-[21px] font-extrabold tracking-tight" style={{ color: ink }}>
           BagUi
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-7 font-mono text-[13px] md:flex" style={{ color: "#4a4740" }}>
           {NAV_LINKS.map((item) => (
@@ -398,26 +399,28 @@ function TenancyMock() {
     { label: "MFA Required", on: true },
   ];
 
-  const Org = ({ name, rows }: { name: string; rows: typeof rowsA }) => (
-    <div className="flex-1 overflow-hidden rounded-[6px] border border-neutral-200 bg-white">
-      <div className="bg-neutral-900 px-2.5 py-1.5 text-center font-mono text-[10px] font-semibold text-white">
-        {name}
-      </div>
-      <div className="divide-y divide-neutral-100">
-        {rows.map((r) => (
-          <div key={r.label} className="flex items-center justify-between px-2.5 py-1.5 font-mono text-[9.5px] text-neutral-700">
-            {r.label}
-            <MiniToggle on={r.on} />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+  const organizations = [
+    { name: "Organization A", rows: rowsA },
+    { name: "Organization B", rows: rowsB },
+  ];
 
   return (
     <div className="flex gap-2">
-      <Org name="Organization A" rows={rowsA} />
-      <Org name="Organization B" rows={rowsB} />
+      {organizations.map(({ name, rows }) => (
+        <div key={name} className="flex-1 overflow-hidden rounded-[6px] border border-neutral-200 bg-white">
+          <div className="bg-neutral-900 px-2.5 py-1.5 text-center font-mono text-[10px] font-semibold text-white">
+            {name}
+          </div>
+          <div className="divide-y divide-neutral-100">
+            {rows.map((r) => (
+              <div key={r.label} className="flex items-center justify-between px-2.5 py-1.5 font-mono text-[9.5px] text-neutral-700">
+                {r.label}
+                <MiniToggle on={r.on} />
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

@@ -101,7 +101,7 @@ const featureVariants: Variants = {
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
-function PricingCard({ plan, index }: { plan: PricingPlan; index: number }) {
+function PricingCard({ plan }: { plan: PricingPlan }) {
   return (
       <motion.div
           variants={cardVariants}
@@ -111,7 +111,7 @@ function PricingCard({ plan, index }: { plan: PricingPlan; index: number }) {
         ${
               plan.highlighted
                   ? "bg-zinc-950 border border-zinc-700 text-white"
-                  : "bg-white border border-zinc-200 text-zinc-900"
+                  : "bg-white border border-zinc-200 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
           }
       `}
       >
@@ -120,12 +120,12 @@ function PricingCard({ plan, index }: { plan: PricingPlan; index: number }) {
             className={`mb-5 p-3 rounded-md ${
                 plan.highlighted
                     ? "bg-zinc-900/50 border border-zinc-800"
-                    : "bg-gray-100"
+                    : "bg-gray-100 dark:bg-zinc-800"
             }`}
         >
           <h3
               className={`text-xl font-semibold tracking-tight mb-2 ${
-                  plan.highlighted ? "text-white" : "text-zinc-900"
+                  plan.highlighted ? "text-white" : "text-zinc-900 dark:text-white"
               }`}
           >
             {plan.title}
@@ -133,7 +133,7 @@ function PricingCard({ plan, index }: { plan: PricingPlan; index: number }) {
 
           <p
               className={`text-sm leading-relaxed ${
-                  plan.highlighted ? "text-zinc-400" : "text-zinc-500"
+                  plan.highlighted ? "text-zinc-400" : "text-zinc-500 dark:text-zinc-400"
               }`}
           >
             {plan.description}
@@ -143,14 +143,14 @@ function PricingCard({ plan, index }: { plan: PricingPlan; index: number }) {
           <div className="mt-6">
             <p
                 className={`text-2xl font-bold tracking-tight ${
-                    plan.highlighted ? "text-white" : "text-zinc-900"
+                    plan.highlighted ? "text-white" : "text-zinc-900 dark:text-white"
                 }`}
             >
               {plan.price}
               {plan.priceLabel && (
                   <span
                       className={`text-sm font-normal ml-2 ${
-                          plan.highlighted ? "text-zinc-400" : "text-zinc-500"
+                          plan.highlighted ? "text-zinc-400" : "text-zinc-500 dark:text-zinc-400"
                       }`}
                   >
                 / {plan.priceLabel}
@@ -163,7 +163,7 @@ function PricingCard({ plan, index }: { plan: PricingPlan; index: number }) {
         {/* Divider */}
         <div
             className={`h-px mb-5 ${
-                plan.highlighted ? "bg-zinc-800" : "bg-zinc-100"
+                plan.highlighted ? "bg-zinc-800" : "bg-zinc-100 dark:bg-zinc-700"
             }`}
         />
 
@@ -179,12 +179,12 @@ function PricingCard({ plan, index }: { plan: PricingPlan; index: number }) {
                 <Check
                     size={15}
                     className={`mt-0.5 shrink-0 ${
-                        plan.highlighted ? "text-zinc-300" : "text-zinc-700"
+                        plan.highlighted ? "text-zinc-300" : "text-zinc-700 dark:text-zinc-300"
                     }`}
                 />
                 <span
                     className={`text-sm ${
-                        plan.highlighted ? "text-zinc-300" : "text-zinc-600"
+                        plan.highlighted ? "text-zinc-300" : "text-zinc-600 dark:text-zinc-300"
                     }`}
                 >
               {feat}
@@ -216,7 +216,7 @@ function PricingCard({ plan, index }: { plan: PricingPlan; index: number }) {
 
 export default function PricingSection() {
   return (
-      <section className="w-full bg-zinc-50 py-20 px-4 font-sans">
+      <section className="w-full bg-zinc-50 px-4 py-20 font-sans dark:bg-zinc-950">
         <div className="max-w-5xl mx-auto">
           {/* Header */}
           <motion.div
@@ -229,7 +229,7 @@ export default function PricingSection() {
             <p className="text-xs font-medium uppercase tracking-widest text-zinc-400 mb-3">
               Pricing &amp; Plan
             </p>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-zinc-950">
+            <h2 className="text-4xl font-bold tracking-tight text-zinc-950 dark:text-white md:text-5xl">
               No Contract, No Surprises
             </h2>
           </motion.div>
@@ -245,8 +245,8 @@ export default function PricingSection() {
                   viewport={{ once: true, margin: "-60px" }}
                   className="grid grid-cols-1 md:grid-cols-2 gap-5"
               >
-                {plans.slice(0, 2).map((plan, i) => (
-                    <PricingCard key={plan.title} plan={plan} index={i} />
+                {plans.slice(0, 2).map((plan) => (
+                    <PricingCard key={plan.title} plan={plan} />
                 ))}
               </motion.div>
 
@@ -256,16 +256,16 @@ export default function PricingSection() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.45, delay: 0.3, ease: "easeOut" }}
-                  className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white border border-zinc-200 rounded-2xl px-7 py-5"
+                  className="flex flex-col items-center justify-between gap-4 rounded-2xl border border-zinc-200 bg-white px-7 py-5 dark:border-zinc-700 dark:bg-zinc-900 sm:flex-row"
               >
-                <p className="text-sm font-semibold text-zinc-900">
-                  Didn't find the answer?
+                <p className="text-sm font-semibold text-zinc-900 dark:text-white">
+                  Didn&apos;t find the answer?
                 </p>
                 <div className="flex items-center gap-6">
                   <motion.a
                       href="mailto:anelka.bag@gmail.com"
                       whileHover={{ scale: 1.04 }}
-                      className="flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 transition-colors"
+                      className="flex items-center gap-2 text-sm text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
                   >
                     <Mail size={15} />
                     Email us
@@ -273,7 +273,7 @@ export default function PricingSection() {
                   <motion.a
                       href="https://t.me/@anelkabag"
                       whileHover={{ scale: 1.04 }}
-                      className="flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 transition-colors"
+                      className="flex items-center gap-2 text-sm text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
                   >
                     <Send size={15} />
                     Chat on Telegram
@@ -290,7 +290,7 @@ export default function PricingSection() {
                 viewport={{ once: true, margin: "-60px" }}
                 className="h-full"
             >
-              <PricingCard key={plans[2].title} plan={plans[2]} index={2} />
+              <PricingCard key={plans[2].title} plan={plans[2]} />
             </motion.div>
           </div>
         </div>

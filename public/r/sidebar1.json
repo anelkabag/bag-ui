@@ -2,9 +2,9 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "sidebar1",
   "title": "Sidebar Exemple 1",
-  "description": "Frequently asked questions section with collapsible items.",
+  "description": "Animated application sidebar with grouped navigation links and a collapsible layout.",
   "dependencies": [
-    "motion/react",
+    "motion",
     "lucide-react"
   ],
   "files": [

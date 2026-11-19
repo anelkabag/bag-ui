@@ -26,8 +26,6 @@ import Image from "next/image";
 import { motion, useReducedMotion, type Variants } from "motion/react";
 import { ChevronRight } from "lucide-react";
 import {
-  FaXTwitter, // X
-  FaInstagram, // Instagram
   FaLinkedin, // LinkedIn
   FaFacebook,
 } from "react-icons/fa6";

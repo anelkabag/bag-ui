@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, Variants } from "motion/react";
-import Image from "next/image";
 
 /* ─── Animation ─── */
 const fadeUp: Variants = {
@@ -264,7 +263,7 @@ export default function FeaturesSection2() {
                     <motion.p variants={fadeUp} className="text-[15px] text-[#6b7280] leading-relaxed mb-3 max-w-xl mx-auto">
                         You spend days fixing sync errors between your tax software and QuickBooks. Your support
                         tickets take a week to get a real answer. You track nexus thresholds on a spreadsheet,
-                        hoping you don't miss one.
+                        hoping you don&apos;t miss one.
                     </motion.p>
                     <motion.p variants={fadeUp} className="text-[15px] text-[#6b7280]">
                         There is a simpler way to work.

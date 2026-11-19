@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import { Check, ChevronDown, Languages, Menu, X } from "lucide-react";
 import {
@@ -370,9 +371,11 @@ export default function Navbar2() {
 
                   {/* Preview image */}
                   <div className="relative hidden h-64 w-72 flex-col justify-end overflow-hidden rounded-2xl md:flex">
-                    <img
+                    <Image
                       src={activeMenu.image.src}
                       alt={activeMenu.image.alt}
+                      fill
+                      sizes="288px"
                       className="absolute inset-0 h-full w-full object-cover"
                     />
                     {activeMenu.imageCaption && (

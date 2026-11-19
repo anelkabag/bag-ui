@@ -2,8 +2,11 @@
 
 import React from "react";
 
+let previewCache: Record<string, React.ReactNode> | undefined;
+let fallbackCache: React.ReactNode | undefined;
+
 export default function BlockPreview({ blockType }: { blockType: string }) {
-  const previews: Record<string, React.ReactNode> = {
+  const previews: Record<string, React.ReactNode> = (previewCache ??= {
     // ── Hero ─────────────────────────────────────────────────────────────────
     hero: (
       <svg viewBox="0 0 320 180" className="w-full h-full" fill="none">
@@ -2567,10 +2570,10 @@ export default function BlockPreview({ blockType }: { blockType: string }) {
         ))}
       </svg>
     ),
-  };
+  });
 
   // ── Fallback ───────────────────────────────────────────────────────────────
-  const fallback = (
+  const fallback = (fallbackCache ??= (
     <svg viewBox="0 0 320 180" className="w-full h-full" fill="none">
       <rect width="320" height="180" fill="var(--background)" />
       <rect x="88" y="20" width="144" height="10" rx="4" fill="var(--muted)" />
@@ -2613,7 +2616,7 @@ export default function BlockPreview({ blockType }: { blockType: string }) {
         </g>
       ))}
     </svg>
-  );
+  ));
 
   return previews[blockType] ?? fallback;
 }

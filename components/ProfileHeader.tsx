@@ -397,7 +397,7 @@ export function ProfileHeader({
               setIsEditOpen(false);
             }}
           />
-          <div className="relative z-10 max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-[32px] border border-border bg-card/95 p-8 shadow-2xl shadow-black/20">
+          <div data-lenis-prevent className="relative z-10 max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-[32px] border border-border bg-card/95 p-8 shadow-2xl shadow-black/20">
             <div className="flex items-center justify-between">
               <p className="text-sm uppercase tracking-[0.35em] text-muted-foreground">
                 Edit Profile

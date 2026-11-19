@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, MotionConfig } from "motion/react";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
 
 /* ───────────── Constantes ───────────── */
@@ -42,7 +43,7 @@ const HERO_LINES = ["The browser engine", "for autonomous AI"];
 /* ───────────── Petits éléments ───────────── */
 function Logo() {
   return (
-    <img
+    <Image
       src="/logo.png"
       alt="Logo"
       width={26}

@@ -87,7 +87,7 @@ export default function PricingSection() {
 
   return (
     <section
-      className="min-h-screen w-full flex flex-col items-center justify-center px-4 py-24"
+      className="flex min-h-screen w-full flex-col items-center justify-center bg-white px-4 py-24 dark:bg-neutral-950"
       style={{ fontFamily: "var(--font-geist-sans, 'Inter', sans-serif)" }}
     >
       {/* Heading */}
@@ -97,7 +97,7 @@ export default function PricingSection() {
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         className="text-center mb-10 max-w-2xl"
       >
-        <h1 className="text-4xl md:text-5xl text-black leading-tight tracking-tight">
+        <h1 className="text-4xl md:text-5xl leading-tight tracking-tight text-neutral-950 dark:text-white">
           Choose <span className="font-bold">The Plan</span> That&apos;s Right
           For Your Investment Goals!
         </h1>
@@ -108,40 +108,41 @@ export default function PricingSection() {
         initial={{ opacity: 0, scale: 0.92 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.2, duration: 0.35 }}
-        className="flex items-center gap-3 mb-14 px-4 py-1.5 rounded-full border border-black/10 bg-white shadow-sm"
+        className="mb-14 flex items-center gap-3 rounded-full border border-neutral-200 bg-white px-4 py-1.5 shadow-sm dark:border-neutral-700 dark:bg-neutral-900"
       >
         <span
           onClick={() => setAnnual(false)}
-          className="text-sm cursor-pointer select-none transition-colors"
-          style={{
-            color: !annual ? "#000" : "#999",
-            fontWeight: !annual ? 600 : 400,
-          }}
+          className={`cursor-pointer select-none text-sm transition-colors ${
+            !annual
+              ? "font-semibold text-neutral-950 dark:text-white"
+              : "text-neutral-400 hover:text-neutral-600 dark:text-neutral-500 dark:hover:text-neutral-300"
+          }`}
         >
           Monthly
         </span>
 
         <button
           onClick={() => setAnnual((v) => !v)}
-          className="relative w-10 h-5 rounded-full focus:outline-none transition-colors duration-300 cursor-pointer"
-          style={{ background: annual ? "#000" : "#D1D1D1" }}
+          className={`relative h-5 w-10 cursor-pointer rounded-full transition-colors duration-300 focus:outline-none ${
+            annual ? "bg-neutral-950 dark:bg-white" : "bg-neutral-300 dark:bg-neutral-700"
+          }`}
           aria-label="Toggle billing"
         >
           <motion.span
             layout
             transition={{ type: "spring", stiffness: 700, damping: 38 }}
-            className="absolute top-0.5 w-4 h-4 rounded-full bg-white"
+            className="absolute top-0.5 h-4 w-4 rounded-full bg-white dark:bg-neutral-950"
             style={{ left: annual ? "calc(100% - 18px)" : "2px" }}
           />
         </button>
 
         <span
           onClick={() => setAnnual(true)}
-          className="text-sm cursor-pointer select-none transition-colors"
-          style={{
-            color: annual ? "#000" : "#999",
-            fontWeight: annual ? 600 : 400,
-          }}
+          className={`cursor-pointer select-none text-sm transition-colors ${
+            annual
+              ? "font-semibold text-neutral-950 dark:text-white"
+              : "text-neutral-400 hover:text-neutral-600 dark:text-neutral-500 dark:hover:text-neutral-300"
+          }`}
         >
           Annually
         </span>
@@ -177,16 +178,15 @@ export default function PricingSection() {
                 ? "0 20px 50px rgba(0,0,0,0.30)"
                 : "0 12px 36px rgba(0,0,0,0.10)",
             }}
-            className="rounded-2xl p-7 flex flex-col relative"
             style={{
-              background: plan.dark ? "#000" : "#fff",
-              border: plan.dark ? "1.5px solid #000" : "1.5px solid #E5E5E5",
               transform: plan.highlight ? "translateY(-14px)" : "translateY(0)",
-              boxShadow: plan.dark
-                ? "0 12px 40px rgba(0,0,0,0.20)"
-                : "0 2px 16px rgba(0,0,0,0.05)",
               transition: "box-shadow 0.25s",
             }}
+            className={`relative flex flex-col rounded-2xl border p-7 ${
+              plan.dark
+                ? "border-neutral-950 bg-neutral-950 text-white dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-950"
+                : "border-neutral-200 bg-white text-neutral-950 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white"
+            }`}
           >
             {/* Badge */}
             {plan.highlight && (
@@ -203,17 +203,16 @@ export default function PricingSection() {
             {/* Icon + Name */}
             <div className="flex items-center gap-2 mb-5">
               <span
-                className="w-7 h-7 rounded-lg flex items-center justify-center text-sm font-semibold"
-                style={{
-                  background: plan.dark ? "#1A1A1A" : "#F4F4F4",
-                  color: plan.dark ? "#fff" : "#000",
-                }}
+                className={`flex h-7 w-7 items-center justify-center rounded-lg text-sm font-semibold ${
+                  plan.dark
+                    ? "bg-neutral-800 text-white dark:bg-neutral-200 dark:text-neutral-950"
+                    : "bg-neutral-100 text-neutral-950 dark:bg-neutral-800 dark:text-white"
+                }`}
               >
                 {plan.icon}
               </span>
               <span
-                className="text-sm font-semibold"
-                style={{ color: plan.dark ? "#fff" : "#000" }}
+                className={`text-sm font-semibold ${plan.dark ? "text-white dark:text-neutral-950" : "text-neutral-950 dark:text-white"}`}
               >
                 {plan.name}
               </span>
@@ -228,15 +227,13 @@ export default function PricingSection() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.2 }}
-                  className="text-5xl font-bold leading-none tracking-tight"
-                  style={{ color: plan.dark ? "#fff" : "#000" }}
+                  className={`text-5xl font-bold leading-none tracking-tight ${plan.dark ? "text-white dark:text-neutral-950" : "text-neutral-950 dark:text-white"}`}
                 >
                   ${annual ? plan.annualPrice : plan.monthlyPrice}
                 </motion.span>
               </AnimatePresence>
               <span
-                className="text-xs mb-1.5"
-                style={{ color: plan.dark ? "#888" : "#888" }}
+                className={`mb-1.5 text-xs ${plan.dark ? "text-neutral-400 dark:text-neutral-600" : "text-neutral-500 dark:text-neutral-400"}`}
               >
                 / Month
               </span>
@@ -244,16 +241,14 @@ export default function PricingSection() {
 
             {/* Description */}
             <p
-              className="text-xs leading-relaxed mb-6"
-              style={{ color: plan.dark ? "#888" : "#666" }}
+              className={`mb-6 text-xs leading-relaxed ${plan.dark ? "text-neutral-400 dark:text-neutral-600" : "text-neutral-600 dark:text-neutral-400"}`}
             >
               {plan.description}
             </p>
 
             {/* Divider */}
             <div
-              className="w-full h-px mb-6"
-              style={{ background: plan.dark ? "#222" : "#F0F0F0" }}
+              className={`mb-6 h-px w-full ${plan.dark ? "bg-neutral-800 dark:bg-neutral-300" : "bg-neutral-100 dark:bg-neutral-800"}`}
             />
 
             {/* Features */}
@@ -264,19 +259,17 @@ export default function PricingSection() {
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3 + i * 0.06, duration: 0.3 }}
-                  className="flex items-start gap-2.5 text-xs"
-                  style={{ color: plan.dark ? "#ccc" : "#333" }}
+                  className={`flex items-start gap-2.5 text-xs ${plan.dark ? "text-neutral-300 dark:text-neutral-700" : "text-neutral-700 dark:text-neutral-300"}`}
                 >
                   <span
-                    className="mt-0.5 w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center"
-                    style={{
-                      background: plan.dark ? "#1A1A1A" : "#F4F4F4",
-                    }}
+                    className={`mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full ${
+                      plan.dark ? "bg-neutral-800 dark:bg-neutral-200" : "bg-neutral-100 dark:bg-neutral-800"
+                    }`}
                   >
                     <Check
                       size={9}
                       strokeWidth={2.5}
-                      style={{ color: plan.dark ? "#fff" : "#000" }}
+                      className={plan.dark ? "text-white dark:text-neutral-950" : "text-neutral-950 dark:text-white"}
                     />
                   </span>
                   {f}
@@ -288,18 +281,13 @@ export default function PricingSection() {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.97 }}
-              className="w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-              style={
+              className={`flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-xl py-3 text-sm font-semibold transition-colors ${
                 plan.id === "starter"
-                  ? { background: "#000", color: "#fff" }
+                  ? "bg-neutral-950 text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200"
                   : plan.dark
-                    ? { background: "#fff", color: "#000" }
-                    : {
-                        background: "#F4F4F4",
-                        color: "#000",
-                        border: "1px solid #E5E5E5",
-                      }
-              }
+                    ? "bg-white text-neutral-950 hover:bg-neutral-100 dark:bg-neutral-950 dark:text-white dark:hover:bg-neutral-800"
+                    : "border border-neutral-200 bg-neutral-100 text-neutral-950 hover:bg-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700"
+              }`}
             >
               {plan.cta}
               {plan.id !== "starter" && (
