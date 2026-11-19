@@ -2,7 +2,8 @@
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import type { Session, User } from "@supabase/supabase-js";
+import type { User } from "@supabase/supabase-js";
+import posthog from "posthog-js";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import type { Database } from "@/types/supabase";
 
@@ -48,6 +49,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
+    let identifiedUserId: string | null = null;
+
+    const identifyUser = (activeUser: User) => {
+      if (identifiedUserId && identifiedUserId !== activeUser.id) {
+        posthog.reset();
+      }
+
+      posthog.identify(activeUser.id, {
+        ...(activeUser.email ? { email: activeUser.email } : {}),
+        ...(typeof activeUser.user_metadata.username === "string"
+          ? { username: activeUser.user_metadata.username }
+          : {}),
+      });
+      identifiedUserId = activeUser.id;
+    };
+
     const initializeAuth = async () => {
       setLoading(true);
       const {
@@ -58,6 +75,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(activeUser);
 
       if (activeUser) {
+        identifyUser(activeUser);
         await fetchProfile();
       }
 
@@ -67,13 +85,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     initializeAuth();
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (_, session) => {
+      async (event, session) => {
         const activeUser = session?.user ?? null;
         setUser(activeUser);
         if (activeUser) {
+          if (event === "SIGNED_IN") {
+            identifyUser(activeUser);
+          }
           await fetchProfile();
         } else {
           setProfile(null);
+          if (event === "SIGNED_OUT") {
+            identifiedUserId = null;
+            posthog.reset();
+          }
         }
       },
     );
@@ -94,38 +119,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return error.message;
     }
     await fetchProfile();
+    posthog.capture("user_signed_in", { sign_in_method: "email_password" });
     router.replace("/blocks");
     return null;
   };
 
   const signUp = async (email: string, password: string, username: string) => {
-  setLoading(true);
+    setLoading(true);
 
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: { username },
-      emailRedirectTo: `${window.location.origin}/auth/callback?next=/blocks&welcome=1`,
-    },
-  });
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { username },
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=/blocks&welcome=1`,
+      },
+    });
 
-  setLoading(false);
+    setLoading(false);
 
-  if (error) {
-    return error.message;
-  }
+    if (error) {
+      return error.message;
+    }
 
-  if (data.user && data.user.identities?.length === 0) {
-    return "An account with this email already exists.";
-  }
+    if (data.user && data.user.identities?.length === 0) {
+      return "An account with this email already exists.";
+    }
 
-  if (data.session?.user?.email_confirmed_at) {
-    await fetch("/api/auth/welcome", { method: "POST" });
-  }
+    if (data.session?.user?.email_confirmed_at) {
+      await fetch("/api/auth/welcome", { method: "POST" });
+    }
 
-  return null;
-};
+    posthog.capture("account_registered", {
+      registration_method: "email_password",
+    });
+    return null;
+  };
 
   const signInWithGoogle = async () => {
     // Redirect through /auth/callback so the OAuth `code` returned by Google

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Trash2 } from "lucide-react";
+import posthog from "posthog-js";
 import type { Database } from "@/types/supabase";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -109,6 +110,7 @@ export function ProfileEditForm({
         throw new Error(data.error || "Error updating profile");
       }
 
+      posthog.capture("profile_updated", { update_source: "profile_form" });
       setSuccess(true);
       setIsEditing(false);
       router.refresh();
@@ -146,6 +148,7 @@ export function ProfileEditForm({
         throw new Error(data.error || "Unable to delete your account.");
       }
 
+      posthog.capture("account_deleted");
       await signOut();
       router.replace("/");
       router.refresh();

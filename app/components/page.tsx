@@ -13,6 +13,7 @@ import Navbar from "@/components/navbar";
 import { Check, ChevronDown } from "lucide-react";
 import PnpmLogo from "@/public/assets/pnpm.svg";
 import YarnLogo from "@/public/assets/yarn.svg";
+import posthog from "posthog-js";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type AccessTier = "free" | "pro";
@@ -78,6 +79,11 @@ function CliButton({ item }: { item: RegistryItem }) {
     e.stopPropagation();
     try {
       await navigator.clipboard.writeText(cmd);
+      posthog.capture("component_install_command_copied", {
+        component_name: item.name,
+        access_tier: getComponentAccessTier(item),
+        package_manager: pkg,
+      });
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {

@@ -35,6 +35,7 @@ import {
 } from "@tabler/icons-react";
 import { useAuth } from "@/hooks/useAuth";
 import { trackComponentDownload } from "@/lib/analytics";
+import posthog from "posthog-js";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -160,8 +161,8 @@ function useInView<T extends Element>(rootMargin = "400px") {
 
 function useCopy(timeout = 1500) {
   const [copied, setCopied] = useState(false);
-  const copy = (text: string) => {
-    navigator.clipboard.writeText(text);
+  const copy = async (text: string) => {
+    await navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), timeout);
   };
@@ -426,13 +427,18 @@ const VariantToolbarHeader = memo(function VariantToolbarHeader({
     pathname ?? "/blocks",
   );
 
-  const handleCopy = (text: string) => {
+  const handleCopy = async (text: string) => {
     if (installState.action !== "install") {
       return;
     }
 
     void trackComponentDownload(variantId);
-    copy(text);
+    await copy(text);
+    posthog.capture("component_install_command_copied", {
+      component_name: variantId,
+      access_tier: accessTier,
+      package_manager: pkg,
+    });
   };
 
   return (

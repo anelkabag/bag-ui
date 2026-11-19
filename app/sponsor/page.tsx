@@ -12,6 +12,7 @@ import {
   Wrench,
 } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
+import posthog from "posthog-js";
 import AppShell from "@/components/shell/AppShell";
 import PageHero from "@/components/shell/PageHero";
 
@@ -145,6 +146,11 @@ export default function SponsorPage() {
                       href={checkoutUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() =>
+                        posthog.capture("sponsorship_checkout_started", {
+                          provider: "github",
+                        })
+                      }
                       className="group mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white py-3 text-center text-sm font-semibold text-black shadow-[0_8px_30px_-10px_rgba(255,255,255,0.45)] transition-all hover:bg-zinc-100 hover:shadow-[0_8px_36px_-8px_rgba(255,255,255,0.6)] sm:w-auto sm:px-7"
                     >
                       <FaGithub size={16} />

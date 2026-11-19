@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import posthog from "posthog-js";
 
 export function NotificationPreferences() {
   const [enabled, setEnabled] = useState(true);
@@ -44,6 +45,9 @@ export function NotificationPreferences() {
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Could not update preferences");
       setEnabled(result.productUpdatesEnabled === true);
+      posthog.capture("notification_preference_updated", {
+        product_updates_enabled: result.productUpdatesEnabled === true,
+      });
       setMessage(nextEnabled ? "Product updates enabled." : "Product updates disabled.");
     } catch (error) {
       setMessage(
