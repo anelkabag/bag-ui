@@ -225,7 +225,7 @@ export function ProfileHeader({
           ) : (
             <Link
               href="/sponsor"
-              aria-label="Devenir sponsor"
+              aria-label="Become a sponsor"
               className="group/badge relative inline-flex shrink-0 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <BadgeCheck
@@ -233,7 +233,7 @@ export function ProfileHeader({
                 className="text-muted-foreground transition group-hover/badge:text-foreground sm:h-6 sm:w-6"
               />
               <span className="pointer-events-none absolute left-1/2 top-full z-30 mt-2 w-max -translate-x-1/2 rounded-lg border border-border bg-popover px-3 py-1.5 text-[11px] font-medium text-foreground opacity-0 shadow-lg transition group-hover/badge:opacity-100 group-focus-visible/badge:opacity-100">
-                Devenir sponsor !
+                Become a sponsor!
               </span>
             </Link>
           )}
