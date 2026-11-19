@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Pencil, BadgeCheck, X, Check } from "lucide-react";
 import { FaInstagram, FaXTwitter, FaLinkedin, FaGithub } from "react-icons/fa6";
 import type { IconType } from "react-icons";
@@ -80,7 +81,6 @@ export function ProfileHeader({
   joinedShort,
 }: ProfileHeaderProps) {
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [showBadgeTip, setShowBadgeTip] = useState(false);
 
   const [bio, setBio] = useState(profile.bio ?? "");
   const [isEditingBio, setIsEditingBio] = useState(false);
@@ -223,22 +223,19 @@ export function ProfileHeader({
               aria-label="Premium member"
             />
           ) : (
-            <span
-              className="relative shrink-0"
-              onMouseEnter={() => setShowBadgeTip(true)}
-              onMouseLeave={() => setShowBadgeTip(false)}
+            <Link
+              href="/sponsor"
+              aria-label="Devenir sponsor"
+              className="group/badge relative inline-flex shrink-0 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <BadgeCheck
                 size={20}
-                className="text-muted-foreground sm:h-6 sm:w-6"
-                aria-label="Locked badge"
+                className="text-muted-foreground transition group-hover/badge:text-foreground sm:h-6 sm:w-6"
               />
-              {showBadgeTip && (
-                <span className="absolute left-1/2 top-full z-30 mt-2 w-56 -translate-x-1/2 rounded-lg border border-border bg-popover px-3 py-2 text-[11px] leading-snug text-muted-foreground shadow-2xl shadow-black/20">
-                  Support BagUI in Pricing to unlock the Pro badge.
-                </span>
-              )}
-            </span>
+              <span className="pointer-events-none absolute left-1/2 top-full z-30 mt-2 w-max -translate-x-1/2 rounded-lg border border-border bg-popover px-3 py-1.5 text-[11px] font-medium text-foreground opacity-0 shadow-lg transition group-hover/badge:opacity-100 group-focus-visible/badge:opacity-100">
+                Devenir sponsor !
+              </span>
+            </Link>
           )}
         </h1>
 
@@ -289,9 +286,28 @@ export function ProfileHeader({
           )}
         </div>
 
-        {/* Pills: joined, socials, add social */}
+        <dl className="mt-6 divide-y divide-border overflow-hidden rounded-xl border border-border text-left">
+          {[
+            ["Username", profile.username],
+            ["Email", email || "—"],
+            ["Phone", phone || "—"],
+            ["Plan", isProPlan ? "Pro" : "Free"],
+            ["Joined", joinedShort],
+          ].map(([label, value]) => (
+            <div
+              key={label}
+              className="grid gap-1 px-4 py-3 sm:grid-cols-[7.5rem_minmax(0,1fr)] sm:items-center sm:gap-4"
+            >
+              <dt className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                {label}
+              </dt>
+              <dd className="truncate text-sm text-foreground">{value}</dd>
+            </div>
+          ))}
+        </dl>
+
+        {/* Pills: socials, add social */}
         <div className="mt-4 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-          <span className={pillClass}>Joined {joinedShort}</span>
 
           {(Object.entries(socials) as [SocialPlatform, string][])
             .filter(([, handle]) => handle)
