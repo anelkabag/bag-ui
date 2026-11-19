@@ -1,84 +1,56 @@
 import Link from "next/link";
-import { Footer } from "@/components/footer";
-import Navbar from "@/components/navbar";
+import { ArrowRight, Home } from "lucide-react";
+import AppShell from "@/components/shell/AppShell";
+import PageHero from "@/components/shell/PageHero";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navbar */}
-      <Navbar />
-      <div className="max-w-7xl mx-auto px-6 pt-10 pb-20 border-x border-gray-200">
-        {/* Main */}
-        <main className="flex-1 flex flex-col items-center justify-center text-center px-6 py-16 relative overflow-hidden">
-          {/* Grid background */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              backgroundImage:
-                "linear-gradient(#f0f0f0 1px, transparent 1px), linear-gradient(90deg, #f0f0f0 1px, transparent 1px)",
-              backgroundSize: "40px 40px",
-              opacity: 0.6,
-            }}
-          />
-          {/* Radial fade */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, white 80%)",
-            }}
-          />
+    <AppShell>
+      <div className="mx-auto flex min-h-full max-w-[1440px] flex-col bg-background pb-16 text-foreground">
+        <PageHero
+          firstLine="Wrong turn."
+          secondLine="This page"
+          emphasis="isn't here."
+          className="pb-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.8fr)]"
+        >
+          <p className="max-w-xl text-sm leading-6 text-muted-foreground md:text-base">
+            The address may have moved, been removed, or never existed. The
+            rest of BagUI is still right where you left it.
+          </p>
+        </PageHero>
 
-          <div className="relative z-10 max-w-lg mx-auto">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-widest uppercase text-gray-500 border border-gray-200 rounded-full px-3.5 py-1 mb-7">
-              <span className="w-1.5 h-1.5 bg-black rounded-full" />
-              Page not found
-            </div>
-
-            {/* 404 */}
-              <div className="text-[clamp(120px,25vw,220px)] font-extrabold leading-none tracking-[-8px] text-black mb-2">
-                  4<span className="text-gray-200">0</span>4
-              </div>
-
-            <h1 className="text-xl font-semibold text-black mb-3">
-              This block doesn&apos;t exist.
-            </h1>
-            <p className="text-sm text-gray-400 leading-relaxed mb-9">
-              The page you&apos;re looking for has moved, been deleted,
-              <br className="hidden sm:block" />
-              or never existed in the first place.
+        <section className="mx-5 mt-2 overflow-hidden rounded-2xl border border-border bg-card md:mx-10">
+          <div className="border-b border-border px-6 py-5 md:px-8">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+              404
             </p>
-
-            {/* Actions */}
-            <div className="flex items-center justify-center gap-2.5 flex-wrap">
+          </div>
+          <div className="px-6 py-10 md:px-8 md:py-14">
+            <p className="text-[clamp(72px,12vw,120px)] font-semibold leading-none tracking-[-0.06em] text-foreground">
+              4<span className="text-muted-foreground/40">0</span>4
+            </p>
+            <h2 className="mt-6 text-xl font-semibold tracking-tight text-foreground">
+              This block doesn&apos;t exist.
+            </h2>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link
                 href="/blocks"
-                className="inline-flex items-center gap-1.5 bg-black text-white text-sm font-medium px-5 py-2.5 rounded-xl hover:bg-gray-900 transition-colors"
+                className="inline-flex items-center gap-2 rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:opacity-90"
               >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                >
-                  <path d="M2 7h10M7 2l5 5-5 5" />
-                </svg>
                 Browse blocks
+                <ArrowRight size={15} />
               </Link>
               <Link
                 href="/"
-                className="inline-flex items-center gap-1.5 bg-white text-gray-700 text-sm font-medium px-5 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors"
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition hover:bg-accent"
               >
+                <Home size={15} />
                 Go home
               </Link>
             </div>
           </div>
-        </main>
+        </section>
       </div>
-      <Footer />
-    </div>
+    </AppShell>
   );
 }
