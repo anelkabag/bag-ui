@@ -284,7 +284,7 @@ function Bar({
 /* ---------- Page ---------- */
 export default function Template3() {
   return (
-    <main className="min-h-screen w-full bg-black font-sans text-white antialiased">
+    <main className="flow-root min-h-screen w-full bg-black font-sans text-white antialiased">
       <div className="mx-auto w-full max-w-[1000px] px-5">
         {/* Navbar */}
         <nav className="mx-auto mt-5 flex max-w-[960px] items-center justify-between rounded-[14px] border border-[#1f1f1f] bg-[#0a0a0a] px-[18px] py-3 text-xs">
