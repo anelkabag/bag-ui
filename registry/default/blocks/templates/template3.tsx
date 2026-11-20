@@ -1,16 +1,8 @@
-// app/page.tsx — BagUI landing, single file (Next.js App Router + Tailwind CSS v4)
+"use client";
+
+// BagUI landing page template (Next.js App Router + Tailwind CSS v4)
 // Aucun CSS externe : tout est en classes Tailwind (valeurs arbitraires pour les dégradés).
-import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Inter_Tight } from "next/font/google";
-
-const font = Inter_Tight({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "BagUI – Open Source shadcn/ui Components & Blocks",
-  description:
-    "BagUI is an open-source shadcn/ui registry with production-ready components, blocks, templates, and animations for React, Next.js, and Tailwind CSS.",
-};
 
 /* ---------- Données ---------- */
 const B = "https://www.bagui.pro";
@@ -128,7 +120,7 @@ function Bar({ label, value, w, hi }: { label: string; value: string; w: number;
 /* ---------- Page ---------- */
 export default function Template3() {
   return (
-    <main className={`${font.className} min-h-screen bg-black text-white antialiased`}>
+    <main className="min-h-screen bg-black font-sans text-white antialiased">
       <div className="mx-auto max-w-[1000px] px-5">
         {/* Navbar */}
         <nav className="mx-auto mt-5 flex max-w-[960px] items-center justify-between rounded-[14px] border border-[#1f1f1f] bg-[#0a0a0a] px-[18px] py-3 text-xs">
