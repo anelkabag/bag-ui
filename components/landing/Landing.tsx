@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import BlockPreview from "@/components/BlockPreview";
+import Reviews from "@/components/landing/Reviews";
 import PageHero from "@/components/shell/PageHero";
 import PageTopBar from "@/components/shell/PageTopBar";
 
@@ -133,6 +134,7 @@ export default function Landing() {
           </Link>
         </div>
       </PageHero>
+      <Reviews />
       <PreviewFrame />
     </>
   );
