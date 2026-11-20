@@ -22,14 +22,16 @@ export default function TemplatesPage() {
             firstLine="Ready-to-use"
             secondLine="website"
             emphasis="templates."
-            className="pb-6 lg:grid-cols-[1fr_auto]"
+            className="px-4 pb-8 pt-8 md:px-4 lg:grid-cols-[1fr_auto]"
           >
             <div className="flex items-center justify-between gap-5 sm:justify-end sm:gap-7">
               <div>
                 <p className="text-lg font-semibold leading-none tracking-tight text-foreground">
                   {templates.length}
                 </p>
-                <p className="mt-1.5 text-xs text-muted-foreground">Templates</p>
+                <p className="mt-1.5 text-xs text-muted-foreground">
+                  Templates
+                </p>
               </div>
               <div>
                 <p className="text-lg font-semibold leading-none tracking-tight text-foreground">
@@ -46,15 +48,17 @@ export default function TemplatesPage() {
             </div>
           </PageHero>
 
-          <div>
-            {templates.length > 0 ? (
-              <TemplatePreview templates={templates} />
-            ) : (
-              <p className="py-12 text-center text-sm text-muted-foreground">
-                No templates available yet.
-              </p>
-            )}
-          </div>
+          <p className="mx-4 mb-8 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            Full-page website templates, ready to add to your project.
+          </p>
+
+          {templates.length > 0 ? (
+            <TemplatePreview templates={templates} />
+          ) : (
+            <p className="py-12 text-center text-sm text-muted-foreground">
+              No templates available yet.
+            </p>
+          )}
         </div>
       </div>
     </AppShell>
