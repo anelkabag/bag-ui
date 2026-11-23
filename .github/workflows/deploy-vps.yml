@@ -39,6 +39,11 @@ jobs:
           printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
+      - name: Verify SSH key
+        run: |
+          echo "Checking SSH key..."
+          ssh-keygen -y -f ~/.ssh/id_ed25519 | ssh-keygen -lf -
+
       - name: Deploy BagUI
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
