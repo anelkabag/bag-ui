@@ -50,9 +50,6 @@ export async function GET(request: Request) {
   } else {
     console.error("auth callback: missing code");
   }
-
-  // Code déjà consommé (prefetch, double appel) mais session valide :
-  // on ne montre pas d'erreur
   const {
     data: { user },
   } = await supabase.auth.getUser();
