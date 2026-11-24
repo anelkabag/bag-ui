@@ -1,26 +1,35 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { createServerClient } from "@supabase/ssr";
 import { withPostHogProxy } from "@posthog/next";
-
-const protectedRoutes = ["/account"];
 
 export const proxy = withPostHogProxy(
   async (request: NextRequest) => {
-    const requestedPath = request.nextUrl.pathname;
+    let response = NextResponse.next({ request });
 
-    if (!protectedRoutes.some((route) => requestedPath.startsWith(route))) {
-      return NextResponse.next();
-    }
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll: () => request.cookies.getAll(),
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) =>
+              request.cookies.set(name, value),
+            );
+            response = NextResponse.next({ request });
+            cookiesToSet.forEach(({ name, value, options }) =>
+              response.cookies.set(name, value, options),
+            );
+          },
+        },
+      },
+    );
 
-    const token = request.cookies.get("sb-access-token")?.value;
-    const refreshToken = request.cookies.get("sb-refresh-token")?.value;
+    // Rafraîchit la session et réécrit les cookies. La page /account décide du redirect.
+    await supabase.auth.getUser();
 
-    if (token && refreshToken) {
-      return NextResponse.next();
-    }
-
-    // The account page checks the session itself and decides whether to redirect.
-    return NextResponse.next();
+    return response;
   },
   {
     apiKey:
