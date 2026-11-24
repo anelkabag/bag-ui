@@ -1,5 +1,5 @@
 
-name: Deploy BagUI to VPS
+name: Deploy BagUI to VPS (Production)
 
 on:
   push:
@@ -31,6 +31,8 @@ jobs:
           VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY_CI }}
           VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
         run: |
+          set -e
+
           install -m 700 -d ~/.ssh
 
           printf '%s' "$VPS_SSH_KEY" | tr -d '\r' > ~/.ssh/id_ed25519
@@ -39,12 +41,12 @@ jobs:
           printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
-          echo "Checking key format..."
-          head -n 1 ~/.ssh/id_ed25519
-          tail -n 1 ~/.ssh/id_ed25519
+          echo "SSH configuration completed."
 
       - name: Verify SSH key
         run: |
+          set -e
+
           echo "Checking SSH key..."
           ssh-keygen -y -f ~/.ssh/id_ed25519 | ssh-keygen -lf -
 
@@ -55,6 +57,10 @@ jobs:
           VPS_PORT: ${{ secrets.VPS_PORT }}
           GITHUB_SHA: ${{ github.sha }}
         run: |
+          set -e
+
+          echo "Deploying commit: $GITHUB_SHA"
+
           ssh \
             -o BatchMode=yes \
             -o IdentitiesOnly=yes \
@@ -62,4 +68,6 @@ jobs:
             -i ~/.ssh/id_ed25519 \
             -p "$VPS_PORT" \
             "$VPS_USER@$VPS_HOST" \
-            "sudo -n /usr/local/sbin/deploy-bagui.sh '$GITHUB_SHA'"
+            "sudo -n /bin/bash /usr/local/sbin/deploy-bagui.sh '$GITHUB_SHA'"
+
+          echo "Deployment command completed successfully."
