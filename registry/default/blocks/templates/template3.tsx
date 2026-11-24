@@ -5,7 +5,7 @@
 import type { ReactNode } from "react";
 
 /* ---------- Données ---------- */
-const B = "https://www.bagui.pro";
+const B = "https://bagui.pro";
 const GH = "https://github.com/anelkabag/bag-ui";
 
 type Item = { i: string; t: string; d: string };

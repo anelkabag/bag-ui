@@ -18,6 +18,6 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: "https://www.bagui.pro/sitemap.xml",
+    sitemap: "https://bagui.pro/sitemap.xml",
   };
 }

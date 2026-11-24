@@ -1,4 +1,4 @@
-export const PRODUCTION_SITE_URL = "https://www.bagui.pro";
+export const PRODUCTION_SITE_URL = "https://bagui.pro";
 export const PRODUCTION_REGISTRY_URL = `${PRODUCTION_SITE_URL}/r/registry.json`;
 
 export interface PublishedResource {

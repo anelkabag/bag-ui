@@ -5,13 +5,12 @@ export async function GET() {
   try {
     const supabase = await createSupabaseRouteHandlerClient();
 
-    // Vérifier la session
     const {
-      data: { session },
-      error: sessionError,
-    } = await supabase.auth.getSession();
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
 
-    if (sessionError || !session?.user) {
+    if (userError || !user) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
@@ -19,7 +18,7 @@ export async function GET() {
     const { data: downloads, error } = await supabase
       .from("component_downloads")
       .select("id, component, created_at, os, cli_version")
-      .eq("user_id", session.user.id)
+      .eq("user_id", user.id)
       .order("created_at", { ascending: false })
       .limit(50); // Limiter à 50 derniers téléchargements
 

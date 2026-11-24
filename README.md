@@ -172,11 +172,18 @@ The first command makes sure the app compiles correctly. The second prepares and
 
 BagUI listens for successful GitHub `deployment_status` events from Vercel.
 Only deployments marked as production are accepted. The publisher then reads
-the canonical live registry at `https://www.bagui.pro/r/registry.json`; the
+the canonical live registry at `https://bagui.pro/r/registry.json`; the
 first synchronization records the existing catalog as a baseline without
 emailing it. Later additions create unique campaigns and durable per-recipient
 delivery jobs in Supabase. Ordinary resource updates, preview deployments, and
 local development do not create campaigns.
+
+For the production app, make sure the PM2 process loads
+`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
+`SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_APP_URL=https://bagui.pro`, and
+`NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN`. Keep `SUPABASE_SERVICE_ROLE_KEY`
+server-side only; admin operations and account deletion require it. Without the
+PostHog project token, analytics and request-error reporting are disabled.
 
 Before enabling production sends:
 
@@ -188,7 +195,7 @@ Before enabling production sends:
    wakes due or expired deliveries if an HTTP dispatch or worker was
    interrupted; this is not a Vercel Cron Job.
 2. Set these server-side environment variables in the production deployment:
-   `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `RESEND_WEBHOOK_SECRET`,
+   `RESEND_API_KEY`, `RESEND_WEBHOOK_SECRET`,
    `RELEASE_NOTIFICATION_DISPATCH_SECRET` (at least 32 random bytes),
    `RELEASE_NOTIFICATION_WORKER_SECRET` (at least 32 random bytes),
    `NOTIFICATION_TOKEN_SECRET` (at least 32 random bytes), and
@@ -200,7 +207,7 @@ Before enabling production sends:
    [`.github/workflows/release-notifications.yml`](.github/workflows/release-notifications.yml)
    must be merged to the default branch to receive GitHub `deployment_status`
    events, then calls
-   `https://www.bagui.pro/api/notifications/publish`. Confirm the Vercel GitHub
+   `https://bagui.pro/api/notifications/publish`. Confirm the Vercel GitHub
    integration creates GitHub deployments with `production_environment: true`
    for production. The publisher independently checks the event and fetches
    the public production registry before creating campaigns.
@@ -209,7 +216,7 @@ Before enabling production sends:
 
    ```sql
    select vault.create_secret(
-     'https://www.bagui.pro/api/notifications/worker',
+     'https://bagui.pro/api/notifications/worker',
      'release_notification_worker_url'
    );
    select vault.create_secret(
@@ -227,7 +234,7 @@ Before enabling production sends:
    DMARC policy with the domain administrator as a separate deliverability step.
    The worker checks the Resend account before claiming or sending any email.
 6. Configure a Resend webhook at
-   `https://www.bagui.pro/api/webhooks/resend` for `email.sent`,
+   `https://bagui.pro/api/webhooks/resend` for `email.sent`,
    `email.delivered`, `email.failed`, `email.bounced`, and `email.complained`,
    then store its signing secret as `RESEND_WEBHOOK_SECRET`.
 

@@ -62,7 +62,7 @@ function HoverImage() {
       whileHover={{ boxShadow: "0 0 24px 6px rgba(255,255,255,0.15)" }}
     >
       <Image
-        src="https://bagui.vercel.app/faviconblack.png"
+        src="https://bagui.pro/faviconblack.png"
         alt=""
         fill
         sizes="(min-width: 768px) 52px, 44px"

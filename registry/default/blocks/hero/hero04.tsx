@@ -70,7 +70,7 @@ export default function Hero1() {
             >
               <Link href="/" className="flex items-center gap-3 group">
                 <Image
-                  src="https://bagui.vercel.app/logoR.png"
+                  src="https://bagui.pro/logoR.png"
                   alt="BagUi logo"
                   width={32}
                   height={32}

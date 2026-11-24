@@ -141,7 +141,7 @@ export default function Navbar1() {
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2.5 mr-8 shrink-0">
                     <Image
-                        src="https://bagui.vercel.app/logoR.png"
+                        src="https://bagui.pro/logoR.png"
                         alt="Debisol icon"
                         width={36}
                         height={36}

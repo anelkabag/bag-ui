@@ -69,8 +69,8 @@ function escapeHtml(value: string) {
 
 export function buildWelcomeEmail({ email, username }: WelcomeEmailParams) {
   const safeName = escapeHtml(username);
-  const blocksUrl = "https://www.bagui.pro/blocks";
-  const docsUrl = "https://www.bagui.pro/docs";
+  const blocksUrl = "https://bagui.pro/blocks";
+  const docsUrl = "https://bagui.pro/docs";
 
   return {
     from: "BagUI <updates@news.bagui.pro>",

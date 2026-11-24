@@ -40,7 +40,7 @@ test("normalizes published production resources and ignores malformed entries", 
       resource_name: "Hero 01",
       description: "A new hero block.",
       category: "Hero",
-      resource_url: "https://www.bagui.pro/blocks/hero-01",
+      resource_url: "https://bagui.pro/blocks/hero-01",
       image_url: "https://bagui.pro/previews/hero.png",
     },
   ]);
@@ -136,10 +136,10 @@ test("release email escapes untrusted content and includes required links", () =
     resource_name: "<script>alert(1)</script>",
     description: "A <strong>new</strong> block",
     category: "Hero & CTA",
-    resource_url: "https://www.bagui.pro/blocks/example",
+    resource_url: "https://bagui.pro/blocks/example",
     image_url: null,
-    unsubscribeUrl: "https://www.bagui.pro/unsubscribe?token=abc",
-    preferencesUrl: "https://www.bagui.pro/account#notifications",
+    unsubscribeUrl: "https://bagui.pro/unsubscribe?token=abc",
+    preferencesUrl: "https://bagui.pro/account#notifications",
   });
 
   assert.equal(email.from, "BagUI <updates@news.bagui.pro>");
@@ -147,9 +147,9 @@ test("release email escapes untrusted content and includes required links", () =
   assert.match(email.html, /&lt;script&gt;alert\(1\)&lt;\/script&gt;/);
   assert.match(email.html, /A &lt;strong&gt;new&lt;\/strong&gt; block/);
   assert.match(email.html, /Explore Component/);
-  assert.match(email.html, /https:\/\/www\.bagui\.pro\/blocks\/example/);
-  assert.match(email.html, /https:\/\/www\.bagui\.pro\/unsubscribe\?token=abc/);
-  assert.match(email.html, /https:\/\/www\.bagui\.pro\/account#notifications/);
+  assert.match(email.html, /https:\/\/bagui\.pro\/blocks\/example/);
+  assert.match(email.html, /https:\/\/bagui\.pro\/unsubscribe\?token=abc/);
+  assert.match(email.html, /https:\/\/bagui\.pro\/account#notifications/);
   assert.match(email.html, /turn these emails off at any time/);
   assert.match(email.text, /turn off emails about new BagUI components anytime/);
   assert.equal(
@@ -206,7 +206,7 @@ test("Resend webhook rejects invalid signatures before touching the database", a
   process.env.RESEND_WEBHOOK_SECRET = "whsec_test-signing-secret";
   try {
     const response = await handleResendWebhook(
-      new Request("https://www.bagui.pro/api/webhooks/resend", {
+      new Request("https://bagui.pro/api/webhooks/resend", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

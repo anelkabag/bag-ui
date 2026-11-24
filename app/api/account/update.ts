@@ -5,13 +5,12 @@ export async function PUT(request: NextRequest) {
   try {
     const supabase = await createSupabaseServerClient();
 
-    // Vérifier la session
     const {
-      data: { session },
-      error: sessionError,
-    } = await supabase.auth.getSession();
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
 
-    if (sessionError || !session?.user) {
+    if (userError || !user) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
@@ -85,7 +84,7 @@ export async function PUT(request: NextRequest) {
         ...normalizedSocials,
         updated_at: new Date().toISOString(),
       })
-      .eq("id", session.user.id)
+      .eq("id", user.id)
       .select();
 
     if (error) {

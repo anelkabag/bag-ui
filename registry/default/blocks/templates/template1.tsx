@@ -40,8 +40,8 @@ export default function OpenAgents() {
     const btnOutline = dark ? 'border-white/20 hover:border-white/60' : 'border-black/20 hover:border-black/60';
     const cardBg = dark ? 'bg-white/5' : 'bg-black/5';
     const logoSrc = dark
-        ? "https://bagui.vercel.app/faviconblack.png"
-        : "https://bagui.vercel.app/faviconwhite.png";
+        ? "https://bagui.pro/faviconblack.png"
+        : "https://bagui.pro/faviconwhite.png";
 
     return (
         <div className={`min-h-screen ${bg} ${text} transition-colors duration-300`}>

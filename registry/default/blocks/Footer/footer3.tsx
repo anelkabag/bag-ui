@@ -4,7 +4,7 @@
  * Footer3
  * ────────────────────────────────────────────────────────────────────────
  * A CTA banner + footer section, reproduced from the provided screenshot,
- * restyled with BagUI's design tokens (bagui.vercel.app):
+ * restyled with BagUI's design tokens (bagui.pro):
  *   - Font: Geist (next/font/google) — falls back to Inter/system-ui if
  *     the project hasn't wired up the --font-geist-sans CSS variable yet.
  *   - Colors: BagUI's monochrome shadcn "neutral" system — near-black

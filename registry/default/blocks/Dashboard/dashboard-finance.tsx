@@ -24,7 +24,7 @@
  *     the `<html>` tag to carry the class).
  *
  * Font: Geist (next/font/google), set once on the root wrapper.
- * Colors: BagUI's neutral/gray system (bagui.vercel.app) — gray-50→900,
+ * Colors: BagUI's neutral/gray system (bagui.pro) — gray-50→900,
  * black primary actions, soft-pill status colors. Primary black surfaces
  * invert to white in dark mode to keep the strict black/white/gray language.
  *

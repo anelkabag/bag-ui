@@ -11,17 +11,14 @@ import {
 export async function GET() {
   const supabase = await createSupabaseRouteHandlerClient();
 
-  // Utiliser getSession() pour les route handlers (les cookies sont toujours disponibles)
   const {
-    data: { session },
-    error: sessionError,
-  } = await supabase.auth.getSession();
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
-  if (sessionError || !session?.user) {
+  if (userError || !user) {
     return NextResponse.json({ profile: null }, { status: 401 });
   }
-
-  const user = session.user;
 
   const { data: profile, error } = await supabase
     .from("profiles")
@@ -87,17 +84,14 @@ export async function PUT(request: NextRequest) {
   try {
     const supabase = await createSupabaseRouteHandlerClient();
 
-    // Utiliser getSession() pour les route handlers
     const {
-      data: { session },
-      error: sessionError,
-    } = await supabase.auth.getSession();
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
 
-    if (sessionError || !session?.user) {
+    if (userError || !user) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
-
-    const user = session.user;
 
     // Récupérer les données de la requête
     const body = await request.json();

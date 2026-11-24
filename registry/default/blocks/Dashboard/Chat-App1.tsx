@@ -297,7 +297,7 @@ function Sidebar({ selectedContact, onSelectContact, isMobileOpen, onMobileClose
                 <div className="p-4 flex items-center justify-between">
                     <div className="w-10 h-10 rounded-md overflow-hidden">
                         <Image
-                            src="https://bagui.vercel.app/logoR.png"
+                            src="https://bagui.pro/logoR.png"
                             alt="Me"
                             width={40}
                             height={40}

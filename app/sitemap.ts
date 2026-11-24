@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const baseUrl = "https://www.bagui.pro";
+const baseUrl = "https://bagui.pro";
 
 const publicRoutes = [
   { path: "", changeFrequency: "daily", priority: 1 },

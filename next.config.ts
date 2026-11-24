@@ -50,7 +50,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "bagui.vercel.app",
+        hostname: "bagui.pro",
       },
       {
         protocol: "https",

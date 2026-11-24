@@ -287,7 +287,7 @@ export default function TestimonialsBlock2() {
               </span>
             </p>
             <a
-              href="https://www.bagui.pro/blocks"
+              href="https://bagui.pro/blocks"
               className="inline-flex items-center gap-2 whitespace-nowrap rounded-lg bg-neutral-950 px-4 py-2.5 text-[13px] font-medium text-white transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:bg-white dark:text-neutral-950 dark:focus-visible:outline-white"
             >
               <svg

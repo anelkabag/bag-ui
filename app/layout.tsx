@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.bagui.pro"),
+  metadataBase: new URL("https://bagui.pro"),
   title: "BagUI – Open-Source shadcn/ui Components & Blocks",
   description:
     "Discover BagUI, an open-source shadcn/ui registry with production-ready React components, blocks, templates, and animations for Next.js and Tailwind CSS.",
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
     title: "BagUI – Open-Source shadcn/ui Components & Blocks",
     description:
       "Discover BagUI (also searched as Bag UI), an open-source shadcn/ui registry with production-ready React components, blocks, templates, and animations for Next.js and Tailwind CSS.",
-    url: "https://www.bagui.pro",
+    url: "https://bagui.pro",
     siteName: "BagUI",
     type: "website",
     images: [
