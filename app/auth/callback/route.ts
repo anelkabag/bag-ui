@@ -13,10 +13,8 @@ export async function GET(request: Request) {
   const next =
     rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/blocks";
 
-  const baseUrl =
-    process.env.NODE_ENV === "development"
-      ? origin
-      : process.env.NEXT_PUBLIC_APP_URL || "https://bagui.pro";
+  // Même host que celui qui a reçu les cookies de session
+  const baseUrl = origin;
 
   const supabase = await createSupabaseRouteHandlerClient();
 
@@ -36,6 +34,8 @@ export async function GET(request: Request) {
     console.error("auth callback: missing code");
   }
 
+  // Code déjà consommé (prefetch, double appel) mais session valide :
+  // on ne montre pas d'erreur
   const {
     data: { user },
   } = await supabase.auth.getUser();
