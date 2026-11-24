@@ -18,6 +18,8 @@ export async function GET(request: Request) {
 
   const supabase = await createSupabaseRouteHandlerClient();
 
+  let reason = "missing_code";
+
   if (code) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
@@ -30,6 +32,7 @@ export async function GET(request: Request) {
     }
 
     console.error("exchangeCodeForSession:", error.message);
+    reason = error.message;
   } else {
     console.error("auth callback: missing code");
   }
@@ -44,7 +47,11 @@ export async function GET(request: Request) {
     return NextResponse.redirect(new URL(next, baseUrl));
   }
 
+  // TEMPORAIRE : `reason` sert au debug, à retirer ensuite
   return NextResponse.redirect(
-    new URL("/login?error=auth_callback_error", baseUrl),
+    new URL(
+      `/login?error=auth_callback_error&reason=${encodeURIComponent(reason)}`,
+      baseUrl,
+    ),
   );
 }
