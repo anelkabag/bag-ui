@@ -3,8 +3,23 @@ import { NextResponse } from "next/server";
 import { sendWelcomeEmailOnce } from "@/lib/welcome-email";
 import { createSupabaseRouteHandlerClient } from "@/lib/supabase/server";
 
+const FALLBACK_URL = process.env.NEXT_PUBLIC_APP_URL || "https://www.bagui.pro";
+
+function getBaseUrl(request: Request) {
+  const forwardedHost = request.headers.get("x-forwarded-host");
+  const forwardedProto = request.headers.get("x-forwarded-proto") ?? "https";
+
+  // Host public transmis par le proxy, sauf si c'est une adresse locale
+  if (forwardedHost && !/^(localhost|127\.0\.0\.1)/.test(forwardedHost)) {
+    return `${forwardedProto}://${forwardedHost}`;
+  }
+
+  // Sinon : domaine du projet, jamais localhost
+  return FALLBACK_URL;
+}
+
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url);
+  const { searchParams } = new URL(request.url);
 
   const code = searchParams.get("code");
 
@@ -13,8 +28,7 @@ export async function GET(request: Request) {
   const next =
     rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/blocks";
 
-  // Même host que celui qui a reçu les cookies de session
-  const baseUrl = origin;
+  const baseUrl = getBaseUrl(request);
 
   const supabase = await createSupabaseRouteHandlerClient();
 
@@ -47,7 +61,7 @@ export async function GET(request: Request) {
     return NextResponse.redirect(new URL(next, baseUrl));
   }
 
-  // TEMPORAIRE : `reason` sert au debug, à retirer ensuite
+  // TEMPORAIRE : `reason` sert au debug, à retirer une fois l'erreur résolue
   return NextResponse.redirect(
     new URL(
       `/login?error=auth_callback_error&reason=${encodeURIComponent(reason)}`,
