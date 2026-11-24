@@ -1,10 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
-
-const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
-const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
 
 // Le formulaire rétrécit par paliers sur les écrans peu hauts pour toujours tenir sans scroll
 const fit =
@@ -26,7 +22,7 @@ const input =
 export default function SignInPage() {
   return (
     <main
-      className={`${geistSans.variable} ${geistMono.variable} grid h-dvh grid-cols-1 overflow-hidden bg-white font-[family-name:var(--font-geist-mono)] text-[#0a0a0a] antialiased min-[821px]:grid-cols-[42.3%_1fr]`}
+      className="grid h-dvh grid-cols-1 overflow-hidden bg-white font-mono text-[#0a0a0a] antialiased min-[821px]:grid-cols-[42.3%_1fr]"
     >
       {/* Left : form */}
       <section className="flex items-center justify-center px-6 min-[821px]:justify-start min-[821px]:pl-[clamp(32px,5.5vw,80px)]">
@@ -36,7 +32,7 @@ export default function SignInPage() {
         >
           <Image src="/logo.png" alt="Logo" width={24} height={24} priority className="block h-6 w-6" />
 
-          <h1 className="mt-11 font-[family-name:var(--font-geist-sans)] text-[26px] font-semibold leading-7 tracking-[-0.02em]">
+          <h1 className="mt-11 font-sans text-[26px] font-semibold leading-7 tracking-[-0.02em]">
             Sign In
           </h1>
           <p className="mt-6 text-xs leading-4 text-[#8c8c8c]">

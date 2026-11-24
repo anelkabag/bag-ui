@@ -1,13 +1,10 @@
 import type { ReactNode } from "react";
-import { Inter } from "next/font/google";
 
 /**
  * app/page.tsx — fichier unique (composant + styles + police).
  * Prérequis : projet Next.js (App Router) avec Tailwind CSS déjà installé
  * (ex. `npx create-next-app@latest --ts --tailwind`).
  */
-
-const inter = Inter({ subsets: ["latin"], weight: ["400", "500"], display: "swap" });
 
 /* Couleurs isolées au composant et alignées sur la classe de thème du site. */
 const THEME_CSS = `
@@ -167,7 +164,7 @@ function DarkModeIllustration() {
 
 export default function Page() {
   return (
-    <div className={`${inter.className} feature-six min-h-screen bg-[var(--bg)] text-[var(--ink)] antialiased`}>
+    <div className="feature-six min-h-screen bg-[var(--bg)] font-sans text-[var(--ink)] antialiased">
     <style dangerouslySetInnerHTML={{ __html: THEME_CSS }} />
     <main className="mx-auto max-w-[920px] px-5 pt-[72px] pb-20">
       <h1 className="text-center text-[clamp(26px,4vw,36px)] font-normal tracking-[-0.025em]">
