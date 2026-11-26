@@ -221,7 +221,7 @@ function NodeDisc() {
         fill="#b5b5b5"
         letterSpacing=".3"
       >
-        Axiom Core
+        BagUi Core
       </text>
 
       {/* coin */}
@@ -260,10 +260,6 @@ export default function BagUiHero() {
         <header className="relative flex h-[76px] items-center border-y border-dashed border-[#333] px-[30px] max-[520px]:px-3.5">
           <Corners />
           <a href="#" className="flex items-center gap-1.5 text-[29px] font-medium tracking-[-0.4px] max-[520px]:text-2xl">
-            <svg viewBox="0 0 30 30" className="h-[30px] w-[30px]">
-              <rect width="30" height="30" rx="7" fill="#fff" />
-              <text x="15" y="22" textAnchor="middle" fontFamily="Geist, sans-serif" fontWeight="700" fontSize="19" fill="#0b0b0b">B</text>
-            </svg>
             BagUi
           </a>
 
