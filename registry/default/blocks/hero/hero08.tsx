@@ -182,7 +182,7 @@ const Pill = ({ label, dot, className }: { label: string; dot: string; className
 /* ------------------------------------------------------------------ */
 export default function InferaHero() {
   return (
-    <section className="relative h-[736px] overflow-hidden bg-white font-['Geist',system-ui,sans-serif] text-neutral-950 antialiased dark:bg-[#1a1a1a] dark:text-[#f4f4f4]">
+    <section className="relative h-[max(100dvh,736px)] min-h-full w-full overflow-hidden bg-white font-['Geist',system-ui,sans-serif] text-neutral-950 antialiased dark:bg-[#1a1a1a] dark:text-[#f4f4f4]">
       {/* glow behind the globe */}
       <div className="pointer-events-none absolute left-1/2 top-[372px] z-[1] h-[150px] w-[520px] -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,rgba(196,120,16,.22)_0%,rgba(196,120,16,.08)_40%,transparent_70%)] blur-[18px] dark:bg-[radial-gradient(ellipse_at_center,rgba(255,170,40,.32)_0%,rgba(255,150,30,.12)_40%,transparent_70%)]" />
       <HalftoneGlobe />
