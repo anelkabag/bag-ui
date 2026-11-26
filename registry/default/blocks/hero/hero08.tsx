@@ -189,7 +189,7 @@ export default function InferaHero() {
           href="#"
           className="absolute left-1/2 flex -translate-x-1/2 items-center gap-2 text-[15.5px] font-medium tracking-[-0.2px] max-[860px]:static max-[860px]:translate-x-0"
         >
-          <Image src="/logo.png" alt="BagUi" width={21} height={21} className="h-[21px] w-[21px] object-contain" priority />
+          <Image src="/logoW.png" alt="BagUi" width={21} height={21} className="h-[21px] w-[21px] object-contain" priority />
           BagUi
         </a>
 
