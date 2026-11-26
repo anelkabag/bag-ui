@@ -56,6 +56,40 @@
       }
     },
     {
+      "name": "hero07",
+      "type": "registry:block",
+      "title": "Hero Exemple 7",
+      "description": "AI browser-automation hero with workflow previews, product metrics, and responsive navigation.",
+      "dependencies": ["motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/hero/hero07.tsx",
+          "type": "registry:block",
+          "target": "components/blocks/hero-ex-7.tsx"
+        }
+      ],
+      "access": {
+        "tier": "pro"
+      }
+    },
+    {
+      "name": "hero08",
+      "type": "registry:block",
+      "title": "Hero Exemple 8",
+      "description": "AI browser-automation hero with workflow previews, product metrics, and responsive navigation.",
+      "dependencies": ["motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/hero/hero08.tsx",
+          "type": "registry:block",
+          "target": "components/blocks/hero-ex-8.tsx"
+        }
+      ],
+      "access": {
+        "tier": "pro"
+      }
+    },
+    {
       "name": "hero3",
       "type": "registry:block",
       "title": "Hero Exemple 3",
@@ -100,23 +134,6 @@
           "path": "registry/default/blocks/hero/hero06.tsx",
           "type": "registry:block",
           "target": "components/blocks/hero-ex-6.tsx"
-        }
-      ],
-      "access": {
-        "tier": "pro"
-      }
-    },
-    {
-      "name": "hero07",
-      "type": "registry:block",
-      "title": "Hero Exemple 7",
-      "description": "AI browser-automation hero with workflow previews, product metrics, and responsive navigation.",
-      "dependencies": ["motion", "lucide-react"],
-      "files": [
-        {
-          "path": "registry/default/blocks/hero/hero07.tsx",
-          "type": "registry:block",
-          "target": "components/blocks/hero-ex-7.tsx"
         }
       ],
       "access": {
