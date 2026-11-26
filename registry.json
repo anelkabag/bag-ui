@@ -107,6 +107,23 @@
       }
     },
     {
+      "name": "hero07",
+      "type": "registry:block",
+      "title": "Hero Exemple 7",
+      "description": "AI browser-automation hero with workflow previews, product metrics, and responsive navigation.",
+      "dependencies": ["motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/default/blocks/hero/hero07.tsx",
+          "type": "registry:block",
+          "target": "components/blocks/hero-ex-7.tsx"
+        }
+      ],
+      "access": {
+        "tier": "pro"
+      }
+    },
+    {
       "name": "hero4",
       "type": "registry:block",
       "title": "Hero Exemple 4",
