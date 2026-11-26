@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef } from "react";
+import { SiGithub, SiNextdotjs, SiNpm, SiShadcnui } from "react-icons/si";
 
 /* ------------------------------------------------------------------ */
 /*  Geometry (isometric disc)                                          */
@@ -98,6 +99,13 @@ const Corners = () => (
     <span className="absolute -bottom-px -right-px z-[3] h-3 w-3 border-b-2 border-r-2 border-[#8a8a8a]" />
   </>
 );
+
+const LOGOS = [
+  { name: "GitHub", Icon: SiGithub, size: 30 },
+  { name: "Next.js", Icon: SiNextdotjs, size: 30 },
+  { name: "npm", Icon: SiNpm, size: 36 },
+  { name: "shadcn/ui", Icon: SiShadcnui, size: 28 },
+];
 
 const dots =
   "bg-[radial-gradient(#2e2e2e_1px,transparent_1.2px)] bg-[length:4px_4px]";
@@ -244,7 +252,7 @@ function NodeDisc() {
 /* ------------------------------------------------------------------ */
 /*  Hero                                                               */
 /* ------------------------------------------------------------------ */
-export default function AindeskHero() {
+export default function BagUiHero() {
   return (
     <div className="min-h-screen bg-[#0b0b0b] pt-3 font-['Geist',system-ui,sans-serif] text-[#f2f2f2] antialiased">
       <div className="relative mx-auto max-w-[1354px] border-x border-dashed border-[#333] pb-10 max-[520px]:mx-4">
@@ -252,11 +260,11 @@ export default function AindeskHero() {
         <header className="relative flex h-[76px] items-center border-y border-dashed border-[#333] px-[30px] max-[520px]:px-3.5">
           <Corners />
           <a href="#" className="flex items-center gap-1.5 text-[29px] font-medium tracking-[-0.4px] max-[520px]:text-2xl">
-            <svg viewBox="0 0 38 30" fill="#fff" className="h-[30px] w-[38px]">
-              <path d="M13 9C6 9 1 13.6 1 19.5S6 30 13 30c3 0 5.4-1 7-2.6V30h6V5h-6v6.6C18.4 10 16 9 13 9Zm.8 6c3.2 0 5.6 2 5.6 4.5S17 24 13.8 24 8 22 8 19.5 10.6 15 13.8 15Z" />
-              <path d="M28 0h6v4h-6zM28 12c0-2 2-3.6 4.6-3.6C35.5 8.4 37 10.6 37 13.6V30h-6V15c0-1-.5-1.6-1.5-1.6S28 14 28 15V30z" />
+            <svg viewBox="0 0 30 30" className="h-[30px] w-[30px]">
+              <rect width="30" height="30" rx="7" fill="#fff" />
+              <text x="15" y="22" textAnchor="middle" fontFamily="Geist, sans-serif" fontWeight="700" fontSize="19" fill="#0b0b0b">B</text>
             </svg>
-            aindesk
+            BagUi
           </a>
 
           <nav className="absolute left-1/2 flex -translate-x-1/2 gap-[17px] text-[15.5px] text-[#bdbdbd] max-[1100px]:hidden">
@@ -326,39 +334,15 @@ export default function AindeskHero() {
           </div>
         </section>
 
-        {/* LOGOS (placeholder brands) */}
+        {/* LOGOS */}
         <section className="relative grid h-[82px] grid-cols-4 items-center justify-items-center border-b border-dashed border-[#333] text-[#a9a9a9] max-[1100px]:h-auto max-[1100px]:grid-cols-2 max-[1100px]:gap-y-6 max-[1100px]:py-6">
           <Corners />
-          <div className="flex items-center gap-2 text-[21px] font-medium tracking-[1.5px]">
-            <svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke="currentColor" strokeWidth={2.4}>
-              <circle cx="17" cy="17" r="14" />
-              <path d="M11 23V11l6 8 6-8v12" />
-            </svg>
-            NOVA
-          </div>
-          <div className="flex items-center">
-            <svg width="130" height="32" viewBox="0 0 130 32">
-              <rect width="130" height="32" fill="currentColor" />
-              <text x="65" y="25" textAnchor="middle" fontFamily="Geist, sans-serif" fontWeight="700" fontSize="24" letterSpacing="10" fill="#0b0b0b">
-                KITE
-              </text>
-            </svg>
-          </div>
-          <div className="flex items-center gap-2 text-xl tracking-[-0.3px]">
-            <svg width="46" height="32" viewBox="0 0 46 32" fill="none" stroke="currentColor" strokeWidth={2.4}>
-              <ellipse cx="23" cy="16" rx="21" ry="12" transform="rotate(-18 23 16)" />
-              <path d="M15 21 31 10" />
-            </svg>
-            <b className="font-semibold">orbit</b>
-            <span className="font-normal">labs</span>
-          </div>
-          <div className="flex items-center gap-2 text-[26px] font-semibold tracking-[-0.3px]">
-            <svg width="30" height="32" viewBox="0 0 30 32" fill="currentColor">
-              <path d="M15 0 30 5v12c0 8-6 13-15 15C6 30 0 25 0 17V5z" />
-              <path d="M8 11l7 12 7-12" stroke="#0b0b0b" strokeWidth={3} fill="none" />
-            </svg>
-            fieldwave
-          </div>
+          {LOGOS.map(({ name, Icon, size }) => (
+            <div key={name} className="flex items-center gap-2.5 text-[24px] font-semibold tracking-[-0.3px] max-[520px]:text-lg">
+              <Icon style={{ width: size, height: size }} />
+              {name}
+            </div>
+          ))}
         </section>
       </div>
     </div>
