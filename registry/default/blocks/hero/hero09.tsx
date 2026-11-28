@@ -106,7 +106,7 @@ export default function UsersHero() {
       {/* NAV */}
       <header className="relative z-[5] mx-auto flex h-20 max-w-[1472px] items-center justify-between px-[104px] max-[1100px]:px-5">
         <a href="#" className="flex items-center gap-[9px] text-2xl font-medium tracking-[-0.5px]">
-          <Image src="/logo.png" alt="BagUi" width={28} height={28} className="h-7 w-7 object-contain" priority />
+          <Image src="/logoW.png" alt="BagUi" width={28} height={28} className="h-7 w-7 object-contain" priority />
           BagUi
         </a>
         <nav className="absolute left-1/2 flex -translate-x-1/2 items-center gap-[25px] text-[15px] font-medium text-[#e9e9e9] max-[1100px]:hidden">
